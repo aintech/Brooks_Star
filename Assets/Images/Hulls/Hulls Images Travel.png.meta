@@ -1,0 +1,302 @@
+fileFormatVersion: 2
+guid: dd88eb7bab777dc4d9588a95ce608fb1
+timeCreated: 1434380989
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Hull Travel Little
+    21300002: Hull Travel Needle
+    21300004: Hull Travel Gnome
+    21300006: Hull Travel Cricket
+    21300008: Hull Travel Argo
+    21300010: Hull Travel Falcon
+    21300012: Hull Travel Adventurer
+    21300014: Hull Travel Corvette
+    21300016: Hull Travel Buffalo
+    21300018: Hull Travel Legionnaire
+    21300020: Hull Travel StarWalker
+    21300022: Hull Travel Warship
+    21300024: Hull Travel Asterix
+    21300026: Hull Travel Prime
+    21300028: Hull Travel Titan
+    21300030: Hull Travel Dreadnaut
+    21300032: Hull Travel Armageddon
+    21300034: Engine Image Force
+    21300036: Engine Image Gradual
+    21300038: Engine Image Proton
+    21300040: Engine Image Allur
+    21300042: Engine Image Quazar
+    21300044: ShipShield0
+    21300046: ShipShield1
+    21300048: ShipShield2
+    21300050: ShipShield3
+    21300052: ShipShield4
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 150
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Hull Travel Little
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 1768
+        width: 92
+        height: 131
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Travel Needle
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 1734
+        width: 100
+        height: 177
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Travel Gnome
+      rect:
+        serializedVersion: 2
+        x: 704
+        y: 1728
+        width: 92
+        height: 189
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Travel Cricket
+      rect:
+        serializedVersion: 2
+        x: 993
+        y: 1711
+        width: 114
+        height: 223
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Travel Argo
+      rect:
+        serializedVersion: 2
+        x: 1294
+        y: 1693
+        width: 112
+        height: 260
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Travel Falcon
+      rect:
+        serializedVersion: 2
+        x: 1582
+        y: 1671
+        width: 136
+        height: 304
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Travel Adventurer
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 1223
+        width: 214
+        height: 300
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Travel Corvette
+      rect:
+        serializedVersion: 2
+        x: 335
+        y: 1221
+        width: 229
+        height: 303
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Travel Buffalo
+      rect:
+        serializedVersion: 2
+        x: 639
+        y: 1215
+        width: 222
+        height: 315
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Travel Legionnaire
+      rect:
+        serializedVersion: 2
+        x: 938
+        y: 1208
+        width: 224
+        height: 330
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Travel StarWalker
+      rect:
+        serializedVersion: 2
+        x: 1238
+        y: 1202
+        width: 224
+        height: 342
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Travel Warship
+      rect:
+        serializedVersion: 2
+        x: 1538
+        y: 1200
+        width: 224
+        height: 347
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Travel Asterix
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 747
+        width: 236
+        height: 352
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Travel Prime
+      rect:
+        serializedVersion: 2
+        x: 328
+        y: 754
+        width: 244
+        height: 339
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Travel Titan
+      rect:
+        serializedVersion: 2
+        x: 618
+        y: 752
+        width: 264
+        height: 342
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Travel Dreadnaut
+      rect:
+        serializedVersion: 2
+        x: 909
+        y: 734
+        width: 284
+        height: 377
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Travel Armageddon
+      rect:
+        serializedVersion: 2
+        x: 1206
+        y: 720
+        width: 288
+        height: 407
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Engine Image Force
+      rect:
+        serializedVersion: 2
+        x: 1869
+        y: 1868
+        width: 50
+        height: 22
+      alignment: 2
+      pivot: {x: .5, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Engine Image Gradual
+      rect:
+        serializedVersion: 2
+        x: 1869
+        y: 1839
+        width: 50
+        height: 22
+      alignment: 2
+      pivot: {x: .5, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Engine Image Proton
+      rect:
+        serializedVersion: 2
+        x: 1869
+        y: 1809
+        width: 50
+        height: 22
+      alignment: 2
+      pivot: {x: .5, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Engine Image Allur
+      rect:
+        serializedVersion: 2
+        x: 1869
+        y: 1781
+        width: 50
+        height: 22
+      alignment: 2
+      pivot: {x: .5, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Engine Image Quazar
+      rect:
+        serializedVersion: 2
+        x: 1869
+        y: 1753
+        width: 50
+        height: 22
+      alignment: 2
+      pivot: {x: .5, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

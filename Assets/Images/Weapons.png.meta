@@ -1,0 +1,449 @@
+fileFormatVersion: 2
+guid: 270787df2bf5b384fb00466f5f2151d8
+timeCreated: 1428491829
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Weapon_Blaster_Idle
+    21300002: Weapon_Blaster_Shot_1
+    21300004: Weapon_Blaster_Shot_2
+    21300006: Weapon_Blaster_Shot_4
+    21300008: Weapon_Plasmer_Shot_1
+    21300010: Weapons_7
+    21300012: Weapons_8
+    21300014: Weapons_9
+    21300016: Weapons_10
+    21300018: Weapon_Plasmer_Idle
+    21300020: Weapon_Plasmer_Shot_2
+    21300022: Weapon_Plasmer_Shot_3
+    21300024: Weapon_Plasmer_Shot_4
+    21300026: Weapon_Charger_Idle
+    21300028: Weapon_Charger_Shot_1
+    21300030: Weapon_Charger_Shot_2
+    21300032: Weapon_Charger_Shot_3
+    21300034: Weapon_Charger_Shot_4
+    21300036: Weapon_Emitter_Idle
+    21300038: Weapon_Emitter_Shot_1
+    21300040: Weapon_Emitter_Shot_2
+    21300042: Weapon_Emitter_Shot_3
+    21300044: Weapon_Emitter_Shot_4
+    21300046: Weapon_Waver_Idle
+    21300048: Weapon_Waver_Shot_1
+    21300050: Weapon_Waver_Shot_2
+    21300052: Weapon_Waver_Shot_3
+    21300054: Weapon_Waver_Shot_4
+    21300056: Weapons_34
+    21300058: Weapons_35
+    21300060: Weapons_36
+    21300062: Weapons_37
+    21300064: Weapons_38
+    21300066: Weapon_Launcher_Idle
+    21300068: Weapon_Launcher_Shot_1
+    21300070: Weapon_Launcher_Shot_2
+    21300072: Weapon_Launcher_Shot_3
+    21300074: Weapon_Launcher_Shot_4
+    21300076: Weapon_Suppressor_Idle
+    21300078: Weapon_Suppressor_Shot_1
+    21300080: Weapon_Suppressor_Shot_2
+    21300082: Weapon_Suppressor_Shot_3
+    21300084: Weapon_Suppressor_Shot_4
+    21300086: Weapon_Blaster_Shot_3
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 130
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Weapon_Blaster_Idle
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 1875
+        width: 50
+        height: 87
+      alignment: 9
+      pivot: {x: .5, y: .264999986}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Blaster_Shot_1
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 1875
+        width: 60
+        height: 173
+      alignment: 9
+      pivot: {x: .5, y: .134000003}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Blaster_Shot_2
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 1875
+        width: 50
+        height: 173
+      alignment: 9
+      pivot: {x: .5, y: .133000001}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Blaster_Shot_4
+      rect:
+        serializedVersion: 2
+        x: 425
+        y: 1875
+        width: 50
+        height: 173
+      alignment: 9
+      pivot: {x: .5, y: .133000001}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Plasmer_Shot_1
+      rect:
+        serializedVersion: 2
+        x: 125
+        y: 1575
+        width: 50
+        height: 143
+      alignment: 9
+      pivot: {x: .5, y: .159999996}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Plasmer_Idle
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 1575
+        width: 50
+        height: 99
+      alignment: 9
+      pivot: {x: .5, y: .230000004}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Plasmer_Shot_2
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 1575
+        width: 50
+        height: 143
+      alignment: 9
+      pivot: {x: .5, y: .159999996}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Plasmer_Shot_3
+      rect:
+        serializedVersion: 2
+        x: 325
+        y: 1575
+        width: 50
+        height: 143
+      alignment: 9
+      pivot: {x: .5, y: .159999996}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Plasmer_Shot_4
+      rect:
+        serializedVersion: 2
+        x: 425
+        y: 1575
+        width: 50
+        height: 143
+      alignment: 9
+      pivot: {x: .5, y: .159999996}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Charger_Idle
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 1275
+        width: 49
+        height: 114
+      alignment: 9
+      pivot: {x: .504999995, y: .200000003}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Charger_Shot_1
+      rect:
+        serializedVersion: 2
+        x: 126
+        y: 1275
+        width: 48
+        height: 128
+      alignment: 9
+      pivot: {x: .5, y: .180000007}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Charger_Shot_2
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 1275
+        width: 48
+        height: 128
+      alignment: 9
+      pivot: {x: .5, y: .180000007}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Charger_Shot_3
+      rect:
+        serializedVersion: 2
+        x: 326
+        y: 1275
+        width: 48
+        height: 128
+      alignment: 9
+      pivot: {x: .5, y: .180000007}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Charger_Shot_4
+      rect:
+        serializedVersion: 2
+        x: 426
+        y: 1275
+        width: 48
+        height: 128
+      alignment: 9
+      pivot: {x: .5, y: .180000007}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Emitter_Idle
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 975
+        width: 48
+        height: 121
+      alignment: 9
+      pivot: {x: .5, y: .189999998}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Emitter_Shot_1
+      rect:
+        serializedVersion: 2
+        x: 126
+        y: 975
+        width: 48
+        height: 121
+      alignment: 9
+      pivot: {x: .5, y: .188999996}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Emitter_Shot_2
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 975
+        width: 48
+        height: 121
+      alignment: 9
+      pivot: {x: .5, y: .188999996}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Emitter_Shot_3
+      rect:
+        serializedVersion: 2
+        x: 326
+        y: 975
+        width: 48
+        height: 121
+      alignment: 9
+      pivot: {x: .5, y: .188999996}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Emitter_Shot_4
+      rect:
+        serializedVersion: 2
+        x: 426
+        y: 975
+        width: 48
+        height: 121
+      alignment: 9
+      pivot: {x: .5, y: .188999996}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Waver_Idle
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 675
+        width: 80
+        height: 96
+      alignment: 9
+      pivot: {x: .5, y: .239999995}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Waver_Shot_1
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 675
+        width: 84
+        height: 121
+      alignment: 9
+      pivot: {x: .5, y: .188999996}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Waver_Shot_2
+      rect:
+        serializedVersion: 2
+        x: 210
+        y: 675
+        width: 80
+        height: 121
+      alignment: 9
+      pivot: {x: .5, y: .188999996}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Waver_Shot_3
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 675
+        width: 84
+        height: 121
+      alignment: 9
+      pivot: {x: .5, y: .188999996}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Waver_Shot_4
+      rect:
+        serializedVersion: 2
+        x: 408
+        y: 675
+        width: 84
+        height: 116
+      alignment: 9
+      pivot: {x: .5, y: .200000003}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Launcher_Idle
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 375
+        width: 49
+        height: 106
+      alignment: 9
+      pivot: {x: .504999995, y: .216000006}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Launcher_Shot_1
+      rect:
+        serializedVersion: 2
+        x: 126
+        y: 375
+        width: 48
+        height: 150
+      alignment: 9
+      pivot: {x: .5, y: .152999997}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Launcher_Shot_2
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 375
+        width: 48
+        height: 150
+      alignment: 9
+      pivot: {x: .5, y: .152999997}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Launcher_Shot_3
+      rect:
+        serializedVersion: 2
+        x: 326
+        y: 375
+        width: 48
+        height: 150
+      alignment: 9
+      pivot: {x: .5, y: .152999997}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Launcher_Shot_4
+      rect:
+        serializedVersion: 2
+        x: 426
+        y: 375
+        width: 48
+        height: 150
+      alignment: 9
+      pivot: {x: .5, y: .152999997}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Suppressor_Idle
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 75
+        width: 48
+        height: 107
+      alignment: 9
+      pivot: {x: .5, y: .215000004}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Suppressor_Shot_1
+      rect:
+        serializedVersion: 2
+        x: 126
+        y: 75
+        width: 48
+        height: 107
+      alignment: 9
+      pivot: {x: .5, y: .215000004}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Suppressor_Shot_2
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 75
+        width: 48
+        height: 107
+      alignment: 9
+      pivot: {x: .5, y: .215000004}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Suppressor_Shot_3
+      rect:
+        serializedVersion: 2
+        x: 326
+        y: 75
+        width: 48
+        height: 107
+      alignment: 9
+      pivot: {x: .5, y: .215000004}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Suppressor_Shot_4
+      rect:
+        serializedVersion: 2
+        x: 426
+        y: 75
+        width: 48
+        height: 107
+      alignment: 9
+      pivot: {x: .5, y: .215000004}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Weapon_Blaster_Shot_3
+      rect:
+        serializedVersion: 2
+        x: 325
+        y: 1875
+        width: 50
+        height: 173
+      alignment: 9
+      pivot: {x: .5, y: .134000003}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

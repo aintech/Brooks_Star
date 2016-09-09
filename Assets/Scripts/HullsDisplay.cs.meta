@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: 8d68ba7d74050c84788ba3683c3658a6
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - hullDisplayItemPrefab: {fileID: 473588, guid: 967bb8d816ac48148bbe4d26b13ea06f,
+      type: 2}
+  - moveUpBtnSprite: {fileID: 21300034, guid: a4a6b8c5652bc914eb4f084c0e06baf5, type: 3}
+  - moveDownBtnSprite: {fileID: 21300038, guid: a4a6b8c5652bc914eb4f084c0e06baf5,
+      type: 3}
+  - moveUpBtnSpriteDisabled: {fileID: 21300036, guid: a4a6b8c5652bc914eb4f084c0e06baf5,
+      type: 3}
+  - moveDownBtnSpriteDisabled: {fileID: 21300040, guid: a4a6b8c5652bc914eb4f084c0e06baf5,
+      type: 3}
+  - buyBtnSprite: {fileID: 21300042, guid: a4a6b8c5652bc914eb4f084c0e06baf5, type: 3}
+  - buyBtnSpriteDisabled: {fileID: 21300044, guid: a4a6b8c5652bc914eb4f084c0e06baf5,
+      type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 

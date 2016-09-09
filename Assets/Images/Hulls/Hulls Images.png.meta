@@ -1,0 +1,234 @@
+fileFormatVersion: 2
+guid: bbdead8f0534ec046bc2c13a20c0b252
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Hull Little
+    21300002: Hull Needle
+    21300004: Hull Gnome
+    21300006: Hull Cricket
+    21300008: Hull Argo
+    21300010: Hull Falcon
+    21300012: Hull Adventurer
+    21300014: Hull Corvette
+    21300016: Hull Buffalo
+    21300018: Hull Legionnaire
+    21300020: Hull StarWalker
+    21300022: Hull Warship
+    21300024: Hull Asterix
+    21300026: Hull Prime
+    21300028: Hull Titan
+    21300030: Hull Dreadnaut
+    21300032: Hull Armageddon
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 60
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Hull Little
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1598
+        width: 300
+        height: 450
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Needle
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 1598
+        width: 300
+        height: 450
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Gnome
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 1598
+        width: 300
+        height: 450
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Cricket
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 1598
+        width: 300
+        height: 450
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Argo
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 1598
+        width: 300
+        height: 450
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Falcon
+      rect:
+        serializedVersion: 2
+        x: 1500
+        y: 1598
+        width: 300
+        height: 450
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Adventurer
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1148
+        width: 300
+        height: 450
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Corvette
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 1148
+        width: 300
+        height: 450
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Buffalo
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 1148
+        width: 300
+        height: 450
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Legionnaire
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 1148
+        width: 300
+        height: 450
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull StarWalker
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 1148
+        width: 300
+        height: 450
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Warship
+      rect:
+        serializedVersion: 2
+        x: 1500
+        y: 1148
+        width: 300
+        height: 450
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Asterix
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 698
+        width: 300
+        height: 450
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Prime
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 698
+        width: 300
+        height: 450
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Titan
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 698
+        width: 300
+        height: 450
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Dreadnaut
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 698
+        width: 300
+        height: 450
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Armageddon
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 698
+        width: 300
+        height: 450
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 

@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 3d37eba2a2714d943a08accb468a4984
+timeCreated: 1428566149
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - blasterPrefab: {fileID: 480620, guid: 39c783a130ab7fc46a0218fa0e5dfd98, type: 2}
+  - plasmerPrefab: {fileID: 409514, guid: f7f30f3852a79af4991951beecaac829, type: 2}
+  - chargerPrefab: {fileID: 474982, guid: 316e78622a4a8c54f946e0fda7b11cb0, type: 2}
+  - emitterPrefab: {fileID: 403302, guid: 6e1617005968e494ab63631567b7c8c4, type: 2}
+  - waverPrefab: {fileID: 473264, guid: cf145b763e8b8704f8fd08fbd1ab96d9, type: 2}
+  - launcherPrefab: {fileID: 483802, guid: 5e26413ec6df1a547b7d0ec2587a99bd, type: 2}
+  - suppressorPrefab: {fileID: 498856, guid: d0f88f1551b79d242b118931ae87c551, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

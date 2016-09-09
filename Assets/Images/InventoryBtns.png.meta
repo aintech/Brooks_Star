@@ -1,0 +1,355 @@
+fileFormatVersion: 2
+guid: a4a6b8c5652bc914eb4f084c0e06baf5
+timeCreated: 1428586162
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Storage Btn
+    21300002: Inventory Btn
+    21300004: Ship Btn
+    21300006: Inventory Btn Disabled
+    21300008: Storage Btn Disabled
+    21300010: Ship Btn Disabled
+    21300012: MoveUp Btn
+    21300014: MoveUp Btn Disabled
+    21300016: MoveDown Btn
+    21300018: MoveDown Btn Disabled
+    21300020: Volume Background
+    21300022: Market Btn
+    21300024: Market Btn Disabled
+    21300026: Buyback Btn
+    21300028: Buyback Btn Disabled
+    21300030: Market Equipment BG
+    21300032: Market Hulls BG
+    21300034: MoveUpBig Btn
+    21300036: MoveUpBig Btn Disabled
+    21300038: MoveDownBig Btn
+    21300040: MoveDownBig Btn Disabled
+    21300042: Buy Btn
+    21300044: Buy Btn Disabled
+    21300046: Sell Btn
+    21300048: Sell Btn Disabled
+    21300050: Hull Show Btn
+    21300052: Storage Show Btn
+    21300054: Hull Information BG
+    21300056: VolumeBG
+    21300058: Sort Btn
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 60
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Inventory Btn
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 372
+        width: 50
+        height: 140
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Inventory Btn Disabled
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 372
+        width: 50
+        height: 140
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Storage Btn
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 372
+        width: 50
+        height: 140
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Storage Btn Disabled
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 372
+        width: 50
+        height: 140
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Ship Btn
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 372
+        width: 50
+        height: 140
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Ship Btn Disabled
+      rect:
+        serializedVersion: 2
+        x: 250
+        y: 372
+        width: 50
+        height: 140
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: MoveUp Btn
+      rect:
+        serializedVersion: 2
+        x: 330
+        y: 474
+        width: 90
+        height: 38
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: MoveUp Btn Disabled
+      rect:
+        serializedVersion: 2
+        x: 330
+        y: 436
+        width: 90
+        height: 38
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: MoveDown Btn
+      rect:
+        serializedVersion: 2
+        x: 330
+        y: 398
+        width: 90
+        height: 38
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: MoveDown Btn Disabled
+      rect:
+        serializedVersion: 2
+        x: 330
+        y: 360
+        width: 90
+        height: 38
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: VolumeBG
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 332
+        width: 50
+        height: 38
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Market Btn
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 232
+        width: 50
+        height: 140
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Market Btn Disabled
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 232
+        width: 50
+        height: 140
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Buyback Btn
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 232
+        width: 50
+        height: 140
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Buyback Btn Disabled
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 232
+        width: 50
+        height: 140
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Market Equipment BG
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 136
+        width: 207
+        height: 96
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Market Hulls BG
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 40
+        width: 207
+        height: 96
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: MoveUpBig Btn
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 474
+        width: 150
+        height: 38
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: MoveUpBig Btn Disabled
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 436
+        width: 150
+        height: 38
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: MoveDownBig Btn
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 398
+        width: 150
+        height: 38
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: MoveDownBig Btn Disabled
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 360
+        width: 150
+        height: 38
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Buy Btn
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 462
+        width: 207
+        height: 50
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Buy Btn Disabled
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 412
+        width: 207
+        height: 50
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Show Btn
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 136
+        width: 207
+        height: 96
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Storage Show Btn
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 40
+        width: 207
+        height: 96
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Hull Information BG
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 377
+        width: 272
+        height: 35
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sort Btn
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 292
+        width: 50
+        height: 38
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

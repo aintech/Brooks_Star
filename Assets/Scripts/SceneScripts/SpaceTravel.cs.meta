@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: d266beb3be49d3d42a81ac155c73ecd0
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - sectorPrefab: {fileID: 400000, guid: 7cc8a396e4ddb9b4b849400e7e4220cf, type: 2}
+  - shipPrefab: {fileID: 400004, guid: fa280f7ec37c2ca439fda87d7c46050e, type: 2}
+  - inventoryPrefab: {fileID: 400000, guid: 318b88ef80949294283fa7a3b2cad186, type: 2}
+  - inventoryBtnTexture: {fileID: 2800000, guid: 415ac5b444903e84f98a0d41cb13d491,
+      type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
