@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Ship : MonoBehaviour {
+public abstract class Ship : MonoBehaviour {
 	
 	public Transform blasterPrefab, plasmerPrefab, chargerPrefab, emitterPrefab, waverPrefab, launcherPrefab, suppressorPrefab;
 
@@ -34,13 +34,7 @@ public class Ship : MonoBehaviour {
 
 	protected ShieldsPool shieldsPool;
 
-	protected bool playerShip = false;
-
-	void Awake () {
-		init ();
-	}
-
-	virtual protected void init () {
+	protected void initInner () {
 		if (weaponSlotsMap == null) {
 			initializeWeaponSlotsMap();
 			initializeEngineMap();
@@ -152,6 +146,7 @@ public class Ship : MonoBehaviour {
 	public int getFullShield () {
 		return fullShield;
 	}
+
 	//для теста - потом убрать
 	public void damageShip (int damage) {
 		if (getShield() >= damage) {
@@ -196,10 +191,6 @@ public class Ship : MonoBehaviour {
 
 	public int getShieldRenderOrder () {
 		return shieldRenderOrder;
-	}
-
-	public bool isAPlayerShip () {
-		return playerShip;
 	}
 
 	protected Vector3 getWeaponPosition (int weaponIndex) {
@@ -331,4 +322,6 @@ public class Ship : MonoBehaviour {
 		colliderMap.Add(HullType.Dreadnaut, new Vector3(-0.04f, 1.8f, 2.58f));
 		colliderMap.Add(HullType.Armageddon, new Vector3(-0.07f, 1.8f, 2.8f));
 	}
+
+	public abstract bool isPlayerShip ();
 }

@@ -14,7 +14,9 @@ public class MessageBox : MonoBehaviour {
 	
 	private Rect scrollViewRect, msgRect, btnRect;
 	
-	private const float screenHeightRate = .05f, screenWidthRate = .09f, textAreaWidthRate = .83f, textAreaHeightRate = .85f, btnSpacing = 2;
+	private const float screenTopOffsetRate = .03f /*отступ сверху*/, textAreaHeightRate = .95f /*Высота текстового блока*/,
+						screenLeftOffsetRate = .085f, textAreaWidthRate = .83f,
+						btnSpacing = 2;
 
 	private const float scrollSpeed = 20;
 	
@@ -22,7 +24,7 @@ public class MessageBox : MonoBehaviour {
 	
 	private List<ContentWrapper> contents = new List<ContentWrapper>();
 	
-	private float contentWidth, contentHeight, btnHeight = 30, nextObjY, msgToBtnOffset, msgStartY, msgMaxY;
+	private float contentWidth, contentHeight, btnHeight = 30, nextObjY, msgToBtnOffset, msgStartY, msgMaxY, btnLowerY;
 	
 	private RectOffset rectOffset;
 	
@@ -32,9 +34,12 @@ public class MessageBox : MonoBehaviour {
 	
 	private static bool hided = false;
 
-	public void init () {
-		float yPos = Screen.height * screenHeightRate;
-		float xPos = Screen.width * screenWidthRate;
+	private Planet planet;
+
+	public void init (Planet planet) {
+		this.planet = planet;
+		float yPos = Screen.height * screenTopOffsetRate;
+		float xPos = Screen.width * screenLeftOffsetRate;
 		Vector2 pos = new Vector2(xPos, yPos);
 		float textWidth = Screen.width * textAreaWidthRate;
 		float textHeight = Screen.height * textAreaHeightRate;
@@ -51,6 +56,7 @@ public class MessageBox : MonoBehaviour {
 		appearMsgStyle = new GUIStyle(msgStyle);
 		appearColor = appearMsgStyle.normal.textColor;
 		appearColor.a = 0;
+		btnLowerY = Screen.height - (Screen.height * screenTopOffsetRate) - btnHeight;
 		hideMessageBox();
 	}
 	
@@ -73,13 +79,23 @@ public class MessageBox : MonoBehaviour {
 			}
 			msgRect.y += wrapper.getContentHeight();
 		}
-		btnRect.y = msgRect.y + msgToBtnOffset;
-		foreach (MessageContainer.ButtonObject btn in messageObject.getButtons()) {
+//		btnRect.y = msgRect.y + msgToBtnOffset;
+		btnRect.y = btnLowerY;
+		MessageContainer.ButtonObject btn;
+		for (int i = messageObject.getButtons().Length-1; i >= 0; i--) {
+			if (messageObject == null) { break; }
+			btn = messageObject.getButtons()[i];
 			if (GUI.Button(btnRect, btn.getBtnText(), btnStyle)) {
 				clickButton (btn);
 			}
-			btnRect.y += btnHeight + btnSpacing;
+			btnRect.y -= btnHeight + btnSpacing;
 		}
+//		foreach (MessageContainer.ButtonObject btn in messageObject.getButtons()) {
+//			if (GUI.Button(btnRect, btn.getBtnText(), btnStyle)) {
+//				clickButton (btn);
+//			}
+//			btnRect.y -= btnHeight + btnSpacing;
+//		}
 		GUI.EndScrollView();
 	}
 	
@@ -140,6 +156,7 @@ public class MessageBox : MonoBehaviour {
 	
 	public void showNewMessage (MessageContainer messageContainer, int messageIndex) {
 		this.messageContainer = messageContainer;
+		planet.setPlanetBtnsEnabled(false);
 		gameObject.SetActive(true);
 		displayNextMessage(messageIndex);
 	}
@@ -165,7 +182,7 @@ public class MessageBox : MonoBehaviour {
 		msgStartY = msgMaxY;
 		contentHeight = 0;
 		gameObject.SetActive(false);
-		Variables.planetScene.setPlanetEnabled(enablePlanet);
+		planet.setPlanetBtnsEnabled(enablePlanet);
 	}
 	
 	private void displayNextMessage (int messageIndex) {
@@ -185,21 +202,19 @@ public class MessageBox : MonoBehaviour {
 		scrollToLastMessage();
 	}
 	
-	private void clickButton(MessageContainer.ButtonObject btn)
-	{
-		switch (btn.getInstructionType())
-		{
-		case MessageContainer.InstructionType.CLOSE:
-			closeMessageBox(true);
-			break;
-		case MessageContainer.InstructionType.GOTO:
-			addContentWrapper("\n<color=orange>" + btn.getBtnText() + "</color>\n", null);
-			displayNextMessage(int.Parse(btn.getInstructionParams()[0]));
-			break;
-		case MessageContainer.InstructionType.SKIPTO:
-			displayNextMessage(int.Parse(btn.getInstructionParams()[0]));
-			break;
-		default: Debug.Log("Неизвестная инструкция"); break;
+	private void clickButton(MessageContainer.ButtonObject btn) {
+		switch (btn.getInstructionType()) {
+			case MessageContainer.InstructionType.CLOSE:
+				closeMessageBox(true);
+				break;
+	//		case MessageContainer.InstructionType.GOTO:
+	//			addContentWrapper("\n<color=orange>" + btn.getBtnText() + "</color>\n", null);
+	//			displayNextMessage(int.Parse(btn.getInstructionParams()[0]));
+	//			break;
+			case MessageContainer.InstructionType.GOTO:
+				displayNextMessage(int.Parse(btn.getInstructionParams()[0]));
+				break;
+			default: Debug.Log("Неизвестная инструкция"); break;
 		}
 	}
 	
@@ -209,7 +224,7 @@ public class MessageBox : MonoBehaviour {
 		private bool appearing;
 		
 		public ContentWrapper(string txt, Texture image, GUIStyle msgStyle, float contentWidth) {
-			this.content = new GUIContent(txt, image);
+			this.content = new GUIContent(image == null? txt: "<color=orange>" + txt + "</color>", image);
 			contentHeight = msgStyle.CalcHeight(this.content, contentWidth);
 			appearing = true;
 		}

@@ -7,18 +7,18 @@ public class Utils : MonoBehaviour {
 	
 	public static Vector2 mousePos;
 	
-	private static Camera camera;
+	private static Camera cam;
 	
 	private static Vector2 zeroV = Vector2.zero;
 
 	private static float seed = 0;
 	
 	void Awake () {
-		camera = Camera.main;
+		cam = Camera.main;
 	}
 	
 	void Update () {
-		mousePos = camera.ScreenToWorldPoint(Input.mousePosition);
+		mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
 		hit = Physics2D.Raycast(mousePos, zeroV, 1).collider;
 	}
 

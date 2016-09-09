@@ -26,7 +26,7 @@ public class ShieldsPool : MonoBehaviour {
 			shieldsList.Add(shield);
 		}
 
-		if (ship.isAPlayerShip()) {
+		if (ship.isPlayerShip()) {
 			shield.GetComponent<SpriteRenderer>().sortingLayerName = "Player";
 		} else {
 			shield.GetComponent<SpriteRenderer>().sortingLayerName = "Enemy";

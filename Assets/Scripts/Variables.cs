@@ -3,8 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public static class Variables {
-	public static PlanetScene planetScene;
-
+	
 	public static PlanetType planetType = PlanetType.CORAS;
 
 	public static HullType shipHullType = HullType.Corvette;

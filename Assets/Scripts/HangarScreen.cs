@@ -6,7 +6,7 @@ public class HangarScreen : InventoryContainedScreen {
 
 	public Sprite hullActiveSprite, storageActiveSprite;
 	
-	private PlanetScene planetScene;
+	private Planet planet;
 
 	private SpriteRenderer hullStorageBtnRender;
 
@@ -22,20 +22,20 @@ public class HangarScreen : InventoryContainedScreen {
 
 	private Vector3 hullViewPosition = new Vector3 (4.72f, 0.43f);
 
-	override protected void init () {
-		base.init ();
-		initInvetoryAndStorageBtns ();
-		hullStorageBtnRender = transform.FindChild ("Hull Storage Btn").GetComponent<SpriteRenderer> ();
-	}
-
-	public void showScreen (PlanetScene planetScene, Inventory inventory, Inventory storage, ShipData shipData) {
-		gameObject.SetActive (true);
-
-		this.planetScene = planetScene;
+	public void init (Planet planet, ShipData shipData, Inventory inventory, Inventory storage) {
+		this.planet = planet;
+		this.shipData = shipData;
 		this.inventory = inventory;
 		this.storage = storage;
-		this.shipData = shipData;
 
+		innerInit();
+//		initInvetoryAndStorageBtns ();
+		hullStorageBtnRender = transform.FindChild ("Hull Storage Btn").GetComponent<SpriteRenderer> ();
+
+		gameObject.SetActive(false);
+	}
+
+	public void showScreen () {
 		inventory.setContainerScreen(this);
 		storage.setContainerScreen(this);
 
@@ -48,6 +48,8 @@ public class HangarScreen : InventoryContainedScreen {
 		shipData.updateHullInfo ();
 
 		showHullScreen ();
+
+		gameObject.SetActive (true);
 	}
 
 	override protected void checkBtnPress (string colliderName) {
@@ -249,7 +251,7 @@ public class HangarScreen : InventoryContainedScreen {
 		inventory.gameObject.SetActive (false);
 		storage.gameObject.SetActive (false);
 		shipData.gameObject.SetActive (false);
-		planetScene.setPlanetEnabled(true);
+		planet.setPlanetBtnsEnabled(true);
 		gameObject.SetActive (false);
 	}
 }

@@ -1,97 +1,119 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MarketScreen : MonoBehaviour {
+public class MarketScreen : MonoBehaviour, ButtonHolder {
+	
+	private HullsMarket hullsMarket;
 
-	public Sprite equipmentActiveSprite, hullActiveSprite;
+	private EquipmentsMarket equipmentsMarket;
 
-	private SpriteRenderer equipmentHullsBtnRender;
+	private EquipmentsMarket goodsMarket, gearsMarket;
 
-	private Inventory inventory, storage, marketInv, shipInv, buybackInv;
+	private Planet planet;
 
-	private HullsDisplay hullsDisplay;
-
-	private MarketEquipmentScreen marketEquipmentScreen;
-
-	private ShipData shipData;
-
-	private PlanetScene planetScene;
-
-	private BoxCollider2D closeBtn, equipmentHullsBtn;
-
-	private Vector3 mouseToWorldPosition;
-
-	private RaycastHit2D hit;
+	private Button goodsBtn, gearsBtn, equipmentsBtn, hullsBtn, closeBtn;
 
 	private TextMesh cashTxt;
 
-	void Awake () {
-		marketEquipmentScreen = transform.FindChild ("Equipment Market").GetComponent<MarketEquipmentScreen>();
-		hullsDisplay = transform.FindChild ("Hulls Market").GetComponent<HullsDisplay> ();
-		hullsDisplay.fillWithRandomHulls(15, "Hull Item");
+	public void init (Planet planet, ShipData shipData, Inventory inventory, Inventory storage, Inventory marketInv, Inventory shipInv, Inventory buybackInv) {
+		this.planet = planet;
 
-		closeBtn = transform.FindChild ("Close Btn").GetComponent<BoxCollider2D> ();
-		equipmentHullsBtn = transform.FindChild ("Equipment Hulls Btn").GetComponent<BoxCollider2D> ();
-		equipmentHullsBtnRender = equipmentHullsBtn.transform.GetComponent<SpriteRenderer> ();
+		equipmentsMarket = transform.Find ("EquipmentsMarket").GetComponent<EquipmentsMarket>();
+		equipmentsMarket.init(this, inventory, storage, marketInv, shipInv, buybackInv, shipData);
 
-		cashTxt = transform.FindChild ("CashTxt").GetComponent<TextMesh> ();
+		hullsMarket = transform.Find ("HullsMarket").GetComponent<HullsMarket> ();
+		hullsMarket.init(inventory, storage, shipData);
+		hullsMarket.fillWithRandomHulls(15, "Hull Item");
+
+		goodsBtn = transform.Find ("GoodsBtn").GetComponent<Button> ().init();
+		gearsBtn = transform.Find ("GearsBtn").GetComponent<Button> ().init();
+		equipmentsBtn = transform.Find ("EquipmentsBtn").GetComponent<Button> ().init();
+		hullsBtn = transform.Find("HullsBtn").GetComponent<Button>().init();
+		closeBtn = transform.Find ("CloseBtn").GetComponent<Button> ().init();
+
+		cashTxt = transform.Find ("CashTxt").GetComponent<TextMesh> ();
 		cashTxt.gameObject.GetComponent<MeshRenderer> ().sortingOrder = 1;
-	}
-
-	public void showScreen (PlanetScene planetScene, Inventory inventory, Inventory storage, Inventory marketInv,
-	                        Inventory shipInv, Inventory buybackInv, ShipData shipData)
-	{
-		gameObject.SetActive (true);
-
-		this.planetScene = planetScene;
-		this.inventory = inventory;
-		this.storage = storage;
-		this.marketInv = marketInv;
-		this.shipInv = shipInv;
-		this.buybackInv = buybackInv;
-		this.shipData = shipData;
-
-		showEquipmentScreen ();
-	}
-
-	void Update () {
-		if (Input.GetMouseButtonDown (0)) {
-			mouseToWorldPosition = Camera.main.ScreenToWorldPoint (Input.mousePosition);
-			hit = Physics2D.Raycast(mouseToWorldPosition, Vector2.zero, 1);
-			if (hit.collider != null) {
-				switch (hit.collider.name) {
-					case "Close Btn": closeScreen(); break;
-					case "Equipment Hulls Btn": changeScreens (); break;
-				}
-			}
-		}
 		cashTxt.text = Variables.cash.ToString("C0");
+
+		gameObject.SetActive(false);
 	}
 
-	private void changeScreens () {
-		if (!marketEquipmentScreen.gameObject.activeInHierarchy) {
-			showEquipmentScreen();	
+	public void showScreen () {
+		gameObject.SetActive (true);
+	}
+
+	public void fireClickButton (Button button) {
+		if (button == closeBtn) {
+			if (goodsMarket.gameObject.activeInHierarchy || 
+				gearsMarket.gameObject.activeInHierarchy || 
+				equipmentsMarket.gameObject.activeInHierarchy || 
+				hullsMarket.gameObject.activeInHierarchy)
+			{
+				closeMarket();
+			} else { closeScreen(); }
+		} else if (button == goodsBtn) {
+			showMarket(MarketType.GOODS);
+		} else if (button == gearsBtn) {
+			showMarket(MarketType.GEARS);
+		} else if (button == equipmentsBtn) {
+			showMarket(MarketType.EQUIPMENTS);
+		} else if (button == hullsBtn) {
+			showMarket(MarketType.HULLS);
 		} else {
-			showHullsScreen();
+			Debug.Log("Unknown button");
 		}
 	}
 
-	private void showEquipmentScreen () {
-		equipmentHullsBtnRender.sprite = equipmentActiveSprite;
-		hullsDisplay.gameObject.SetActive (false);
-		marketEquipmentScreen.showScreen (this, inventory, storage, marketInv, shipInv, buybackInv, shipData);
+//	void Update () {
+//		if (Input.GetMouseButtonDown (0) && Utils.hit != null) {
+//			if (Utils.hit == closeBtn) {
+//				closeScreen();
+//			} else if (Utils.hit == equipmentHullsBtn) {
+//				changeScreens();
+//			}
+////			mouseToWorldPosition = Camera.main.ScreenToWorldPoint (Input.mousePosition);
+////			hit = Physics2D.Raycast(mouseToWorldPosition, Vector2.zero, 1);
+////			if (hit.collider != null) {
+////				switch (hit.collider.name) {
+////					case "Close Btn": closeScreen(); break;
+////					case "Equipment Hulls Btn": changeScreens (); break;
+////				}
+////			}
+//		}
+//	}
+
+	private void closeMarket () {
+		if (goodsMarket.gameObject.activeInHierarchy) { goodsMarket.gameObject.SetActive(false); }
+		if (gearsMarket.gameObject.activeInHierarchy) { gearsMarket.gameObject.SetActive(false); }
+		if (equipmentsMarket.gameObject.activeInHierarchy) { equipmentsMarket.closeScreen(); }
+		if (hullsMarket.gameObject.activeInHierarchy) { equipmentsMarket.gameObject.SetActive(false); }
+		setBtnsEnabled(true);
 	}
 
-	private void showHullsScreen () {
-		equipmentHullsBtnRender.sprite = hullActiveSprite;
-		marketEquipmentScreen.closeScreen ();
-		hullsDisplay.showScreen (inventory, storage, shipInv);
+	private void showMarket (MarketType type) {
+		switch (type) {
+			case MarketType.GOODS: goodsMarket.showScreen(); break;
+			case MarketType.GEARS: gearsMarket.showScreen(); break;
+			case MarketType.EQUIPMENTS: equipmentsMarket.showScreen(); break;
+			case MarketType.HULLS: hullsMarket.showScreen(); break;
+			default: Debug.Log("Unknown market type"); break;
+		}
+		setBtnsEnabled(false);
+	}
+
+	private void setBtnsEnabled (bool enabled) {
+		goodsBtn.gameObject.SetActive(enabled);
+		gearsBtn.gameObject.SetActive(enabled);
+		equipmentsBtn.gameObject.SetActive(enabled);
+		hullsBtn.gameObject.SetActive(enabled);
 	}
 
 	private void closeScreen () {
-		marketEquipmentScreen.closeScreen ();
-		hullsDisplay.gameObject.SetActive (false);
-		planetScene.setPlanetEnabled(true);
 		gameObject.SetActive (false);
+		planet.setPlanetBtnsEnabled(true);
+	}
+
+	private enum MarketType {
+		GOODS, GEARS, EQUIPMENTS, HULLS
 	}
 }

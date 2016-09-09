@@ -36,11 +36,7 @@ public class ShipData : MonoBehaviour {
 
 	private TextMesh hullHeatlhText, hullArmorText, hullEnergyText;
 
-	void Awake () {
-		init ();
-	}
-
-	private void init () {
+	public ShipData init () {
 		trans = transform;
 		radarSlot = trans.FindChild("Radar Slot").GetComponent<HullSlot>();
 		engineSlot = trans.FindChild("Engine Slot").GetComponent<HullSlot>();
@@ -85,6 +81,10 @@ public class ShipData : MonoBehaviour {
 		hullHeatlhText.GetComponent<MeshRenderer> ().sortingOrder = 3;
 		hullArmorText.GetComponent<MeshRenderer> ().sortingOrder = 3;
 		hullEnergyText.GetComponent<MeshRenderer> ().sortingOrder = 3;
+
+		gameObject.SetActive(false);
+
+		return this;
 	}
 
 	public void setHullType (HullType hullType, int health) {

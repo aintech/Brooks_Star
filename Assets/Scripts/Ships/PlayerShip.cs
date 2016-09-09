@@ -8,14 +8,11 @@ public class PlayerShip : Ship {
 
 	private ShipController controller;
 
-	override protected void init () {
-		base.init();
-		controller = transform.GetComponent<ShipController>();
-	}
-
 	public void initPlayerShip (ShipData shipData) {
 		this.shipData = shipData;
 		this.name = "Player ship";
+		initInner();
+		controller = transform.GetComponent<ShipController>();
 		setHullType (shipData.getHullType());
 		health = shipData.getCurrentHealth ();
 		fullHealth = shipData.getHullType().getMaxHealth();
@@ -25,7 +22,6 @@ public class PlayerShip : Ship {
 		initEngine ();
 		initWeapons ();
 		controller.initController(this);
-		playerShip = true;
 	}
 	
 	private void initEngine () {
@@ -102,5 +98,9 @@ public class PlayerShip : Ship {
 	override public void setGamePaused (bool gamePaused) {
 		base.setGamePaused(gamePaused);
 		getController().setGamePaused(gamePaused);
+	}
+
+	public override bool isPlayerShip () {
+		return true;
 	}
 }

@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class HullsDisplay : MonoBehaviour {
+public class HullsMarket : MonoBehaviour {
 
-	public Transform hullDisplayItemPrefab;
+	public Transform hullsMarketItemPrefab;
 
 	private ShipData shipData;
 
@@ -12,9 +13,9 @@ public class HullsDisplay : MonoBehaviour {
 
 	public Sprite[] hullImages;
 
-	private HullDisplayCell[] cells;
+	private HullsMarketCell[] cells;
 
-	private Dictionary<int, HullDisplayItem> items = new Dictionary<int, HullDisplayItem>();
+	private Dictionary<int, HullsMarketItem> items = new Dictionary<int, HullsMarketItem>();
 	
 	private SpriteRenderer moveUpBtnRender, moveDownBtnRender, buyHullBtnRender, chosenHullBorder, hullImage;
 	
@@ -23,14 +24,10 @@ public class HullsDisplay : MonoBehaviour {
 	private int offset = 0;
 	
 	private int offsetStep = 2;
-	
-	private Vector3 mouseToWorldPosition;
-	
-	private RaycastHit2D hit;
-	
+
 	private bool scrollableUp, scrollableDown;
 
-	private HullDisplayItem chosenHull;
+	private HullsMarketItem chosenHull;
 
 	private TextMesh hullName, hullCost, hullHealth, hullStorage,
 					 weaponSlots, armorSlots, shieldSlots,
@@ -42,16 +39,14 @@ public class HullsDisplay : MonoBehaviour {
 
 	private Color greenColor = new Color(0, 1, 0); 
 
-	private Inventory inventory, storage, shipInv;
+	private Inventory inventory, storage;
 
-	void Awake () {
-		init();
-	}
+	public void init (Inventory inventory, Inventory storage, ShipData shipData) {
+		this.inventory = inventory;
+		this.storage = storage;
+		this.shipData = shipData;
 
-	private void init () {
-		cells = transform.GetComponentsInChildren<HullDisplayCell> ();
-
-		shipData = GameObject.Find ("Ship Data").GetComponent<ShipData> ();
+		cells = transform.GetComponentsInChildren<HullsMarketCell> ();
 
 		moveUpBtn = transform.FindChild ("MoveUpBtn").GetComponent<BoxCollider2D> ();
 		moveDownBtn = transform.FindChild ("MoveDownBtn").GetComponent<BoxCollider2D> ();
@@ -95,34 +90,27 @@ public class HullsDisplay : MonoBehaviour {
 		checkButtons ();
 	}
 
-	public void showScreen (Inventory inventory, Inventory storage, Inventory shipInv) {
-		this.inventory = inventory;
-		this.storage = storage;
-		this.shipInv = shipInv;
+	public void showScreen () {
 		gameObject.SetActive (true);
 	}
 
 	void Update () {
-		if (Input.GetMouseButtonDown (0)) {
-			mouseToWorldPosition = Camera.main.ScreenToWorldPoint (Input.mousePosition);
-			hit = Physics2D.Raycast(mouseToWorldPosition, Vector2.zero, 1);
-			if (hit.collider != null) {
-				if (hit.collider == moveUpBtn) {
-					if (scrollableUp) {
-						offset -= offsetStep;
-						afterScroll ();
-					}
-				} else if (hit.collider == moveDownBtn) {
-					if (scrollableDown) {
-						offset += offsetStep;
-						afterScroll ();
-					}
-				} else if (hit.collider == buyHullBtn) {
-					buyHull ();
-				} else if (hit.collider.name.Equals("Cell")) {
-					selectCell ((HullDisplayCell)hit.collider.gameObject.GetComponent<HullDisplayCell>());
+		if (Input.GetMouseButtonDown (0) && Utils.hit != null) {
+			if (Utils.hit == moveUpBtn) {
+				if (scrollableUp) {
+					offset -= offsetStep;
+					afterScroll ();
 				}
-			}	
+			} else if (Utils.hit == moveDownBtn) {
+				if (scrollableDown) {
+					offset += offsetStep;
+					afterScroll ();
+				}
+			} else if (Utils.hit == buyHullBtn) {
+				buyHull ();
+			} else if (Utils.hit.name.Equals("Cell")) {
+				selectCell ((HullsMarketCell)Utils.hit.gameObject.GetComponent<HullsMarketCell>());
+			}
 		}
 	}
 
@@ -147,7 +135,7 @@ public class HullsDisplay : MonoBehaviour {
 		chosenHull.setHullType(oldHullType);
 		selectCell(chosenHull.getCell());
 
-		transform.parent.GetComponent<MarketScreen>().transform.FindChild("Equipment Market").GetComponent<MarketEquipmentScreen>().updateShipInventory();
+		transform.parent.GetComponent<MarketScreen>().transform.FindChild("EquipmentsMarket").GetComponent<EquipmentsMarket>().updateShipInventory();
 	}
 
 	private void checkInventoryCapacity () {
@@ -183,16 +171,16 @@ public class HullsDisplay : MonoBehaviour {
 		}
 	}
 
-	private void refreshDisplay () {
-		foreach (HullDisplayCell cell in cells) {
+	private void refreshMarket () {
+		foreach (HullsMarketCell cell in cells) {
 			cell.setItem (null);
 		}
 		
-		foreach (KeyValuePair<int, HullDisplayItem> pair in getItems ()) {
-			HullDisplayItem item = pair.Value;
+		foreach (KeyValuePair<int, HullsMarketItem> pair in getItems ()) {
+			HullsMarketItem item = pair.Value;
 			item.setCell(null);
 			if (pair.Key >= offset && pair.Key < (cells.Length + offset)) {
-				HullDisplayCell cell = getCell (pair.Key - offset);
+				HullsMarketCell cell = getCell (pair.Key - offset);
 				cell.setItem (item);
 				item.setCell (cell);
 				item.transform.position = cell.transform.position;
@@ -207,7 +195,7 @@ public class HullsDisplay : MonoBehaviour {
 	}
 
 	private void afterScroll () {
-		refreshDisplay ();
+		refreshMarket ();
 		if (chosenHull.getCell() == null) {
 			chosenHullBorder.gameObject.SetActive (false);
 		} else {
@@ -218,7 +206,7 @@ public class HullsDisplay : MonoBehaviour {
 	
 	private int getMaximumItemIndex () {
 		int index = 0;
-		foreach (KeyValuePair<int, HullDisplayItem> pair in getItems()) {
+		foreach (KeyValuePair<int, HullsMarketItem> pair in getItems()) {
 			if (pair.Key > index) {
 				index = pair.Key;
 			}
@@ -243,8 +231,8 @@ public class HullsDisplay : MonoBehaviour {
 		}
 	}
 	
-	private HullDisplayCell getCell (int index) {
-		foreach (HullDisplayCell cell in cells) {
+	private HullsMarketCell getCell (int index) {
+		foreach (HullsMarketCell cell in cells) {
 			if (cell.index == index) {
 				return cell;
 			}
@@ -255,11 +243,11 @@ public class HullsDisplay : MonoBehaviour {
 	public void fillWithRandomHulls (int count, string label) {
 		int index = 0;
 		for (int i = 0; i < count; i++) {
-			Transform itemTrans = Instantiate(hullDisplayItemPrefab)  as Transform;
-			HullDisplayItem item = itemTrans.GetComponent<HullDisplayItem>();
+			Transform itemTrans = Instantiate(hullsMarketItemPrefab)  as Transform;
+			HullsMarketItem item = itemTrans.GetComponent<HullsMarketItem>();
 			itemTrans.SetParent(transform);
 			if (label != null) { item.name = label; }
-			int rand = Mathf.RoundToInt (Random.value * 16);
+			int rand = Mathf.RoundToInt (UnityEngine.Random.value * Enum.GetNames(typeof(HullType)).Length);
 
 			item.setHullType (rand == 0? HullType.Little:
 			                  rand == 1? HullType.Needle:
@@ -288,11 +276,11 @@ public class HullsDisplay : MonoBehaviour {
 			index++;
 		}
 
-		refreshDisplay();
+		refreshMarket();
 		selectCell (getCell (0));
 	}
 
-	public void selectCell (HullDisplayCell cell) {
+	public void selectCell (HullsMarketCell cell) {
 		chosenHull = cell.getItem ();
 		chosenHullBorder.transform.position = cell.transform.position;
 		chosenHullBorder.gameObject.SetActive (true);
@@ -365,11 +353,11 @@ public class HullsDisplay : MonoBehaviour {
 		}
 	}
 
-	public Dictionary<int, HullDisplayItem> getItems () {
+	public Dictionary<int, HullsMarketItem> getItems () {
 		return items;
 	}
 	
-	public HullDisplayCell[] getCells () {
+	public HullsMarketCell[] getCells () {
 		return cells;
 	}
 

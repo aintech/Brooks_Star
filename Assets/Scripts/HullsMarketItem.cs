@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class HullDisplayItem : MonoBehaviour {
+public class HullsMarketItem : MonoBehaviour {
 
 	public Sprite[] hullIcons;
 
@@ -9,7 +9,7 @@ public class HullDisplayItem : MonoBehaviour {
 
 	private HullType hullType;
 
-	private HullDisplayCell cell;
+	private HullsMarketCell cell;
 
 	void Awake () {
 		if (render == null) render = transform.GetComponent<SpriteRenderer>();
@@ -46,11 +46,11 @@ public class HullDisplayItem : MonoBehaviour {
 		return hullType;
 	}
 
-	public void setCell (HullDisplayCell cell) {
+	public void setCell (HullsMarketCell cell) {
 		this.cell = cell;
 	}
 
-	public HullDisplayCell getCell () {
+	public HullsMarketCell getCell () {
 		return cell;
 	}
 }

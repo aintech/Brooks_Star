@@ -21,24 +21,20 @@ public abstract class InventoryContainedScreen : MonoBehaviour {
 
 	protected TextMesh itemName, itemLabel_1, itemValue_1, itemLabel_2, itemValue_2, itemEnergyLabel, itemEnergyValue, itemVolumeLabel, itemVolumeValue, itemCostLabel, itemCostValue;
 
-	void Awake () {
-		init ();
-	}
-
-	virtual protected void init() {
-		Transform itemInformation = transform.FindChild("Item Information").transform;
+	protected void innerInit() {
+		Transform itemInformation = transform.Find("Item Information").transform;
 		
-		itemName = itemInformation.FindChild ("ItemName").GetComponent<TextMesh> ();
-		itemLabel_1 = itemInformation.FindChild ("ItemLabel_1").GetComponent<TextMesh> ();
-		itemValue_1 = itemInformation.FindChild ("ItemValue_1").GetComponent<TextMesh> ();
-		itemLabel_2 = itemInformation.FindChild ("ItemLabel_2").GetComponent<TextMesh> ();
-		itemValue_2 = itemInformation.FindChild ("ItemValue_2").GetComponent<TextMesh> ();
-		itemEnergyLabel = itemInformation.FindChild ("ItemEnergyLabel").GetComponent<TextMesh> ();
-		itemEnergyValue = itemInformation.FindChild ("ItemEnergyValue").GetComponent<TextMesh> ();
-		itemVolumeLabel = itemInformation.FindChild ("ItemVolumeLabel").GetComponent<TextMesh> ();
-		itemVolumeValue = itemInformation.FindChild ("ItemVolumeValue").GetComponent<TextMesh> ();
-		itemCostLabel = itemInformation.FindChild ("ItemCostLabel").GetComponent<TextMesh> ();
-		itemCostValue = itemInformation.FindChild ("ItemCostValue").GetComponent<TextMesh> ();
+		itemName = itemInformation.Find("ItemName").GetComponent<TextMesh> ();
+		itemLabel_1 = itemInformation.Find("ItemLabel_1").GetComponent<TextMesh> ();
+		itemValue_1 = itemInformation.Find("ItemValue_1").GetComponent<TextMesh> ();
+		itemLabel_2 = itemInformation.Find("ItemLabel_2").GetComponent<TextMesh> ();
+		itemValue_2 = itemInformation.Find("ItemValue_2").GetComponent<TextMesh> ();
+		itemEnergyLabel = itemInformation.Find("ItemEnergyLabel").GetComponent<TextMesh> ();
+		itemEnergyValue = itemInformation.Find("ItemEnergyValue").GetComponent<TextMesh> ();
+		itemVolumeLabel = itemInformation.Find("ItemVolumeLabel").GetComponent<TextMesh> ();
+		itemVolumeValue = itemInformation.Find("ItemVolumeValue").GetComponent<TextMesh> ();
+		itemCostLabel = itemInformation.Find("ItemCostLabel").GetComponent<TextMesh> ();
+		itemCostValue = itemInformation.Find("ItemCostValue").GetComponent<TextMesh> ();
 		
 		itemName.GetComponent<MeshRenderer> ().sortingLayerName = "Inventory";
 		itemLabel_1.GetComponent<MeshRenderer> ().sortingLayerName = "Inventory";
@@ -64,13 +60,16 @@ public abstract class InventoryContainedScreen : MonoBehaviour {
 		itemCostLabel.GetComponent<MeshRenderer> ().sortingOrder = 3;
 		itemCostValue.GetComponent<MeshRenderer> ().sortingOrder = 3;
 		
-		chosenItemBorder = transform.FindChild ("ChosenItemBorder").transform;
+		chosenItemBorder = transform.Find ("ChosenItemBorder").transform;
+
+		inventoryBtnRender = transform.Find("Inventory Btn") == null? null: transform.Find("Inventory Btn").GetComponent<SpriteRenderer>();
+		storageBtnRender = transform.Find("Storage Btn") == null? null: transform.Find("Storage Btn").GetComponent<SpriteRenderer>();
 	}
 
-	protected void initInvetoryAndStorageBtns () {
-		inventoryBtnRender = transform.FindChild ("Inventory Btn").GetComponent<SpriteRenderer> ();
-		storageBtnRender = transform.FindChild ("Storage Btn").GetComponent<SpriteRenderer> ();
-	}
+//	protected void initInvetoryAndStorageBtns () {
+//		inventoryBtnRender = transform.Find ("Inventory Btn").GetComponent<SpriteRenderer> ();
+//		storageBtnRender = transform.Find ("Storage Btn").GetComponent<SpriteRenderer> ();
+//	}
 
 	void Update () {
 		mouseToWorldPosition = Camera.main.ScreenToWorldPoint (Input.mousePosition);

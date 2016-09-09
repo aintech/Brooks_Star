@@ -23,10 +23,6 @@ public class Inventory : MonoBehaviour {
 	private int offset = 0;
 
 	private int offsetStep = 4;
-	
-	private Vector3 mouseToWorldPosition;
-	
-	private RaycastHit2D hit;
 
 	private bool scrollableUp, scrollableDown;
 
@@ -34,7 +30,7 @@ public class Inventory : MonoBehaviour {
 
 	private TextMesh volumeMesh;
 
-	void Awake () {
+	public Inventory init () {
 		cells = transform.GetComponentsInChildren<InventoryCell> ();
 		moveUpBtn = transform.FindChild ("MoveUpBtn").GetComponent<BoxCollider2D> ();
 		moveDownBtn = transform.FindChild ("MoveDownBtn").GetComponent<BoxCollider2D> ();
@@ -48,6 +44,10 @@ public class Inventory : MonoBehaviour {
 		meshRend.sortingOrder = 3;
 
 		checkButtons ();
+
+		gameObject.SetActive(false);
+
+		return this;
 	}
 
 	public void setContainerScreen (InventoryContainedScreen containerScreen) {
@@ -55,25 +55,21 @@ public class Inventory : MonoBehaviour {
 	}
 
 	void Update () {
-		if (Input.GetMouseButtonDown (0)) {
-			mouseToWorldPosition = Camera.main.ScreenToWorldPoint (Input.mousePosition);
-			hit = Physics2D.Raycast(mouseToWorldPosition, Vector2.zero, 1);
-			if (hit.collider != null) {
-				if (hit.collider == moveUpBtn) {
-					if (scrollableUp) {
-						offset -= offsetStep;
-						afterScroll ();
-					}
-				} else if (hit.collider == moveDownBtn) {
-					if (scrollableDown) {
-						offset += offsetStep;
-						afterScroll ();
-					}
-				} else if (hit.collider == sortBtn) {
-					sortInventory();
-					containerScreen.updateChosenItemBorder();
+		if (Input.GetMouseButtonDown (0) && Utils.hit != null) {
+			if (Utils.hit == moveUpBtn) {
+				if (scrollableUp) {
+					offset -= offsetStep;
+					afterScroll ();
 				}
-			}	
+			} else if (Utils.hit == moveDownBtn) {
+				if (scrollableDown) {
+					offset += offsetStep;
+					afterScroll ();
+				}
+			} else if (Utils.hit == sortBtn) {
+				sortInventory();
+				containerScreen.updateChosenItemBorder();
+			}
 		}
 	}
 	
@@ -279,6 +275,7 @@ public class Inventory : MonoBehaviour {
 		}
 
 		refreshInventory ();
+		sortInventory();
 	}
 
 	public void updateVolumeTxt () {
@@ -305,7 +302,6 @@ public class Inventory : MonoBehaviour {
 	}
 
 	public void sortInventory () {
-		InventoryItem item = null;
 		List<InventoryItem> weapons = new List<InventoryItem>();
 		List<InventoryItem> engines = new List<InventoryItem>();
 		List<InventoryItem> armors = new List<InventoryItem>();

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class MarketEquipmentScreen : InventoryContainedScreen {
+public class EquipmentsMarket : InventoryContainedScreen {
 
 	public Transform inventoryItemPrefab;
 
@@ -16,18 +16,7 @@ public class MarketEquipmentScreen : InventoryContainedScreen {
 
 	private bool shipInvFilled;
 
-	override protected void init () {
-		base.init ();
-		initInvetoryAndStorageBtns ();
-		shipBtnRender = transform.FindChild ("Ship Btn").GetComponent<SpriteRenderer> ();
-		marketBtnRender = transform.FindChild ("Market Btn").GetComponent<SpriteRenderer> ();
-		buybackBtnRender = transform.FindChild ("Buyback Btn").GetComponent<SpriteRenderer> ();
-	}
-	
-	public void showScreen (MarketScreen marketScreen, Inventory inventory, Inventory storage,
-	                        Inventory marketInv, Inventory shipInv, Inventory buybackInv, ShipData shipData) {
-		gameObject.SetActive (true);
-
+	public void init (MarketScreen marketScreen, Inventory inventory, Inventory storage, Inventory marketInv, Inventory shipInv, Inventory buybackInv, ShipData shipData) {
 		this.inventory = inventory;
 		this.storage = storage;
 		this.marketInv = marketInv;
@@ -35,6 +24,14 @@ public class MarketEquipmentScreen : InventoryContainedScreen {
 		this.buybackInv = buybackInv;
 		this.shipData = shipData;
 
+		innerInit();
+//		initInvetoryAndStorageBtns ();
+		shipBtnRender = transform.FindChild ("Ship Btn").GetComponent<SpriteRenderer> ();
+		marketBtnRender = transform.FindChild ("Market Btn").GetComponent<SpriteRenderer> ();
+		buybackBtnRender = transform.FindChild ("Buyback Btn").GetComponent<SpriteRenderer> ();
+	}
+	
+	public void showScreen () {
 		inventory.setContainerScreen(this);
 		storage.setContainerScreen(this);
 		marketInv.setContainerScreen(this);
@@ -54,6 +51,8 @@ public class MarketEquipmentScreen : InventoryContainedScreen {
 
 		setInventoryActive ();
 		setMarketInvActive ();
+
+		gameObject.SetActive (true);
 	}
 
 	override protected void checkBtnPress (string colliderName) {
@@ -124,7 +123,6 @@ public class MarketEquipmentScreen : InventoryContainedScreen {
 	}
 
 	private void fillShipInventory () {
-		int index = 0;
 		foreach (HullSlot slot in shipData.getSlots()) {
 			if (slot.getItem() != null) {
 				InventoryItem sourceItem = slot.getItem ();

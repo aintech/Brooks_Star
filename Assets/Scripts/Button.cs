@@ -4,10 +4,12 @@ using System.Collections;
 public class Button : MonoBehaviour {
 	
 	public Sprite normal, hover;
-	
+
+	public Color32 normalColor, hoverColor;
+
 	private SpriteRenderer render;
 	
-	private Collider2D collider;
+	private Collider2D coll;
 	
 	private TextMesh text;
 
@@ -17,25 +19,27 @@ public class Button : MonoBehaviour {
 	
 	private ButtonHolder holder;
 	
-	void Awake () {
+	public Button init () {
 		render = GetComponent<SpriteRenderer>();
-		collider = GetComponent<Collider2D>();
+		coll = GetComponent<Collider2D>();
 		holder = transform.parent.GetComponent<ButtonHolder>();
 		text = transform.Find("BtnText").GetComponent<TextMesh>();
-		textRender= text.GetComponent<MeshRenderer>();
+		textRender = text.GetComponent<MeshRenderer>();
 		textRender.sortingLayerName = render.sortingLayerName;
 		textRender.sortingOrder = render.sortingOrder + 1;
+
+		return this;
 	}
 	
 	void Update () {
-		if (Utils.hit != null && Utils.hit == collider) {
+		if (Utils.hit != null && Utils.hit == coll) {
 			if (state == State.NORMAL) {
 				changeState(State.HOVER);
 			}
 			if (Input.GetMouseButtonDown(0)) {
 				holder.fireClickButton(this);
 			}
-		} else if (Utils.hit != null && Utils.hit != collider && state == State.HOVER) {
+		} else if (Utils.hit != null && Utils.hit != coll && state == State.HOVER) {
 			changeState(State.NORMAL);
 		} else if (Utils.hit == null && state == State.HOVER) {
 			changeState(State.NORMAL);
@@ -45,14 +49,14 @@ public class Button : MonoBehaviour {
 	private void changeState (State state) {
 		this.state = state;
 		switch (state) {
-			case State.NORMAL: render.sprite = normal; break;
-			case State.HOVER: render.sprite = hover; break;
+			case State.NORMAL: render.sprite = normal; text.color = normalColor; break;
+			case State.HOVER: render.sprite = hover; text.color = hoverColor; break;
 		}
 	}
 
 	public void setEnable (bool enable) {
 		render.enabled = enable;
-		collider.enabled = enable;
+		coll.enabled = enable;
 		textRender.enabled = enable;
 	}
 	

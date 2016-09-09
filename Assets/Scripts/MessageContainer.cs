@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MessageContainer : MonoBehaviour {
+public class MessageContainer {
 	
 	private MessageObject[] messageObjs;
 	
@@ -109,7 +109,7 @@ public class MessageContainer : MonoBehaviour {
 	}
 	
 	public enum InstructionType {
-		CLOSE, GOTO, SKIPTO, CHAT
+		CLOSE, GOTO
 	}
 	
 	private static InstructionType getInstructionTypeByName(string value)
@@ -118,8 +118,6 @@ public class MessageContainer : MonoBehaviour {
 		{
 			case "close": return InstructionType.CLOSE;
 			case "goto": return InstructionType.GOTO;
-			case "skipto": return InstructionType.SKIPTO;
-			case "chat": return InstructionType.CHAT;
 			default: Debug.Log("Неизвестная инструкция"); return InstructionType.CLOSE;
 		}
 	}

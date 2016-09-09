@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -23,6 +24,8 @@ public class EnemyShip : Ship {
 	private float distanceToPlayer;
 
 	public void initRandomShip (int shipLevel, Transform playerShip) {
+		initInner();
+
 		if (sortingOrder == -1) {
 			sortingOrder = Variables.freeSortingOrder;
 		}
@@ -38,7 +41,7 @@ public class EnemyShip : Ship {
 
 		this.playerShip = playerShip;
 
-		int rand = (int) Random.Range (shipLevels[shipLevel].x, shipLevels[shipLevel].y+1);
+		int rand = (int) UnityEngine.Random.Range (shipLevels[shipLevel].x, shipLevels[shipLevel].y+1);
 
 		setHullType (rand == 0? HullType.Little: rand == 1? HullType.Needle: rand == 2? HullType.Gnome:
 		             rand == 3? HullType.Cricket: rand == 4? HullType.Argo: rand == 5? HullType.Falcon:
@@ -80,7 +83,7 @@ public class EnemyShip : Ship {
 	}
 
 	private void initEngine () {
-		int rand = Random.Range(0, 5);
+		int rand = UnityEngine.Random.Range(0, Enum.GetNames(typeof(EngineType)).Length);
 		EngineType eType = 	rand == 0? EngineType.Force:
 						   	rand == 1? EngineType.Gradual:
 						   	rand == 2? EngineType.Proton:
@@ -101,7 +104,7 @@ public class EnemyShip : Ship {
 	private void initWeapon (int weaponIndex) {
 		Weapon weapon = null;
 
-		int rand = Random.Range(0, 7);
+//		int rand = UnityEngine.Random.Range(0, Enum.GetNames(typeof(WeaponType)).Length);
 
 		WeaponType type = WeaponType.Blaster;//rand == 0? WeaponType.Blaster:
 						  //rand == 1? WeaponType.Plasmer:
@@ -200,7 +203,12 @@ public class EnemyShip : Ship {
 	private void arrangeBarToShip () {
 		barTrans.position = trans.position + barOffset;
 	}
+
 	public bool isAlive () {
 		return alive;
+	}
+
+	public override bool isPlayerShip () {
+		return false;
 	}
 }
