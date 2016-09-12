@@ -19,7 +19,9 @@ public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 
 	protected void innerInit() {
 		Transform itemInformation = transform.Find("Item Information").transform;
-		
+
+        itemInformation.gameObject.SetActive(true);
+
 		itemName = itemInformation.Find("ItemName").GetComponent<TextMesh> ();
 		itemLabel_1 = itemInformation.Find("ItemLabel_1").GetComponent<TextMesh> ();
 		itemValue_1 = itemInformation.Find("ItemValue_1").GetComponent<TextMesh> ();
@@ -67,7 +69,7 @@ public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 			if (Utils.hit.name.Equals("Cell")) {
 				InventoryItem item = Utils.hit.transform.GetComponent<InventoryCell>().getItem();
 				if (item != null) {
-					if (!item.transform.parent.name.Equals("Ship Inventory")) {
+					if (item.getCell().getInventory().getInventoryType() != Inventory.InventoryType.INUSE) {
 						draggedItem = Utils.hit.transform.GetComponent<InventoryCell>().takeItem();
 						draggedItem.GetComponent<Renderer>().sortingOrder = 4;
 					}
@@ -83,8 +85,6 @@ public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 					choseItem(item);
 					chosenItemBorder.gameObject.SetActive(true);
 				}
-			} else {
-//				checkBtnPress (Utils.hit.name);
 			}
 		}
 		if (draggedItem != null) {

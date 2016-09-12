@@ -44,7 +44,7 @@ public class HullsMarket : MonoBehaviour, ButtonHolder {
 		this.storage = storage;
 		this.shipData = shipData;
 
-		cells = transform.GetComponentsInChildren<HullsMarketCell> ();
+		cells = transform.Find("Hulls Display").GetComponentsInChildren<HullsMarketCell> ();
 
 		upBtn = transform.FindChild ("Up Button").GetComponent<Button> ().init();
 		downBtn = transform.FindChild ("Down Button").GetComponent<Button> ().init();
@@ -93,18 +93,24 @@ public class HullsMarket : MonoBehaviour, ButtonHolder {
 		gameObject.SetActive(false);
 	}
 
+    void Update () {
+        if (Input.GetMouseButtonDown(0) && Utils.hit != null && Utils.hit.name.Equals("Cell")) {
+            selectCell((HullsMarketCell)Utils.hit.gameObject.GetComponent<HullsMarketCell>());
+        }
+    }
+
 	public void fireClickButton (Button btn) {
-		if (btn == upBtn && scrollableUp) {
-			offset -= offsetStep;
-			afterScroll();
-		} else if (btn == downBtn && scrollableDown) {
-			offset += offsetStep;
-			afterScroll();
-		} else if (btn == buyBtn) {
-			buyHull();
-		} else if (Utils.hit.name.Equals("Cell")) {
-			selectCell ((HullsMarketCell)Utils.hit.gameObject.GetComponent<HullsMarketCell>());
-		}
+        if (btn == upBtn && scrollableUp) {
+            offset -= offsetStep;
+            afterScroll();
+        } else if (btn == downBtn && scrollableDown) {
+            offset += offsetStep;
+            afterScroll();
+        } else if (btn == buyBtn) {
+            buyHull();
+        } else {
+            Debug.Log("Unknown button: " + btn.name);
+        }
 	}
 
 	private void buyHull () {

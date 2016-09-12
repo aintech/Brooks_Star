@@ -8,9 +8,9 @@ public class HangarScreen : InventoryContainedScreen {
 
 	private ShipData shipData;
 
-	private Vector3 hullViewPosition = new Vector3 (4.72f, 0.43f);
+	private Vector3 hullViewPosition = new Vector3 (4.95f, 0);
 
-	private Button showStorageBtn, shipBtn, closeBtn;
+	private Button shipBtn, closeBtn;
 
 	public void init (Planet planet, ShipData shipData, Inventory inventory, Inventory storage) {
 		this.planet = planet;
@@ -19,7 +19,6 @@ public class HangarScreen : InventoryContainedScreen {
 		this.storage = storage;
 
 		innerInit();
-		showStorageBtn = transform.Find("Show Storage Button").GetComponent<Button>().init();
 		shipBtn = transform.Find("Ship Button").GetComponent<Button>().init();
 		closeBtn = transform.Find("Close Button").GetComponent<Button>().init();
 
@@ -35,6 +34,8 @@ public class HangarScreen : InventoryContainedScreen {
 		inventory.setInventoryToBegin ();
 		storage.setInventoryToBegin ();
 
+        inventory.gameObject.SetActive(true);
+
 		storage.setPosition(false);
 		shipData.transform.position = hullViewPosition;
 
@@ -46,7 +47,7 @@ public class HangarScreen : InventoryContainedScreen {
 	}
 
 	override protected void checkBtnPress (Button btn) {
-		if (btn == showStorageBtn) { showStorageScreen(); }
+		if (btn == storageBtn) { showStorageScreen(); }
 		else if (btn == shipBtn) { showHullScreen(); }
 		else if (btn == closeBtn) { closeScreen(); }
 		else { Debug.Log("Unknown button: " + btn.name); }
@@ -152,80 +153,22 @@ public class HangarScreen : InventoryContainedScreen {
 		}
 	}
 
-	private void changeScreens () {
-		if (isHullScreenActive ()) {
-			showStorageScreen ();
-		} else {
-			showHullScreen ();
-		}
-	}
-
 	private void showHullScreen () {
 		storage.gameObject.SetActive(false);
 		shipData.gameObject.SetActive (true);
-//		activateInventory ();
+        if (getChosenItem() != null && getChosenItem().getCell() != null &&
+            getChosenItem().getCell().getInventory().getInventoryType() == Inventory.InventoryType.STORAGE)
+        {
+            hideItemInfo();
+        }
 	}
 
 	private void showStorageScreen () {
 		storage.gameObject.SetActive(true);
 		shipData.gameObject.SetActive (false);
-//		activateInventory ();
-	}
-
-//	private void activateInventory () {
-//		if (isHullScreenActive ()) {
-//			inventory.gameObject.SetActive (true);
-//			inventoryBtnRender.sprite = inventoryBtnSprite;
-//			
-//			storage.gameObject.SetActive (false);
-//			storageBtnRender.sprite = storageBtnSpriteDisabled;
-//		} else {
-//			inventory.gameObject.SetActive (true);
-//			inventoryBtnRender.sprite = inventoryBtnSprite;
-//			
-//			storage.gameObject.SetActive (true);
-//			storageBtnRender.sprite = storageBtnSprite;
-//		}
-//		hideItemInfo (inventory);
-//	}
-
-//	private void activateStorage () {
-//		if (isHullScreenActive ()) {
-//			inventory.gameObject.SetActive (false);
-//			inventoryBtnRender.sprite = inventoryBtnSpriteDisabled;
-//			
-//			storage.gameObject.SetActive (true);
-//			storageBtnRender.sprite = storageBtnSprite;
-//		} else {
-//			inventory.gameObject.SetActive (true);
-//			inventoryBtnRender.sprite = inventoryBtnSprite;
-//			
-//			storage.gameObject.SetActive (true);
-//			storageBtnRender.sprite = storageBtnSprite;
-//		}
-//		hideItemInfo (storage);
-//	}
-	
-	protected void hideItemInfo (Inventory activeInventory) {
-		if (chosenItem != null) {
-			ShipData shipData = chosenItem.transform.parent.GetComponent<ShipData> ();
-			if (shipData != null && shipData.gameObject.activeInHierarchy) {
-				return;
-			}
-		}
-		if (chosenItem != null && activeInventory != null) {
-			Inventory chosenItemInvetnory = chosenItem.transform.parent.GetComponent<Inventory> ();
-			//if (chosenItemInvetnory == inventory && activeInventory == inventory) return;
-			if (chosenItemInvetnory != null && chosenItemInvetnory.gameObject.activeInHierarchy) {
-				chosenItemBorder.transform.position = chosenItem.transform.position;
-				return;
-			}
-		}
-		base.hideItemInfo ();
-	}
-
-	private bool isHullScreenActive () {
-		return shipData.gameObject.activeInHierarchy;
+        if (getChosenItem() != null && getChosenItem().getHullSlot() != null) {
+            hideItemInfo();
+        }
 	}
 
 	private void closeScreen () {

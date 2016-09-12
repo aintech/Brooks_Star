@@ -6,9 +6,11 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 
 	public Transform inventoryItemPrefab;
 
+    private InventoryType inventoryType;
+
 	private InventoryContainedScreen containerScreen;
 
-	private float capacity, freeVolume;
+	private float capacity = -1, freeVolume;
 
 	private InventoryCell[] cells;
 	
@@ -27,15 +29,18 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 	private TextMesh volumeMesh;
 
 	private Vector3 normalScale = new Vector3(.08f, .1f, 1), decimalScale = new Vector3(.065f, .1f, 1);
-
-	private bool limitedCapacity;
-
+    
 	private Vector3 leftPosition = new Vector3(-4.5f, 0, 0), rightPosition = new Vector3(4.5f, 0, 0);
 
-	public Inventory init (bool limitedCapacity) {
-		this.limitedCapacity = limitedCapacity;
+	public Inventory init (InventoryType inventoryType) {
+        this.inventoryType = inventoryType;
 
 		cells = transform.GetComponentsInChildren<InventoryCell> ();
+
+        foreach (InventoryCell cell in cells) {
+            cell.init(this);
+        }
+
 		upBtn = transform.FindChild ("Up Button").GetComponent<Button> ().init();
 		downBtn = transform.FindChild ("Down Button").GetComponent<Button> ().init();
 		sortBtn = transform.FindChild("Sort Button").GetComponent<Button>().init();
@@ -45,7 +50,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		meshRend.sortingLayerName = "Inventory";
 		meshRend.sortingOrder = 3;
 
-		if (!limitedCapacity) {
+		if (inventoryType == InventoryType.INVENTORY) {
 			transform.Find("VolumeBG").gameObject.SetActive(false);
 			volumeMesh.gameObject.SetActive(false);
 		}
@@ -142,16 +147,16 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		Inventory source = item.transform.parent.GetComponent<Inventory> ();
 
 		if (source != this) {
-			if (this.name.Equals ("Ship Inventory")) {
+			if (inventoryType == InventoryType.BUYBACK) {
 				item.returnToParentInventory ();
 				return;
-			} else if (this.name.Equals("Inventory")) {
+			} else if (inventoryType == InventoryType.INVENTORY) {
 				if (getFreeVolume() < item.getVolume()) {
 					item.returnToParentInventory();
-					Messenger.showMessage("Объёма багажника не достаточно для добавления предмета");
+					Messenger.showMessage("Объёма инвентаря не достаточно для добавления предмета");
 					return;
 				}
-			} else if (source != null && (source.name.Equals ("Market Inventory") || source.name.Equals ("Buyback Inventory"))) {
+			} else if (source != null && (source.inventoryType == InventoryType.MARKET || source.inventoryType == InventoryType.BUYBACK)) {
 				if (!buyItem (item)) {
 					item.returnToParentInventory ();
 					return;
@@ -159,11 +164,11 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 			}
 		}
 
-		if (this.name.Equals("Buyback Inventory")) {
+		if (inventoryType == InventoryType.BUYBACK) {
 			addItemToFirstFreePosition(item, true);
 			return;
 		}
-		if (source != null && source.name.Equals("Inventory")) { source.calculateFreeVolume(); }
+		if (source != null && source.inventoryType == InventoryType.INVENTORY) { source.calculateFreeVolume(); }
 
 		InventoryCell prevCell = item.getCell();
 		InventoryItem prevItem = null;
@@ -241,7 +246,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 	}
 
 	public void calculateFreeVolume () {
-		if (!limitedCapacity) { return; }
+		if (inventoryType != InventoryType.INVENTORY) { return; }
 		freeVolume = getCapacity ();
 		foreach (KeyValuePair<int, InventoryItem> pair in getItems()) {
 			freeVolume -= pair.Value.getVolume();	
@@ -285,7 +290,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 	}
 
 	private void updateVolumeTxt () {
-		if (!limitedCapacity) { return; }
+		if (inventoryType != InventoryType.INVENTORY) { return; }
 		if (freeVolume >= 100) {
 			volumeTxt = "99";
 		} else if (freeVolume < 0) {
@@ -437,4 +442,12 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 	public int getOffset () {
 		return offset;
 	}
+
+    public InventoryType getInventoryType () {
+        return inventoryType;
+    }
+
+    public enum InventoryType {
+        INVENTORY, STORAGE, MARKET, INUSE, BUYBACK
+    }
 }

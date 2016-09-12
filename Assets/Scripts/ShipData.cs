@@ -82,6 +82,9 @@ public class ShipData : MonoBehaviour {
 		hullArmorText.GetComponent<MeshRenderer> ().sortingOrder = 3;
 		hullEnergyText.GetComponent<MeshRenderer> ().sortingOrder = 3;
 
+        transform.Find("Hull Image").gameObject.SetActive(true);
+        transform.Find("Hull BG").gameObject.SetActive(true);
+
 		gameObject.SetActive(false);
 
 		return this;

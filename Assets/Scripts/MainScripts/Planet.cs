@@ -16,7 +16,7 @@ public class Planet : MonoBehaviour, ButtonHolder {
 
 	private IndustrialScreen industrialScreen;
 
-	private Inventory inventory, storage, marketInv, shipInv, buybackInv;
+	private Inventory inventory, storage, market, inUse, buyback;
 
 	private ShipData shipData;
 
@@ -34,17 +34,18 @@ public class Planet : MonoBehaviour, ButtonHolder {
 		industrialScreen = GameObject.Find("Industrial Screen").GetComponent<IndustrialScreen>();
 		hangarScreen = GameObject.Find ("Hangar Screen").GetComponent<HangarScreen> ();
 
-		Transform inventories = GameObject.Find("Inventories").transform;
+        shipData = GameObject.Find("Ship Data").GetComponent<ShipData>().init();
 
-		inventory = inventories.Find ("Inventory").GetComponent<Inventory> ().init(true);
-		storage = inventories.Find ("Storage").GetComponent<Inventory> ().init(false);
-		shipInv = inventories.Find ("Ship Inventory").GetComponent<Inventory> ().init(false);
-		marketInv = inventories.Find ("Market Inventory").GetComponent<Inventory> ().init(false);
-		buybackInv = inventories.Find ("Buyback Inventory").GetComponent<Inventory> ().init(false);
+        Transform inventories = GameObject.Find("Inventories").transform;
+        inventory = inventories.Find ("Inventory").GetComponent<Inventory> ().init(Inventory.InventoryType.INVENTORY);
+		storage = inventories.Find ("Storage").GetComponent<Inventory> ().init(Inventory.InventoryType.STORAGE);
+		inUse = inventories.Find ("InUse Inventory").GetComponent<Inventory> ().init(Inventory.InventoryType.INUSE);
+		market = inventories.Find ("Market Inventory").GetComponent<Inventory> ().init(Inventory.InventoryType.MARKET);
+		buyback = inventories.Find ("Buyback Inventory").GetComponent<Inventory> ().init(Inventory.InventoryType.BUYBACK);
 
-		shipData = GameObject.Find("Ship Data").GetComponent<ShipData> ().init();
+        inventory.setCapacity(shipData.getHullType().getStorageCapacity());
 
-		marketBtn = transform.Find("Market Button").GetComponent<Button>().init();
+        marketBtn = transform.Find("Market Button").GetComponent<Button>().init();
 		industrialBtn = transform.Find("Industrial Button").GetComponent<Button>().init();
 		hangarBtn = transform.Find("Hangar Button").GetComponent<Button>().init();
 		leaveBtn = transform.Find("Leave Button").GetComponent<Button>().init();
@@ -54,13 +55,7 @@ public class Planet : MonoBehaviour, ButtonHolder {
 
 		GameObject.Find("Imager").GetComponent<Imager>().init();
 
-		inventory.setCapacity(shipData.getHullType().getStorageCapacity());
-		storage.setCapacity (-1);
-		shipInv.setCapacity (-1);
-		marketInv.setCapacity (-1);
-		buybackInv.setCapacity (-1);
-
-		marketScreen.init(this, shipData, inventory, storage, marketInv, shipInv, buybackInv);
+		marketScreen.init(this, shipData, inventory, storage, market, inUse, buyback);
 		industrialScreen.init(this);
 		hangarScreen.init(this, shipData, inventory, storage);
 
@@ -79,7 +74,7 @@ public class Planet : MonoBehaviour, ButtonHolder {
 
 //		inventory.fillWithRandomItems(30, "Player Item");
 		inventory.calculateFreeVolume();
-		marketInv.fillWithRandomItems(50, "Market Item");
+		market.fillWithRandomItems(50, "Market Item");
 
 		showPlanet();
 		messageBox.showNewMessage(story.getMessageContainer(Storyline.StoryPart.INTRODUCTION));
@@ -125,7 +120,7 @@ public class Planet : MonoBehaviour, ButtonHolder {
 		Vars.inventory = inventory.getItems ();
 		Vars.storage = storage.getItems ();
 		switch(Vars.planetType) {
-			case PlanetType.CORAS: Vars.marketCORAS = marketInv.getItems (); break;
+			case PlanetType.CORAS: Vars.marketCORAS = market.getItems (); break;
 		}
 	}
 	
@@ -133,7 +128,7 @@ public class Planet : MonoBehaviour, ButtonHolder {
 		inventory.loadItems (Vars.inventory);
 		storage.loadItems (Vars.storage);
 		switch(Vars.planetType) {
-			case PlanetType.CORAS: marketInv.loadItems(Vars.marketCORAS); break;
+			case PlanetType.CORAS: market.loadItems(Vars.marketCORAS); break;
 		}
 	}
 

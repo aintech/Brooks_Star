@@ -7,6 +7,12 @@ public class InventoryCell : MonoBehaviour {
 
 	private InventoryItem item;
 
+    private Inventory inventory;
+
+    public void init(Inventory inventory) {
+        this.inventory = inventory;
+    }
+
 	public void setItem (InventoryItem item) {
 		this.item = item;
 	}
@@ -22,4 +28,8 @@ public class InventoryCell : MonoBehaviour {
 		item = null;
 		return returnItem;
 	}
+
+    public Inventory getInventory () {
+        return inventory;
+    }
 }
