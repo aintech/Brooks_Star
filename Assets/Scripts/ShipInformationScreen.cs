@@ -6,11 +6,11 @@ public class ShipInformationScreen : InventoryContainedScreen {
 	private ShipData shipData;
 
 	protected override void checkItemDrop () {
-		if (hit.collider != null) {
-			if (hit.collider.name.Equals("Cell")) {
-				InventoryCell cell = hit.collider.transform.GetComponent<InventoryCell>();
+		if (Utils.hit != null) {
+			if (Utils.hit.name.Equals("Cell")) {
+				InventoryCell cell = Utils.hit.transform.GetComponent<InventoryCell>();
 				inventory.addItemToCell(draggedItem, cell);
-			} else if (hit.collider.name.Contains(" Slot")) {
+			} else if (Utils.hit.name.Contains(" Slot")) {
 				Messenger.showMessage("Оборудование на корабле можно менять только на планетах и в мастерских");
 				draggedItem.returnToParentInventory();
 			}
@@ -35,4 +35,6 @@ public class ShipInformationScreen : InventoryContainedScreen {
 	}
 
 	protected override void choseDraggedItemFromSlot (HullSlot slot) {}
+
+	protected override void checkBtnPress (Button btn) {}
 }

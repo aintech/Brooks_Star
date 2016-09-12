@@ -8,12 +8,14 @@ public class Planet : MonoBehaviour, ButtonHolder {
 
 	private SpriteRenderer bgRender;
 
-	private Button marketBtn, hangarBtn, leaveBtn;
+	private Button marketBtn, industrialBtn, hangarBtn, leaveBtn;
 
 	private MarketScreen marketScreen;
 	
 	private HangarScreen hangarScreen;
-	
+
+	private IndustrialScreen industrialScreen;
+
 	private Inventory inventory, storage, marketInv, shipInv, buybackInv;
 
 	private ShipData shipData;
@@ -25,24 +27,29 @@ public class Planet : MonoBehaviour, ButtonHolder {
 	void Awake () {
 		bgRender = GetComponent<SpriteRenderer>();
 
+		Vars.userInterface = GameObject.Find("User Interface").GetComponent<UserInterface>().init();
+		Vars.userInterface.setEnabled(false);
+
 		marketScreen = GameObject.Find("Market Screen").GetComponent<MarketScreen> ();
+		industrialScreen = GameObject.Find("Industrial Screen").GetComponent<IndustrialScreen>();
 		hangarScreen = GameObject.Find ("Hangar Screen").GetComponent<HangarScreen> ();
 
 		Transform inventories = GameObject.Find("Inventories").transform;
 
-		inventory = inventories.Find ("Inventory").GetComponent<Inventory> ().init();
-		storage = inventories.Find ("Storage").GetComponent<Inventory> ().init();
-		shipInv = inventories.Find ("Ship Inventory").GetComponent<Inventory> ().init();
-		marketInv = inventories.Find ("Market Inventory").GetComponent<Inventory> ().init();
-		buybackInv = inventories.Find ("Buyback Inventory").GetComponent<Inventory> ().init();
+		inventory = inventories.Find ("Inventory").GetComponent<Inventory> ().init(true);
+		storage = inventories.Find ("Storage").GetComponent<Inventory> ().init(false);
+		shipInv = inventories.Find ("Ship Inventory").GetComponent<Inventory> ().init(false);
+		marketInv = inventories.Find ("Market Inventory").GetComponent<Inventory> ().init(false);
+		buybackInv = inventories.Find ("Buyback Inventory").GetComponent<Inventory> ().init(false);
 
 		shipData = GameObject.Find("Ship Data").GetComponent<ShipData> ().init();
 
-		marketBtn = transform.Find("MarketBtn").GetComponent<Button>().init();
-		hangarBtn = transform.Find("HangarBtn").GetComponent<Button>().init();
-		leaveBtn = transform.Find("LeaveBtn").GetComponent<Button>().init();
+		marketBtn = transform.Find("Market Button").GetComponent<Button>().init();
+		industrialBtn = transform.Find("Industrial Button").GetComponent<Button>().init();
+		hangarBtn = transform.Find("Hangar Button").GetComponent<Button>().init();
+		leaveBtn = transform.Find("Leave Button").GetComponent<Button>().init();
 
-		messageBox = GameObject.Find("MessageBox").GetComponent<MessageBox>();
+		messageBox = GameObject.Find("Message Box").GetComponent<MessageBox>();
 		story = GameObject.Find("Storyline").GetComponent<Storyline>();
 
 		GameObject.Find("Imager").GetComponent<Imager>().init();
@@ -54,6 +61,7 @@ public class Planet : MonoBehaviour, ButtonHolder {
 		buybackInv.setCapacity (-1);
 
 		marketScreen.init(this, shipData, inventory, storage, marketInv, shipInv, buybackInv);
+		industrialScreen.init(this);
 		hangarScreen.init(this, shipData, inventory, storage);
 
 		messageBox.init(this);
@@ -69,7 +77,8 @@ public class Planet : MonoBehaviour, ButtonHolder {
 		shipData.initializeRandomShip(HullType.Corvette);
 		shipData.setCurrentHealth (shipData.getHullType ().getMaxHealth ());
 
-		inventory.fillWithRandomItems(30, "Player Item");
+//		inventory.fillWithRandomItems(30, "Player Item");
+		inventory.calculateFreeVolume();
 		marketInv.fillWithRandomItems(50, "Market Item");
 
 		showPlanet();
@@ -78,57 +87,57 @@ public class Planet : MonoBehaviour, ButtonHolder {
 
 	public void showPlanet () {
 		setPlanetBtnsEnabled(true);
-		bgRender.sprite = Imager.getPlanetBG(Variables.planetType);
+		bgRender.sprite = Imager.getPlanetBG(Vars.planetType);
 	}
 
 	public void leavePlanet () {
-		setDataToVariables();
+		setDataToVars();
 		SceneManager.LoadScene("SpaceTravel");
 	}
 
-	public void showMarketScreen () {
-		marketScreen.showScreen();
-		setPlanetBtnsEnabled(false);
-	}
-	
-	public void showHangarScreen () {
-		hangarScreen.showScreen ();
+	private void showScreen (ScreenType type) {
+		switch (type) {
+			case ScreenType.MARKET: marketScreen.showScreen(); break;
+			case ScreenType.HANGAR: hangarScreen.showScreen(); break;
+			case ScreenType.INDUSTRIAL: industrialScreen.showScreen(); break;
+			default: Debug.Log("Unknown screen type"); break;
+		}
 		setPlanetBtnsEnabled(false);
 	}
 
 	public void setPlanetBtnsEnabled (bool enabled) {
 		marketBtn.gameObject.SetActive(enabled);
+		industrialBtn.gameObject.SetActive(enabled);
 		hangarBtn.gameObject.SetActive(enabled);
 		leaveBtn.gameObject.SetActive(enabled);
 	}
 
-
 	public void fireClickButton (Button btn) {
-		if (btn == marketBtn) {
-			showMarketScreen();
-		} else if (btn == hangarBtn) {
-			showHangarScreen();
-		} else if (btn == leaveBtn) {
-			leavePlanet();
-		} else {
-			Debug.Log("Unknown button: " + btn.name);
-		}
+		if (btn == marketBtn) { showScreen(ScreenType.MARKET); }
+		else if (btn == hangarBtn) { showScreen(ScreenType.HANGAR); }
+		else if (btn == industrialBtn) { showScreen(ScreenType.INDUSTRIAL); }
+		else if (btn == leaveBtn) { leavePlanet(); }
+		else { Debug.Log("Unknown button: " + btn.name); }
 	}
 
-	private void setDataToVariables () {
-		shipData.sendToVariables ();
-		Variables.inventory = inventory.getItems ();
-		Variables.storage = storage.getItems ();
-		switch(Variables.planetType) {
-			case PlanetType.CORAS: Variables.marketCORAS = marketInv.getItems (); break;
+	private void setDataToVars () {
+		shipData.sendToVars ();
+		Vars.inventory = inventory.getItems ();
+		Vars.storage = storage.getItems ();
+		switch(Vars.planetType) {
+			case PlanetType.CORAS: Vars.marketCORAS = marketInv.getItems (); break;
 		}
 	}
 	
-	private void getDataFromVariables () {
-		inventory.loadItems (Variables.inventory);
-		storage.loadItems (Variables.storage);
-		switch(Variables.planetType) {
-			case PlanetType.CORAS: marketInv.loadItems(Variables.marketCORAS); break;
+	private void getDataFromVars () {
+		inventory.loadItems (Vars.inventory);
+		storage.loadItems (Vars.storage);
+		switch(Vars.planetType) {
+			case PlanetType.CORAS: marketInv.loadItems(Vars.marketCORAS); break;
 		}
+	}
+
+	private enum ScreenType {
+		MARKET, INDUSTRIAL, HANGAR
 	}
 }

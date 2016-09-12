@@ -195,9 +195,9 @@ public class ShipData : MonoBehaviour {
 		}
 	}
 
-	public void initializeFromVariables () {
-		setHullType (Variables.shipHullType, Variables.shipCurrentHealth);
-		foreach (KeyValuePair<string, InventoryItem> pair in Variables.shipHullSlotsMap) {
+	public void initializeFromVars () {
+		setHullType (Vars.shipHullType, Vars.shipCurrentHealth);
+		foreach (KeyValuePair<string, InventoryItem> pair in Vars.shipHullSlotsMap) {
 			InventoryItem item = Instantiate<Transform>(inventoryItemPrefab).GetComponent<InventoryItem>();
 			item.initialaizeFromSource(pair.Value);
 			item.transform.parent = trans;
@@ -302,13 +302,13 @@ public class ShipData : MonoBehaviour {
 		arrangeItemsToSlots();
 	}
 
-	public void sendToVariables () {
-		Variables.shipCurrentHealth = currentHealth;
-		Variables.shipHullType = getHullType ();
-		Variables.shipHullSlotsMap.Clear ();
+	public void sendToVars () {
+		Vars.shipCurrentHealth = currentHealth;
+		Vars.shipHullType = getHullType ();
+		Vars.shipHullSlotsMap.Clear ();
 		foreach (HullSlot slot in getSlots()) {
 			if (slot.getItem() != null) {
-				Variables.shipHullSlotsMap.Add(getSlotName(slot), slot.getItem());
+				Vars.shipHullSlotsMap.Add(getSlotName(slot), slot.getItem());
 			}
 		}
 	}

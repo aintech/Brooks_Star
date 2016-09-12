@@ -27,7 +27,7 @@ public class EnemyShip : Ship {
 		initInner();
 
 		if (sortingOrder == -1) {
-			sortingOrder = Variables.freeSortingOrder;
+			sortingOrder = Vars.freeSortingOrder;
 		}
 
 		if (shipLevels.Count == 0) {
@@ -62,7 +62,7 @@ public class EnemyShip : Ship {
 		getEngineRender().sortingOrder = sortingOrder;
 		getHullRender().sortingOrder = sortingOrder + 1;
 		shieldRenderOrder = sortingOrder + 3;
-		Variables.freeSortingOrder += getHullType().getWeaponSlots() > 0? 4: 3;
+		Vars.freeSortingOrder += getHullType().getWeaponSlots() > 0? 4: 3;
 		alive = true;
 	}
 

@@ -2,23 +2,19 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Inventory : MonoBehaviour {
+public class Inventory : MonoBehaviour, ButtonHolder {
 
 	public Transform inventoryItemPrefab;
 
 	private InventoryContainedScreen containerScreen;
 
-	public Sprite moveUpBtnSprite, moveDownBtnSprite, moveUpBtnSpriteDisabled, moveDownBtnSpriteDisabled;
-
-	private float capacity;
+	private float capacity, freeVolume;
 
 	private InventoryCell[] cells;
 	
 	private Dictionary<int, InventoryItem> items = new Dictionary<int, InventoryItem>();
 
-	private SpriteRenderer moveUpBtnRender, moveDownBtnRender;
-
-	private BoxCollider2D moveUpBtn, moveDownBtn, sortBtn;
+	private Button upBtn, downBtn, sortBtn;
 
 	private int offset = 0;
 
@@ -30,18 +26,29 @@ public class Inventory : MonoBehaviour {
 
 	private TextMesh volumeMesh;
 
-	public Inventory init () {
+	private Vector3 normalScale = new Vector3(.08f, .1f, 1), decimalScale = new Vector3(.065f, .1f, 1);
+
+	private bool limitedCapacity;
+
+	private Vector3 leftPosition = new Vector3(-4.5f, 0, 0), rightPosition = new Vector3(4.5f, 0, 0);
+
+	public Inventory init (bool limitedCapacity) {
+		this.limitedCapacity = limitedCapacity;
+
 		cells = transform.GetComponentsInChildren<InventoryCell> ();
-		moveUpBtn = transform.FindChild ("MoveUpBtn").GetComponent<BoxCollider2D> ();
-		moveDownBtn = transform.FindChild ("MoveDownBtn").GetComponent<BoxCollider2D> ();
-		sortBtn = transform.FindChild("SortBtn").GetComponent<BoxCollider2D>();
-		moveUpBtnRender = transform.FindChild ("MoveUpBtn").GetComponent<SpriteRenderer>();
-		moveDownBtnRender = transform.FindChild ("MoveDownBtn").GetComponent<SpriteRenderer>();
+		upBtn = transform.FindChild ("Up Button").GetComponent<Button> ().init();
+		downBtn = transform.FindChild ("Down Button").GetComponent<Button> ().init();
+		sortBtn = transform.FindChild("Sort Button").GetComponent<Button>().init();
 
 		volumeMesh = transform.FindChild ("VolumeTxt").GetComponent<TextMesh> ();
 		MeshRenderer meshRend = transform.FindChild ("VolumeTxt").GetComponent<MeshRenderer> ();
 		meshRend.sortingLayerName = "Inventory";
 		meshRend.sortingOrder = 3;
+
+		if (!limitedCapacity) {
+			transform.Find("VolumeBG").gameObject.SetActive(false);
+			volumeMesh.gameObject.SetActive(false);
+		}
 
 		checkButtons ();
 
@@ -50,29 +57,32 @@ public class Inventory : MonoBehaviour {
 		return this;
 	}
 
+	public void setPosition (bool left) {
+		if ((left && transform.localPosition.x > 0) || (!left && transform.localPosition.x < 0)) {
+			transform.localPosition = transform.localPosition * -1;
+			upBtn.transform.localPosition = new Vector2(upBtn.transform.localPosition.x * -1, upBtn.transform.localPosition.y);
+			downBtn.transform.localPosition = new Vector2(downBtn.transform.localPosition.x * -1, downBtn.transform.localPosition.y);
+			sortBtn.transform.localPosition = new Vector2(sortBtn.transform.localPosition.x * -1, sortBtn.transform.localPosition.y);
+		}
+	}
+
 	public void setContainerScreen (InventoryContainedScreen containerScreen) {
 		this.containerScreen = containerScreen;
 	}
 
-	void Update () {
-		if (Input.GetMouseButtonDown (0) && Utils.hit != null) {
-			if (Utils.hit == moveUpBtn) {
-				if (scrollableUp) {
-					offset -= offsetStep;
-					afterScroll ();
-				}
-			} else if (Utils.hit == moveDownBtn) {
-				if (scrollableDown) {
-					offset += offsetStep;
-					afterScroll ();
-				}
-			} else if (Utils.hit == sortBtn) {
-				sortInventory();
-				containerScreen.updateChosenItemBorder();
-			}
+	public void fireClickButton (Button btn) {
+		if (btn == upBtn && scrollableUp) {
+			offset -= offsetStep;
+			afterScroll();
+		} else if (btn == downBtn && scrollableDown) {
+			offset += offsetStep;
+			afterScroll();
+		} else if (btn == sortBtn) {
+			sortInventory();
+			containerScreen.updateChosenItemBorder();
 		}
 	}
-	
+
 	public void setInventoryToBegin () {
 		offset = 0;
 		refreshInventory ();
@@ -98,7 +108,7 @@ public class Inventory : MonoBehaviour {
 			item.transform.SetParent(transform);
 		}
 
-		updateVolumeTxt ();
+		calculateFreeVolume();
 		checkButtons ();
 	}
 
@@ -117,10 +127,10 @@ public class Inventory : MonoBehaviour {
 	public void sellItemToTrader (InventoryItem item, Inventory buybackInventory) {
 		Inventory source = item.getCell ().transform.parent.GetComponent<Inventory> ();
 		if (source != null) {
-			source.updateVolumeTxt ();	
+			source.calculateFreeVolume();
 		}
 		buybackInventory.addItemToFirstFreePosition (item, true);
-		Variables.cash += item.getCost ();
+		Vars.cash += item.getCost ();
 	}
 
 	public void addItemToCell (InventoryItem item, InventoryCell cell) {
@@ -153,7 +163,7 @@ public class Inventory : MonoBehaviour {
 			addItemToFirstFreePosition(item, true);
 			return;
 		}
-		if (source != null && source.name.Equals("Inventory")) source.updateVolumeTxt();
+		if (source != null && source.name.Equals("Inventory")) { source.calculateFreeVolume(); }
 
 		InventoryCell prevCell = item.getCell();
 		InventoryItem prevItem = null;
@@ -197,14 +207,14 @@ public class Inventory : MonoBehaviour {
 	}
 
 	private bool buyItem (InventoryItem item) {
-		if (Variables.cash >= item.getCost()) {
+		if (Vars.cash >= item.getCost()) {
 			if (getCapacity() > 0.0 && (getFreeVolume() - item.getVolume() < 0.0)) {
 				return false;
 			}
 		} else {
 			return false;
 		}
-		Variables.cash -= item.getCost ();
+		Vars.cash -= item.getCost ();
 		return true;
 	}
 
@@ -223,27 +233,23 @@ public class Inventory : MonoBehaviour {
 	}
 	
 	private void checkButtons () {
-		if (offset != 0) {
-			scrollableUp = true;
-			moveUpBtnRender.sprite = moveUpBtnSprite;
-		} else {
-			scrollableUp = false;
-			moveUpBtnRender.sprite = moveUpBtnSpriteDisabled;
-		}
-		if (getMaximumItemIndex () >= (cells.Length + offset - offsetStep)) {
-			scrollableDown = true;
-			moveDownBtnRender.sprite = moveDownBtnSprite;
-		} else {
-			scrollableDown = false;
-			moveDownBtnRender.sprite = moveDownBtnSpriteDisabled;
-		}
+		scrollableUp = offset != 0;
+		upBtn.setActive(scrollableUp);
+
+		scrollableDown = getMaximumItemIndex () >= (cells.Length + offset - offsetStep);
+		downBtn.setActive(scrollableDown);
 	}
 
-	public float getFreeVolume () {
-		float freeVolume = getCapacity ();
+	public void calculateFreeVolume () {
+		if (!limitedCapacity) { return; }
+		freeVolume = getCapacity ();
 		foreach (KeyValuePair<int, InventoryItem> pair in getItems()) {
 			freeVolume -= pair.Value.getVolume();	
 		}
+		updateVolumeTxt();
+	}
+
+	public float getFreeVolume () {
 		return freeVolume;
 	}
 
@@ -278,12 +284,18 @@ public class Inventory : MonoBehaviour {
 		sortInventory();
 	}
 
-	public void updateVolumeTxt () {
-		volumeTxt = getFreeVolume().ToString ();
-		if (volumeTxt.Contains (".")) {
-			volumeTxt = volumeTxt.Remove(volumeTxt.IndexOf("."));	
+	private void updateVolumeTxt () {
+		if (!limitedCapacity) { return; }
+		if (freeVolume >= 100) {
+			volumeTxt = "99";
+		} else if (freeVolume < 0) {
+			volumeTxt = "0";
+		} else {
+			volumeTxt = string.Format(freeVolume < 10? "{0:F1}": "{0:D}", freeVolume.ToString());
 		}
+
 		volumeMesh.text = volumeTxt;
+		volumeMesh.transform.localScale = freeVolume < 10? decimalScale: normalScale;
 	}
 
 	public Dictionary<int, InventoryItem> getItems () {

@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: a4a6b8c5652bc914eb4f084c0e06baf5
-timeCreated: 1428586162
+timeCreated: 1473681427
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -47,7 +47,7 @@ TextureImporter:
   bumpmap:
     convertToNormalMap: 0
     externalNormalMap: 0
-    heightScale: .25
+    heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
   grayScaleToAlpha: 0
@@ -67,19 +67,23 @@ TextureImporter:
   lightmap: 0
   rGBM: 0
   compressionQuality: 50
+  allowsAlphaSplitting: 0
   spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
-  spritePivot: {x: .5, y: .5}
+  spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 60
   alphaIsTransparency: 1
+  spriteTessellationDetail: -1
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
+    serializedVersion: 2
     sprites:
-    - name: Inventory Btn
+    - serializedVersion: 2
+      name: Inventory Btn
       rect:
         serializedVersion: 2
         x: 0
@@ -87,9 +91,12 @@ TextureImporter:
         width: 50
         height: 140
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Inventory Btn Disabled
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Inventory Btn Disabled
       rect:
         serializedVersion: 2
         x: 50
@@ -97,9 +104,12 @@ TextureImporter:
         width: 50
         height: 140
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Storage Btn
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Storage Btn
       rect:
         serializedVersion: 2
         x: 100
@@ -107,9 +117,12 @@ TextureImporter:
         width: 50
         height: 140
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Storage Btn Disabled
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Storage Btn Disabled
       rect:
         serializedVersion: 2
         x: 150
@@ -117,9 +130,12 @@ TextureImporter:
         width: 50
         height: 140
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Ship Btn
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Ship Btn
       rect:
         serializedVersion: 2
         x: 200
@@ -127,9 +143,12 @@ TextureImporter:
         width: 50
         height: 140
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Ship Btn Disabled
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Ship Btn Disabled
       rect:
         serializedVersion: 2
         x: 250
@@ -137,49 +156,12 @@ TextureImporter:
         width: 50
         height: 140
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: MoveUp Btn
-      rect:
-        serializedVersion: 2
-        x: 330
-        y: 474
-        width: 90
-        height: 38
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: MoveUp Btn Disabled
-      rect:
-        serializedVersion: 2
-        x: 330
-        y: 436
-        width: 90
-        height: 38
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: MoveDown Btn
-      rect:
-        serializedVersion: 2
-        x: 330
-        y: 398
-        width: 90
-        height: 38
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: MoveDown Btn Disabled
-      rect:
-        serializedVersion: 2
-        x: 330
-        y: 360
-        width: 90
-        height: 38
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: VolumeBG
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: VolumeBG
       rect:
         serializedVersion: 2
         x: 200
@@ -187,9 +169,12 @@ TextureImporter:
         width: 50
         height: 38
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Market Btn
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Market Btn
       rect:
         serializedVersion: 2
         x: 0
@@ -197,9 +182,12 @@ TextureImporter:
         width: 50
         height: 140
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Market Btn Disabled
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Market Btn Disabled
       rect:
         serializedVersion: 2
         x: 50
@@ -207,9 +195,12 @@ TextureImporter:
         width: 50
         height: 140
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Buyback Btn
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Buyback Btn
       rect:
         serializedVersion: 2
         x: 100
@@ -217,9 +208,12 @@ TextureImporter:
         width: 50
         height: 140
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Buyback Btn Disabled
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Buyback Btn Disabled
       rect:
         serializedVersion: 2
         x: 150
@@ -227,9 +221,12 @@ TextureImporter:
         width: 50
         height: 140
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Market Equipment BG
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Market Equipment BG
       rect:
         serializedVersion: 2
         x: 0
@@ -237,9 +234,12 @@ TextureImporter:
         width: 207
         height: 96
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Market Hulls BG
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Market Hulls BG
       rect:
         serializedVersion: 2
         x: 0
@@ -247,9 +247,12 @@ TextureImporter:
         width: 207
         height: 96
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: MoveUpBig Btn
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: MoveUpBig Btn
       rect:
         serializedVersion: 2
         x: 300
@@ -257,9 +260,12 @@ TextureImporter:
         width: 150
         height: 38
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: MoveUpBig Btn Disabled
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: MoveUpBig Btn Disabled
       rect:
         serializedVersion: 2
         x: 300
@@ -267,9 +273,12 @@ TextureImporter:
         width: 150
         height: 38
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: MoveDownBig Btn
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: MoveDownBig Btn
       rect:
         serializedVersion: 2
         x: 300
@@ -277,9 +286,12 @@ TextureImporter:
         width: 150
         height: 38
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: MoveDownBig Btn Disabled
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: MoveDownBig Btn Disabled
       rect:
         serializedVersion: 2
         x: 300
@@ -287,9 +299,12 @@ TextureImporter:
         width: 150
         height: 38
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Buy Btn
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Buy Btn
       rect:
         serializedVersion: 2
         x: 450
@@ -297,9 +312,12 @@ TextureImporter:
         width: 207
         height: 50
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Buy Btn Disabled
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Buy Btn Disabled
       rect:
         serializedVersion: 2
         x: 450
@@ -307,9 +325,12 @@ TextureImporter:
         width: 207
         height: 50
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Hull Show Btn
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Hull Show Btn
       rect:
         serializedVersion: 2
         x: 207
@@ -317,9 +338,12 @@ TextureImporter:
         width: 207
         height: 96
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Storage Show Btn
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Storage Show Btn
       rect:
         serializedVersion: 2
         x: 207
@@ -327,9 +351,12 @@ TextureImporter:
         width: 207
         height: 96
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Hull Information BG
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Hull Information BG
       rect:
         serializedVersion: 2
         x: 450
@@ -337,9 +364,12 @@ TextureImporter:
         width: 272
         height: 35
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sort Btn
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Sort Btn
       rect:
         serializedVersion: 2
         x: 200
@@ -347,8 +377,11 @@ TextureImporter:
         width: 50
         height: 38
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    outline: []
   spritePackingTag: 
   userData: 
   assetBundleName: 

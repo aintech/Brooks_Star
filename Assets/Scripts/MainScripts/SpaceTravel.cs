@@ -65,16 +65,16 @@ public class SpaceTravel : MonoBehaviour {
 		inventory = shipInformation.transform.FindChild ("Inventory").GetComponent<Inventory> ();
 		shipData = shipInformation.transform.FindChild ("Ship Data").GetComponent<ShipData> ();
 
-		if (Variables.shipCurrentHealth == -1) {
+		if (Vars.shipCurrentHealth == -1) {
 			shipData.initializeRandomShip (HullType.Corvette);
 		} else {
-			shipData.initializeFromVariables ();
+			shipData.initializeFromVars ();
 		}
 		
 		initPlayerShip ();
 
 		inventory.setCapacity (shipData.getHullType ().getStorageCapacity ());
-		inventory.loadItems (Variables.inventory);
+		inventory.loadItems (Vars.inventory);
 
 		initSectors();
 
@@ -212,7 +212,7 @@ public class SpaceTravel : MonoBehaviour {
 	private void spawnAnEnemy () {
 		bool found = false;
 		EnemyShip enemy = null;
-		foreach (EnemyShip ship in Variables.enemyShipsPool) {
+		foreach (EnemyShip ship in Vars.enemyShipsPool) {
 			if (!ship.isAlive()) {
 				enemy = ship;
 				found = true;
@@ -221,7 +221,7 @@ public class SpaceTravel : MonoBehaviour {
 		}
 		if (!found) {
 			enemy = Instantiate<Transform>(enemyShipPrefab).GetComponent<EnemyShip>();
-			Variables.enemyShipsPool.Add(enemy);
+			Vars.enemyShipsPool.Add(enemy);
 		}
 		enemy.initRandomShip(Random.Range(0, 6), playerShip.transform);
 		enemy.transform.position = new Vector3(Random.Range(-1f, 1f) * 2, Random.Range(-1f, 1f) * 2);

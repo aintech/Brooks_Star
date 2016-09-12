@@ -3,13 +3,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class HullsMarket : MonoBehaviour {
+public class HullsMarket : MonoBehaviour, ButtonHolder {
 
 	public Transform hullsMarketItemPrefab;
 
 	private ShipData shipData;
-
-	public Sprite moveUpBtnSprite, moveDownBtnSprite, moveUpBtnSpriteDisabled, moveDownBtnSpriteDisabled, buyBtnSprite, buyBtnSpriteDisabled;
 
 	public Sprite[] hullImages;
 
@@ -17,9 +15,9 @@ public class HullsMarket : MonoBehaviour {
 
 	private Dictionary<int, HullsMarketItem> items = new Dictionary<int, HullsMarketItem>();
 	
-	private SpriteRenderer moveUpBtnRender, moveDownBtnRender, buyHullBtnRender, chosenHullBorder, hullImage;
+	private SpriteRenderer chosenHullBorder, hullImage;
 	
-	private BoxCollider2D moveUpBtn, moveDownBtn, buyHullBtn;
+	private Button upBtn, downBtn, buyBtn;
 	
 	private int offset = 0;
 	
@@ -48,13 +46,10 @@ public class HullsMarket : MonoBehaviour {
 
 		cells = transform.GetComponentsInChildren<HullsMarketCell> ();
 
-		moveUpBtn = transform.FindChild ("MoveUpBtn").GetComponent<BoxCollider2D> ();
-		moveDownBtn = transform.FindChild ("MoveDownBtn").GetComponent<BoxCollider2D> ();
-		buyHullBtn = transform.FindChild ("Buy Hull Btn").GetComponent<BoxCollider2D> ();
+		upBtn = transform.FindChild ("Up Button").GetComponent<Button> ().init();
+		downBtn = transform.FindChild ("Down Button").GetComponent<Button> ().init();
+		buyBtn = transform.FindChild ("Buy Button").GetComponent<Button> ().init();
 
-		moveUpBtnRender = transform.FindChild ("MoveUpBtn").GetComponent<SpriteRenderer>();
-		moveDownBtnRender = transform.FindChild ("MoveDownBtn").GetComponent<SpriteRenderer>();
-		buyHullBtnRender = transform.FindChild ("Buy Hull Btn").GetComponent<SpriteRenderer>();
 		chosenHullBorder = transform.FindChild ("Chosen Item Border").GetComponent<SpriteRenderer>();
 		hullImage = transform.FindChild ("Hull Image").GetComponent<SpriteRenderer>();
 
@@ -94,34 +89,32 @@ public class HullsMarket : MonoBehaviour {
 		gameObject.SetActive (true);
 	}
 
-	void Update () {
-		if (Input.GetMouseButtonDown (0) && Utils.hit != null) {
-			if (Utils.hit == moveUpBtn) {
-				if (scrollableUp) {
-					offset -= offsetStep;
-					afterScroll ();
-				}
-			} else if (Utils.hit == moveDownBtn) {
-				if (scrollableDown) {
-					offset += offsetStep;
-					afterScroll ();
-				}
-			} else if (Utils.hit == buyHullBtn) {
-				buyHull ();
-			} else if (Utils.hit.name.Equals("Cell")) {
-				selectCell ((HullsMarketCell)Utils.hit.gameObject.GetComponent<HullsMarketCell>());
-			}
+	public void closeScreen () {
+		gameObject.SetActive(false);
+	}
+
+	public void fireClickButton (Button btn) {
+		if (btn == upBtn && scrollableUp) {
+			offset -= offsetStep;
+			afterScroll();
+		} else if (btn == downBtn && scrollableDown) {
+			offset += offsetStep;
+			afterScroll();
+		} else if (btn == buyBtn) {
+			buyHull();
+		} else if (Utils.hit.name.Equals("Cell")) {
+			selectCell ((HullsMarketCell)Utils.hit.gameObject.GetComponent<HullsMarketCell>());
 		}
 	}
 
 	private void buyHull () {
 		int cost = shipData.getHullType ().getCost () - chosenHull.getHullType ().getCost ();
 
-		if (Variables.cash + cost < 0) {
+		if (Vars.cash + cost < 0) {
 			Messenger.showMessage("Не хватает кредитов на замену корпуса");
 			return;
 		} else {
-			Variables.cash += cost;
+			Vars.cash += cost;
 		}
 
 		HullType oldHullType = shipData.getHullType();
@@ -135,7 +128,7 @@ public class HullsMarket : MonoBehaviour {
 		chosenHull.setHullType(oldHullType);
 		selectCell(chosenHull.getCell());
 
-		transform.parent.GetComponent<MarketScreen>().transform.FindChild("EquipmentsMarket").GetComponent<EquipmentsMarket>().updateShipInventory();
+		transform.parent.GetComponent<MarketScreen>().transform.FindChild("Equipments Market").GetComponent<EquipmentsMarket>().updateInUseInventory();
 	}
 
 	private void checkInventoryCapacity () {
@@ -215,20 +208,11 @@ public class HullsMarket : MonoBehaviour {
 	}
 
 	private void checkButtons () {
-		if (offset != 0) {
-			scrollableUp = true;
-			moveUpBtnRender.sprite = moveUpBtnSprite;
-		} else {
-			scrollableUp = false;
-			moveUpBtnRender.sprite = moveUpBtnSpriteDisabled;
-		}
-		if (getMaximumItemIndex () >= (cells.Length + offset)) {
-			scrollableDown = true;
-			moveDownBtnRender.sprite = moveDownBtnSprite;
-		} else {
-			scrollableDown = false;
-			moveDownBtnRender.sprite = moveDownBtnSpriteDisabled;
-		}
+		scrollableUp = offset != 0;
+		upBtn.setActive(scrollableUp);
+
+		scrollableDown = getMaximumItemIndex () >= (cells.Length + offset);
+		downBtn.setActive(scrollableDown);
 	}
 	
 	private HullsMarketCell getCell (int index) {
@@ -346,11 +330,7 @@ public class HullsMarket : MonoBehaviour {
 		repairDroidSlots.color = repairDroids > 0 ? greenColor : repairDroids < 0 ? redColor : blueColor;
 		harvesterSlots.color = harvesters > 0 ? greenColor : harvesters < 0 ? redColor : blueColor;
 
-		if (Variables.cash + cost < 0) {
-			buyHullBtnRender.sprite = buyBtnSpriteDisabled;
-		} else {
-			buyHullBtnRender.sprite = buyBtnSprite;
-		}
+		buyBtn.setActive(Vars.cash + cost >= 0);
 	}
 
 	public Dictionary<int, HullsMarketItem> getItems () {

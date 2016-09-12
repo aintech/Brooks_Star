@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public static class Variables {
+public static class Vars {
 	
 	public static PlanetType planetType = PlanetType.CORAS;
 
@@ -23,7 +23,12 @@ public static class Variables {
 	public static int freeSortingOrder = 0;
 
 	public static List<EnemyShip> enemyShipsPool = new List<EnemyShip>();
+
+	public static UserInterface userInterface;
 }
+
+
+//TODO: В инвенторе три кнопки - отображать только товары, снаряжение или оборудование
 
 //Анимацию выхлопа для двигателей
 //Для ремонта корабля дроидом необходима такая штука как scrapMetal - выбивается из врагов и покупается в магазинах

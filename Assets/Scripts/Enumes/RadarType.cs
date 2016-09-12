@@ -37,13 +37,13 @@ public static class RadarDescriptor {
 
 	public static float getVolume (this RadarType type) {
 		switch(type) {
-		case RadarType.Sequester: return 1;
-		case RadarType.Planar: return 1;
-		case RadarType.Matrix: return 1;
-		case RadarType.PatanCorsac: return 1;
-		case RadarType.Snake: return 1;
-		case RadarType.Astral: return 1;
-		default: return 0;
+			case RadarType.Sequester: return .5f;
+			case RadarType.Planar: return .5f;
+			case RadarType.Matrix: return .5f;
+			case RadarType.PatanCorsac: return .5f;
+			case RadarType.Snake: return .5f;
+			case RadarType.Astral: return .5f;
+			default: return 0;
 		}
 	}
 

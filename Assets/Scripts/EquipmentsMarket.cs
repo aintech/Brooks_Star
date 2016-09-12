@@ -6,76 +6,72 @@ public class EquipmentsMarket : InventoryContainedScreen {
 
 	public Transform inventoryItemPrefab;
 
-	public Sprite shipBtnSprite, shipBtnSpriteDisabled, marketBtnSprite, marketBtnSpriteDisabled, buybackBtnSprite, buybackBtnSpriteDisabled;
-	
-	private Inventory marketInv, shipInv, buybackInv;
+	private Inventory market, inUse, buyback;
 
 	private ShipData shipData;
 
-	private SpriteRenderer shipBtnRender, marketBtnRender, buybackBtnRender;
+	private Button marketBtn, inUseBtn, buybackBtn;
 
-	private bool shipInvFilled;
+	private bool inUseFilled;
 
-	public void init (MarketScreen marketScreen, Inventory inventory, Inventory storage, Inventory marketInv, Inventory shipInv, Inventory buybackInv, ShipData shipData) {
+	public void init (MarketScreen marketScreen, Inventory inventory, Inventory storage, Inventory market, Inventory inUse, Inventory buyback, ShipData shipData) {
 		this.inventory = inventory;
 		this.storage = storage;
-		this.marketInv = marketInv;
-		this.shipInv = shipInv;
-		this.buybackInv = buybackInv;
+		this.market = market;
+		this.inUse = inUse;
+		this.buyback = buyback;
 		this.shipData = shipData;
 
 		innerInit();
-//		initInvetoryAndStorageBtns ();
-		shipBtnRender = transform.FindChild ("Ship Btn").GetComponent<SpriteRenderer> ();
-		marketBtnRender = transform.FindChild ("Market Btn").GetComponent<SpriteRenderer> ();
-		buybackBtnRender = transform.FindChild ("Buyback Btn").GetComponent<SpriteRenderer> ();
+		marketBtn = transform.FindChild ("Market Button").GetComponent<Button> ().init();
+		inUseBtn = transform.FindChild ("InUse Button").GetComponent<Button> ().init();
+		buybackBtn = transform.FindChild ("Buyback Button").GetComponent<Button> ().init();
 	}
 	
 	public void showScreen () {
 		inventory.setContainerScreen(this);
 		storage.setContainerScreen(this);
-		marketInv.setContainerScreen(this);
-		shipInv.setContainerScreen(this);
-		buybackInv.setContainerScreen(this);
+		market.setContainerScreen(this);
+		inUse.setContainerScreen(this);
+		buyback.setContainerScreen(this);
 
 		inventory.setInventoryToBegin ();
 		storage.setInventoryToBegin ();
-		marketInv.setInventoryToBegin ();
-		buybackInv.setInventoryToBegin ();
+		market.setInventoryToBegin ();
+		buyback.setInventoryToBegin ();
 
-		inventoryBtnRender.gameObject.SetActive (true);
-		storageBtnRender.gameObject.SetActive (true);
-		marketBtnRender.gameObject.SetActive (true);
-		shipBtnRender.gameObject.SetActive (true);
-		buybackBtnRender.gameObject.SetActive (true);
+		inventoryBtn.setEnable(true);
+		storageBtn.setEnable(true);
+		marketBtn.setEnable(true);
+		inUseBtn.setEnable(true);
+		buybackBtn.setEnable(true);
 
 		setInventoryActive ();
-		setMarketInvActive ();
+		setMarketActive ();
 
 		gameObject.SetActive (true);
 	}
 
-	override protected void checkBtnPress (string colliderName) {
-		switch (colliderName) {
-			case "Inventory Btn": setInventoryActive (); break;
-			case "Storage Btn": setStorageActive (); break;
-			case "Ship Btn": setShipInvActive (); break;
-			case "Market Btn": setMarketInvActive(); break;
-			case "Buyback Btn": setBuybackInvAvtive(); break;
-		}
+	override protected void checkBtnPress (Button btn) {
+		if (btn == inventoryBtn) { setInventoryActive(); }
+		else if (btn == storageBtn) { setStorageActive(); }
+		else if (btn == inUseBtn) { setInUseActive(); }
+		else if (btn == marketBtn) { setMarketActive(); }
+		else if (btn == buybackBtn) { setBuybackActive(); }
+		else { Debug.Log("Unknown btn: " + btn.name); }
 	}
 
 	override protected void checkItemDrop () {
-		if (hit.collider != null && hit.collider.name.Equals("Cell")) {
-			InventoryCell cell = hit.collider.transform.GetComponent<InventoryCell>();
-			Inventory sourceInv = draggedItem.transform.parent.GetComponent<Inventory>();
-			Inventory targetInv = cell.transform.parent.GetComponent<Inventory>();
+		if (Utils.hit != null && Utils.hit.name.Equals("Cell")) {
+			InventoryCell cell = Utils.hit.transform.GetComponent<InventoryCell>();
+			Inventory source = draggedItem.transform.parent.GetComponent<Inventory>();
+			Inventory target = cell.transform.parent.GetComponent<Inventory>();
 			
-			if (sourceInv != targetInv && (sourceInv == inventory || sourceInv == storage || sourceInv == shipInv) && (targetInv == marketInv || targetInv == buybackInv)) {
-				targetInv.sellItemToTrader(draggedItem, buybackInv);
+			if (source != target && (source == inventory || source == storage || source == inUse) && (target == market || target == buyback)) {
+				target.sellItemToTrader(draggedItem, buyback);
 				hideItemInfo(null);
 			} else {
-				targetInv.addItemToCell(draggedItem, cell);
+				target.addItemToCell(draggedItem, cell);
 			}
 		} else {
 			draggedItem.returnToParentInventory();
@@ -85,44 +81,34 @@ public class EquipmentsMarket : InventoryContainedScreen {
 	private void setInventoryActive () {
 		inventory.gameObject.SetActive (true);
 		storage.gameObject.SetActive (false);
-		shipInv.gameObject.SetActive (false);
-		inventoryBtnRender.sprite = inventoryBtnSprite;
-		storageBtnRender.sprite = storageBtnSpriteDisabled;
-		shipBtnRender.sprite = shipBtnSpriteDisabled;
+		inUse.gameObject.SetActive (false);
 		hideItemInfo (inventory);
 	}
 	
 	private void setStorageActive () {
 		storage.gameObject.SetActive (true);
 		inventory.gameObject.SetActive (false);
-		shipInv.gameObject.SetActive (false);
-		storageBtnRender.sprite = storageBtnSprite;
-		inventoryBtnRender.sprite = inventoryBtnSpriteDisabled;
-		shipBtnRender.sprite = shipBtnSpriteDisabled;
+		inUse.gameObject.SetActive (false);
 		hideItemInfo (storage);
 	}
 	
-	private void setShipInvActive () {
-		shipInv.gameObject.SetActive (true);
+	private void setInUseActive () {
+		inUse.gameObject.SetActive (true);
 		inventory.gameObject.SetActive (false);
 		storage.gameObject.SetActive (false);
-		shipBtnRender.sprite = shipBtnSprite;
-		inventoryBtnRender.sprite = inventoryBtnSpriteDisabled;
-		storageBtnRender.sprite = storageBtnSpriteDisabled;
-		hideItemInfo (shipInv);
+		hideItemInfo (inUse);
 
-		if (!shipInvFilled) {
-			fillShipInventory ();
-			shipInv.sortInventory();
+		if (!inUseFilled) {
+			fillInUseInventory ();
 		}
 	}
 
-	public void updateShipInventory () {
-		clearShipInventory();
-		fillShipInventory();
+	public void updateInUseInventory () {
+		clearInUseInventory();
+		fillInUseInventory();
 	}
 
-	private void fillShipInventory () {
+	private void fillInUseInventory () {
 		foreach (HullSlot slot in shipData.getSlots()) {
 			if (slot.getItem() != null) {
 				InventoryItem sourceItem = slot.getItem ();
@@ -135,49 +121,46 @@ public class EquipmentsMarket : InventoryContainedScreen {
 				item.setItemQuality(sourceItem.getItemQuality());
 				item.setVolume(sourceItem.getVolume());
 
-				shipInv.addItemToCell(item, null);
+				inUse.addItemToCell(item, null);
 			}
 		}
-		shipInvFilled = true;
+		inUse.sortInventory();
+		inUseFilled = true;
 	}
 
-	private void clearShipInventory () {
-		foreach (KeyValuePair<int, InventoryItem> pair in shipInv.getItems()) {
+	private void clearInUseInventory () {
+		foreach (KeyValuePair<int, InventoryItem> pair in inUse.getItems()) {
 			Destroy(pair.Value.gameObject);
 		}
-		shipInv.getItems().Clear();
-		shipInv.setInventoryToBegin ();
-		shipInvFilled = false;
+		inUse.getItems().Clear();
+		inUse.setInventoryToBegin ();
+		inUseFilled = false;
 	}
 
-	private void setMarketInvActive () {
-		marketInv.gameObject.SetActive (true);
-		buybackInv.gameObject.SetActive (false);
-		marketBtnRender.sprite = marketBtnSprite;
-		buybackBtnRender.sprite = buybackBtnSpriteDisabled;
-		hideItemInfo (marketInv);
+	private void setMarketActive () {
+		market.gameObject.SetActive (true);
+		buyback.gameObject.SetActive (false);
+		hideItemInfo (market);
 	}
 	
-	private void setBuybackInvAvtive () {
-		marketInv.gameObject.SetActive (false);
-		buybackInv.gameObject.SetActive (true);
-		marketBtnRender.sprite = marketBtnSpriteDisabled;
-		buybackBtnRender.sprite = buybackBtnSprite;
-		hideItemInfo (buybackInv);
+	private void setBuybackActive () {
+		market.gameObject.SetActive (false);
+		buyback.gameObject.SetActive (true);
+		hideItemInfo (buyback);
 	}
 	
 	protected void hideItemInfo (Inventory activeInventory) {
 		if (chosenItem != null && activeInventory != null) {
 			Inventory chosenItemInvetnory = chosenItem.transform.parent.GetComponent<Inventory> ();
 			
-			if ((chosenItemInvetnory == marketInv || chosenItemInvetnory == buybackInv) && 
-			    (activeInventory == inventory || activeInventory == storage || activeInventory == shipInv)) 
+			if ((chosenItemInvetnory == market || chosenItemInvetnory == buyback) && 
+				(activeInventory == inventory || activeInventory == storage || activeInventory == inUse)) 
 			{
 				return;
 			}
 			
-			if ((chosenItemInvetnory == inventory || chosenItemInvetnory == storage || chosenItemInvetnory == shipInv) &&
-			    (activeInventory == marketInv || activeInventory == buybackInv))
+			if ((chosenItemInvetnory == inventory || chosenItemInvetnory == storage || chosenItemInvetnory == inUse) &&
+			    (activeInventory == market || activeInventory == buyback))
 			{
 				return;
 			}
@@ -186,12 +169,12 @@ public class EquipmentsMarket : InventoryContainedScreen {
 	}
 
 	public void closeScreen () {
-		inventoryBtnRender.gameObject.SetActive (false);
-		storageBtnRender.gameObject.SetActive (false);
-		shipBtnRender.gameObject.SetActive (false);
-		marketBtnRender.gameObject.SetActive (false);
-		buybackBtnRender.gameObject.SetActive (false);
-		clearShipInventory();
+//		inventoryBtnRender.gameObject.SetActive (false);
+//		storageBtnRender.gameObject.SetActive (false);
+//		shipBtnRender.gameObject.SetActive (false);
+//		marketBtnRender.gameObject.SetActive (false);
+//		buybackBtnRender.gameObject.SetActive (false);
+		clearInUseInventory();
 
 		if (inventory != null) {
 			if (draggedItem != null) {
@@ -203,9 +186,9 @@ public class EquipmentsMarket : InventoryContainedScreen {
 
 			inventory.gameObject.SetActive (false);
 			storage.gameObject.SetActive (false);
-			shipInv.gameObject.SetActive (false);
-			marketInv.gameObject.SetActive (false);
-			buybackInv.gameObject.SetActive (false);
+			inUse.gameObject.SetActive (false);
+			market.gameObject.SetActive (false);
+			buyback.gameObject.SetActive (false);
 
 			gameObject.SetActive (false);
 		}

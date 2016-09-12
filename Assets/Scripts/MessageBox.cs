@@ -182,6 +182,7 @@ public class MessageBox : MonoBehaviour {
 		msgStartY = msgMaxY;
 		contentHeight = 0;
 		gameObject.SetActive(false);
+		Vars.userInterface.setEnabled(true);
 		planet.setPlanetBtnsEnabled(enablePlanet);
 	}
 	

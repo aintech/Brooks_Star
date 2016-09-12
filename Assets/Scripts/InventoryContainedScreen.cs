@@ -1,11 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public abstract class InventoryContainedScreen : MonoBehaviour {
+public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 
-	public Sprite inventoryBtnSprite, inventoryBtnSpriteDisabled, storageBtnSprite, storageBtnSpriteDisabled;
-
-	protected SpriteRenderer inventoryBtnRender, storageBtnRender;
+	protected Button inventoryBtn, storageBtn;
 
 	protected Inventory inventory, storage;
 	
@@ -13,10 +11,8 @@ public abstract class InventoryContainedScreen : MonoBehaviour {
 	
 	protected Transform chosenItemBorder;
 	
-	protected Vector3 mouseToWorldPosition, draggedItemPosition = Vector3.zero;
-	
-	protected RaycastHit2D hit;
-	
+	protected Vector3 draggedItemPosition = Vector3.zero;
+
 	protected Vector2 dragOffset;
 
 	protected TextMesh itemName, itemLabel_1, itemValue_1, itemLabel_2, itemValue_2, itemEnergyLabel, itemEnergyValue, itemVolumeLabel, itemVolumeValue, itemCostLabel, itemCostValue;
@@ -60,55 +56,50 @@ public abstract class InventoryContainedScreen : MonoBehaviour {
 		itemCostLabel.GetComponent<MeshRenderer> ().sortingOrder = 3;
 		itemCostValue.GetComponent<MeshRenderer> ().sortingOrder = 3;
 		
-		chosenItemBorder = transform.Find ("ChosenItemBorder").transform;
+		chosenItemBorder = transform.Find ("Chosen Item Border").transform;
 
-		inventoryBtnRender = transform.Find("Inventory Btn") == null? null: transform.Find("Inventory Btn").GetComponent<SpriteRenderer>();
-		storageBtnRender = transform.Find("Storage Btn") == null? null: transform.Find("Storage Btn").GetComponent<SpriteRenderer>();
+		inventoryBtn = transform.Find("Inventory Button") == null? null: transform.Find("Inventory Button").GetComponent<Button>().init();
+		storageBtn = transform.Find("Storage Button") == null? null: transform.Find("Storage Button").GetComponent<Button>().init();
 	}
 
-//	protected void initInvetoryAndStorageBtns () {
-//		inventoryBtnRender = transform.Find ("Inventory Btn").GetComponent<SpriteRenderer> ();
-//		storageBtnRender = transform.Find ("Storage Btn").GetComponent<SpriteRenderer> ();
-//	}
-
 	void Update () {
-		mouseToWorldPosition = Camera.main.ScreenToWorldPoint (Input.mousePosition);
-		if (Input.GetMouseButtonDown(0)) {
-			hit = Physics2D.Raycast(mouseToWorldPosition, Vector2.zero, 1);
-			if (hit.collider != null) {
-				if (hit.collider.name.Equals("Cell")) {
-					InventoryItem item = hit.collider.transform.GetComponent<InventoryCell>().getItem();
-					if (item != null) {
-						if (!item.transform.parent.name.Equals("Ship Inventory")) {
-							draggedItem = hit.collider.transform.GetComponent<InventoryCell>().takeItem();
-							draggedItem.GetComponent<Renderer>().sortingOrder = 4;
-						}
-						choseItem(item);
-						chosenItemBorder.transform.position = item.transform.position;
-						chosenItemBorder.gameObject.SetActive(true);
+		if (Input.GetMouseButtonDown(0) && Utils.hit != null) {
+			if (Utils.hit.name.Equals("Cell")) {
+				InventoryItem item = Utils.hit.transform.GetComponent<InventoryCell>().getItem();
+				if (item != null) {
+					if (!item.transform.parent.name.Equals("Ship Inventory")) {
+						draggedItem = Utils.hit.transform.GetComponent<InventoryCell>().takeItem();
+						draggedItem.GetComponent<Renderer>().sortingOrder = 4;
 					}
-				} else if (hit.collider.name.Contains(" Slot")) {
-					InventoryItem item = hit.collider.transform.GetComponent<HullSlot>().getItem();
-					if (item != null) {
-						choseDraggedItemFromSlot(hit.collider.transform.GetComponent<HullSlot>());
-						chosenItemBorder.transform.position = item.transform.position;
-						choseItem(item);
-						chosenItemBorder.gameObject.SetActive(true);
-					}
-				} else {
-					checkBtnPress (hit.collider.name);
+					choseItem(item);
+					chosenItemBorder.transform.position = item.transform.position;
+					chosenItemBorder.gameObject.SetActive(true);
 				}
+			} else if (Utils.hit.name.Contains(" Slot")) {
+				InventoryItem item = Utils.hit.transform.GetComponent<HullSlot>().getItem();
+				if (item != null) {
+					choseDraggedItemFromSlot(Utils.hit.transform.GetComponent<HullSlot>());
+					chosenItemBorder.transform.position = item.transform.position;
+					choseItem(item);
+					chosenItemBorder.gameObject.SetActive(true);
+				}
+			} else {
+//				checkBtnPress (Utils.hit.name);
 			}
 		}
 		if (draggedItem != null) {
-			draggedItemPosition.Set(mouseToWorldPosition.x - dragOffset.x, mouseToWorldPosition.y - dragOffset.y, 0);
+			draggedItemPosition.Set(Utils.mousePos.x - dragOffset.x, Utils.mousePos.y - dragOffset.y, 0);
 			draggedItem.transform.position = draggedItemPosition;
 			chosenItemBorder.position = chosenItem.transform.position;
 			if (Input.GetMouseButtonUp(0)) dropItem ();
 		}
 	}
 
-	virtual protected void checkBtnPress (string colliderName) {}
+	public void fireClickButton (Button btn) {
+		checkBtnPress(btn);
+	}
+
+	abstract protected void checkBtnPress (Button btn);
 	
 	virtual protected void choseDraggedItemFromSlot (HullSlot slot) {
 		draggedItem = slot.takeItem();
@@ -190,11 +181,10 @@ public abstract class InventoryContainedScreen : MonoBehaviour {
 		itemCostLabel.text = "Стоимость";
 		itemCostValue.text = "$ " + item.getCost();
 		
-		dragOffset.Set(mouseToWorldPosition.x - item.transform.position.x, mouseToWorldPosition.y - item.transform.position.y);
+		dragOffset.Set(Utils.mousePos.x - item.transform.position.x, Utils.mousePos.y - item.transform.position.y);
 	}
 	
 	private void dropItem () {
-		hit = Physics2D.Raycast(mouseToWorldPosition, Vector2.zero, 1);
 		checkItemDrop ();
 		draggedItem.GetComponent<Renderer>().sortingOrder = 3;
 		if(chosenItem != null) chosenItemBorder.position = chosenItem.transform.position;
