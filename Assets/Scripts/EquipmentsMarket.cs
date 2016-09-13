@@ -67,7 +67,7 @@ public class EquipmentsMarket : InventoryContainedScreen {
 			Inventory source = draggedItem.transform.parent.GetComponent<Inventory>();
 			Inventory target = cell.transform.parent.GetComponent<Inventory>();
 			
-			if (source != target && (source == inventory || source == storage || source == inUse) && (target == market || target == buyback)) {
+			if (source != target && (source == inventory || source == storage) && target == market) {
 				target.sellItemToTrader(draggedItem, buyback);
 				hideItemInfo(null);
 			} else {
@@ -82,6 +82,9 @@ public class EquipmentsMarket : InventoryContainedScreen {
 		inventory.gameObject.SetActive (true);
 		storage.gameObject.SetActive (false);
 		inUse.gameObject.SetActive (false);
+		inventoryBtn.setActive(false);
+		storageBtn.setActive(true);
+		inUseBtn.setActive(true);
 		hideItemInfo (inventory);
 	}
 	
@@ -89,6 +92,9 @@ public class EquipmentsMarket : InventoryContainedScreen {
 		storage.gameObject.SetActive (true);
 		inventory.gameObject.SetActive (false);
 		inUse.gameObject.SetActive (false);
+		storageBtn.setActive(false);
+		inventoryBtn.setActive(true);
+		inUseBtn.setActive(true);
 		hideItemInfo (storage);
 	}
 	
@@ -96,6 +102,9 @@ public class EquipmentsMarket : InventoryContainedScreen {
 		inUse.gameObject.SetActive (true);
 		inventory.gameObject.SetActive (false);
 		storage.gameObject.SetActive (false);
+		inUseBtn.setActive(false);
+		inventoryBtn.setActive(true);
+		storageBtn.setActive(true);
 		hideItemInfo (inUse);
 
 		if (!inUseFilled) {
@@ -140,12 +149,16 @@ public class EquipmentsMarket : InventoryContainedScreen {
 	private void setMarketActive () {
 		market.gameObject.SetActive (true);
 		buyback.gameObject.SetActive (false);
+		marketBtn.setActive(false);
+		buybackBtn.setActive(true);
 		hideItemInfo (market);
 	}
 	
 	private void setBuybackActive () {
 		market.gameObject.SetActive (false);
 		buyback.gameObject.SetActive (true);
+		marketBtn.setActive(true);
+		buybackBtn.setActive(false);
 		hideItemInfo (buyback);
 	}
 	

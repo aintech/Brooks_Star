@@ -11,8 +11,6 @@ public class MarketScreen : MonoBehaviour, ButtonHolder {
 
 	private Button equipmentsBtn, hullsBtn, closeBtn;
 
-	private TextMesh cashTxt;
-
 	public void init (Planet planet, ShipData shipData, Inventory inventory, Inventory storage, Inventory marketInv, Inventory shipInv, Inventory buybackInv) {
 		this.planet = planet;
 
@@ -26,10 +24,6 @@ public class MarketScreen : MonoBehaviour, ButtonHolder {
 		equipmentsBtn = transform.Find ("Equipments Button").GetComponent<Button> ().init();
 		hullsBtn = transform.Find("Hulls Button").GetComponent<Button>().init();
 		closeBtn = transform.Find ("Close Button").GetComponent<Button> ().init();
-
-		cashTxt = transform.Find ("Cash Text").GetComponent<TextMesh> ();
-		cashTxt.gameObject.GetComponent<MeshRenderer> ().sortingOrder = 1;
-		cashTxt.text = Vars.cash.ToString("C0");
 
 		transform.Find("Market BG").gameObject.SetActive(true);
 
@@ -68,10 +62,14 @@ public class MarketScreen : MonoBehaviour, ButtonHolder {
 	private void showEquipmentMarket () {
 		hullsMarket.closeScreen();
 		equipmentsMarket.showScreen();
+		hullsBtn.setActive(true);
+		equipmentsBtn.setActive(false);
 	}
 
 	private void showHullsMarket () {
 		equipmentsMarket.closeScreen();
 		hullsMarket.showScreen();
+		hullsBtn.setActive(false);
+		equipmentsBtn.setActive(true);
 	}
 }

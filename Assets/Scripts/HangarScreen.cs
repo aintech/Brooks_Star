@@ -41,14 +41,14 @@ public class HangarScreen : InventoryContainedScreen {
 
 		shipData.updateHullInfo ();
 
-		showHullScreen ();
+		showShipScreen ();
 
 		gameObject.SetActive (true);
 	}
 
 	override protected void checkBtnPress (Button btn) {
 		if (btn == storageBtn) { showStorageScreen(); }
-		else if (btn == shipBtn) { showHullScreen(); }
+		else if (btn == shipBtn) { showShipScreen(); }
 		else if (btn == closeBtn) { closeScreen(); }
 		else { Debug.Log("Unknown button: " + btn.name); }
 	}
@@ -153,9 +153,11 @@ public class HangarScreen : InventoryContainedScreen {
 		}
 	}
 
-	private void showHullScreen () {
+	private void showShipScreen () {
 		storage.gameObject.SetActive(false);
 		shipData.gameObject.SetActive (true);
+		shipBtn.setActive(false);
+		storageBtn.setActive(true);
         if (getChosenItem() != null && getChosenItem().getCell() != null &&
             getChosenItem().getCell().getInventory().getInventoryType() == Inventory.InventoryType.STORAGE)
         {
@@ -166,6 +168,8 @@ public class HangarScreen : InventoryContainedScreen {
 	private void showStorageScreen () {
 		storage.gameObject.SetActive(true);
 		shipData.gameObject.SetActive (false);
+		storageBtn.setActive(false);
+		shipBtn.setActive(true);
         if (getChosenItem() != null && getChosenItem().getHullSlot() != null) {
             hideItemInfo();
         }

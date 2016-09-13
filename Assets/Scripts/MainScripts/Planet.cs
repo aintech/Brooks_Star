@@ -39,9 +39,9 @@ public class Planet : MonoBehaviour, ButtonHolder {
         Transform inventories = GameObject.Find("Inventories").transform;
         inventory = inventories.Find ("Inventory").GetComponent<Inventory> ().init(Inventory.InventoryType.INVENTORY);
 		storage = inventories.Find ("Storage").GetComponent<Inventory> ().init(Inventory.InventoryType.STORAGE);
-		inUse = inventories.Find ("InUse Inventory").GetComponent<Inventory> ().init(Inventory.InventoryType.INUSE);
-		market = inventories.Find ("Market Inventory").GetComponent<Inventory> ().init(Inventory.InventoryType.MARKET);
-		buyback = inventories.Find ("Buyback Inventory").GetComponent<Inventory> ().init(Inventory.InventoryType.BUYBACK);
+		inUse = inventories.Find ("InUse").GetComponent<Inventory> ().init(Inventory.InventoryType.INUSE);
+		market = inventories.Find ("Market").GetComponent<Inventory> ().init(Inventory.InventoryType.MARKET);
+		buyback = inventories.Find ("Buyback").GetComponent<Inventory> ().init(Inventory.InventoryType.BUYBACK);
 
         inventory.setCapacity(shipData.getHullType().getStorageCapacity());
 
@@ -77,7 +77,8 @@ public class Planet : MonoBehaviour, ButtonHolder {
 		market.fillWithRandomItems(50, "Market Item");
 
 		showPlanet();
-		messageBox.showNewMessage(story.getMessageContainer(Storyline.StoryPart.INTRODUCTION));
+		Vars.userInterface.setEnabled(true);
+//		messageBox.showNewMessage(story.getMessageContainer(Storyline.StoryPart.INTRODUCTION));
 	}
 
 	public void showPlanet () {

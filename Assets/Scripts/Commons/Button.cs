@@ -72,6 +72,7 @@ public class Button : MonoBehaviour {
 		coll.enabled = active;
 		if (!active) { changeState(State.NORMAL); }
 		render.color = active? normalColor: notActiveColor;
+		text.color = active? normalColor: notActiveColor;
 	}
 
 	private enum State {

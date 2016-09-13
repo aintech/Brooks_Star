@@ -34,34 +34,36 @@ public class ShipData : MonoBehaviour {
 
 	private int currentHealth;
 
-	private TextMesh hullHeatlhText, hullArmorText, hullEnergyText;
+	private TextMesh healthValue, armorValue, shieldValue, energyValue;
+
+	private Color32 okColor, badColor = new Color32(255, 0, 0, 255);
 
 	public ShipData init () {
 		trans = transform;
-		radarSlot = trans.FindChild("Radar Slot").GetComponent<HullSlot>();
-		engineSlot = trans.FindChild("Engine Slot").GetComponent<HullSlot>();
-		generatorSlot_1 = trans.FindChild("Generator Slot 1").GetComponent<HullSlot>();
-		generatorSlot_2 = trans.FindChild("Generator Slot 2").GetComponent<HullSlot>();
-		generatorSlot_3 = trans.FindChild("Generator Slot 3").GetComponent<HullSlot>();
-		harvesterSlot_1 = trans.FindChild("Harvester Slot 1").GetComponent<HullSlot>();
-		harvesterSlot_2 = trans.FindChild("Harvester Slot 2").GetComponent<HullSlot>();
-		repairDroidSlot_1 = trans.FindChild("RepairDroid Slot 1").GetComponent<HullSlot>();
-		repairDroidSlot_2 = trans.FindChild("RepairDroid Slot 2").GetComponent<HullSlot>();
-		repairDroidSlot_3 = trans.FindChild("RepairDroid Slot 3").GetComponent<HullSlot>();
-		repairDroidSlot_4 = trans.FindChild("RepairDroid Slot 4").GetComponent<HullSlot>();
-		shieldSlot_1 = trans.FindChild("Shield Slot 1").GetComponent<HullSlot>();
-		shieldSlot_2 = trans.FindChild("Shield Slot 2").GetComponent<HullSlot>();
-		shieldSlot_3 = trans.FindChild("Shield Slot 3").GetComponent<HullSlot>();
-		weaponSlot_1 = trans.FindChild("Weapon Slot 1").GetComponent<HullSlot>();
-		weaponSlot_2 = trans.FindChild("Weapon Slot 2").GetComponent<HullSlot>();
-		weaponSlot_3 = trans.FindChild("Weapon Slot 3").GetComponent<HullSlot>();
-		weaponSlot_4 = trans.FindChild("Weapon Slot 4").GetComponent<HullSlot>();
-		weaponSlot_5 = trans.FindChild("Weapon Slot 5").GetComponent<HullSlot>();
-		armorSlot_1 = trans.FindChild("Armor Slot 1").GetComponent<HullSlot>();
-		armorSlot_2 = trans.FindChild("Armor Slot 2").GetComponent<HullSlot>();
-		armorSlot_3 = trans.FindChild("Armor Slot 3").GetComponent<HullSlot>();
-		armorSlot_4 = trans.FindChild("Armor Slot 4").GetComponent<HullSlot>();
-		armorSlot_5 = trans.FindChild("Armor Slot 5").GetComponent<HullSlot>();
+		radarSlot = trans.Find("Radar Slot").GetComponent<HullSlot>();
+		engineSlot = trans.Find("Engine Slot").GetComponent<HullSlot>();
+		generatorSlot_1 = trans.Find("Generator Slot 1").GetComponent<HullSlot>();
+		generatorSlot_2 = trans.Find("Generator Slot 2").GetComponent<HullSlot>();
+		generatorSlot_3 = trans.Find("Generator Slot 3").GetComponent<HullSlot>();
+		harvesterSlot_1 = trans.Find("Harvester Slot 1").GetComponent<HullSlot>();
+		harvesterSlot_2 = trans.Find("Harvester Slot 2").GetComponent<HullSlot>();
+		repairDroidSlot_1 = trans.Find("RepairDroid Slot 1").GetComponent<HullSlot>();
+		repairDroidSlot_2 = trans.Find("RepairDroid Slot 2").GetComponent<HullSlot>();
+		repairDroidSlot_3 = trans.Find("RepairDroid Slot 3").GetComponent<HullSlot>();
+		repairDroidSlot_4 = trans.Find("RepairDroid Slot 4").GetComponent<HullSlot>();
+		shieldSlot_1 = trans.Find("Shield Slot 1").GetComponent<HullSlot>();
+		shieldSlot_2 = trans.Find("Shield Slot 2").GetComponent<HullSlot>();
+		shieldSlot_3 = trans.Find("Shield Slot 3").GetComponent<HullSlot>();
+		weaponSlot_1 = trans.Find("Weapon Slot 1").GetComponent<HullSlot>();
+		weaponSlot_2 = trans.Find("Weapon Slot 2").GetComponent<HullSlot>();
+		weaponSlot_3 = trans.Find("Weapon Slot 3").GetComponent<HullSlot>();
+		weaponSlot_4 = trans.Find("Weapon Slot 4").GetComponent<HullSlot>();
+		weaponSlot_5 = trans.Find("Weapon Slot 5").GetComponent<HullSlot>();
+		armorSlot_1 = trans.Find("Armor Slot 1").GetComponent<HullSlot>();
+		armorSlot_2 = trans.Find("Armor Slot 2").GetComponent<HullSlot>();
+		armorSlot_3 = trans.Find("Armor Slot 3").GetComponent<HullSlot>();
+		armorSlot_4 = trans.Find("Armor Slot 4").GetComponent<HullSlot>();
+		armorSlot_5 = trans.Find("Armor Slot 5").GetComponent<HullSlot>();
 
 		slots = new HullSlot[]{radarSlot, engineSlot, generatorSlot_1, generatorSlot_2, generatorSlot_3, harvesterSlot_1, harvesterSlot_2,
 							   repairDroidSlot_1, repairDroidSlot_2, repairDroidSlot_3, repairDroidSlot_4, shieldSlot_1, shieldSlot_2, shieldSlot_3,
@@ -69,18 +71,37 @@ public class ShipData : MonoBehaviour {
 							   armorSlot_1, armorSlot_2, armorSlot_3, armorSlot_4, armorSlot_5};
 
 		
-		Transform hullInfo = transform.FindChild ("Hull Information");
-		hullHeatlhText = hullInfo.FindChild ("Health Text").GetComponent<TextMesh> ();
-		hullArmorText = hullInfo.FindChild ("Armor Text").GetComponent<TextMesh> ();
-		hullEnergyText = hullInfo.FindChild ("Energy Text").GetComponent<TextMesh> ();
-		
-		hullHeatlhText.GetComponent<MeshRenderer> ().sortingLayerName = "Inventory";
-		hullArmorText.GetComponent<MeshRenderer> ().sortingLayerName = "Inventory";
-		hullEnergyText.GetComponent<MeshRenderer> ().sortingLayerName = "Inventory";
-		
-		hullHeatlhText.GetComponent<MeshRenderer> ().sortingOrder = 3;
-		hullArmorText.GetComponent<MeshRenderer> ().sortingOrder = 3;
-		hullEnergyText.GetComponent<MeshRenderer> ().sortingOrder = 3;
+		Transform hullInfo = transform.Find ("Hull Information");
+		hullInfo.gameObject.SetActive(true);
+
+		TextMesh healthLabel = hullInfo.Find ("Health Label").GetComponent<TextMesh> ();
+		TextMesh armorLabel = hullInfo.Find ("Armor Label").GetComponent<TextMesh> ();
+		TextMesh shieldLabel = hullInfo.Find ("Shield Label").GetComponent<TextMesh> ();
+		TextMesh energyLabel = hullInfo.Find ("Energy Label").GetComponent<TextMesh> ();
+		healthValue = hullInfo.Find ("Health Value").GetComponent<TextMesh> ();
+		armorValue = hullInfo.Find ("Armor Value").GetComponent<TextMesh> ();
+		shieldValue = hullInfo.Find("Shield Value").GetComponent<TextMesh>();
+		energyValue = hullInfo.Find ("Energy Value").GetComponent<TextMesh> ();
+
+		okColor = energyValue.color;
+
+		healthLabel.GetComponent<MeshRenderer> ().sortingLayerName = "Inventory";
+		armorLabel.GetComponent<MeshRenderer> ().sortingLayerName = "Inventory";
+		shieldLabel.GetComponent<MeshRenderer> ().sortingLayerName = "Inventory";
+		energyLabel.GetComponent<MeshRenderer> ().sortingLayerName = "Inventory";
+		healthValue.GetComponent<MeshRenderer> ().sortingLayerName = "Inventory";
+		armorValue.GetComponent<MeshRenderer> ().sortingLayerName = "Inventory";
+		shieldValue.GetComponent<MeshRenderer> ().sortingLayerName = "Inventory";
+		energyValue.GetComponent<MeshRenderer> ().sortingLayerName = "Inventory";
+
+		healthLabel.GetComponent<MeshRenderer> ().sortingOrder = 3;
+		armorLabel.GetComponent<MeshRenderer> ().sortingOrder = 3;
+		shieldLabel.GetComponent<MeshRenderer> ().sortingOrder = 3;
+		energyLabel.GetComponent<MeshRenderer> ().sortingOrder = 3;
+		healthValue.GetComponent<MeshRenderer> ().sortingOrder = 3;
+		armorValue.GetComponent<MeshRenderer> ().sortingOrder = 3;
+		shieldValue.GetComponent<MeshRenderer> ().sortingOrder = 3;
+		energyValue.GetComponent<MeshRenderer> ().sortingOrder = 3;
 
         transform.Find("Hull Image").gameObject.SetActive(true);
         transform.Find("Hull BG").gameObject.SetActive(true);
@@ -127,7 +148,7 @@ public class ShipData : MonoBehaviour {
 	}
 	
 	void getRender () {
-		render = transform.FindChild("Hull Image").GetComponent<SpriteRenderer>();
+		render = transform.Find("Hull Image").GetComponent<SpriteRenderer>();
 	}
 
 	private void setSlotPositions () {
@@ -375,29 +396,28 @@ public class ShipData : MonoBehaviour {
 	}
 
 	public void updateHullInfo () {
-		updateHealthText ();
-		updateArmorText ();
-		updateEnergyText ();
+		updateHealthValue ();
+		updateArmorValue ();
+		updateShieldValue();
+		updateEnergyValue ();
 	}
 
-	public void updateHealthText () {
-		hullHeatlhText.text = currentHealth.ToString() + "/" + getHullType ().getMaxHealth ().ToString();
+	public void updateHealthValue () {
+		healthValue.text = currentHealth.ToString() + "/" + getHullType ().getMaxHealth ().ToString();
 	}
 
-	public void updateArmorText () {
-		hullArmorText.text = getArmor().ToString ();
+	public void updateArmorValue () {
+		armorValue.text = getArmor().ToString ();
 	}
 
-	public void updateEnergyText () {
+	public void updateShieldValue () {
+		shieldValue.text = getShield().ToString();
+	}
+
+	public void updateEnergyValue () {
 		int energy = getEnergyNeeded();
-		if (energy < -999) energy = -999;
-		hullEnergyText.text = energy.ToString ();
-		
-		if (energy < 0) {
-			hullEnergyText.color = new Color(1, 0, 0);
-		} else {
-			hullEnergyText.color = new Color(0, 0, 0);
-		}
+		energyValue.text = energy.ToString ();
+		energyValue.color = energy < 0? badColor: okColor;
 	}
 	
 	public void setCurrentHealth (int currentHealth) {

@@ -32,10 +32,14 @@ public class Inventory : MonoBehaviour, ButtonHolder {
     
 	private Vector3 leftPosition = new Vector3(-4.5f, 0, 0), rightPosition = new Vector3(4.5f, 0, 0);
 
+	private Collider2D inventoryColl;
+
 	public Inventory init (InventoryType inventoryType) {
         this.inventoryType = inventoryType;
 
 		cells = transform.GetComponentsInChildren<InventoryCell> ();
+
+		inventoryColl = transform.GetComponent<Collider2D>();
 
         foreach (InventoryCell cell in cells) {
             cell.init(this);
@@ -75,16 +79,43 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		this.containerScreen = containerScreen;
 	}
 
+	void Update () {
+		if (Input.GetAxis("Mouse ScrollWheel") > 0 && Utils.hit != null) {
+			if (Utils.hit == inventoryColl) {
+				scroll(true);
+			} else if (Utils.hit.name.Equals("Cell") && Utils.hit.GetComponent<InventoryCell>().getInventory() == this) {
+				scroll(true);
+			}
+		} else if (Input.GetAxis("Mouse ScrollWheel") < 0 && Utils.hit != null) {
+			if (Utils.hit == inventoryColl) {
+				scroll(false);
+			} else if (Utils.hit.name.Equals("Cell") && Utils.hit.GetComponent<InventoryCell>().getInventory() == this) {
+				scroll(false);
+			}
+		}
+	}
+
 	public void fireClickButton (Button btn) {
-		if (btn == upBtn && scrollableUp) {
-			offset -= offsetStep;
-			afterScroll();
-		} else if (btn == downBtn && scrollableDown) {
-			offset += offsetStep;
-			afterScroll();
-		} else if (btn == sortBtn) {
+		if (btn == upBtn) { scroll(true); }
+		else if (btn == downBtn) { scroll(false); }
+		else if (btn == sortBtn) {
 			sortInventory();
 			containerScreen.updateChosenItemBorder();
+		} else { Debug.Log("Unknown button: " + btn.name); }
+	}
+
+	private void scroll (bool up) {
+		offset += (up && scrollableUp)? -offsetStep: (!up && scrollableDown)? offsetStep: 0;
+		refreshInventory ();
+		InventoryItem chosenItem = containerScreen.getChosenItem ();
+		if (chosenItem != null && chosenItem.transform.parent == this.transform) {
+			foreach (InventoryCell cell in cells) {
+				if (cell.getItem() == chosenItem) {
+					containerScreen.updateChosenItemBorder (false);
+					return;
+				}
+			}
+			containerScreen.updateChosenItemBorder (true);
 		}
 	}
 
@@ -136,6 +167,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		}
 		buybackInventory.addItemToFirstFreePosition (item, true);
 		Vars.cash += item.getCost ();
+		Vars.userInterface.updateCash();
 	}
 
 	public void addItemToCell (InventoryItem item, InventoryCell cell) {
@@ -144,7 +176,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 			return;
 		}
 
-		Inventory source = item.transform.parent.GetComponent<Inventory> ();
+		Inventory source = item.getCell() == null? null: item.getCell().getInventory();
 
 		if (source != this) {
 			if (inventoryType == InventoryType.BUYBACK) {
@@ -155,11 +187,11 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 					item.returnToParentInventory();
 					Messenger.showMessage("Объёма инвентаря не достаточно для добавления предмета");
 					return;
-				}
-			} else if (source != null && (source.inventoryType == InventoryType.MARKET || source.inventoryType == InventoryType.BUYBACK)) {
-				if (!buyItem (item)) {
-					item.returnToParentInventory ();
-					return;
+				} else if (source != null && (source.inventoryType == InventoryType.MARKET || source.inventoryType == InventoryType.BUYBACK)) {
+					if (!buyItem (item)) {
+						item.returnToParentInventory ();
+						return;
+					}
 				}
 			}
 		}
@@ -216,27 +248,13 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 			if (getCapacity() > 0.0 && (getFreeVolume() - item.getVolume() < 0.0)) {
 				return false;
 			}
-		} else {
-			return false;
-		}
+		} else { return false; }
 		Vars.cash -= item.getCost ();
+		Vars.userInterface.updateCash();
+
 		return true;
 	}
 
-	private void afterScroll () {
-		refreshInventory ();
-		InventoryItem chosenItem = containerScreen.getChosenItem ();
-		if (chosenItem != null && chosenItem.transform.parent == this.transform) {
-			foreach (InventoryCell cell in cells) {
-				if (cell.getItem() == chosenItem) {
-					containerScreen.updateChosenItemBorder (false);
-					return;
-				}
-			}
-			containerScreen.updateChosenItemBorder (true);
-		}
-	}
-	
 	private void checkButtons () {
 		scrollableUp = offset != 0;
 		upBtn.setActive(scrollableUp);

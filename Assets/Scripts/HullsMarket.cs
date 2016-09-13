@@ -39,12 +39,15 @@ public class HullsMarket : MonoBehaviour, ButtonHolder {
 
 	private Inventory inventory, storage;
 
+	private Collider2D hullsDisplayColl;
+
 	public void init (Inventory inventory, Inventory storage, ShipData shipData) {
 		this.inventory = inventory;
 		this.storage = storage;
 		this.shipData = shipData;
 
 		cells = transform.Find("Hulls Display").GetComponentsInChildren<HullsMarketCell> ();
+		hullsDisplayColl = transform.Find("Hulls Display").GetComponent<Collider2D>();
 
 		upBtn = transform.FindChild ("Up Button").GetComponent<Button> ().init();
 		downBtn = transform.FindChild ("Down Button").GetComponent<Button> ().init();
@@ -97,20 +100,29 @@ public class HullsMarket : MonoBehaviour, ButtonHolder {
         if (Input.GetMouseButtonDown(0) && Utils.hit != null && Utils.hit.name.Equals("Cell")) {
             selectCell((HullsMarketCell)Utils.hit.gameObject.GetComponent<HullsMarketCell>());
         }
+		if (Input.GetAxis("Mouse ScrollWheel") > 0 && Utils.hit != null && (Utils.hit == hullsDisplayColl || Utils.hit.name.Equals("Cell"))) {
+			scroll(true);
+		} else if (Input.GetAxis("Mouse ScrollWheel") < 0 && Utils.hit != null && (Utils.hit == hullsDisplayColl || Utils.hit.name.Equals("Cell"))) {
+			scroll(false);
+		}
     }
 
 	public void fireClickButton (Button btn) {
-        if (btn == upBtn && scrollableUp) {
-            offset -= offsetStep;
-            afterScroll();
-        } else if (btn == downBtn && scrollableDown) {
-            offset += offsetStep;
-            afterScroll();
-        } else if (btn == buyBtn) {
-            buyHull();
-        } else {
-            Debug.Log("Unknown button: " + btn.name);
-        }
+		if (btn == upBtn) { scroll(true); }
+		else if (btn == downBtn) { scroll(false); }
+		else if (btn == buyBtn) { buyHull(); }
+		else { Debug.Log("Unknown button: " + btn.name); }
+	}
+
+	private void scroll (bool up) {
+		offset += (up && scrollableUp)? -offsetStep: (!up && scrollableDown)? offsetStep: 0;
+		refreshMarket ();
+		if (chosenHull.getCell() == null) {
+			chosenHullBorder.gameObject.SetActive (false);
+		} else {
+			chosenHullBorder.gameObject.SetActive (true);
+			chosenHullBorder.transform.position = chosenHull.transform.position;
+		}
 	}
 
 	private void buyHull () {
@@ -119,9 +131,8 @@ public class HullsMarket : MonoBehaviour, ButtonHolder {
 		if (Vars.cash + cost < 0) {
 			Messenger.showMessage("Не хватает кредитов на замену корпуса");
 			return;
-		} else {
-			Vars.cash += cost;
-		}
+		} else { Vars.cash += cost; }
+		Vars.userInterface.updateCash();
 
 		HullType oldHullType = shipData.getHullType();
 
@@ -193,16 +204,6 @@ public class HullsMarket : MonoBehaviour, ButtonHolder {
 		checkButtons ();
 	}
 
-	private void afterScroll () {
-		refreshMarket ();
-		if (chosenHull.getCell() == null) {
-			chosenHullBorder.gameObject.SetActive (false);
-		} else {
-			chosenHullBorder.gameObject.SetActive (true);
-			chosenHullBorder.transform.position = chosenHull.transform.position;
-		}
-	}
-	
 	private int getMaximumItemIndex () {
 		int index = 0;
 		foreach (KeyValuePair<int, HullsMarketItem> pair in getItems()) {
