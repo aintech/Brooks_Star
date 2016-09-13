@@ -1,9 +1,0 @@
-fileFormatVersion: 2
-guid: d1f4c1dd01055d049bca8ffca0607bd2
-MonoImporter:
-  serializedVersion: 2
-  defaultReferences:
-  - corvetteHullPrefab: {fileID: 418024, guid: 6e896b711432b994297ad4f8d6b6ff45, type: 2}
-  executionOrder: 0
-  icon: {instanceID: 0}
-  userData: 

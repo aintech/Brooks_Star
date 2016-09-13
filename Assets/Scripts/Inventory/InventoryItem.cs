@@ -31,7 +31,7 @@ public class InventoryItem : MonoBehaviour {
 		this.itemType = itemType;
 		if (render == null) render = transform.GetComponent<SpriteRenderer>();
 		switch (itemType) {
-			case Type.Weapon:
+			case Type.WEAPON:
 				WeaponType weaponType = ((WeaponData)itemData).getType();
 				switch (weaponType) {
 					case WeaponType.Blaster: render.sprite = weaponSprites[0]; break;
@@ -43,7 +43,7 @@ public class InventoryItem : MonoBehaviour {
 					case WeaponType.Suppressor: render.sprite = weaponSprites[6]; break;
 					default: Debug.Log("Неизвестный тип оружия"); break;
 				} break;
-			case Type.Engine:
+			case Type.ENGINE:
 				EngineType engineType = ((EngineData)itemData).getType();
 				switch (engineType) {
 					case EngineType.Force: render.sprite = engineSprites[0]; break;
@@ -53,7 +53,7 @@ public class InventoryItem : MonoBehaviour {
 					case EngineType.Quazar: render.sprite = engineSprites[4]; break;
 					default: Debug.Log("Неизвестный тип двигателя"); break;
 				} break;
-			case Type.Armor:
+			case Type.ARMOR:
 				ArmorType armorType = ((ArmorData)itemData).getType();
 				switch (armorType) {
 					case ArmorType.Steel: render.sprite = armorSprites[0]; break;
@@ -63,7 +63,7 @@ public class InventoryItem : MonoBehaviour {
 					case ArmorType.Adamant: render.sprite = armorSprites[4]; break;
 					default: Debug.Log("Неизвестный тип брони"); break;
 				} break;
-			case Type.Generator:
+			case Type.GENERATOR:
 				GeneratorType generatorType = ((GeneratorData)itemData).getType();
 				switch (generatorType) {
 					case GeneratorType.Atomic: render.sprite = generatorSprites[0]; break;
@@ -72,7 +72,7 @@ public class InventoryItem : MonoBehaviour {
 					case GeneratorType.Tunnel: render.sprite = generatorSprites[3]; break;
 					default: Debug.Log("Неизвестный тип генератора"); break;
 				} break;
-			case Type.Radar:
+			case Type.RADAR:
 				RadarType radarType = ((RadarData)itemData).getType();
 				switch (radarType) {
 					case RadarType.Sequester: render.sprite = radarSprites[0]; break;
@@ -83,7 +83,7 @@ public class InventoryItem : MonoBehaviour {
 					case RadarType.Astral: render.sprite = radarSprites[5]; break;
 					default: Debug.Log("Неизвестный тип радара"); break;
 				} break;
-			case Type.Shield:
+			case Type.SHIELD:
 				ShieldType shieldType = ((ShieldData)itemData).getType();
 				switch (shieldType) {
 					case ShieldType.Block: render.sprite = shieldSprites[0]; break;
@@ -92,7 +92,7 @@ public class InventoryItem : MonoBehaviour {
 					case ShieldType.Phase: render.sprite = shieldSprites[3]; break;
 					default: Debug.Log("Неизвестный тип щита"); break;
 				} break;
-			case Type.RepairDroid:
+			case Type.REPAIR_DROID:
 				RepairDroidType droidType = ((RepairDroidData)itemData).getType();
 				switch (droidType) {
 					case RepairDroidType.Rail: render.sprite = repairDroidSprites[0]; break;
@@ -101,7 +101,7 @@ public class InventoryItem : MonoBehaviour {
 					case RepairDroidType.Thread: render.sprite = repairDroidSprites[3]; break;
 					default: Debug.Log("Неизвестный тип ремонтного робота"); break;
 				} break;
-			case Type.Harvester:
+			case Type.HARVESTER:
 				HarvesterType harvesterType = ((HarvesterData)itemData).getType();
 				switch (harvesterType) {
 					case HarvesterType.Mechanical: render.sprite = harvesterSprites[0]; break;
@@ -179,14 +179,14 @@ public class InventoryItem : MonoBehaviour {
 	
 	public void setItemData (ItemData itemData) {
 		this.itemData = itemData;
-		if (itemData is WeaponData) setSprite (itemData, Type.Weapon);
-		else if (itemData is EngineData) setSprite (itemData, Type.Engine);
-		else if (itemData is ArmorData) setSprite (itemData, Type.Armor);
-		else if (itemData is GeneratorData) setSprite (itemData, Type.Generator);
-		else if (itemData is RadarData) setSprite (itemData, Type.Radar);
-		else if (itemData is ShieldData) setSprite (itemData, Type.Shield);
-		else if (itemData is RepairDroidData) setSprite (itemData, Type.RepairDroid);
-		else if (itemData is HarvesterData) setSprite (itemData, Type.Harvester);
+		if (itemData is WeaponData) setSprite (itemData, Type.WEAPON);
+		else if (itemData is EngineData) setSprite (itemData, Type.ENGINE);
+		else if (itemData is ArmorData) setSprite (itemData, Type.ARMOR);
+		else if (itemData is GeneratorData) setSprite (itemData, Type.GENERATOR);
+		else if (itemData is RadarData) setSprite (itemData, Type.RADAR);
+		else if (itemData is ShieldData) setSprite (itemData, Type.SHIELD);
+		else if (itemData is RepairDroidData) setSprite (itemData, Type.REPAIR_DROID);
+		else if (itemData is HarvesterData) setSprite (itemData, Type.HARVESTER);
 	}
 
 	public ItemData getItemData () {
@@ -211,11 +211,11 @@ public class InventoryItem : MonoBehaviour {
 	}
 
 	public enum Type {
-		Weapon, Engine, Armor, Generator, Radar, Shield, RepairDroid, Harvester
+		WEAPON, ENGINE, ARMOR, GENERATOR, RADAR, SHIELD, REPAIR_DROID, HARVESTER
 	}
 
 	public enum Quality {
-		Normal, Superior, Unique//Normal - обычное, Superior - отличное, Unique - уникальное
+		NORMAL, SUPERIOR, UNIQUE//Normal - обычное, Superior - отличное, Unique - уникальное
 	}
 
 	public abstract class ItemData {

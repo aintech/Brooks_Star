@@ -298,30 +298,30 @@ public class ShipData : MonoBehaviour {
 		if (armorSlots >= 4) getSlotByName("Armor Slot 4").setItem(armor_4);
 		if (armorSlots >= 5) getSlotByName("Armor Slot 5").setItem(armor_5);
 
-		ItemFactory.createItemData(radar, InventoryItem.Type.Radar);
-		ItemFactory.createItemData(engine, InventoryItem.Type.Engine);
-		if (generatorSlots >= 1) ItemFactory.createItemData(generator_1, InventoryItem.Type.Generator);
-		if (generatorSlots >= 2) ItemFactory.createItemData(generator_2, InventoryItem.Type.Generator);
-		if (generatorSlots >= 3) ItemFactory.createItemData(generator_3, InventoryItem.Type.Generator);
-		if (harvesterSlots >= 1) ItemFactory.createItemData(harvester_1, InventoryItem.Type.Harvester);
-		if (harvesterSlots >= 2) ItemFactory.createItemData(harvester_2, InventoryItem.Type.Harvester);
-		if (repairDroids >= 1) ItemFactory.createItemData(repairDroid_1, InventoryItem.Type.RepairDroid);
-		if (repairDroids >= 2) ItemFactory.createItemData(repairDroid_2, InventoryItem.Type.RepairDroid);
-		if (repairDroids >= 3) ItemFactory.createItemData(repairDroid_3, InventoryItem.Type.RepairDroid);
-		if (repairDroids >= 4) ItemFactory.createItemData(repairDroid_4, InventoryItem.Type.RepairDroid);
-		if (shieldSlots >= 1) ItemFactory.createItemData(shield_1, InventoryItem.Type.Shield);
-		if (shieldSlots >= 2) ItemFactory.createItemData(shield_2, InventoryItem.Type.Shield);
-		if (shieldSlots >= 3) ItemFactory.createItemData(shield_3, InventoryItem.Type.Shield);
+		ItemFactory.createItemData(radar, InventoryItem.Type.RADAR);
+		ItemFactory.createItemData(engine, InventoryItem.Type.ENGINE);
+		if (generatorSlots >= 1) ItemFactory.createItemData(generator_1, InventoryItem.Type.GENERATOR);
+		if (generatorSlots >= 2) ItemFactory.createItemData(generator_2, InventoryItem.Type.GENERATOR);
+		if (generatorSlots >= 3) ItemFactory.createItemData(generator_3, InventoryItem.Type.GENERATOR);
+		if (harvesterSlots >= 1) ItemFactory.createItemData(harvester_1, InventoryItem.Type.HARVESTER);
+		if (harvesterSlots >= 2) ItemFactory.createItemData(harvester_2, InventoryItem.Type.HARVESTER);
+		if (repairDroids >= 1) ItemFactory.createItemData(repairDroid_1, InventoryItem.Type.REPAIR_DROID);
+		if (repairDroids >= 2) ItemFactory.createItemData(repairDroid_2, InventoryItem.Type.REPAIR_DROID);
+		if (repairDroids >= 3) ItemFactory.createItemData(repairDroid_3, InventoryItem.Type.REPAIR_DROID);
+		if (repairDroids >= 4) ItemFactory.createItemData(repairDroid_4, InventoryItem.Type.REPAIR_DROID);
+		if (shieldSlots >= 1) ItemFactory.createItemData(shield_1, InventoryItem.Type.SHIELD);
+		if (shieldSlots >= 2) ItemFactory.createItemData(shield_2, InventoryItem.Type.SHIELD);
+		if (shieldSlots >= 3) ItemFactory.createItemData(shield_3, InventoryItem.Type.SHIELD);
 		if (weaponSlots >= 1) ItemFactory.createWeaponData(weapon_1, WeaponType.Blaster);
 		if (weaponSlots >= 2) ItemFactory.createWeaponData(weapon_2, WeaponType.Blaster);
-		if (weaponSlots >= 3) ItemFactory.createItemData(weapon_3, InventoryItem.Type.Weapon);
-		if (weaponSlots >= 4) ItemFactory.createItemData(weapon_4, InventoryItem.Type.Weapon);
-		if (weaponSlots >= 5) ItemFactory.createItemData(weapon_5, InventoryItem.Type.Weapon);
-		if (armorSlots >= 1) ItemFactory.createItemData(armor_1, InventoryItem.Type.Armor);
-		if (armorSlots >= 2) ItemFactory.createItemData(armor_2, InventoryItem.Type.Armor);
-		if (armorSlots >= 3) ItemFactory.createItemData(armor_3, InventoryItem.Type.Armor);
-		if (armorSlots >= 4) ItemFactory.createItemData(armor_4, InventoryItem.Type.Armor);
-		if (armorSlots >= 5) ItemFactory.createItemData(armor_5, InventoryItem.Type.Armor);
+		if (weaponSlots >= 3) ItemFactory.createItemData(weapon_3, InventoryItem.Type.WEAPON);
+		if (weaponSlots >= 4) ItemFactory.createItemData(weapon_4, InventoryItem.Type.WEAPON);
+		if (weaponSlots >= 5) ItemFactory.createItemData(weapon_5, InventoryItem.Type.WEAPON);
+		if (armorSlots >= 1) ItemFactory.createItemData(armor_1, InventoryItem.Type.ARMOR);
+		if (armorSlots >= 2) ItemFactory.createItemData(armor_2, InventoryItem.Type.ARMOR);
+		if (armorSlots >= 3) ItemFactory.createItemData(armor_3, InventoryItem.Type.ARMOR);
+		if (armorSlots >= 4) ItemFactory.createItemData(armor_4, InventoryItem.Type.ARMOR);
+		if (armorSlots >= 5) ItemFactory.createItemData(armor_5, InventoryItem.Type.ARMOR);
 
 		arrangeItemsToSlots();
 	}
@@ -365,6 +365,76 @@ public class ShipData : MonoBehaviour {
 			case "Armor Slot 5": return armorSlot_5;
 			default: Debug.Log("Неизвестное имя слота"); return null;
 		}
+	}
+
+	public HullSlot getSlotByType (HullSlot.HullSlotType type, int slotIndex) {
+		if (type == HullSlot.HullSlotType.Radar) { return radarSlot; }
+		if (type == HullSlot.HullSlotType.Engine) { return engineSlot; }
+		if (type == HullSlot.HullSlotType.Generator) {
+			switch (slotIndex) {
+				case 1: return generatorSlot_1;
+				case 2: return generatorSlot_2;
+				case 3: return generatorSlot_3;
+				default: Debug.Log("Unknown generator slot: " + slotIndex); return null;
+			}
+		}
+		if (type == HullSlot.HullSlotType.Harvester) {
+			switch (slotIndex) {
+				case 1: return harvesterSlot_1;
+				case 2: return harvesterSlot_2;
+				default: Debug.Log("Unknown harvester slot: " + slotIndex); return null;
+			}
+		}
+		if (type == HullSlot.HullSlotType.RepairDroid) {
+			switch (slotIndex) {
+				case 1: return repairDroidSlot_1;
+				case 2: return repairDroidSlot_2;
+				case 3: return repairDroidSlot_3;
+				case 4: return repairDroidSlot_4;
+				default: Debug.Log("Unknown repair droid slot: " + slotIndex); return null;
+			}
+		}
+		if (type == HullSlot.HullSlotType.Shield) {
+			switch (slotIndex) {
+				case 1: return shieldSlot_1;
+				case 2: return shieldSlot_2;
+				case 3: return shieldSlot_3;
+				default: Debug.Log("Unknown shield slot: " + slotIndex); return null;
+			}
+		}
+		if (type == HullSlot.HullSlotType.Weapon) {
+			switch (slotIndex) {
+				case 1: return weaponSlot_1;
+				case 2: return weaponSlot_2;
+				case 3: return weaponSlot_3;
+				case 4: return weaponSlot_4;
+				case 5: return weaponSlot_5;
+				default: Debug.Log("Unknown weapon slot: " + slotIndex); return null;
+			}
+		}
+		if (type == HullSlot.HullSlotType.Weapon) {
+			switch (slotIndex) {
+				case 1: return weaponSlot_1;
+				case 2: return weaponSlot_2;
+				case 3: return weaponSlot_3;
+				case 4: return weaponSlot_4;
+				case 5: return weaponSlot_5;
+				default: Debug.Log("Unknown weapon slot: " + slotIndex); return null;
+			}
+		}
+		if (type == HullSlot.HullSlotType.Armor) {
+			switch (slotIndex) {
+				case 1: return armorSlot_1;
+				case 2: return armorSlot_2;
+				case 3: return armorSlot_3;
+				case 4: return armorSlot_4;
+				case 5: return armorSlot_5;
+				default: Debug.Log("Unknown armor slot: " + slotIndex); return null;
+			}
+		}
+
+		Debug.Log("Slot type not found");
+		return null;
 	}
 
 	private string getSlotName (HullSlot slot) {
@@ -431,7 +501,7 @@ public class ShipData : MonoBehaviour {
 	public int getShield () {
 		int shield = 0;
 		foreach (HullSlot slot in slots) {
-			if (slot.getItem() != null && slot.getItem().getItemType() == InventoryItem.Type.Shield) {
+			if (slot.getItem() != null && slot.getItem().getItemType() == InventoryItem.Type.SHIELD) {
 				shield += ((InventoryItem.ShieldData) slot.getItem().getItemData()).getShieldLevel();
 			}	
 		}
@@ -441,7 +511,7 @@ public class ShipData : MonoBehaviour {
 	public int getArmor () {
 		int armor = 0;
 		foreach (HullSlot slot in slots) {
-			if (slot.getItem() != null && slot.getItem ().getItemType() == InventoryItem.Type.Armor) {
+			if (slot.getItem() != null && slot.getItem ().getItemType() == InventoryItem.Type.ARMOR) {
 				armor += ((InventoryItem.ArmorData)slot.getItem ().getItemData()).getArmorClass();
 			}
 		}
@@ -457,7 +527,7 @@ public class ShipData : MonoBehaviour {
 		int energy = 0;
 		foreach (HullSlot slot in slots) {
 			if (slot.getItem() != null) {
-				if (slot.getItem().getItemType() == InventoryItem.Type.Generator) {
+				if (slot.getItem().getItemType() == InventoryItem.Type.GENERATOR) {
 					energy += ((InventoryItem.GeneratorData)slot.getItem().getItemData()).getMaxEnergy();
 				}
 				energy -= slot.getItem().getEnergyNeeded();

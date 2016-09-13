@@ -291,14 +291,14 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 			item.transform.SetParent(transform);
 			if (label != null) { item.name = label; }
 			int rand = Mathf.RoundToInt (Random.value * 10);
-			ItemFactory.createItemData (item, rand <= 3? InventoryItem.Type.Weapon:
-			                            	  rand == 4? InventoryItem.Type.Engine:
-			                            	  rand == 5? InventoryItem.Type.Armor:
-			                            	  rand == 6? InventoryItem.Type.Generator:
-			                            	  rand == 7? InventoryItem.Type.Radar:
-			                            	  rand == 8? InventoryItem.Type.Shield:
-			                            	  rand == 9? InventoryItem.Type.RepairDroid:
-			                            	  InventoryItem.Type.Harvester);
+			ItemFactory.createItemData (item, rand <= 3? InventoryItem.Type.WEAPON:
+			                            	  rand == 4? InventoryItem.Type.ENGINE:
+			                            	  rand == 5? InventoryItem.Type.ARMOR:
+			                            	  rand == 6? InventoryItem.Type.GENERATOR:
+			                            	  rand == 7? InventoryItem.Type.RADAR:
+			                            	  rand == 8? InventoryItem.Type.SHIELD:
+			                            	  rand == 9? InventoryItem.Type.REPAIR_DROID:
+											  InventoryItem.Type.HARVESTER);
 
 			addItemToFirstFreePosition(item, false);
 		}
@@ -348,27 +348,27 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 
 		foreach(KeyValuePair<int, InventoryItem> pair in getItems()) {
 			switch (pair.Value.getItemType()) {
-				case InventoryItem.Type.Weapon: weapons.Add(pair.Value); break;
-				case InventoryItem.Type.Engine: engines.Add(pair.Value); break;
-				case InventoryItem.Type.Armor: armors.Add(pair.Value); break;
-				case InventoryItem.Type.Generator: generators.Add(pair.Value); break;
-				case InventoryItem.Type.Radar: radars.Add(pair.Value); break;
-				case InventoryItem.Type.Shield: shields.Add(pair.Value); break;
-				case InventoryItem.Type.RepairDroid: repairDroids.Add(pair.Value); break;
-				case InventoryItem.Type.Harvester: harvesters.Add(pair.Value); break;
+				case InventoryItem.Type.WEAPON: weapons.Add(pair.Value); break;
+				case InventoryItem.Type.ENGINE: engines.Add(pair.Value); break;
+				case InventoryItem.Type.ARMOR: armors.Add(pair.Value); break;
+				case InventoryItem.Type.GENERATOR: generators.Add(pair.Value); break;
+				case InventoryItem.Type.RADAR: radars.Add(pair.Value); break;
+				case InventoryItem.Type.SHIELD: shields.Add(pair.Value); break;
+				case InventoryItem.Type.REPAIR_DROID: repairDroids.Add(pair.Value); break;
+				case InventoryItem.Type.HARVESTER: harvesters.Add(pair.Value); break;
 			}
 		}
 
 		getItems().Clear();
 
-		weapons = sortList(weapons, InventoryItem.Type.Weapon);
-		engines = sortList(engines, InventoryItem.Type.Engine);
-		armors = sortList(armors, InventoryItem.Type.Armor);
-		generators = sortList(generators, InventoryItem.Type.Generator);
-		radars = sortList(radars, InventoryItem.Type.Radar);
-		shields = sortList(shields, InventoryItem.Type.Shield);
-		repairDroids = sortList(repairDroids, InventoryItem.Type.RepairDroid);
-		harvesters = sortList(harvesters, InventoryItem.Type.Harvester);
+		weapons = sortList(weapons, InventoryItem.Type.WEAPON);
+		engines = sortList(engines, InventoryItem.Type.ENGINE);
+		armors = sortList(armors, InventoryItem.Type.ARMOR);
+		generators = sortList(generators, InventoryItem.Type.GENERATOR);
+		radars = sortList(radars, InventoryItem.Type.RADAR);
+		shields = sortList(shields, InventoryItem.Type.SHIELD);
+		repairDroids = sortList(repairDroids, InventoryItem.Type.REPAIR_DROID);
+		harvesters = sortList(harvesters, InventoryItem.Type.HARVESTER);
 
 		int counter = 0;
 		counter = addSortToItems(weapons, counter);
@@ -387,7 +387,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		SortedDictionary<int, InventoryItem> weights = new SortedDictionary<int, InventoryItem>();
 		int weight = 0;
 		foreach (InventoryItem item in list) {
-			if (type == InventoryItem.Type.Weapon) {
+			if (type == InventoryItem.Type.WEAPON) {
 				InventoryItem.WeaponData data = (InventoryItem.WeaponData) item.getItemData();
 				switch (data.getType()) {
 					case WeaponType.Blaster: weight = 1000000; break;
@@ -400,25 +400,25 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 					default: Debug.Log("Неизвестный тип оружия"); break;
 				}
 				weight += item.getCost();
-			} else if (type == InventoryItem.Type.Engine) {
+			} else if (type == InventoryItem.Type.ENGINE) {
 				InventoryItem.EngineData data = (InventoryItem.EngineData) item.getItemData();
 				weight = Mathf.RoundToInt(data.getPower() * 1000);
-			} else if (type == InventoryItem.Type.Armor) {
+			} else if (type == InventoryItem.Type.ARMOR) {
 				InventoryItem.ArmorData data = (InventoryItem.ArmorData) item.getItemData();
 				weight = data.getArmorClass() * 1000;
-			} else if (type == InventoryItem.Type.Generator) {
+			} else if (type == InventoryItem.Type.GENERATOR) {
 				InventoryItem.GeneratorData data = (InventoryItem.GeneratorData) item.getItemData();
 				weight = data.getMaxEnergy();
-			} else if (type == InventoryItem.Type.Radar) {
+			} else if (type == InventoryItem.Type.RADAR) {
 				InventoryItem.RadarData data = (InventoryItem.RadarData) item.getItemData();
 				weight = data.getRange();
-			} else if (type == InventoryItem.Type.Shield) {
+			} else if (type == InventoryItem.Type.SHIELD) {
 				InventoryItem.ShieldData data = (InventoryItem.ShieldData) item.getItemData();
 				weight = data.getShieldLevel();
-			} else if (type == InventoryItem.Type.RepairDroid) {
+			} else if (type == InventoryItem.Type.REPAIR_DROID) {
 				InventoryItem.RepairDroidData data = (InventoryItem.RepairDroidData) item.getItemData();
 				weight = data.getRepairSpeed();
-			} else if (type == InventoryItem.Type.Harvester) {
+			} else if (type == InventoryItem.Type.HARVESTER) {
 				InventoryItem.HarvesterData data = (InventoryItem.HarvesterData) item.getItemData();
 				weight = 1000000 - data.getHarvestTime();
 			}

@@ -23,12 +23,12 @@ public static class EngineDescriptor {
 
 	public static float getMainPower (this EngineType type) {
 		switch(type) {
-		case EngineType.Force: return 0.2f;
-		case EngineType.Gradual: return 0.22f;
-		case EngineType.Proton: return 0.25f;
-		case EngineType.Allur: return 0.29f;
-		case EngineType.Quazar: return 0.34f;
-		default: return 0;
+			case EngineType.Force: return 0.04f;
+			case EngineType.Gradual: return 0.044f;
+			case EngineType.Proton: return 0.05f;
+			case EngineType.Allur: return 0.058f;
+			case EngineType.Quazar: return 0.068f;
+			default: return 0;
 		}
 	}
 
