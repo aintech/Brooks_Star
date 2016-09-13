@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class HangarScreen : InventoryContainedScreen {
 	
-	private Planet planet;
+	private PlanetSurface planetSurface;
 
 	private ShipData shipData;
 
@@ -12,8 +12,8 @@ public class HangarScreen : InventoryContainedScreen {
 
 	private Button shipBtn, closeBtn;
 
-	public void init (Planet planet, ShipData shipData, Inventory inventory, Inventory storage) {
-		this.planet = planet;
+	public void init (PlanetSurface planetSurface, ShipData shipData, Inventory inventory, Inventory storage) {
+		this.planetSurface = planetSurface;
 		this.shipData = shipData;
 		this.inventory = inventory;
 		this.storage = storage;
@@ -181,7 +181,7 @@ public class HangarScreen : InventoryContainedScreen {
 		inventory.gameObject.SetActive (false);
 		storage.gameObject.SetActive (false);
 		shipData.gameObject.SetActive (false);
-		planet.setPlanetBtnsEnabled(true);
+        planetSurface.setPlanetBtnsEnabled(true);
 		gameObject.SetActive (false);
 	}
 }

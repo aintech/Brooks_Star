@@ -34,10 +34,10 @@ public class MessageBox : MonoBehaviour {
 	
 	private static bool hided = false;
 
-	private Planet planet;
+	private PlanetSurface planetSurface;
 
-	public void init (Planet planet) {
-		this.planet = planet;
+	public void init (PlanetSurface planetSurface) {
+		this.planetSurface = planetSurface;
 		float yPos = Screen.height * screenTopOffsetRate;
 		float xPos = Screen.width * screenLeftOffsetRate;
 		Vector2 pos = new Vector2(xPos, yPos);
@@ -156,7 +156,7 @@ public class MessageBox : MonoBehaviour {
 	
 	public void showNewMessage (MessageContainer messageContainer, int messageIndex) {
 		this.messageContainer = messageContainer;
-		planet.setPlanetBtnsEnabled(false);
+        planetSurface.setPlanetBtnsEnabled(false);
 		gameObject.SetActive(true);
 		displayNextMessage(messageIndex);
 	}
@@ -183,7 +183,7 @@ public class MessageBox : MonoBehaviour {
 		contentHeight = 0;
 		gameObject.SetActive(false);
 		Vars.userInterface.setEnabled(true);
-		planet.setPlanetBtnsEnabled(enablePlanet);
+        planetSurface.setPlanetBtnsEnabled(enablePlanet);
 	}
 	
 	private void displayNextMessage (int messageIndex) {

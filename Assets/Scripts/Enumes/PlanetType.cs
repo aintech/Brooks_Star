@@ -29,4 +29,12 @@ public static class PlanetDescriptor {
 		default: return "Неизвестное наименование планеты";
 		}
 	}
+
+    public static float getDistanceToStar (this PlanetType type) {
+        switch (type) {
+            case PlanetType.CORAS: return 8;
+            case PlanetType.PALETTE: return 20;
+            default: Debug.Log("Unknown planet type: " + type); return 0;
+        }
+    }
 }

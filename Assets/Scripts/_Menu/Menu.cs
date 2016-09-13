@@ -5,7 +5,7 @@ using System.Collections;
 public class Menu : MonoBehaviour {
 	
 	public void startNewGame () {
-		Planet.newGame = true;
-		SceneManager.LoadScene("Planet");
+		PlanetSurface.newGame = true;
+		SceneManager.LoadScene("PlanetSurface");
 	}
 }

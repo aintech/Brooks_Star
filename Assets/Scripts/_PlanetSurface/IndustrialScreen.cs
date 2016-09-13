@@ -3,12 +3,12 @@ using System.Collections;
 
 public class IndustrialScreen : MonoBehaviour, ButtonHolder {
 
-	private Planet planet;
+	private PlanetSurface planetSurface;
 
 	private Button laboratoryBtn, workshopBtn, factoryshopBtn, closeBtn;
 
-	public void init (Planet planet) {
-		this.planet = planet;
+	public void init (PlanetSurface planetSurface) {
+		this.planetSurface = planetSurface;
 
 		laboratoryBtn = transform.Find("Laboratory Button").GetComponent<Button>().init();
 		workshopBtn = transform.Find("Workshop Button").GetComponent<Button>().init();
@@ -24,7 +24,7 @@ public class IndustrialScreen : MonoBehaviour, ButtonHolder {
 
 	private void closeScreen () {
 		gameObject.SetActive(false);
-		planet.setPlanetBtnsEnabled(true);
+        planetSurface.setPlanetBtnsEnabled(true);
 	}
 
 	public void fireClickButton (Button btn) {

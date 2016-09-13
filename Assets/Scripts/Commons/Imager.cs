@@ -8,25 +8,47 @@ public static class Imager {
 	//Star systems
 	private static Sprite aluria;
 
-	//Planets
-	private static Sprite coras;
+    //System Stars
+    private static Sprite aluriaStar;
+
+	//Planet Surfaces
+	private static Sprite corasSurf, paletteSurf;
+
+    //Planets
+    private static Sprite coras, palette; 
 
 	//Portraits
 	private static Texture alika, rokot;
 
-	public static Sprite getPlanetBG (PlanetType type) {
+	public static Sprite getPlanetSurface (PlanetType type) {
 		switch (type) {
-			case PlanetType.CORAS: return coras;
+			case PlanetType.CORAS: return corasSurf;
+            case PlanetType.PALETTE: return paletteSurf;
 			default: Debug.Log("Unknown planet type: " + type); return null;
 		}
 	}
 
-	public static Sprite getStarSystemBG (StarSystemType type) {
+    public static Sprite getPlanet (PlanetType type) {
+        switch (type) {
+            case PlanetType.CORAS: return coras;
+            case PlanetType.PALETTE: return palette;
+            default: Debug.Log("Unknown planet type: " + type); return null;
+        }
+    }
+
+	public static Sprite getStarSystem (StarSystemType type) {
 		switch (type) {
 			case StarSystemType.ALURIA: return aluria;
 			default: Debug.Log("Unknown system type: " + type); return null;
 		}
 	}
+
+    public static Sprite getStar (StarSystemType type) {
+        switch (type) {
+            case StarSystemType.ALURIA: return aluriaStar;
+            default: Debug.Log("Unknown system type: " + type); return null;
+        }
+    }
 
 	public static Texture getPortrait (CharacterType type) {
 		switch (type) {
@@ -44,9 +66,13 @@ public static class Imager {
 
 		foreach (Sprite sprite in sprites) {
 			switch (sprite.name) {
+                case "StarSystem_Aluria": aluria = sprite; break;
+                case "Star_Aluria": aluriaStar = sprite; break;
 				case "Planet_Coras": coras = sprite; break;
-				case "StarSystem_Aluria": aluria = sprite; break;
-				default: Debug.Log("Unmapped sprite: " + sprite.name); break;
+                case "Planet_Palette": palette = sprite; break;
+                case "PlanetSurface_Coras": corasSurf = sprite; break;
+                case "PlanetSurface_Palette": paletteSurf = sprite; break;
+                default: Debug.Log("Unmapped sprite: " + sprite.name); break;
 			}
 		}
 

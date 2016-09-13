@@ -25,4 +25,12 @@ public class UserInterface : MonoBehaviour, ButtonHolder {
 	public void fireClickButton (Button btn) {
 		
 	}
+
+    public void showPlanetInfo (PlanetType type) {
+        Debug.Log("Ship near " + type.getName());
+    }
+
+    public void hidePlanetInfo () {
+        Debug.Log("Leave Planet!");//CONTINUE: UserInterface to GUI
+    }
 }

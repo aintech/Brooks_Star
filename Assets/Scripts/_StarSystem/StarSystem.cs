@@ -4,13 +4,13 @@ using System.Collections.Generic;
 
 public class StarSystem : MonoBehaviour {
 
-	public Transform playerShipPrefab, enemyShipPrefab;
+	public Transform planetPrefab, playerShipPrefab, enemyShipPrefab;
 
 	public Texture inventoryBtnTexture;
 
 	public GUIStyle shieldStyle1, shieldStyle2, healthStyle1, healthStyle2;
 
-	private SpriteRenderer backgroundGalaxy;
+	private SpriteRenderer backgroundGalaxy, star;
 
 	private ShipInformationScreen shipInformation;
 
@@ -29,6 +29,8 @@ public class StarSystem : MonoBehaviour {
 	private Rect healthRect = new Rect(Screen.width - 70, Screen.height - 20, 0, 0), 
 				 shieldRect = new Rect(Screen.width - 190, Screen.height - 20, 0, 0);
 
+    private List<Planet> planets;
+
 	//Выведеное опытным путем расстояние от центра до края сектора
 	//при условии что разрешение картинки сектора 4096х4096, pixelsToUnit = 50, sectorMoveSpeed = 0.1
 //	private float sectorHalfSide = 409.1f;
@@ -45,9 +47,12 @@ public class StarSystem : MonoBehaviour {
 
 		Imager.initialize();
 
-		backgroundGalaxy = transform.Find("BG").GetComponent<SpriteRenderer>();
-		backgroundGalaxy.sprite = Imager.getStarSystemBG(StarSystemType.ALURIA);
+        Vars.userInterface = GameObject.Find("User Interface").GetComponent<UserInterface>().init();
+
+        backgroundGalaxy = transform.Find("BG").GetComponent<SpriteRenderer>();
 		backgroundGalaxy.gameObject.SetActive(true);
+        star = transform.Find("Star").GetComponent<SpriteRenderer>();
+        star.gameObject.SetActive(true);
 
 		shipInformation = GameObject.Find ("Ship Information").GetComponent<ShipInformationScreen> ();
 		inventory = shipInformation.transform.FindChild ("Inventory").GetComponent<Inventory> ();
@@ -68,10 +73,22 @@ public class StarSystem : MonoBehaviour {
 		inventory.setCapacity (shipData.getHullType ().getStorageCapacity ());
 		inventory.loadItems (Vars.inventory);
 
+        loadStarSystem();
+
 		//for (int i = 0; i <= 10; i++) {
-			spawnAnEnemy ();
+			//spawnAnEnemy ();
 		//}
 	}
+
+    private void loadStarSystem () {
+        PlanetType[] types = Vars.starSystemType.getPlanetTypes();
+        planets = new List<Planet>(types.Length);
+        foreach (PlanetType type in types) {
+            planets.Add(Instantiate<Transform>(planetPrefab).GetComponent<Planet>().init(type, playerShip.transform));
+        }
+        backgroundGalaxy.sprite = Imager.getStarSystem(Vars.starSystemType);
+        star.sprite = Imager.getStar(Vars.starSystemType);
+    }
 
 	private void initPlayerShip () {
 		playerShip = Instantiate<Transform> (playerShipPrefab).GetComponent<PlayerShip> ();

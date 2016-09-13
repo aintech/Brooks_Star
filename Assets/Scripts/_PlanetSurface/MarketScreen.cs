@@ -3,7 +3,7 @@ using System.Collections;
 
 public class MarketScreen : MonoBehaviour, ButtonHolder {
 
-	private Planet planet;
+	private PlanetSurface planetSurface;
 
 	private HullsMarket hullsMarket;
 
@@ -11,8 +11,8 @@ public class MarketScreen : MonoBehaviour, ButtonHolder {
 
 	private Button equipmentsBtn, hullsBtn, closeBtn;
 
-	public void init (Planet planet, ShipData shipData, Inventory inventory, Inventory storage, Inventory marketInv, Inventory shipInv, Inventory buybackInv) {
-		this.planet = planet;
+	public void init (PlanetSurface planetSurface, ShipData shipData, Inventory inventory, Inventory storage, Inventory marketInv, Inventory shipInv, Inventory buybackInv) {
+		this.planetSurface = planetSurface;
 
 		equipmentsMarket = transform.Find ("Equipments Market").GetComponent<EquipmentsMarket>();
 		equipmentsMarket.init(this, inventory, storage, marketInv, shipInv, buybackInv, shipData);
@@ -39,7 +39,7 @@ public class MarketScreen : MonoBehaviour, ButtonHolder {
 		hullsMarket.closeScreen();
 		equipmentsMarket.closeScreen();
 		gameObject.SetActive(false);
-		planet.setPlanetBtnsEnabled(true);
+        planetSurface.setPlanetBtnsEnabled(true);
 	}
 
 	public void fireClickButton (Button button) {

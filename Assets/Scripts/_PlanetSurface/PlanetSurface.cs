@@ -2,7 +2,7 @@
 using UnityEngine.SceneManagement;
 using System.Collections;
 
-public class Planet : MonoBehaviour, ButtonHolder {
+public class PlanetSurface : MonoBehaviour, ButtonHolder {
 
 	public static bool newGame = true;
 
@@ -30,7 +30,6 @@ public class Planet : MonoBehaviour, ButtonHolder {
 		Imager.initialize();
 
 		Vars.userInterface = GameObject.Find("User Interface").GetComponent<UserInterface>().init();
-		Vars.userInterface.setEnabled(false);
 
 		marketScreen = GameObject.Find("Market Screen").GetComponent<MarketScreen> ();
 		industrialScreen = GameObject.Find("Industrial Screen").GetComponent<IndustrialScreen>();
@@ -83,7 +82,7 @@ public class Planet : MonoBehaviour, ButtonHolder {
 
 	public void showPlanet () {
 		setPlanetBtnsEnabled(true);
-		bgRender.sprite = Imager.getPlanetBG(Vars.planetType);
+		bgRender.sprite = Imager.getPlanetSurface(Vars.planetType);
 	}
 
 	public void leavePlanet () {
