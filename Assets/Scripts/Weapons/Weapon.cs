@@ -23,8 +23,6 @@ public abstract class Weapon : MonoBehaviour {
 
 	protected bool isAPlayerWeapon = false;
 
-	private bool gamePaused = false;
-
 	private SpriteRenderer render;
 	
 	protected static int enemyLayer = -1, playerLayer = -1;
@@ -43,17 +41,17 @@ public abstract class Weapon : MonoBehaviour {
 	}
 
 	private void Update () {
-		if (!gamePaused) {
-			if (isAPlayerWeapon) {
-				if (Input.GetMouseButton(0) && canShoot()) {
-					lastShotTime = Time.time;
-					makeAShot ();
-				}
-			} else {
-				if (canShoot() && distanceInRange()) {
-					lastShotTime = Time.time;
-					makeAShot ();
-				}
+		if (StarSystem.gamePaused) { return; }
+
+		if (isAPlayerWeapon) {
+			if (Input.GetMouseButton(0) && canShoot()) {
+				lastShotTime = Time.time;
+				makeAShot ();
+			}
+		} else {
+			if (canShoot() && distanceInRange()) {
+				lastShotTime = Time.time;
+				makeAShot ();
 			}
 		}
 	}
@@ -67,7 +65,9 @@ public abstract class Weapon : MonoBehaviour {
 	}
 
 	private void FixedUpdate () {
-		if (!gamePaused) weaponLookAtTarget(isAPlayerWeapon? mainCamera.ScreenToWorldPoint(Input.mousePosition): playerTrans.position);
+		if (StarSystem.gamePaused) { return; }
+
+		weaponLookAtTarget(isAPlayerWeapon? mainCamera.ScreenToWorldPoint(Input.mousePosition): playerTrans.position);
 	}
 
 	private void weaponLookAtTarget (Vector3 target) {
@@ -99,7 +99,6 @@ public abstract class Weapon : MonoBehaviour {
 	public void setReloadTime (float reloadTime) { this.reloadTime = reloadTime; }
 	public float getReloadTime () { return reloadTime; }
 
-	public void setGamePaused (bool gamePaused) { this.gamePaused = gamePaused; }
 	public void setPlayerTransform (Transform playerTrans) { this.playerTrans = playerTrans; }
 
 	public SpriteRenderer getRender () {

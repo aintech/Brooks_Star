@@ -84,7 +84,9 @@ public class PlayerShip : Ship {
 	}
 
 	protected override void updateHealthAndShieldInfo () {
-		base.updateHealthAndShieldInfo ();
+		shipData.setCurrentShield(getShield());
+		shipData.setCurrentHealth(getHealth());
+		Vars.userInterface.updateShip();
 	}
 
 	public Engine getEngine () {
@@ -93,11 +95,6 @@ public class PlayerShip : Ship {
 
 	public ShipController getController () {
 		return controller;
-	}
-
-	override public void setGamePaused (bool gamePaused) {
-		base.setGamePaused(gamePaused);
-		getController().setGamePaused(gamePaused);
 	}
 
 	public override bool isPlayerShip () {

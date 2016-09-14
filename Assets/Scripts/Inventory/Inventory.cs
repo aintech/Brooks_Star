@@ -167,7 +167,6 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		}
 		buybackInventory.addItemToFirstFreePosition (item, true);
 		Vars.cash += item.getCost ();
-		Vars.userInterface.updateCash();
 	}
 
 	public void addItemToCell (InventoryItem item, InventoryCell cell) {
@@ -250,7 +249,6 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 			}
 		} else { return false; }
 		Vars.cash -= item.getCost ();
-		Vars.userInterface.updateCash();
 
 		return true;
 	}

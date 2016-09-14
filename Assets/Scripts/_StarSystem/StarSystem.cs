@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -6,15 +7,9 @@ public class StarSystem : MonoBehaviour {
 
 	public Transform planetPrefab, playerShipPrefab, enemyShipPrefab;
 
-	public Texture inventoryBtnTexture;
-
-	public GUIStyle shieldStyle1, shieldStyle2, healthStyle1, healthStyle2;
+	public static bool gamePaused;
 
 	private SpriteRenderer backgroundGalaxy, star;
-
-	private ShipInformationScreen shipInformation;
-
-	private Rect inventoryBtnRect = new Rect (10, 10, 50, 50);
 
 	private Transform mainCamera;
 
@@ -26,10 +21,9 @@ public class StarSystem : MonoBehaviour {
 
 	private CameraController cameraController;
 
-	private Rect healthRect = new Rect(Screen.width - 70, Screen.height - 20, 0, 0), 
-				 shieldRect = new Rect(Screen.width - 190, Screen.height - 20, 0, 0);
-
     private List<Planet> planets;
+
+	private ShieldsPool shieldsPool;
 
 	//Выведеное опытным путем расстояние от центра до края сектора
 	//при условии что разрешение картинки сектора 4096х4096, pixelsToUnit = 50, sectorMoveSpeed = 0.1
@@ -47,14 +41,12 @@ public class StarSystem : MonoBehaviour {
 
 		Imager.initialize();
 
-        Vars.userInterface = GameObject.Find("User Interface").GetComponent<UserInterface>().init();
-
         backgroundGalaxy = transform.Find("BG").GetComponent<SpriteRenderer>();
 		backgroundGalaxy.gameObject.SetActive(true);
         star = transform.Find("Star").GetComponent<SpriteRenderer>();
         star.gameObject.SetActive(true);
 
-		shipInformation = GameObject.Find ("Ship Information").GetComponent<ShipInformationScreen> ();
+		ShipInformationScreen shipInformation = GameObject.Find ("Ship Information").GetComponent<ShipInformationScreen> ();
 		inventory = shipInformation.transform.FindChild ("Inventory").GetComponent<Inventory> ();
 		shipData = shipInformation.transform.FindChild ("Ship Data").GetComponent<ShipData> ();
 
@@ -70,14 +62,19 @@ public class StarSystem : MonoBehaviour {
 		initPlayerShip ();
 		shipInformation.init(this, shipData, inventory);
 
+		Vars.userInterface = GameObject.FindGameObjectWithTag("UserInterface").GetComponent<UserInterface>().init(this, shipInformation, playerShip);
+
 		inventory.setCapacity (shipData.getHullType ().getStorageCapacity ());
 		inventory.loadItems (Vars.inventory);
 
         loadStarSystem();
 
+		shieldsPool = GameObject.Find("ShieldsPool").GetComponent<ShieldsPool>();
+
 		//for (int i = 0; i <= 10; i++) {
-			//spawnAnEnemy ();
+			spawnAnEnemy ();
 		//}
+		gamePaused = false;
 	}
 
     private void loadStarSystem () {
@@ -95,42 +92,6 @@ public class StarSystem : MonoBehaviour {
 		playerShip.initPlayerShip(shipData);
 		cameraController = mainCamera.GetComponent<CameraController>();
 		cameraController.init(playerShip.transform);
-	}
-
-	void Update () {
-//		if (Input.GetKeyUp(KeyCode.I)) {
-//			if (shipInformation.gameObject.activeInHierarchy) {
-//				hideShipInformation();
-//			} else {
-//				showShipInformation();
-//			}
-//		}
-//		if (Input.GetMouseButtonDown (0)) {
-//			mouseToWorldPosition = Camera.main.ScreenToWorldPoint (Input.mousePosition);
-//			hit = Physics2D.Raycast(mouseToWorldPosition, Vector2.zero, 1);
-//			if (hit.collider != null) {
-//				if (hit.collider == closeBtn) {
-//					hideShipInformation();
-//				}
-//			}	
-//		}
-	}
-
-	void FixedUpdate () {
-		//checkSectorWithCamera();
-	}
-	
-	void OnGUI () {
-		if (GUI.Button (inventoryBtnRect, inventoryBtnTexture)) {
-			if (!shipInformation.gameObject.activeInHierarchy) {
-				showShipInformation();
-			}
-		}
-
-		GUI.Label(shieldRect, playerShip.getShield().ToString(), shieldStyle1);
-		GUI.Label(shieldRect, "/" + playerShip.getFullShield().ToString(), shieldStyle2);
-		GUI.Label(healthRect, playerShip.getHealth().ToString(), healthStyle1);
-		GUI.Label(healthRect, "/" + playerShip.getFullHealth().ToString(), healthStyle2);
 	}
 
 	private void spawnAnEnemy () {
@@ -151,6 +112,16 @@ public class StarSystem : MonoBehaviour {
 		enemy.transform.position = new Vector3(Random.Range(-1f, 1f) * 2, Random.Range(-1f, 1f) * 2);
 	}
 
+	public void landOnPlanet (PlanetType planetType) {
+		gamePaused = true;
+		shieldsPool.clearPool();
+		Vars.userInterface.setEnabled(false);
+		shipData.sendToVars();
+		Vars.inventory = inventory.getItems ();
+		Vars.planetType = planetType;
+		SceneManager.LoadScene("PlanetSurface");
+	}
+
 	//Возвращает порядковый номер сектора от 11 до 55 (в котором находится камера)
 	//Всего секторов 25, их порядок:
 	//	51 52 53 54 55
@@ -166,18 +137,4 @@ public class StarSystem : MonoBehaviour {
 //		
 //		currentSectorNumber = (fromLeft * 10) + fromBottom;
 //	}
-
-	private void showShipInformation () {
-		shipInformation.showScreen();
-	}
-
-	public void setGamePaused (bool gamePaused) {
-		cameraController.setGamePaused(gamePaused);
-		playerShip.setGamePaused(gamePaused);
-		foreach (EnemyShip ship in Vars.enemyShipsPool) {
-			if (ship.isAlive()) {
-				ship.setGamePaused(gamePaused);
-			}
-		}
-	}
 }

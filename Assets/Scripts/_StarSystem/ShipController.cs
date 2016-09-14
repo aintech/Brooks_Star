@@ -18,8 +18,6 @@ public class ShipController : MonoBehaviour {
 	private bool sPressed;
 	private bool dPressed;
 
-	private bool gamePaused = false;
-
 	public void initController (PlayerShip ship) {
 		Engine engine = ship.getEngine();
 		mainAcceleration = engine.getMainAcceleration();
@@ -29,12 +27,11 @@ public class ShipController : MonoBehaviour {
 		maxRotationPower = engine.getMaxRotationPower();
 		maxRotationPowerNeg = maxRotationPower * -1;
 	}
-	
-	// Update is called once per frame
+
 	void Update () {
-		if (!gamePaused) {
-			checkInput ();
-		}
+		if (StarSystem.gamePaused) { return; }
+
+		checkInput ();
 	}
 	
 	private void checkInput () {
@@ -45,10 +42,10 @@ public class ShipController : MonoBehaviour {
 	}
 
 	void FixedUpdate () {
-		if (!gamePaused) {
-			forwardMoveControl ();
-			turnControl ();
-		}
+		if (StarSystem.gamePaused) { return; }
+
+		forwardMoveControl ();
+		turnControl ();
 	}
 
 	private void forwardMoveControl () {
@@ -99,9 +96,5 @@ public class ShipController : MonoBehaviour {
 			if (rotationPower < rotationAcceleration && rotationPower > (rotationAcceleration * -1)) rotationPower = 0.0f;
 		}
 		if (rotationPower != 0.0) transform.Rotate(new Vector3(0, 0, 1), rotationPower);
-	}
-
-	public void setGamePaused (bool gamePaused) {
-		this.gamePaused = gamePaused;
 	}
 }

@@ -25,8 +25,6 @@ public class CameraController : MonoBehaviour {
 
 	private int cameraSizeMin = 2;
 
-	private bool gamePaused = false;
-
 	public void init (Transform spaceship) {
 		this.spaceship = spaceship;
 		this.cameraStandartSize = (int) Camera.main.orthographicSize;
@@ -35,23 +33,23 @@ public class CameraController : MonoBehaviour {
 	}
 
 	void Update () {
-		if (!gamePaused) {
-			if (Input.GetAxis("Mouse ScrollWheel") < 0) {
-				Camera.main.orthographicSize = Mathf.Min(Camera.main.orthographicSize+1, cameraSizeMax);
-			} else if (Input.GetAxis("Mouse ScrollWheel") > 0) {
-				Camera.main.orthographicSize = Mathf.Max(Camera.main.orthographicSize-1, cameraSizeMin);
-			}
+		if(StarSystem.gamePaused) { return; }
+
+		if (Input.GetAxis("Mouse ScrollWheel") < 0) {
+			Camera.main.orthographicSize = Mathf.Min(Camera.main.orthographicSize+1, cameraSizeMax);
+		} else if (Input.GetAxis("Mouse ScrollWheel") > 0) {
+			Camera.main.orthographicSize = Mathf.Max(Camera.main.orthographicSize-1, cameraSizeMin);
 		}
 	}
 
 	void FixedUpdate () {
-		if (!gamePaused) {
-			cameraPosition.Set(transform.position.x, transform.position.y);
-			shipPosition.Set(spaceship.position.x, spaceship.position.y);
-			cameraToShipDistance = Vector2.Distance(cameraPosition, shipPosition);
-			if (cameraToShipDistance > cameraRestDistance) {
-				moveCamera ();
-			}
+		if (StarSystem.gamePaused) { return; }
+
+		cameraPosition.Set(transform.position.x, transform.position.y);
+		shipPosition.Set(spaceship.position.x, spaceship.position.y);
+		cameraToShipDistance = Vector2.Distance(cameraPosition, shipPosition);
+		if (cameraToShipDistance > cameraRestDistance) {
+			moveCamera ();
 		}
 	}
 
@@ -63,9 +61,5 @@ public class CameraController : MonoBehaviour {
 
 	public Vector2 getCameraPosition () {
 		return cameraPosition;
-	}
-
-	public void setGamePaused (bool gamePaused) {
-		this.gamePaused = gamePaused;
 	}
 }

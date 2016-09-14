@@ -29,7 +29,7 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder {
 
 		Imager.initialize();
 
-		Vars.userInterface = GameObject.Find("User Interface").GetComponent<UserInterface>().init();
+		Vars.userInterface = GameObject.FindGameObjectWithTag("UserInterface").GetComponent<UserInterface>().init(null, null, null);
 
 		marketScreen = GameObject.Find("Market Screen").GetComponent<MarketScreen> ();
 		industrialScreen = GameObject.Find("Industrial Screen").GetComponent<IndustrialScreen>();
@@ -65,6 +65,8 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder {
 			startNewGame();
 			newGame = false;
 		}
+
+		landPlanet();
 	}
 
 	private void startNewGame () {
@@ -72,17 +74,20 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder {
 		shipData.setCurrentHealth (shipData.getHullType ().getMaxHealth ());
 
 //		inventory.fillWithRandomItems(30, "Player Item");
-		inventory.calculateFreeVolume();
 		market.fillWithRandomItems(50, "Market Item");
 
-		showPlanet();
-		Vars.userInterface.setEnabled(true);
+		setDataToVars();
 //		messageBox.showNewMessage(story.getMessageContainer(Storyline.StoryPart.INTRODUCTION));
 	}
 
-	public void showPlanet () {
-		setPlanetBtnsEnabled(true);
+	public void landPlanet () {
+		//TODO: По прибытии ломается рынок
+		getDataFromVars();
+		shipData.setCurrentShield(shipData.getShield());
+		inventory.calculateFreeVolume();
+		Vars.userInterface.setEnabled(true);
 		bgRender.sprite = Imager.getPlanetSurface(Vars.planetType);
+		setPlanetBtnsEnabled(true);
 	}
 
 	public void leavePlanet () {

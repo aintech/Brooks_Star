@@ -15,7 +15,7 @@ public class EnemyShip : Ship {
 
 	private Transform trans, playerShip;
 
-	private float shieldDiff, healthDiff;
+	private Vector3 shieldValue = Vector3.one, healthValue = Vector3.one;
 	
 	private int sortingOrder = -1;
 	
@@ -182,11 +182,11 @@ public class EnemyShip : Ship {
 	}
 
 	override protected void updateHealthAndShieldInfo () {
-		shieldDiff = 1.0f * getShield() / getFullShield();
-		healthDiff = 1.0f * getHealth() / getFullHealth();
+		shieldValue.x = (float)getShield() / getFullShield();
+		healthValue.x = (float)getHealth() / getFullHealth();
 
-		shieldBar.transform.localScale = new Vector3(shieldDiff, 1, 1);
-		healthBar.transform.localScale = new Vector3(healthDiff, 1, 1);
+		shieldBar.transform.localScale = shieldValue;
+		healthBar.transform.localScale = healthValue;
 	}
 
 	override protected void destroyShip () {

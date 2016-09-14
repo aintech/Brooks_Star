@@ -132,7 +132,6 @@ public class HullsMarket : MonoBehaviour, ButtonHolder {
 			Messenger.showMessage("Не хватает кредитов на замену корпуса");
 			return;
 		} else { Vars.cash += cost; }
-		Vars.userInterface.updateCash();
 
 		HullType oldHullType = shipData.getHullType();
 

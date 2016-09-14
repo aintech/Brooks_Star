@@ -181,14 +181,6 @@ public abstract class Ship : MonoBehaviour {
 	virtual protected void updateHealthAndShieldInfo () {}
 	virtual protected void destroyShip () {}
 
-	virtual public void setGamePaused (bool gamePaused) {
-		if (weapon_1 != null) { weapon_1.setGamePaused(gamePaused); }
-		if (weapon_2 != null) { weapon_2.setGamePaused(gamePaused); }
-		if (weapon_3 != null) { weapon_3.setGamePaused(gamePaused); }
-		if (weapon_4 != null) { weapon_4.setGamePaused(gamePaused); }
-		if (weapon_5 != null) { weapon_5.setGamePaused(gamePaused); }
-	}
-
 	public int getShieldRenderOrder () {
 		return shieldRenderOrder;
 	}

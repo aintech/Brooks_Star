@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: dad02f5b6b3f9e04a9fa10dfb17d9284
-timeCreated: 1473674176
+timeCreated: 1473840169
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -24,7 +24,7 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
-  isReadable: 0
+  isReadable: 1
   grayScaleToAlpha: 0
   generateCubemap: 0
   cubemapConvolution: 0
@@ -52,7 +52,7 @@ TextureImporter:
   spritePixelsToUnits: 100
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
-  textureType: 8
+  textureType: 5
   buildTargetSettings: []
   spriteSheet:
     serializedVersion: 2
@@ -61,8 +61,8 @@ TextureImporter:
       name: UserInterface_ExpBar
       rect:
         serializedVersion: 2
-        x: 183
-        y: 183
+        x: 168
+        y: 101
         width: 37
         height: 35
       alignment: 7
@@ -74,10 +74,10 @@ TextureImporter:
       name: UserInterface_StatusHover
       rect:
         serializedVersion: 2
-        x: 102
-        y: 172
-        width: 46
-        height: 56
+        x: 87
+        y: 92
+        width: 44
+        height: 52
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -87,9 +87,9 @@ TextureImporter:
       name: UserInterface_Status
       rect:
         serializedVersion: 2
-        x: 22
-        y: 175
-        width: 46
+        x: 7
+        y: 94
+        width: 44
         height: 52
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -100,10 +100,10 @@ TextureImporter:
       name: UserInterface_Values
       rect:
         serializedVersion: 2
-        x: 264
-        y: 180
-        width: 492
-        height: 48
+        x: 0
+        y: 201
+        width: 1600
+        height: 50
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

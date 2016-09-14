@@ -45,7 +45,9 @@ public class ShipInformationScreen : InventoryContainedScreen {
 	public void showScreen () {
 		Camera.main.orthographicSize = 5;
 		transform.localPosition = Vector3.zero;
-		starSystem.setGamePaused(true);
+		StarSystem.gamePaused = true;
+		shipData.updateShieldValue();
+		shipData.updateHealthValue();
 		transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, transform.position.z);
 		gameObject.SetActive (true);
 	}
@@ -53,7 +55,7 @@ public class ShipInformationScreen : InventoryContainedScreen {
 
 	private void closeScreen () {
 		gameObject.SetActive(false);
-		starSystem.setGamePaused(false);
+		StarSystem.gamePaused = false;
 	}
 	protected override void choseDraggedItemFromSlot (HullSlot slot) {}
 

@@ -44,6 +44,10 @@ public class ShieldsPool : MonoBehaviour {
 		shield.gameObject.SetActive(true);
 	}
 
+	public void clearPool () {
+		shieldsList.Clear();
+	}
+
 	void FixedUpdate () {
 		foreach (Transform shield in shieldsList) {
 			if (shield.gameObject.activeInHierarchy) {

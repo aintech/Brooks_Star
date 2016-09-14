@@ -30,6 +30,8 @@ public class Planet : MonoBehaviour {
     }
 
     void Update () {
+		if (StarSystem.gamePaused) { return; }
+
         orbitingStar();
         checkShipIsCloseEnought();
     }

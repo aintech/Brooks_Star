@@ -32,7 +32,7 @@ public class ShipData : MonoBehaviour {
 
 	private HullSlot[] slots;
 
-	private int currentHealth;
+	private int currentHealth, currentShield;
 
 	private TextMesh healthValue, armorValue, shieldValue, energyValue;
 
@@ -481,7 +481,7 @@ public class ShipData : MonoBehaviour {
 	}
 
 	public void updateShieldValue () {
-		shieldValue.text = getShield().ToString();
+		shieldValue.text = currentShield.ToString() + "/" +  getShield().ToString();
 	}
 
 	public void updateEnergyValue () {
@@ -496,6 +496,10 @@ public class ShipData : MonoBehaviour {
 	
 	public int getCurrentHealth () {
 		return currentHealth;
+	}
+
+	public void setCurrentShield (int currentShield) {
+		this.currentShield = currentShield;
 	}
 
 	public int getShield () {
