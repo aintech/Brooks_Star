@@ -50,9 +50,13 @@ public class Planet : MonoBehaviour {
         }
     }
 
-    private void setShipIsNear (bool shipIsNear) {
+	public void setShipIsNear (bool shipIsNear) {
         this.shipIsNear = shipIsNear;
         if (shipIsNear) { Vars.userInterface.showPlanetInfo(planetType); }
         else { Vars.userInterface.hidePlanetInfo(); }
     }
+
+	public PlanetType getPlanetType () {
+		return planetType;
+	}
 }

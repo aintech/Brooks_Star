@@ -4,7 +4,7 @@ using System.Collections;
 
 public class PlanetSurface : MonoBehaviour, ButtonHolder {
 
-	public static bool newGame = true;
+	public static bool newGame = false;
 
 	private SpriteRenderer bgRender;
 
@@ -81,8 +81,8 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder {
 	}
 
 	public void landPlanet () {
-		//TODO: По прибытии ломается рынок
 		getDataFromVars();
+		if (market.getItems().Count == 0) { market.fillWithRandomItems(); }
 		shipData.setCurrentShield(shipData.getShield());
 		inventory.calculateFreeVolume();
 		Vars.userInterface.setEnabled(true);
@@ -136,6 +136,7 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder {
 	}
 	
 	private void getDataFromVars () {
+		shipData.initializeFromVars();
 		inventory.loadItems (Vars.inventory);
 		storage.loadItems (Vars.storage);
 		switch(Vars.planetType) {

@@ -151,9 +151,12 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 	public void loadItems (Dictionary<int, InventoryItem> items) {
 		Dictionary<int, InventoryItem> tempDic = new Dictionary<int, InventoryItem> ();
 		foreach (KeyValuePair<int, InventoryItem> pair in items) {
-			InventoryItem item = (Instantiate(inventoryItemPrefab) as Transform).GetComponent<InventoryItem>();
+			InventoryItem item = Instantiate<Transform>(inventoryItemPrefab).GetComponent<InventoryItem>();
 			item.initialaizeFromSource (pair.Value);
 			tempDic.Add(pair.Key, item);
+		}
+		foreach (KeyValuePair<int, InventoryItem> pair in this.items) {
+			Destroy(pair.Value);
 		}
 		this.items.Clear ();
 		this.items = tempDic;
@@ -283,7 +286,15 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		return null;
 	}
 
+	public void fillWithRandomItems () {
+		fillWithRandomItems (Random.Range(10, 50), null);
+	}
+
 	public void fillWithRandomItems (int count, string label) {
+		foreach (KeyValuePair<int, InventoryItem> pair in getItems()) {
+			Destroy(pair.Value);
+		}
+		getItems().Clear();
 		for (int i = 0; i < count; i++) {
 			InventoryItem item = Instantiate<Transform>(inventoryItemPrefab).GetComponent<InventoryItem>();
 			item.transform.SetParent(transform);
@@ -457,6 +468,10 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 
 	public int getOffset () {
 		return offset;
+	}
+
+	private void clearInventory () {
+		
 	}
 
     public InventoryType getInventoryType () {

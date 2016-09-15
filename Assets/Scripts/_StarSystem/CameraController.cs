@@ -29,6 +29,10 @@ public class CameraController : MonoBehaviour {
 		this.spaceship = spaceship;
 		this.cameraStandartSize = (int) Camera.main.orthographicSize;
 		cameraSizeMax = cameraStandartSize + 4;
+		setDirectlyToShip();
+	}
+
+	public void setDirectlyToShip () {
 		transform.position = new Vector3(spaceship.position.x, spaceship.position.y, transform.position.z);
 	}
 

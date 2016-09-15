@@ -49,6 +49,9 @@ public class ShipInformationScreen : InventoryContainedScreen {
 		shipData.updateShieldValue();
 		shipData.updateHealthValue();
 		transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, transform.position.z);
+		foreach (Planet planet in starSystem.getPlanets()) {
+			planet.setShipIsNear(false);
+		}
 		gameObject.SetActive (true);
 	}
 

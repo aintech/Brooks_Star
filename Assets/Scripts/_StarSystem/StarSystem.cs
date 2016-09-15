@@ -72,8 +72,9 @@ public class StarSystem : MonoBehaviour {
 		shieldsPool = GameObject.Find("ShieldsPool").GetComponent<ShieldsPool>();
 
 		//for (int i = 0; i <= 10; i++) {
-			spawnAnEnemy ();
+//			spawnAnEnemy ();
 		//}
+
 		gamePaused = false;
 	}
 
@@ -85,6 +86,13 @@ public class StarSystem : MonoBehaviour {
         }
         backgroundGalaxy.sprite = Imager.getStarSystem(Vars.starSystemType);
         star.sprite = Imager.getStar(Vars.starSystemType);
+		foreach (Planet planet in planets) {
+			if (planet.getPlanetType() == Vars.planetType) {
+				playerShip.transform.position = planet.transform.position;
+				cameraController.setDirectlyToShip();
+				break;
+			}
+		}
     }
 
 	private void initPlayerShip () {
@@ -122,6 +130,9 @@ public class StarSystem : MonoBehaviour {
 		SceneManager.LoadScene("PlanetSurface");
 	}
 
+	public List<Planet> getPlanets () {
+		return planets;
+	}
 	//Возвращает порядковый номер сектора от 11 до 55 (в котором находится камера)
 	//Всего секторов 25, их порядок:
 	//	51 52 53 54 55

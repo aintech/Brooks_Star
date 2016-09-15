@@ -219,18 +219,6 @@ public class ShipData : MonoBehaviour {
 		}
 	}
 
-	public void initializeFromVars () {
-		setHullType (Vars.shipHullType, Vars.shipCurrentHealth);
-		foreach (KeyValuePair<string, InventoryItem> pair in Vars.shipHullSlotsMap) {
-			InventoryItem item = Instantiate<Transform>(inventoryItemPrefab).GetComponent<InventoryItem>();
-			item.initialaizeFromSource(pair.Value);
-			item.transform.parent = trans;
-			item.GetComponent<SpriteRenderer>().sortingOrder = 3;
-			getSlotByName(pair.Key).setItem(item);
-		}
-		arrangeItemsToSlots ();
-	}
-
 	public void initializeRandomShip (HullType initType) {
 		setHullType (initType, initType.getMaxHealth());
 
@@ -324,6 +312,8 @@ public class ShipData : MonoBehaviour {
 		if (armorSlots >= 5) ItemFactory.createItemData(armor_5, InventoryItem.Type.ARMOR);
 
 		arrangeItemsToSlots();
+
+		setCurrentShield (getShield());
 	}
 
 	public void sendToVars () {
@@ -335,6 +325,20 @@ public class ShipData : MonoBehaviour {
 				Vars.shipHullSlotsMap.Add(getSlotName(slot), slot.getItem());
 			}
 		}
+	}
+
+	public void initializeFromVars () {
+		setHullType (Vars.shipHullType, Vars.shipCurrentHealth);
+		foreach (KeyValuePair<string, InventoryItem> pair in Vars.shipHullSlotsMap) {
+			InventoryItem item = Instantiate<Transform>(inventoryItemPrefab).GetComponent<InventoryItem>();
+			item.initialaizeFromSource(pair.Value);
+			item.transform.parent = trans;
+			item.GetComponent<SpriteRenderer>().sortingOrder = 3;
+			getSlotByName(pair.Key).setItem(item);
+		}
+		Vars.shipHullSlotsMap.Clear();
+		arrangeItemsToSlots ();
+		setCurrentShield(getShield());
 	}
 
 	public HullSlot getSlotByName (string slotName) {
@@ -466,6 +470,7 @@ public class ShipData : MonoBehaviour {
 	}
 
 	public void updateHullInfo () {
+		updateShieldValue();
 		updateHealthValue ();
 		updateArmorValue ();
 		updateShieldValue();
