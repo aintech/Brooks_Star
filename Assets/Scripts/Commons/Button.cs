@@ -61,10 +61,10 @@ public class Button : MonoBehaviour {
 		}
 	}
 
-	public void setEnable (bool enable) {
-		render.enabled = enable;
-		coll.enabled = enable;
-		textRender.enabled = enable;
+	public void setVisible (bool visible) {
+		render.enabled = visible;
+		coll.enabled = visible;
+		textRender.enabled = visible;
 	}
 
 	public void setActive (bool active) {

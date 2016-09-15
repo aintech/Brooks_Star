@@ -17,6 +17,8 @@ public class UserInterface : MonoBehaviour {
 
 	private ShipInformationScreen shipInformation;
 
+	private StatusScreen statusScreen;
+
 	private PlayerShip ship;
 
 	private bool planetDescriptVisible;
@@ -34,7 +36,8 @@ public class UserInterface : MonoBehaviour {
 				 planetDescriptRect = new Rect(Screen.width - 220, 80, 210, 290), 
 				 planetSurfaceRect, planetNameRect, planetLandRect;
 
-	public UserInterface init (StarSystem starSystem, ShipInformationScreen shipInformation, PlayerShip ship) {
+	public UserInterface init (StatusScreen statusScreen, StarSystem starSystem, ShipInformationScreen shipInformation, PlayerShip ship) {
+		this.statusScreen = statusScreen;
 		this.starSystem = starSystem;
 		this.shipInformation = shipInformation;
 		this.ship = ship;
@@ -56,12 +59,24 @@ public class UserInterface : MonoBehaviour {
 		GUI.DrawTexture(backgroundRect, background);
 		GUI.Label(cashRect, Vars.cash.ToString(), cashStyle);
 		if (GUI.Button(statusBtnRect, "", statusBtnStyle)) {
-			
+			if (!statusScreen.gameObject.activeInHierarchy) {
+				if (shipInformation != null && shipInformation.gameObject.activeInHierarchy) {
+					shipInformation.closeScreen();
+				}
+				statusScreen.showScreen();
+			} else {
+				statusScreen.closeScreen();
+			}
 		}
 		if (starSystem != null) {
 			if (GUI.Button (shipInfoBtnRect, "", shipBtnStyle)) {
 				if (!shipInformation.gameObject.activeInHierarchy) {
-					showShipInformation();
+					if (statusScreen != null && statusScreen.gameObject.activeInHierarchy) {
+						statusScreen.closeScreen();
+					}
+					shipInformation.showScreen();
+				} else {
+					shipInformation.closeScreen();
 				}
 			}
 
@@ -81,10 +96,6 @@ public class UserInterface : MonoBehaviour {
 
 	public void setEnabled (bool enabled) {
 		gameObject.SetActive(enabled);
-	}
-
-	private void showShipInformation () {
-		shipInformation.showScreen();
 	}
 
 	public void showPlanetInfo (PlanetType planetType) {

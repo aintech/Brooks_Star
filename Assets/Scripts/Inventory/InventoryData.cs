@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class InventoryData {
 
-	private Dictionary<int, InventoryItem> items = new Dictionary<int, InventoryItem>();
+	private Dictionary<int, Item> items = new Dictionary<int, Item>();
 
 	private float capacity = 0f;//Объем в ноль означает, что в этот класс данные не были записаны, т.к. объем может быть либо -1, либо положительное значение
 
@@ -16,11 +16,11 @@ public class InventoryData {
 		return capacity;
 	}
 
-	public Dictionary<int, InventoryItem> getItems () {
+	public Dictionary<int, Item> getItems () {
 		return items;
 	}
 
-	public void addToItems (int index, InventoryItem item) {
+	public void addToItems (int index, Item item) {
 		items.Add (index, item);
 	}
 }

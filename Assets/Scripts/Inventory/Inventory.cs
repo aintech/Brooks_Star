@@ -14,7 +14,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 
 	private InventoryCell[] cells;
 	
-	private Dictionary<int, InventoryItem> items = new Dictionary<int, InventoryItem>();
+	private Dictionary<int, Item> items = new Dictionary<int, Item>();
 
 	private Button upBtn, downBtn, sortBtn;
 
@@ -107,7 +107,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 	private void scroll (bool up) {
 		offset += (up && scrollableUp)? -offsetStep: (!up && scrollableDown)? offsetStep: 0;
 		refreshInventory ();
-		InventoryItem chosenItem = containerScreen.getChosenItem ();
+		Item chosenItem = containerScreen.getChosenItem ();
 		if (chosenItem != null && chosenItem.transform.parent == this.transform) {
 			foreach (InventoryCell cell in cells) {
 				if (cell.getItem() == chosenItem) {
@@ -129,8 +129,8 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 			cell.setItem (null);
 		}
 
-		foreach (KeyValuePair<int, InventoryItem> pair in getItems ()) {
-			InventoryItem item = pair.Value;
+		foreach (KeyValuePair<int, Item> pair in getItems ()) {
+			Item item = pair.Value;
 			item.setCell(null);
 			if (pair.Key >= offset && pair.Key < (cells.Length + offset)) {
 				InventoryCell cell = getCell (pair.Key - offset);
@@ -148,22 +148,19 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		checkButtons ();
 	}
 
-	public void loadItems (Dictionary<int, InventoryItem> items) {
-		Dictionary<int, InventoryItem> tempDic = new Dictionary<int, InventoryItem> ();
-		foreach (KeyValuePair<int, InventoryItem> pair in items) {
-			InventoryItem item = Instantiate<Transform>(inventoryItemPrefab).GetComponent<InventoryItem>();
+	public void loadItems (Dictionary<int, Item> items) {
+		clearInventory();
+		Dictionary<int, Item> tempDic = new Dictionary<int, Item> ();
+		foreach (KeyValuePair<int, Item> pair in items) {
+			Item item = Instantiate<Transform>(inventoryItemPrefab).GetComponent<Item>();
 			item.initialaizeFromSource (pair.Value);
 			tempDic.Add(pair.Key, item);
 		}
-		foreach (KeyValuePair<int, InventoryItem> pair in this.items) {
-			Destroy(pair.Value);
-		}
-		this.items.Clear ();
 		this.items = tempDic;
 		refreshInventory ();
 	}
 
-	public void sellItemToTrader (InventoryItem item, Inventory buybackInventory) {
+	public void sellItemToTrader (Item item, Inventory buybackInventory) {
 		Inventory source = item.getCell ().transform.parent.GetComponent<Inventory> ();
 		if (source != null) {
 			source.calculateFreeVolume();
@@ -172,7 +169,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		Vars.cash += item.getCost ();
 	}
 
-	public void addItemToCell (InventoryItem item, InventoryCell cell) {
+	public void addItemToCell (Item item, InventoryCell cell) {
 		if (cell == null) {
 			addItemToFirstFreePosition (item, true);
 			return;
@@ -205,7 +202,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		if (source != null && source.inventoryType == InventoryType.INVENTORY) { source.calculateFreeVolume(); }
 
 		InventoryCell prevCell = item.getCell();
-		InventoryItem prevItem = null;
+		Item prevItem = null;
 
 		if (cell.getItem () != null) prevItem = cell.takeItem ();
 
@@ -219,7 +216,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		refreshInventory();
 	}
 
-	private void addItemToFirstFreePosition (InventoryItem item, bool refresh) {
+	private void addItemToFirstFreePosition (Item item, bool refresh) {
 		int newIndex = getMinFreeItemIndex ();
 		getItems ().Add (newIndex, item);
 		if (refresh) refreshInventory ();
@@ -227,7 +224,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 
 	private int getMinFreeItemIndex () {
 		int maxIndex = getMaximumItemIndex();
-		InventoryItem item = null;
+		Item item = null;
 		for (int i = 0; i <= maxIndex; i++) {
 			items.TryGetValue(i, out item);
 			if (item == null) return i;
@@ -237,7 +234,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 	
 	private int getMaximumItemIndex () {
 		int index = 0;
-		foreach (KeyValuePair<int, InventoryItem> pair in items) {
+		foreach (KeyValuePair<int, Item> pair in items) {
 			if (pair.Key > index) {
 				index = pair.Key;
 			}
@@ -245,7 +242,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		return index;
 	}
 
-	private bool buyItem (InventoryItem item) {
+	private bool buyItem (Item item) {
 		if (Vars.cash >= item.getCost()) {
 			if (getCapacity() > 0.0 && (getFreeVolume() - item.getVolume() < 0.0)) {
 				return false;
@@ -267,7 +264,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 	public void calculateFreeVolume () {
 		if (inventoryType != InventoryType.INVENTORY) { return; }
 		freeVolume = getCapacity ();
-		foreach (KeyValuePair<int, InventoryItem> pair in getItems()) {
+		foreach (KeyValuePair<int, Item> pair in getItems()) {
 			freeVolume -= pair.Value.getVolume();	
 		}
 		updateVolumeTxt();
@@ -291,23 +288,20 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 	}
 
 	public void fillWithRandomItems (int count, string label) {
-		foreach (KeyValuePair<int, InventoryItem> pair in getItems()) {
-			Destroy(pair.Value);
-		}
-		getItems().Clear();
+		clearInventory();
 		for (int i = 0; i < count; i++) {
-			InventoryItem item = Instantiate<Transform>(inventoryItemPrefab).GetComponent<InventoryItem>();
+			Item item = Instantiate<Transform>(inventoryItemPrefab).GetComponent<Item>();
 			item.transform.SetParent(transform);
 			if (label != null) { item.name = label; }
 			int rand = Mathf.RoundToInt (Random.value * 10);
-			ItemFactory.createItemData (item, rand <= 3? InventoryItem.Type.WEAPON:
-			                            	  rand == 4? InventoryItem.Type.ENGINE:
-			                            	  rand == 5? InventoryItem.Type.ARMOR:
-			                            	  rand == 6? InventoryItem.Type.GENERATOR:
-			                            	  rand == 7? InventoryItem.Type.RADAR:
-			                            	  rand == 8? InventoryItem.Type.SHIELD:
-			                            	  rand == 9? InventoryItem.Type.REPAIR_DROID:
-											  InventoryItem.Type.HARVESTER);
+			ItemFactory.createItemData (item, rand <= 3? Item.Type.WEAPON:
+			                            	  rand == 4? Item.Type.ENGINE:
+			                            	  rand == 5? Item.Type.ARMOR:
+			                            	  rand == 6? Item.Type.GENERATOR:
+			                            	  rand == 7? Item.Type.RADAR:
+			                            	  rand == 8? Item.Type.SHIELD:
+			                            	  rand == 9? Item.Type.REPAIR_DROID:
+											  Item.Type.HARVESTER);
 
 			addItemToFirstFreePosition(item, false);
 		}
@@ -330,54 +324,54 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		volumeMesh.transform.localScale = freeVolume < 10? decimalScale: normalScale;
 	}
 
-	public Dictionary<int, InventoryItem> getItems () {
+	public Dictionary<int, Item> getItems () {
 		return items;
 	}
 
-	public InventoryItem takeLastItem () {
+	public Item takeLastItem () {
 		int index = getMaximumItemIndex();
 		if (getCell(index) != null && getCell(index).getItem() != null) {
 			return getCell(index).takeItem();
 		}
-		InventoryItem item;
+		Item item;
 		getItems().TryGetValue(index, out item);
 		getItems().Remove(index);
 		return item;
 	}
 
 	public void sortInventory () {
-		List<InventoryItem> weapons = new List<InventoryItem>();
-		List<InventoryItem> engines = new List<InventoryItem>();
-		List<InventoryItem> armors = new List<InventoryItem>();
-		List<InventoryItem> generators = new List<InventoryItem>();
-		List<InventoryItem> radars = new List<InventoryItem>();
-		List<InventoryItem> shields = new List<InventoryItem>();
-		List<InventoryItem> repairDroids = new List<InventoryItem>();
-		List<InventoryItem> harvesters = new List<InventoryItem>();
+		List<Item> weapons = new List<Item>();
+		List<Item> engines = new List<Item>();
+		List<Item> armors = new List<Item>();
+		List<Item> generators = new List<Item>();
+		List<Item> radars = new List<Item>();
+		List<Item> shields = new List<Item>();
+		List<Item> repairDroids = new List<Item>();
+		List<Item> harvesters = new List<Item>();
 
-		foreach(KeyValuePair<int, InventoryItem> pair in getItems()) {
+		foreach(KeyValuePair<int, Item> pair in getItems()) {
 			switch (pair.Value.getItemType()) {
-				case InventoryItem.Type.WEAPON: weapons.Add(pair.Value); break;
-				case InventoryItem.Type.ENGINE: engines.Add(pair.Value); break;
-				case InventoryItem.Type.ARMOR: armors.Add(pair.Value); break;
-				case InventoryItem.Type.GENERATOR: generators.Add(pair.Value); break;
-				case InventoryItem.Type.RADAR: radars.Add(pair.Value); break;
-				case InventoryItem.Type.SHIELD: shields.Add(pair.Value); break;
-				case InventoryItem.Type.REPAIR_DROID: repairDroids.Add(pair.Value); break;
-				case InventoryItem.Type.HARVESTER: harvesters.Add(pair.Value); break;
+				case Item.Type.WEAPON: weapons.Add(pair.Value); break;
+				case Item.Type.ENGINE: engines.Add(pair.Value); break;
+				case Item.Type.ARMOR: armors.Add(pair.Value); break;
+				case Item.Type.GENERATOR: generators.Add(pair.Value); break;
+				case Item.Type.RADAR: radars.Add(pair.Value); break;
+				case Item.Type.SHIELD: shields.Add(pair.Value); break;
+				case Item.Type.REPAIR_DROID: repairDroids.Add(pair.Value); break;
+				case Item.Type.HARVESTER: harvesters.Add(pair.Value); break;
 			}
 		}
 
 		getItems().Clear();
 
-		weapons = sortList(weapons, InventoryItem.Type.WEAPON);
-		engines = sortList(engines, InventoryItem.Type.ENGINE);
-		armors = sortList(armors, InventoryItem.Type.ARMOR);
-		generators = sortList(generators, InventoryItem.Type.GENERATOR);
-		radars = sortList(radars, InventoryItem.Type.RADAR);
-		shields = sortList(shields, InventoryItem.Type.SHIELD);
-		repairDroids = sortList(repairDroids, InventoryItem.Type.REPAIR_DROID);
-		harvesters = sortList(harvesters, InventoryItem.Type.HARVESTER);
+		weapons = sortList(weapons, Item.Type.WEAPON);
+		engines = sortList(engines, Item.Type.ENGINE);
+		armors = sortList(armors, Item.Type.ARMOR);
+		generators = sortList(generators, Item.Type.GENERATOR);
+		radars = sortList(radars, Item.Type.RADAR);
+		shields = sortList(shields, Item.Type.SHIELD);
+		repairDroids = sortList(repairDroids, Item.Type.REPAIR_DROID);
+		harvesters = sortList(harvesters, Item.Type.HARVESTER);
 
 		int counter = 0;
 		counter = addSortToItems(weapons, counter);
@@ -392,12 +386,12 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		refreshInventory ();
 	}
 
-	private List<InventoryItem> sortList (List<InventoryItem> list, InventoryItem.Type type) {
-		SortedDictionary<int, InventoryItem> weights = new SortedDictionary<int, InventoryItem>();
+	private List<Item> sortList (List<Item> list, Item.Type type) {
+		SortedDictionary<int, Item> weights = new SortedDictionary<int, Item>();
 		int weight = 0;
-		foreach (InventoryItem item in list) {
-			if (type == InventoryItem.Type.WEAPON) {
-				InventoryItem.WeaponData data = (InventoryItem.WeaponData) item.getItemData();
+		foreach (Item item in list) {
+			if (type == Item.Type.WEAPON) {
+				Item.WeaponData data = (Item.WeaponData) item.getItemData();
 				switch (data.getType()) {
 					case WeaponType.Blaster: weight = 1000000; break;
 					case WeaponType.Plasmer: weight = 2000000; break;
@@ -409,26 +403,26 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 					default: Debug.Log("Неизвестный тип оружия"); break;
 				}
 				weight += item.getCost();
-			} else if (type == InventoryItem.Type.ENGINE) {
-				InventoryItem.EngineData data = (InventoryItem.EngineData) item.getItemData();
+			} else if (type == Item.Type.ENGINE) {
+				Item.EngineData data = (Item.EngineData) item.getItemData();
 				weight = Mathf.RoundToInt(data.getPower() * 1000);
-			} else if (type == InventoryItem.Type.ARMOR) {
-				InventoryItem.ArmorData data = (InventoryItem.ArmorData) item.getItemData();
+			} else if (type == Item.Type.ARMOR) {
+				Item.ArmorData data = (Item.ArmorData) item.getItemData();
 				weight = data.getArmorClass() * 1000;
-			} else if (type == InventoryItem.Type.GENERATOR) {
-				InventoryItem.GeneratorData data = (InventoryItem.GeneratorData) item.getItemData();
+			} else if (type == Item.Type.GENERATOR) {
+				Item.GeneratorData data = (Item.GeneratorData) item.getItemData();
 				weight = data.getMaxEnergy();
-			} else if (type == InventoryItem.Type.RADAR) {
-				InventoryItem.RadarData data = (InventoryItem.RadarData) item.getItemData();
+			} else if (type == Item.Type.RADAR) {
+				Item.RadarData data = (Item.RadarData) item.getItemData();
 				weight = data.getRange();
-			} else if (type == InventoryItem.Type.SHIELD) {
-				InventoryItem.ShieldData data = (InventoryItem.ShieldData) item.getItemData();
+			} else if (type == Item.Type.SHIELD) {
+				Item.ShieldData data = (Item.ShieldData) item.getItemData();
 				weight = data.getShieldLevel();
-			} else if (type == InventoryItem.Type.REPAIR_DROID) {
-				InventoryItem.RepairDroidData data = (InventoryItem.RepairDroidData) item.getItemData();
+			} else if (type == Item.Type.REPAIR_DROID) {
+				Item.RepairDroidData data = (Item.RepairDroidData) item.getItemData();
 				weight = data.getRepairSpeed();
-			} else if (type == InventoryItem.Type.HARVESTER) {
-				InventoryItem.HarvesterData data = (InventoryItem.HarvesterData) item.getItemData();
+			} else if (type == Item.Type.HARVESTER) {
+				Item.HarvesterData data = (Item.HarvesterData) item.getItemData();
 				weight = 1000000 - data.getHarvestTime();
 			}
 			while(weights.ContainsKey(weight)) {
@@ -439,7 +433,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 
 		list.Clear();
 
-		foreach (KeyValuePair<int, InventoryItem> pair in weights) {
+		foreach (KeyValuePair<int, Item> pair in weights) {
 			list.Add(pair.Value);
 		}
 		list.Reverse();
@@ -447,7 +441,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		return list;
 	}
 
-	private int addSortToItems (List<InventoryItem> list, int count) {
+	private int addSortToItems (List<Item> list, int count) {
 		for (int i = 0; i < list.Count; i++) {
 			getItems().Add(i + count, list[i]);
 		}
@@ -471,7 +465,14 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 	}
 
 	private void clearInventory () {
-		
+		Dictionary<int, Item> spare = new Dictionary<int, Item>(getItems());
+		foreach (KeyValuePair<int, Item> pair in spare) {
+			if (pair.Value.getCell() != null) {
+				pair.Value.getCell().takeItem();
+			}
+			Destroy(pair.Value.gameObject);
+		}
+		getItems().Clear();
 	}
 
     public InventoryType getInventoryType () {

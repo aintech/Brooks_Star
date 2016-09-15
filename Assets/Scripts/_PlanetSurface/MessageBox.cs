@@ -156,7 +156,7 @@ public class MessageBox : MonoBehaviour {
 	
 	public void showNewMessage (MessageContainer messageContainer, int messageIndex) {
 		this.messageContainer = messageContainer;
-        planetSurface.setPlanetBtnsEnabled(false);
+		planetSurface.setVisible(false);
 		gameObject.SetActive(true);
 		displayNextMessage(messageIndex);
 	}
@@ -183,7 +183,7 @@ public class MessageBox : MonoBehaviour {
 		contentHeight = 0;
 		gameObject.SetActive(false);
 		Vars.userInterface.setEnabled(true);
-        planetSurface.setPlanetBtnsEnabled(enablePlanet);
+		planetSurface.setVisible(enablePlanet);
 	}
 	
 	private void displayNextMessage (int messageIndex) {

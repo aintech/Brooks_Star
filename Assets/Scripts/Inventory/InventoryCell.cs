@@ -5,7 +5,7 @@ public class InventoryCell : MonoBehaviour {
 
 	public int index;
 
-	private InventoryItem item;
+	private Item item;
 
     private Inventory inventory;
 
@@ -13,18 +13,18 @@ public class InventoryCell : MonoBehaviour {
         this.inventory = inventory;
     }
 
-	public void setItem (InventoryItem item) {
+	public void setItem (Item item) {
 		this.item = item;
 	}
 
-	public InventoryItem getItem () {
+	public Item getItem () {
 		return item;
 	}
 
-	public InventoryItem takeItem () {
+	public Item takeItem () {
 		Inventory inventory = transform.parent.GetComponent<Inventory> ();
 		inventory.getItems ().Remove (index + inventory.getOffset ());
-		InventoryItem returnItem = item;
+		Item returnItem = item;
 		item = null;
 		return returnItem;
 	}

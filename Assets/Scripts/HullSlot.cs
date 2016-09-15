@@ -10,7 +10,7 @@ public class HullSlot : MonoBehaviour {
 
 	private SpriteRenderer render;
 
-	private InventoryItem item;
+	private Item item;
 	
 	private static Dictionary<HullType, List<Vector3>> slotPositions;
 
@@ -51,17 +51,17 @@ public class HullSlot : MonoBehaviour {
 		}
 	}
 
-	public void setItem (InventoryItem item) {
+	public void setItem (Item item) {
 		item.setHullSlot(this);
 		this.item = item;
 	}
 
-	public InventoryItem getItem () {
+	public Item getItem () {
 		return item;
 	}
 
-	public InventoryItem takeItem () {
-		InventoryItem itemRef = getItem ();
+	public Item takeItem () {
+		Item itemRef = getItem ();
 		item.setHullSlot(null);
 		item = null;
 		return itemRef;

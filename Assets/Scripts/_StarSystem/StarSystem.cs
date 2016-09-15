@@ -7,7 +7,11 @@ public class StarSystem : MonoBehaviour {
 
 	public Transform planetPrefab, playerShipPrefab, enemyShipPrefab;
 
-	public static bool gamePaused;
+	public static bool gamePaused {  get; private set;}
+
+	private static ShipInformationScreen shipInfoScreen;
+
+	private static StatusScreen statusScreen;
 
 	private SpriteRenderer backgroundGalaxy, star;
 
@@ -46,12 +50,11 @@ public class StarSystem : MonoBehaviour {
         star = transform.Find("Star").GetComponent<SpriteRenderer>();
         star.gameObject.SetActive(true);
 
-		ShipInformationScreen shipInformation = GameObject.Find ("Ship Information").GetComponent<ShipInformationScreen> ();
-		inventory = shipInformation.transform.FindChild ("Inventory").GetComponent<Inventory> ();
-		shipData = shipInformation.transform.FindChild ("Ship Data").GetComponent<ShipData> ();
+		shipInfoScreen = GameObject.Find ("Ship Information").GetComponent<ShipInformationScreen> ();
 
-		shipData.init();
-		inventory.init(Inventory.InventoryType.INVENTORY);
+		shipData = shipInfoScreen.transform.FindChild ("Ship Data").GetComponent<ShipData> ().init();
+
+		inventory = GameObject.Find("Inventories").transform.Find ("Inventory").GetComponent<Inventory> ().init(Inventory.InventoryType.INVENTORY);
 
 		if (Vars.shipCurrentHealth == -1) {
 			shipData.initializeRandomShip (HullType.Corvette);
@@ -60,20 +63,18 @@ public class StarSystem : MonoBehaviour {
 		}
 		
 		initPlayerShip ();
-		shipInformation.init(this, shipData, inventory);
+		shipInfoScreen.init(this, shipData, inventory);
 
-		Vars.userInterface = GameObject.FindGameObjectWithTag("UserInterface").GetComponent<UserInterface>().init(this, shipInformation, playerShip);
+		statusScreen = GameObject.Find("Status Screen").GetComponent<StatusScreen>().init(false, inventory, null, this);
+
+		Vars.userInterface = GameObject.FindGameObjectWithTag("UserInterface").GetComponent<UserInterface>().init(statusScreen, this, shipInfoScreen, playerShip);
 
 		inventory.setCapacity (shipData.getHullType ().getStorageCapacity ());
 		inventory.loadItems (Vars.inventory);
 
-        loadStarSystem();
-
 		shieldsPool = GameObject.Find("ShieldsPool").GetComponent<ShieldsPool>();
 
-		//for (int i = 0; i <= 10; i++) {
-//			spawnAnEnemy ();
-		//}
+        loadStarSystem();
 
 		gamePaused = false;
 	}
@@ -93,6 +94,8 @@ public class StarSystem : MonoBehaviour {
 				break;
 			}
 		}
+
+		spawnAnEnemy();
     }
 
 	private void initPlayerShip () {
@@ -123,6 +126,7 @@ public class StarSystem : MonoBehaviour {
 	public void landOnPlanet (PlanetType planetType) {
 		gamePaused = true;
 		shieldsPool.clearPool();
+		Vars.enemyShipsPool.Clear();
 		Vars.userInterface.setEnabled(false);
 		shipData.sendToVars();
 		Vars.inventory = inventory.getItems ();
@@ -133,6 +137,12 @@ public class StarSystem : MonoBehaviour {
 	public List<Planet> getPlanets () {
 		return planets;
 	}
+
+	public static void setGamePause (bool paused) {
+		if (!paused && ((shipInfoScreen != null && shipInfoScreen.gameObject.activeInHierarchy) || (statusScreen != null && statusScreen.gameObject.activeInHierarchy))) { return; }
+		gamePaused = paused;
+	}
+
 	//Возвращает порядковый номер сектора от 11 до 55 (в котором находится камера)
 	//Всего секторов 25, их порядок:
 	//	51 52 53 54 55

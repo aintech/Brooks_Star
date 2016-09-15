@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class InventoryItem : MonoBehaviour {
+public class Item : MonoBehaviour {
 
 	public Sprite[] weaponSprites, engineSprites, armorSprites, generatorSprites, radarSprites, shieldSprites, repairDroidSprites, harvesterSprites;
 
@@ -15,6 +15,8 @@ public class InventoryItem : MonoBehaviour {
 
 	private Type itemType;
 
+	private Kind itemKind;
+
 	private Quality itemQuality;
 
 	private float itemLevel;
@@ -27,8 +29,11 @@ public class InventoryItem : MonoBehaviour {
 	
 	private float volume;
 
-	private void setSprite (ItemData itemData, Type itemType) {
+	private void initType (ItemData itemData, Type itemType) {
+		this.itemData = itemData;
 		this.itemType = itemType;
+		setItemKind();
+
 		if (render == null) render = transform.GetComponent<SpriteRenderer>();
 		switch (itemType) {
 			case Type.WEAPON:
@@ -112,6 +117,25 @@ public class InventoryItem : MonoBehaviour {
 		}
 	}
 
+	private void setItemKind () {
+		switch (itemType) {
+			case Type.ARMOR: case Type.ENGINE: case Type.GENERATOR: case Type.HARVESTER: case Type.RADAR: case Type.REPAIR_DROID: case Type.SHIELD: case Type.WEAPON:
+				itemKind = Kind.EQUIPMENT;
+				break;
+			case Type.HAND_WEAPON: case Type.BODY_ARMOR:
+				itemKind = Kind.GEAR;
+				break;
+			case Type.GOLD:
+				itemKind = Kind.GOOD;
+				break;
+			default: Debug.Log("Unknown item type: " + itemType); break;
+		}
+	}
+
+	public Kind getItemKind () {
+		return itemKind;
+	}
+
 	public void returnToParentInventory () {
 		Inventory inventory = transform.parent.GetComponent<Inventory> ();
 		inventory.addItemToCell (this, getCell());
@@ -178,15 +202,14 @@ public class InventoryItem : MonoBehaviour {
 	}
 	
 	public void setItemData (ItemData itemData) {
-		this.itemData = itemData;
-		if (itemData is WeaponData) setSprite (itemData, Type.WEAPON);
-		else if (itemData is EngineData) setSprite (itemData, Type.ENGINE);
-		else if (itemData is ArmorData) setSprite (itemData, Type.ARMOR);
-		else if (itemData is GeneratorData) setSprite (itemData, Type.GENERATOR);
-		else if (itemData is RadarData) setSprite (itemData, Type.RADAR);
-		else if (itemData is ShieldData) setSprite (itemData, Type.SHIELD);
-		else if (itemData is RepairDroidData) setSprite (itemData, Type.REPAIR_DROID);
-		else if (itemData is HarvesterData) setSprite (itemData, Type.HARVESTER);
+		if (itemData is WeaponData) initType (itemData, Type.WEAPON);
+		else if (itemData is EngineData) initType (itemData, Type.ENGINE);
+		else if (itemData is ArmorData) initType (itemData, Type.ARMOR);
+		else if (itemData is GeneratorData) initType (itemData, Type.GENERATOR);
+		else if (itemData is RadarData) initType (itemData, Type.RADAR);
+		else if (itemData is ShieldData) initType (itemData, Type.SHIELD);
+		else if (itemData is RepairDroidData) initType (itemData, Type.REPAIR_DROID);
+		else if (itemData is HarvesterData) initType (itemData, Type.HARVESTER);
 	}
 
 	public ItemData getItemData () {
@@ -201,7 +224,7 @@ public class InventoryItem : MonoBehaviour {
 		return getItemData ().getItemDescription ();
 	}
 
-	public void initialaizeFromSource (InventoryItem source) {
+	public void initialaizeFromSource (Item source) {
 		setItemData (source.getItemData ());
 		setItemLevel (source.getItemLevel ());
 		setItemQuality (source.getItemQuality ());
@@ -210,8 +233,14 @@ public class InventoryItem : MonoBehaviour {
 		setVolume (source.getVolume ());
 	}
 
+	public enum Kind {
+		GOOD, GEAR, EQUIPMENT
+	}
+
 	public enum Type {
-		WEAPON, ENGINE, ARMOR, GENERATOR, RADAR, SHIELD, REPAIR_DROID, HARVESTER
+		WEAPON, ENGINE, ARMOR, GENERATOR, RADAR, SHIELD, REPAIR_DROID, HARVESTER,
+		HAND_WEAPON, BODY_ARMOR,
+		GOLD
 	}
 
 	public enum Quality {

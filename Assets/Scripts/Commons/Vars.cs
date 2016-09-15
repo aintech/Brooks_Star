@@ -10,17 +10,17 @@ public static class Vars {
 
 	public static HullType shipHullType = HullType.Corvette;
 
-	public static Dictionary<string, InventoryItem> shipHullSlotsMap = new Dictionary<string, InventoryItem> ();
+	public static Dictionary<string, Item> shipHullSlotsMap = new Dictionary<string, Item> ();
 
 	public static int shipCurrentHealth = -1;
 
 	public static int cash = 90000;
 
-	public static Dictionary<int, InventoryItem> inventory = new Dictionary<int, InventoryItem>();
+	public static Dictionary<int, Item> inventory = new Dictionary<int, Item>();
 
-	public static Dictionary<int, InventoryItem> storage = new Dictionary<int, InventoryItem>();
+	public static Dictionary<int, Item> storage = new Dictionary<int, Item>();
 
-	public static Dictionary<int, InventoryItem> marketCORAS = new Dictionary<int, InventoryItem> ();
+	public static Dictionary<int, Item> marketCORAS = new Dictionary<int, Item> ();
 
 	public static int freeSortingOrder = 0;
 

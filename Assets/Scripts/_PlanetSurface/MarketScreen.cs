@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MarketScreen : MonoBehaviour, ButtonHolder {
+public class MarketScreen : MonoBehaviour, ButtonHolder, Hideable {
 
 	private PlanetSurface planetSurface;
 
@@ -31,6 +31,7 @@ public class MarketScreen : MonoBehaviour, ButtonHolder {
 	}
 
 	public void showScreen () {
+		PlanetSurface.topHideable = this;
 		showEquipmentMarket();
 		gameObject.SetActive(true);
 	}
@@ -39,7 +40,7 @@ public class MarketScreen : MonoBehaviour, ButtonHolder {
 		hullsMarket.closeScreen();
 		equipmentsMarket.closeScreen();
 		gameObject.SetActive(false);
-        planetSurface.setPlanetBtnsEnabled(true);
+		planetSurface.setVisible(true);
 	}
 
 	public void fireClickButton (Button button) {
@@ -71,5 +72,9 @@ public class MarketScreen : MonoBehaviour, ButtonHolder {
 		hullsMarket.showScreen();
 		hullsBtn.setActive(false);
 		equipmentsBtn.setActive(true);
+	}
+
+	public void setVisible (bool visible) {
+		gameObject.SetActive(visible);
 	}
 }

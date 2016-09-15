@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class IndustrialScreen : MonoBehaviour, ButtonHolder {
+public class IndustrialScreen : MonoBehaviour, ButtonHolder, Hideable {
 
 	private PlanetSurface planetSurface;
 
@@ -19,12 +19,13 @@ public class IndustrialScreen : MonoBehaviour, ButtonHolder {
 	}
 
 	public void showScreen () {
+		PlanetSurface.topHideable = this;
 		gameObject.SetActive(true);
 	}
 
 	private void closeScreen () {
 		gameObject.SetActive(false);
-        planetSurface.setPlanetBtnsEnabled(true);
+		planetSurface.setVisible(true);
 	}
 
 	public void fireClickButton (Button btn) {
@@ -37,6 +38,10 @@ public class IndustrialScreen : MonoBehaviour, ButtonHolder {
 
 	private void showShop (ShopType type) {
 		
+	}
+
+	public void setVisible (bool visible) {
+		gameObject.SetActive(visible);
 	}
 
 	private enum ShopType {

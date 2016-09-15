@@ -25,8 +25,8 @@ public class PlayerShip : Ship {
 	}
 	
 	private void initEngine () {
-		InventoryItem engineItem = shipData.getSlotByName ("Engine Slot").getItem ();
-		InventoryItem.EngineData data = (InventoryItem.EngineData)engineItem.getItemData ();
+		Item engineItem = shipData.getSlotByName ("Engine Slot").getItem ();
+		Item.EngineData data = (Item.EngineData)engineItem.getItemData ();
 		engine.setEngine (data.getType(), data.getPower(), data.getType().getRotatePower());
 		setEngineSprite();
 	}
@@ -38,11 +38,11 @@ public class PlayerShip : Ship {
 		HullSlot slot4 = shipData.getSlotByName("Weapon Slot 4");
 		HullSlot slot5 = shipData.getSlotByName("Weapon Slot 5");
 
-		InventoryItem.WeaponData slot1WeaponData = slot1.getItem() == null? null: (InventoryItem.WeaponData)slot1.getItem().getItemData();
-		InventoryItem.WeaponData slot2WeaponData = slot2.getItem() == null? null: (InventoryItem.WeaponData)slot2.getItem().getItemData();
-		InventoryItem.WeaponData slot3WeaponData = slot3.getItem() == null? null: (InventoryItem.WeaponData)slot3.getItem().getItemData();
-		InventoryItem.WeaponData slot4WeaponData = slot4.getItem() == null? null: (InventoryItem.WeaponData)slot4.getItem().getItemData();
-		InventoryItem.WeaponData slot5WeaponData = slot5.getItem() == null? null: (InventoryItem.WeaponData)slot5.getItem().getItemData();
+		Item.WeaponData slot1WeaponData = slot1.getItem() == null? null: (Item.WeaponData)slot1.getItem().getItemData();
+		Item.WeaponData slot2WeaponData = slot2.getItem() == null? null: (Item.WeaponData)slot2.getItem().getItemData();
+		Item.WeaponData slot3WeaponData = slot3.getItem() == null? null: (Item.WeaponData)slot3.getItem().getItemData();
+		Item.WeaponData slot4WeaponData = slot4.getItem() == null? null: (Item.WeaponData)slot4.getItem().getItemData();
+		Item.WeaponData slot5WeaponData = slot5.getItem() == null? null: (Item.WeaponData)slot5.getItem().getItemData();
 
 		if (slot1WeaponData != null) initWeapon (slot1WeaponData, 1);
 		if (slot2WeaponData != null) initWeapon (slot2WeaponData, 2);
@@ -51,7 +51,7 @@ public class PlayerShip : Ship {
 		if (slot5WeaponData != null) initWeapon (slot5WeaponData, 5);
 	}
 	
-	private void initWeapon(InventoryItem.WeaponData data, int weaponIndex) {
+	private void initWeapon(Item.WeaponData data, int weaponIndex) {
 		Weapon weapon = null;
 		
 		switch (data.getType()) {

@@ -15,14 +15,13 @@ public class EquipmentsMarket : InventoryContainedScreen {
 	private bool inUseFilled;
 
 	public void init (MarketScreen marketScreen, Inventory inventory, Inventory storage, Inventory market, Inventory inUse, Inventory buyback, ShipData shipData) {
-		this.inventory = inventory;
-		this.storage = storage;
 		this.market = market;
 		this.inUse = inUse;
 		this.buyback = buyback;
 		this.shipData = shipData;
 
-		innerInit();
+		innerInit(inventory, storage);
+
 		marketBtn = transform.FindChild ("Market Button").GetComponent<Button> ().init();
 		inUseBtn = transform.FindChild ("InUse Button").GetComponent<Button> ().init();
 		buybackBtn = transform.FindChild ("Buyback Button").GetComponent<Button> ().init();
@@ -40,11 +39,11 @@ public class EquipmentsMarket : InventoryContainedScreen {
 		market.setInventoryToBegin ();
 		buyback.setInventoryToBegin ();
 
-		inventoryBtn.setEnable(true);
-		storageBtn.setEnable(true);
-		marketBtn.setEnable(true);
-		inUseBtn.setEnable(true);
-		buybackBtn.setEnable(true);
+		inventoryBtn.setVisible(true);
+		storageBtn.setVisible(true);
+		marketBtn.setVisible(true);
+		inUseBtn.setVisible(true);
+		buybackBtn.setVisible(true);
 
 		setInventoryActive ();
 		setMarketActive ();
@@ -120,8 +119,8 @@ public class EquipmentsMarket : InventoryContainedScreen {
 	private void fillInUseInventory () {
 		foreach (HullSlot slot in shipData.getSlots()) {
 			if (slot.getItem() != null) {
-				InventoryItem sourceItem = slot.getItem ();
-				InventoryItem item = (Instantiate(inventoryItemPrefab) as Transform).GetComponent<InventoryItem>();
+				Item sourceItem = slot.getItem ();
+				Item item = (Instantiate(inventoryItemPrefab) as Transform).GetComponent<Item>();
 
 				item.setItemData(sourceItem.getItemData());
 				item.setCost(sourceItem.getCost());
@@ -138,7 +137,7 @@ public class EquipmentsMarket : InventoryContainedScreen {
 	}
 
 	private void clearInUseInventory () {
-		foreach (KeyValuePair<int, InventoryItem> pair in inUse.getItems()) {
+		foreach (KeyValuePair<int, Item> pair in inUse.getItems()) {
 			Destroy(pair.Value.gameObject);
 		}
 		inUse.getItems().Clear();
@@ -182,11 +181,6 @@ public class EquipmentsMarket : InventoryContainedScreen {
 	}
 
 	public void closeScreen () {
-//		inventoryBtnRender.gameObject.SetActive (false);
-//		storageBtnRender.gameObject.SetActive (false);
-//		shipBtnRender.gameObject.SetActive (false);
-//		marketBtnRender.gameObject.SetActive (false);
-//		buybackBtnRender.gameObject.SetActive (false);
 		clearInUseInventory();
 
 		if (inventory != null) {

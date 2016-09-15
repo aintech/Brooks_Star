@@ -6,76 +6,76 @@ public static class ItemFactory {
 
 	private static float qualityMult = 0;
 
-	public static void createItemData (InventoryItem item, InventoryItem.Type type) {
+	public static void createItemData (Item item, Item.Type type) {
 
 
 
-		float maxRand = type == InventoryItem.Type.WEAPON? Enum.GetNames(typeof(WeaponType)).Length:
-						type == InventoryItem.Type.ENGINE?  Enum.GetNames(typeof(EngineType)).Length:
-						type == InventoryItem.Type.ARMOR?  Enum.GetNames(typeof(ArmorType)).Length:
-						type == InventoryItem.Type.GENERATOR?  Enum.GetNames(typeof(GeneratorType)).Length:
-						type == InventoryItem.Type.RADAR?  Enum.GetNames(typeof(RadarType)).Length:
-						type == InventoryItem.Type.SHIELD?  Enum.GetNames(typeof(ShieldType)).Length:
-						type == InventoryItem.Type.REPAIR_DROID?  Enum.GetNames(typeof(RepairDroidType)).Length:
-						type == InventoryItem.Type.HARVESTER?  Enum.GetNames(typeof(HarvesterType)).Length:
+		float maxRand = type == Item.Type.WEAPON? Enum.GetNames(typeof(WeaponType)).Length:
+						type == Item.Type.ENGINE?  Enum.GetNames(typeof(EngineType)).Length:
+						type == Item.Type.ARMOR?  Enum.GetNames(typeof(ArmorType)).Length:
+						type == Item.Type.GENERATOR?  Enum.GetNames(typeof(GeneratorType)).Length:
+						type == Item.Type.RADAR?  Enum.GetNames(typeof(RadarType)).Length:
+						type == Item.Type.SHIELD?  Enum.GetNames(typeof(ShieldType)).Length:
+						type == Item.Type.REPAIR_DROID?  Enum.GetNames(typeof(RepairDroidType)).Length:
+						type == Item.Type.HARVESTER?  Enum.GetNames(typeof(HarvesterType)).Length:
 						-1;
 
 		int rand = Mathf.RoundToInt (UnityEngine.Random.value * maxRand);
 		
 		setItemQualityAndLevel (item, type);
 
-		InventoryItem.ItemData data = null;
+		Item.ItemData data = null;
 
 		switch (type) {
-			case InventoryItem.Type.WEAPON: data = createWeaponData (item, rand); break;
-			case InventoryItem.Type.ENGINE: data = createEngineData (item, rand); break;
-			case InventoryItem.Type.ARMOR: data = createArmorData (item, rand); break;
-			case InventoryItem.Type.GENERATOR: data = createGeneratorData (item, rand); break;
-			case InventoryItem.Type.RADAR: data = createRadarData (item, rand); break;
-			case InventoryItem.Type.SHIELD: data = createShieldData (item, rand); break;
-			case InventoryItem.Type.REPAIR_DROID: data = createRepairDroidData (item, rand); break;
-			case InventoryItem.Type.HARVESTER: data = createHarvesterData (item, rand); break;
+			case Item.Type.WEAPON: data = createWeaponData (item, rand); break;
+			case Item.Type.ENGINE: data = createEngineData (item, rand); break;
+			case Item.Type.ARMOR: data = createArmorData (item, rand); break;
+			case Item.Type.GENERATOR: data = createGeneratorData (item, rand); break;
+			case Item.Type.RADAR: data = createRadarData (item, rand); break;
+			case Item.Type.SHIELD: data = createShieldData (item, rand); break;
+			case Item.Type.REPAIR_DROID: data = createRepairDroidData (item, rand); break;
+			case Item.Type.HARVESTER: data = createHarvesterData (item, rand); break;
 		}
 
 		setItemValues (item, data, type);
 	}
 
-	private static void setItemQualityAndLevel (InventoryItem item, InventoryItem.Type type) {
-		if (type == InventoryItem.Type.ARMOR) {
+	private static void setItemQualityAndLevel (Item item, Item.Type type) {
+		if (type == Item.Type.ARMOR) {
 			item.setItemLevel(1);
-			item.setItemQuality(InventoryItem.Quality.NORMAL);
+			item.setItemQuality(Item.Quality.NORMAL);
 		} else {
 			int randQuality = Mathf.RoundToInt (UnityEngine.Random.value * 100);
 			
-			if (randQuality > 90) item.setItemQuality(InventoryItem.Quality.UNIQUE);
-			else if (randQuality > 60) item.setItemQuality(InventoryItem.Quality.SUPERIOR);
-			else item.setItemQuality(InventoryItem.Quality.NORMAL);
+			if (randQuality > 90) item.setItemQuality(Item.Quality.UNIQUE);
+			else if (randQuality > 60) item.setItemQuality(Item.Quality.SUPERIOR);
+			else item.setItemQuality(Item.Quality.NORMAL);
 
 			item.setItemLevel(1 + (UnityEngine.Random.value * 0.3f));
 		}
 
-		qualityMult = item.getItemQuality() == InventoryItem.Quality.UNIQUE? 3: item.getItemQuality() == InventoryItem.Quality.SUPERIOR? 2: 1;
+		qualityMult = item.getItemQuality() == Item.Quality.UNIQUE? 3: item.getItemQuality() == Item.Quality.SUPERIOR? 2: 1;
 	}
 
-	private static void setItemValues (InventoryItem item, InventoryItem.ItemData data, InventoryItem.Type type) {
+	private static void setItemValues (Item item, Item.ItemData data, Item.Type type) {
 		item.setCost (calculateCost (data, type, item.getItemLevel(), item.getItemQuality()));
 		item.setEnergyNeeded(calculateEnergy(data, type, item.getItemLevel()));
 		item.setItemData(data);
 	}
 
-	public static void createWeaponData (InventoryItem item, WeaponType type) {
-		setItemQualityAndLevel (item, InventoryItem.Type.WEAPON);
-		InventoryItem.WeaponData data = createWeaponData (item, type == WeaponType.Blaster? 0:
+	public static void createWeaponData (Item item, WeaponType type) {
+		setItemQualityAndLevel (item, Item.Type.WEAPON);
+		Item.WeaponData data = createWeaponData (item, type == WeaponType.Blaster? 0:
 		                                                  		type == WeaponType.Plasmer? 1:
 		                                                  		type == WeaponType.Charger? 2:
 		                                                  		type == WeaponType.Emitter? 3:
 		                                                  		type == WeaponType.Waver? 4:
 		                                                  		type == WeaponType.Launcher? 5: 6);
 
-		setItemValues(item, data, InventoryItem.Type.WEAPON);
+		setItemValues(item, data, Item.Type.WEAPON);
 	}
 
-	private static InventoryItem.WeaponData createWeaponData (InventoryItem item, int random) {
+	private static Item.WeaponData createWeaponData (Item item, int random) {
 		WeaponType type = WeaponType.Blaster;
 		switch (random) {
 			case 0: type = WeaponType.Blaster; break;
@@ -87,15 +87,15 @@ public static class ItemFactory {
 			case 6: type = WeaponType.Suppressor; break;
 		}
 
-		float reloadMulty = item.getItemQuality() == InventoryItem.Quality.UNIQUE? 0.6f: item.getItemQuality() == InventoryItem.Quality.SUPERIOR? 0.8f: 1;
+		float reloadMulty = item.getItemQuality() == Item.Quality.UNIQUE? 0.6f: item.getItemQuality() == Item.Quality.SUPERIOR? 0.8f: 1;
 
 		int damage = Mathf.RoundToInt(type.getDamage() * item.getItemLevel() * qualityMult);
 		float reloadTime = (type.getReloadTime() / item.getItemLevel()) * reloadMulty;
 		item.setVolume (type.getVolume ());
-		return new InventoryItem.WeaponData (type, damage - type.getDamageRange(), damage + type.getDamageRange(), reloadTime);
+		return new Item.WeaponData (type, damage - type.getDamageRange(), damage + type.getDamageRange(), reloadTime);
 	}
 
-	private static InventoryItem.EngineData createEngineData (InventoryItem item, int random) {
+	private static Item.EngineData createEngineData (Item item, int random) {
 		EngineType type = EngineType.Force;
 		switch (random) {
 			case 0: type = EngineType.Force; break;
@@ -108,10 +108,10 @@ public static class ItemFactory {
 		float power = type.getMainPower() * item.getItemLevel() * qualityMult;
 
 		item.setVolume (type.getVolume());
-		return new InventoryItem.EngineData (type, power);
+		return new Item.EngineData (type, power);
 	}
 	
-	private static InventoryItem.ArmorData createArmorData (InventoryItem item, int random) {
+	private static Item.ArmorData createArmorData (Item item, int random) {
 		ArmorType type = ArmorType.Steel;
 		switch (random) {
 			case 0: type = ArmorType.Steel; break;
@@ -121,10 +121,10 @@ public static class ItemFactory {
 			case 4: type = ArmorType.Adamant; break;	
 		}
 		item.setVolume (type.getVolume());
-		return new InventoryItem.ArmorData (type, type.getArmorClass());
+		return new Item.ArmorData (type, type.getArmorClass());
 	}
 
-	private static InventoryItem.GeneratorData createGeneratorData (InventoryItem item, int random) {
+	private static Item.GeneratorData createGeneratorData (Item item, int random) {
 		GeneratorType type = GeneratorType.Atomic;
 		switch (random) {
 			case 0: type = GeneratorType.Atomic; break;
@@ -136,10 +136,10 @@ public static class ItemFactory {
 		int maxEnergy = Mathf.RoundToInt(type.getMaxEnergy() * item.getItemLevel() * qualityMult);
 
 		item.setVolume (type.getVolume());
-		return new InventoryItem.GeneratorData (type, maxEnergy);
+		return new Item.GeneratorData (type, maxEnergy);
 	}
 	
-	private static InventoryItem.RadarData createRadarData (InventoryItem item, int random) {
+	private static Item.RadarData createRadarData (Item item, int random) {
 		RadarType type = RadarType.Sequester;
 		switch (random) {
 			case 0: type = RadarType.Sequester; break;
@@ -153,10 +153,10 @@ public static class ItemFactory {
 		int range = Mathf.RoundToInt(type.getRange() * item.getItemLevel() * qualityMult);
 
 		item.setVolume (type.getVolume());
-		return new InventoryItem.RadarData (type, range);
+		return new Item.RadarData (type, range);
 	}
 	
-	private static InventoryItem.ShieldData createShieldData (InventoryItem item, int random) {
+	private static Item.ShieldData createShieldData (Item item, int random) {
 		ShieldType type = ShieldType.Block;
 		switch (random) {
 			case 0: type = ShieldType.Block; break;
@@ -169,10 +169,10 @@ public static class ItemFactory {
 		int rechargeSpeed = Mathf.RoundToInt(type.getRechargeSpeed() * item.getItemLevel() * qualityMult);
 
 		item.setVolume (type.getVolume());
-		return new InventoryItem.ShieldData (type, shieldLevel, rechargeSpeed);
+		return new Item.ShieldData (type, shieldLevel, rechargeSpeed);
 	}
 
-	private static InventoryItem.RepairDroidData createRepairDroidData (InventoryItem item, int random) {
+	private static Item.RepairDroidData createRepairDroidData (Item item, int random) {
 		RepairDroidType type = RepairDroidType.Rail;
 		switch (random) {
 			case 0: type = RepairDroidType.Rail; break;
@@ -184,10 +184,10 @@ public static class ItemFactory {
 		int repairSpeed = Mathf.RoundToInt(type.getRepairSpeed() * item.getItemLevel() * qualityMult);
 
 		item.setVolume (type.getVolume());
-		return new InventoryItem.RepairDroidData (type, repairSpeed);
+		return new Item.RepairDroidData (type, repairSpeed);
 	}
 	
-	private static InventoryItem.HarvesterData createHarvesterData (InventoryItem item, int random) {
+	private static Item.HarvesterData createHarvesterData (Item item, int random) {
 		HarvesterType type = HarvesterType.Mechanical;
 		switch (random) {
 			case 0: type = HarvesterType.Mechanical; break;
@@ -195,36 +195,36 @@ public static class ItemFactory {
 			case 2: type = HarvesterType.Generative; break;	
 		}
 
-		float harvestMulty = item.getItemQuality() == InventoryItem.Quality.UNIQUE? 0.6f: item.getItemQuality() == InventoryItem.Quality.SUPERIOR? 0.8f: 1;
+		float harvestMulty = item.getItemQuality() == Item.Quality.UNIQUE? 0.6f: item.getItemQuality() == Item.Quality.SUPERIOR? 0.8f: 1;
 		int harvestTime = Mathf.RoundToInt(type.getHarvestTime() / item.getItemLevel() * harvestMulty);
 
 		item.setVolume (type.getVolume());
-		return new InventoryItem.HarvesterData (type, harvestTime);
+		return new Item.HarvesterData (type, harvestTime);
 	}
 
-	private static int calculateCost (InventoryItem.ItemData data, InventoryItem.Type type, float itemLevel, InventoryItem.Quality itemQuality) {
+	private static int calculateCost (Item.ItemData data, Item.Type type, float itemLevel, Item.Quality itemQuality) {
 		int cost = 0;
 		switch (type) {
-			case InventoryItem.Type.WEAPON: cost = Mathf.RoundToInt(itemLevel * ((InventoryItem.WeaponData)data).getType().getCost()); break;
-			case InventoryItem.Type.ENGINE: cost = Mathf.RoundToInt(itemLevel * ((InventoryItem.EngineData)data).getType().getCost()); break;
-			case InventoryItem.Type.ARMOR: return ((InventoryItem.ArmorData)data).getType().getCost();
-			case InventoryItem.Type.GENERATOR: cost = Mathf.RoundToInt(itemLevel * ((InventoryItem.GeneratorData)data).getType().getCost()); break;
-			case InventoryItem.Type.RADAR: cost = Mathf.RoundToInt(itemLevel * ((InventoryItem.RadarData)data).getType().getCost()); break;
-			case InventoryItem.Type.SHIELD: cost = Mathf.RoundToInt(itemLevel * ((InventoryItem.ShieldData)data).getType().getCost()); break;
-			case InventoryItem.Type.REPAIR_DROID: cost = Mathf.RoundToInt(itemLevel * ((InventoryItem.RepairDroidData)data).getType().getCost()); break;
-			case InventoryItem.Type.HARVESTER: cost = Mathf.RoundToInt(itemLevel * ((InventoryItem.HarvesterData)data).getType().getCost()); break;
+			case Item.Type.WEAPON: cost = Mathf.RoundToInt(itemLevel * ((Item.WeaponData)data).getType().getCost()); break;
+			case Item.Type.ENGINE: cost = Mathf.RoundToInt(itemLevel * ((Item.EngineData)data).getType().getCost()); break;
+			case Item.Type.ARMOR: return ((Item.ArmorData)data).getType().getCost();
+			case Item.Type.GENERATOR: cost = Mathf.RoundToInt(itemLevel * ((Item.GeneratorData)data).getType().getCost()); break;
+			case Item.Type.RADAR: cost = Mathf.RoundToInt(itemLevel * ((Item.RadarData)data).getType().getCost()); break;
+			case Item.Type.SHIELD: cost = Mathf.RoundToInt(itemLevel * ((Item.ShieldData)data).getType().getCost()); break;
+			case Item.Type.REPAIR_DROID: cost = Mathf.RoundToInt(itemLevel * ((Item.RepairDroidData)data).getType().getCost()); break;
+			case Item.Type.HARVESTER: cost = Mathf.RoundToInt(itemLevel * ((Item.HarvesterData)data).getType().getCost()); break;
 			default: cost = 0; break;
 		}
-		return Mathf.RoundToInt(cost * (itemQuality == InventoryItem.Quality.UNIQUE? 2.5f: itemQuality == InventoryItem.Quality.SUPERIOR? 1.5f: 1));
+		return Mathf.RoundToInt(cost * (itemQuality == Item.Quality.UNIQUE? 2.5f: itemQuality == Item.Quality.SUPERIOR? 1.5f: 1));
 	}
 
-	private static int calculateEnergy (InventoryItem.ItemData data, InventoryItem.Type type, float itemLevel) {
+	private static int calculateEnergy (Item.ItemData data, Item.Type type, float itemLevel) {
 		switch (type) {
-			case InventoryItem.Type.WEAPON: return Mathf.RoundToInt(itemLevel * ((InventoryItem.WeaponData)data).getType().getEnergyNeeded());//randomizeValue(((InventoryItem.WeaponData)data).getType().getEnergyNeeded());
-			case InventoryItem.Type.ENGINE: return Mathf.RoundToInt(itemLevel * ((InventoryItem.EngineData)data).getType().getEnergyNeeded());
-			case InventoryItem.Type.RADAR: return Mathf.RoundToInt(itemLevel * ((InventoryItem.RadarData)data).getType().getEnergyNeeded());
-			case InventoryItem.Type.SHIELD: return Mathf.RoundToInt(itemLevel * ((InventoryItem.ShieldData)data).getType().getEnergyNeeded());
-			case InventoryItem.Type.REPAIR_DROID: return Mathf.RoundToInt(itemLevel * ((InventoryItem.RepairDroidData)data).getType().getEnergyNeeded());
+			case Item.Type.WEAPON: return Mathf.RoundToInt(itemLevel * ((Item.WeaponData)data).getType().getEnergyNeeded());//randomizeValue(((Item.WeaponData)data).getType().getEnergyNeeded());
+			case Item.Type.ENGINE: return Mathf.RoundToInt(itemLevel * ((Item.EngineData)data).getType().getEnergyNeeded());
+			case Item.Type.RADAR: return Mathf.RoundToInt(itemLevel * ((Item.RadarData)data).getType().getEnergyNeeded());
+			case Item.Type.SHIELD: return Mathf.RoundToInt(itemLevel * ((Item.ShieldData)data).getType().getEnergyNeeded());
+			case Item.Type.REPAIR_DROID: return Mathf.RoundToInt(itemLevel * ((Item.RepairDroidData)data).getType().getEnergyNeeded());
 			default: return 0;
 		}
 	}

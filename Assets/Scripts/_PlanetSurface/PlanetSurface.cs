@@ -2,9 +2,11 @@
 using UnityEngine.SceneManagement;
 using System.Collections;
 
-public class PlanetSurface : MonoBehaviour, ButtonHolder {
+public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 
-	public static bool newGame = false;
+	public static bool newGame = true;
+
+	public static Hideable topHideable;
 
 	private SpriteRenderer bgRender;
 
@@ -24,12 +26,12 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder {
 
 	private Storyline story;
 
+	private StatusScreen statusScreen;
+
 	void Awake () {
 		bgRender = GetComponent<SpriteRenderer>();
 
 		Imager.initialize();
-
-		Vars.userInterface = GameObject.FindGameObjectWithTag("UserInterface").GetComponent<UserInterface>().init(null, null, null);
 
 		marketScreen = GameObject.Find("Market Screen").GetComponent<MarketScreen> ();
 		industrialScreen = GameObject.Find("Industrial Screen").GetComponent<IndustrialScreen>();
@@ -44,12 +46,18 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder {
 		market = inventories.Find ("Market").GetComponent<Inventory> ().init(Inventory.InventoryType.MARKET);
 		buyback = inventories.Find ("Buyback").GetComponent<Inventory> ().init(Inventory.InventoryType.BUYBACK);
 
-        inventory.setCapacity(shipData.getHullType().getStorageCapacity());
-
-        marketBtn = transform.Find("Market Button").GetComponent<Button>().init();
+		marketBtn = transform.Find("Market Button").GetComponent<Button>().init();
 		industrialBtn = transform.Find("Industrial Button").GetComponent<Button>().init();
 		hangarBtn = transform.Find("Hangar Button").GetComponent<Button>().init();
 		leaveBtn = transform.Find("Leave Button").GetComponent<Button>().init();
+
+		PlanetSurface.topHideable = this;
+
+		statusScreen = GameObject.Find("Status Screen").GetComponent<StatusScreen>().init(true, inventory, storage, null);
+
+		Vars.userInterface = GameObject.FindGameObjectWithTag("UserInterface").GetComponent<UserInterface>().init(statusScreen, null, null, null);
+
+        inventory.setCapacity(shipData.getHullType().getStorageCapacity());
 
 		messageBox = GameObject.Find("Message Box").GetComponent<MessageBox>();
 		story = GameObject.Find("Storyline").GetComponent<Storyline>();
@@ -87,7 +95,7 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder {
 		inventory.calculateFreeVolume();
 		Vars.userInterface.setEnabled(true);
 		bgRender.sprite = Imager.getPlanetSurface(Vars.planetType);
-		setPlanetBtnsEnabled(true);
+		setVisible(true);
 	}
 
 	public void leavePlanet () {
@@ -108,14 +116,7 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder {
 			case ScreenType.INDUSTRIAL: industrialScreen.showScreen(); break;
 			default: Debug.Log("Unknown screen type"); break;
 		}
-		setPlanetBtnsEnabled(false);
-	}
-
-	public void setPlanetBtnsEnabled (bool enabled) {
-		marketBtn.gameObject.SetActive(enabled);
-		industrialBtn.gameObject.SetActive(enabled);
-		hangarBtn.gameObject.SetActive(enabled);
-		leaveBtn.gameObject.SetActive(enabled);
+		setVisible(false);
 	}
 
 	public void fireClickButton (Button btn) {
@@ -142,6 +143,14 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder {
 		switch(Vars.planetType) {
 			case PlanetType.CORAS: market.loadItems(Vars.marketCORAS); break;
 		}
+	}
+
+	public void setVisible (bool visible) {
+		marketBtn.setVisible(visible);
+		industrialBtn.setVisible(visible);
+		hangarBtn.setVisible(visible);
+		leaveBtn.setVisible(visible);
+		if (visible) { PlanetSurface.topHideable = this; }
 	}
 
 	private enum ScreenType {

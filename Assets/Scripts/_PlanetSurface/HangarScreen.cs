@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class HangarScreen : InventoryContainedScreen {
+public class HangarScreen : InventoryContainedScreen, Hideable {
 	
 	private PlanetSurface planetSurface;
 
@@ -15,10 +15,9 @@ public class HangarScreen : InventoryContainedScreen {
 	public void init (PlanetSurface planetSurface, ShipData shipData, Inventory inventory, Inventory storage) {
 		this.planetSurface = planetSurface;
 		this.shipData = shipData;
-		this.inventory = inventory;
-		this.storage = storage;
 
-		innerInit();
+		innerInit(inventory, storage);
+
 		shipBtn = transform.Find("Ship Button").GetComponent<Button>().init();
 		closeBtn = transform.Find("Close Button").GetComponent<Button>().init();
 
@@ -28,6 +27,7 @@ public class HangarScreen : InventoryContainedScreen {
 	}
 
 	public void showScreen () {
+		PlanetSurface.topHideable = this;
 		inventory.setContainerScreen(this);
 		storage.setContainerScreen(this);
 
@@ -77,7 +77,7 @@ public class HangarScreen : InventoryContainedScreen {
 			} else if (slot.getItem () == null) {
 				setItemToSlot (slot);
 			} else if (slot.getItem() != null) {
-				InventoryItem currItem = slot.takeItem ();
+				Item currItem = slot.takeItem ();
 				if (inventory.gameObject.activeInHierarchy) {
 					inventory.addItemToCell (currItem, draggedItem.getCell ());
 				} else if (storage.gameObject.activeInHierarchy) {
@@ -111,34 +111,34 @@ public class HangarScreen : InventoryContainedScreen {
 		shipData.updateHullInfo ();
 	}
 
-	private HullSlot.HullSlotType getHullToItemType (InventoryItem.Type itemType) {
+	private HullSlot.HullSlotType getHullToItemType (Item.Type itemType) {
 		switch (itemType) {
-			case InventoryItem.Type.ARMOR: return HullSlot.HullSlotType.Armor;
-			case InventoryItem.Type.ENGINE: return HullSlot.HullSlotType.Engine;
-			case InventoryItem.Type.GENERATOR: return HullSlot.HullSlotType.Generator;
-			case InventoryItem.Type.HARVESTER: return HullSlot.HullSlotType.Harvester;
-			case InventoryItem.Type.RADAR: return HullSlot.HullSlotType.Radar;
-			case InventoryItem.Type.REPAIR_DROID: return HullSlot.HullSlotType.RepairDroid;
-			case InventoryItem.Type.SHIELD: return HullSlot.HullSlotType.Shield;
-			case InventoryItem.Type.WEAPON: return HullSlot.HullSlotType.Weapon;
+			case Item.Type.ARMOR: return HullSlot.HullSlotType.Armor;
+			case Item.Type.ENGINE: return HullSlot.HullSlotType.Engine;
+			case Item.Type.GENERATOR: return HullSlot.HullSlotType.Generator;
+			case Item.Type.HARVESTER: return HullSlot.HullSlotType.Harvester;
+			case Item.Type.RADAR: return HullSlot.HullSlotType.Radar;
+			case Item.Type.REPAIR_DROID: return HullSlot.HullSlotType.RepairDroid;
+			case Item.Type.SHIELD: return HullSlot.HullSlotType.Shield;
+			case Item.Type.WEAPON: return HullSlot.HullSlotType.Weapon;
 			default: Debug.Log("Unknown item type: " + itemType); return HullSlot.HullSlotType.Armor;
 		}
 	}
 
 	override protected void afterItemDrop () {
 		if (draggedItem == null) {
-			highlightSlot (false, InventoryItem.Type.ARMOR);
+			highlightSlot (false, Item.Type.ARMOR);
 		}
 	}
 
-	override protected void choseItem (InventoryItem item) {
+	override protected void choseItem (Item item) {
 		base.choseItem(item);
 		if (draggedItem != null) {
 			highlightSlot (true, item.getItemType ());
 		}
 	}
 
-	private void highlightSlot (bool hightlight, InventoryItem.Type itemType) {
+	private void highlightSlot (bool hightlight, Item.Type itemType) {
 		if (!hightlight) {
 			foreach (HullSlot slot in shipData.getSlots()) {
 				slot.setSprite(false);
@@ -181,7 +181,11 @@ public class HangarScreen : InventoryContainedScreen {
 		inventory.gameObject.SetActive (false);
 		storage.gameObject.SetActive (false);
 		shipData.gameObject.SetActive (false);
-        planetSurface.setPlanetBtnsEnabled(true);
+		planetSurface.setVisible(true);
 		gameObject.SetActive (false);
+	}
+
+	public void setVisible (bool visible) {
+		gameObject.SetActive(visible);
 	}
 }

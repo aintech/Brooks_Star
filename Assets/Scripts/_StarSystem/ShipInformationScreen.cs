@@ -17,7 +17,8 @@ public class ShipInformationScreen : InventoryContainedScreen {
 		inventory.setContainerScreen (this);
 		shipData.updateHullInfo ();
 
-		innerInit();
+		innerInit(inventory, null);
+
 		closeBtn = transform.Find("Close Button").GetComponent<Button>().init();
 
 		shipData.gameObject.SetActive(true);
@@ -43,23 +44,32 @@ public class ShipInformationScreen : InventoryContainedScreen {
 	}
 
 	public void showScreen () {
+		if (gameObject.activeInHierarchy) { return; }
+
+		inventory.setContainerScreen(this);
+		inventory.setInventoryToBegin();
+
 		Camera.main.orthographicSize = 5;
-		transform.localPosition = Vector3.zero;
-		StarSystem.gamePaused = true;
+		StarSystem.setGamePause(true);
 		shipData.updateShieldValue();
 		shipData.updateHealthValue();
 		transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, transform.position.z);
+		inventory.transform.parent.position = transform.position;
 		foreach (Planet planet in starSystem.getPlanets()) {
 			planet.setShipIsNear(false);
 		}
+		inventory.gameObject.SetActive(true);
 		gameObject.SetActive (true);
 	}
 
 
-	private void closeScreen () {
+	public void closeScreen () {
+		hideItemInfo();
+		inventory.gameObject.SetActive(false);
 		gameObject.SetActive(false);
-		StarSystem.gamePaused = false;
+		StarSystem.setGamePause(false);
 	}
+
 	protected override void choseDraggedItemFromSlot (HullSlot slot) {}
 
 	protected override void checkBtnPress (Button btn) {
