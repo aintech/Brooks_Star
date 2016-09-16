@@ -11,11 +11,15 @@ public class MarketScreen : MonoBehaviour, ButtonHolder, Hideable {
 
 	private Button equipmentsBtn, hullsBtn, closeBtn;
 
-	public void init (PlanetSurface planetSurface, ShipData shipData, Inventory inventory, Inventory storage, Inventory marketInv, Inventory shipInv, Inventory buybackInv) {
+	private Inventory market, buyback;
+
+	public void init (PlanetSurface planetSurface, ShipData shipData, Inventory inventory, Inventory storage, Inventory market, Inventory buyback) {
 		this.planetSurface = planetSurface;
+		this.market = market;
+		this.buyback = buyback;
 
 		equipmentsMarket = transform.Find ("Equipments Market").GetComponent<EquipmentsMarket>();
-		equipmentsMarket.init(this, inventory, storage, marketInv, shipInv, buybackInv, shipData);
+		equipmentsMarket.init(this, inventory, storage, market, buyback, shipData);
 
 		hullsMarket = transform.Find ("Hulls Market").GetComponent<HullsMarket> ();
 		hullsMarket.init(inventory, storage, shipData);
@@ -75,6 +79,16 @@ public class MarketScreen : MonoBehaviour, ButtonHolder, Hideable {
 	}
 
 	public void setVisible (bool visible) {
+		if (!visible && equipmentsMarket.gameObject.activeInHierarchy) {
+			market.gameObject.SetActive(false);
+			buyback.gameObject.SetActive(false);
+		}
+
 		gameObject.SetActive(visible);
+
+		if (visible) {
+			if (equipmentsMarket.gameObject.activeInHierarchy) { showEquipmentMarket(); }
+			else { showHullsMarket(); }
+		}
 	}
 }

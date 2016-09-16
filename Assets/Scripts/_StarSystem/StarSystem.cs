@@ -19,9 +19,7 @@ public class StarSystem : MonoBehaviour {
 
 	private PlayerShip playerShip;
 
-	private Inventory inventory;
-
-	private ShipData shipData;
+	private Inventory inventory, storage;
 
 	private CameraController cameraController;
 
@@ -52,25 +50,21 @@ public class StarSystem : MonoBehaviour {
 
 		shipInfoScreen = GameObject.Find ("Ship Information").GetComponent<ShipInformationScreen> ();
 
-		shipData = shipInfoScreen.transform.FindChild ("Ship Data").GetComponent<ShipData> ().init();
-
 		inventory = GameObject.Find("Inventories").transform.Find ("Inventory").GetComponent<Inventory> ().init(Inventory.InventoryType.INVENTORY);
+		storage = GameObject.Find("Inventories").transform.Find ("Storage").GetComponent<Inventory> ().init(Inventory.InventoryType.STORAGE);
+
+		statusScreen = GameObject.Find("Status Screen").GetComponent<StatusScreen>().init(false, inventory, storage, this);
 
 		if (Vars.shipCurrentHealth == -1) {
-			shipData.initializeRandomShip (HullType.Corvette);
+			statusScreen.getShipData().initializeRandomShip (HullType.Corvette);
 		} else {
-			shipData.initializeFromVars ();
+			statusScreen.initFromVars();
 		}
 		
 		initPlayerShip ();
-		shipInfoScreen.init(this, shipData, inventory);
-
-		statusScreen = GameObject.Find("Status Screen").GetComponent<StatusScreen>().init(false, inventory, null, this);
+//		shipInfoScreen.init(this, shipData, inventory);
 
 		Vars.userInterface = GameObject.FindGameObjectWithTag("UserInterface").GetComponent<UserInterface>().init(statusScreen, this, shipInfoScreen, playerShip);
-
-		inventory.setCapacity (shipData.getHullType ().getStorageCapacity ());
-		inventory.loadItems (Vars.inventory);
 
 		shieldsPool = GameObject.Find("ShieldsPool").GetComponent<ShieldsPool>();
 
@@ -100,7 +94,7 @@ public class StarSystem : MonoBehaviour {
 
 	private void initPlayerShip () {
 		playerShip = Instantiate<Transform> (playerShipPrefab).GetComponent<PlayerShip> ();
-		playerShip.initPlayerShip(shipData);
+		playerShip.initPlayerShip(statusScreen.getShipData());
 		cameraController = mainCamera.GetComponent<CameraController>();
 		cameraController.init(playerShip.transform);
 	}
@@ -128,8 +122,7 @@ public class StarSystem : MonoBehaviour {
 		shieldsPool.clearPool();
 		Vars.enemyShipsPool.Clear();
 		Vars.userInterface.setEnabled(false);
-		shipData.sendToVars();
-		Vars.inventory = inventory.getItems ();
+		statusScreen.sendToVars();
 		Vars.planetType = planetType;
 		SceneManager.LoadScene("PlanetSurface");
 	}

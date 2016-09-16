@@ -10,17 +10,13 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 
 	private SpriteRenderer bgRender;
 
-	private Button marketBtn, industrialBtn, hangarBtn, leaveBtn;
+	private Button marketBtn, industrialBtn, leaveBtn;
 
 	private MarketScreen marketScreen;
-	
-	private HangarScreen hangarScreen;
 
 	private IndustrialScreen industrialScreen;
 
-	private Inventory inventory, storage, market, inUse, buyback;
-
-	private ShipData shipData;
+	private Inventory inventory, storage, market, buyback;
 
 	private MessageBox messageBox;
 
@@ -35,20 +31,15 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 
 		marketScreen = GameObject.Find("Market Screen").GetComponent<MarketScreen> ();
 		industrialScreen = GameObject.Find("Industrial Screen").GetComponent<IndustrialScreen>();
-		hangarScreen = GameObject.Find ("Hangar Screen").GetComponent<HangarScreen> ();
-
-        shipData = GameObject.Find("Ship Data").GetComponent<ShipData>().init();
 
         Transform inventories = GameObject.Find("Inventories").transform;
         inventory = inventories.Find ("Inventory").GetComponent<Inventory> ().init(Inventory.InventoryType.INVENTORY);
 		storage = inventories.Find ("Storage").GetComponent<Inventory> ().init(Inventory.InventoryType.STORAGE);
-		inUse = inventories.Find ("InUse").GetComponent<Inventory> ().init(Inventory.InventoryType.INUSE);
 		market = inventories.Find ("Market").GetComponent<Inventory> ().init(Inventory.InventoryType.MARKET);
 		buyback = inventories.Find ("Buyback").GetComponent<Inventory> ().init(Inventory.InventoryType.BUYBACK);
 
 		marketBtn = transform.Find("Market Button").GetComponent<Button>().init();
 		industrialBtn = transform.Find("Industrial Button").GetComponent<Button>().init();
-		hangarBtn = transform.Find("Hangar Button").GetComponent<Button>().init();
 		leaveBtn = transform.Find("Leave Button").GetComponent<Button>().init();
 
 		PlanetSurface.topHideable = this;
@@ -57,14 +48,11 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 
 		Vars.userInterface = GameObject.FindGameObjectWithTag("UserInterface").GetComponent<UserInterface>().init(statusScreen, null, null, null);
 
-        inventory.setCapacity(shipData.getHullType().getStorageCapacity());
-
 		messageBox = GameObject.Find("Message Box").GetComponent<MessageBox>();
 		story = GameObject.Find("Storyline").GetComponent<Storyline>();
 
-		marketScreen.init(this, shipData, inventory, storage, market, inUse, buyback);
+		marketScreen.init(this, statusScreen.getShipData(), inventory, storage, market, buyback);
 		industrialScreen.init(this);
-		hangarScreen.init(this, shipData, inventory, storage);
 
 		messageBox.init(this);
 		story.init();
@@ -78,20 +66,19 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 	}
 
 	private void startNewGame () {
-		shipData.initializeRandomShip(HullType.Corvette);
-		shipData.setCurrentHealth (shipData.getHullType ().getMaxHealth ());
+		statusScreen.getShipData().initializeRandomShip(HullType.Corvette);
 
 //		inventory.fillWithRandomItems(30, "Player Item");
 		market.fillWithRandomItems(50, "Market Item");
 
-		setDataToVars();
+		sendToVars();
 //		messageBox.showNewMessage(story.getMessageContainer(Storyline.StoryPart.INTRODUCTION));
 	}
 
 	public void landPlanet () {
-		getDataFromVars();
+		initFromVars();
 		if (market.getItems().Count == 0) { market.fillWithRandomItems(); }
-		shipData.setCurrentShield(shipData.getShield());
+		statusScreen.getShipData().setShieldToMax();
 		inventory.calculateFreeVolume();
 		Vars.userInterface.setEnabled(true);
 		bgRender.sprite = Imager.getPlanetSurface(Vars.planetType);
@@ -99,12 +86,12 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 	}
 
 	public void leavePlanet () {
-		if (shipData.getEnergyNeeded() < 0) {
+		if (statusScreen.getShipData().getEnergyNeeded() < 0) {
 			Messenger.showMessage("Кораблю не хватает энергии");
-		} else if (shipData.getSlotByType(HullSlot.HullSlotType.Engine, 0).getItem() == null) {
+		} else if (statusScreen.getShipData().getSlotByType(HullSlot.HullSlotType.Engine, 0).getItem() == null) {
 			Messenger.showMessage("У корабля отсутствует двигатель");
 		} else {
-			setDataToVars();
+			sendToVars();
 			SceneManager.LoadScene("StarSystem");
 		}
 	}
@@ -112,7 +99,6 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 	private void showScreen (ScreenType type) {
 		switch (type) {
 			case ScreenType.MARKET: marketScreen.showScreen(); break;
-			case ScreenType.HANGAR: hangarScreen.showScreen(); break;
 			case ScreenType.INDUSTRIAL: industrialScreen.showScreen(); break;
 			default: Debug.Log("Unknown screen type"); break;
 		}
@@ -121,39 +107,29 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 
 	public void fireClickButton (Button btn) {
 		if (btn == marketBtn) { showScreen(ScreenType.MARKET); }
-		else if (btn == hangarBtn) { showScreen(ScreenType.HANGAR); }
 		else if (btn == industrialBtn) { showScreen(ScreenType.INDUSTRIAL); }
 		else if (btn == leaveBtn) { leavePlanet(); }
 		else { Debug.Log("Unknown button: " + btn.name); }
 	}
 
-	private void setDataToVars () {
-		shipData.sendToVars ();
-		Vars.inventory = inventory.getItems ();
-		Vars.storage = storage.getItems ();
-		switch(Vars.planetType) {
-			case PlanetType.CORAS: Vars.marketCORAS = market.getItems (); break;
-		}
+	private void sendToVars () {
+		statusScreen.sendToVars();
+		market.sendToVars();
 	}
 	
-	private void getDataFromVars () {
-		shipData.initializeFromVars();
-		inventory.loadItems (Vars.inventory);
-		storage.loadItems (Vars.storage);
-		switch(Vars.planetType) {
-			case PlanetType.CORAS: market.loadItems(Vars.marketCORAS); break;
-		}
+	private void initFromVars () {
+		statusScreen.initFromVars();
+		market.initFromVars();
 	}
 
 	public void setVisible (bool visible) {
 		marketBtn.setVisible(visible);
 		industrialBtn.setVisible(visible);
-		hangarBtn.setVisible(visible);
 		leaveBtn.setVisible(visible);
 		if (visible) { PlanetSurface.topHideable = this; }
 	}
 
 	private enum ScreenType {
-		MARKET, INDUSTRIAL, HANGAR
+		MARKET, INDUSTRIAL
 	}
 }

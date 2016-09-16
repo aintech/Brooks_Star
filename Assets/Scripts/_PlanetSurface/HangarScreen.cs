@@ -111,23 +111,23 @@ public class HangarScreen : InventoryContainedScreen, Hideable {
 		shipData.updateHullInfo ();
 	}
 
-	private HullSlot.HullSlotType getHullToItemType (Item.Type itemType) {
+	private HullSlot.HullSlotType getHullToItemType (ItemData.Type itemType) {
 		switch (itemType) {
-			case Item.Type.ARMOR: return HullSlot.HullSlotType.Armor;
-			case Item.Type.ENGINE: return HullSlot.HullSlotType.Engine;
-			case Item.Type.GENERATOR: return HullSlot.HullSlotType.Generator;
-			case Item.Type.HARVESTER: return HullSlot.HullSlotType.Harvester;
-			case Item.Type.RADAR: return HullSlot.HullSlotType.Radar;
-			case Item.Type.REPAIR_DROID: return HullSlot.HullSlotType.RepairDroid;
-			case Item.Type.SHIELD: return HullSlot.HullSlotType.Shield;
-			case Item.Type.WEAPON: return HullSlot.HullSlotType.Weapon;
+			case ItemData.Type.ARMOR: return HullSlot.HullSlotType.Armor;
+			case ItemData.Type.ENGINE: return HullSlot.HullSlotType.Engine;
+			case ItemData.Type.GENERATOR: return HullSlot.HullSlotType.Generator;
+			case ItemData.Type.HARVESTER: return HullSlot.HullSlotType.Harvester;
+			case ItemData.Type.RADAR: return HullSlot.HullSlotType.Radar;
+			case ItemData.Type.REPAIR_DROID: return HullSlot.HullSlotType.RepairDroid;
+			case ItemData.Type.SHIELD: return HullSlot.HullSlotType.Shield;
+			case ItemData.Type.WEAPON: return HullSlot.HullSlotType.Weapon;
 			default: Debug.Log("Unknown item type: " + itemType); return HullSlot.HullSlotType.Armor;
 		}
 	}
 
 	override protected void afterItemDrop () {
 		if (draggedItem == null) {
-			highlightSlot (false, Item.Type.ARMOR);
+			highlightSlot (false, ItemData.Type.ARMOR);
 		}
 	}
 
@@ -138,7 +138,7 @@ public class HangarScreen : InventoryContainedScreen, Hideable {
 		}
 	}
 
-	private void highlightSlot (bool hightlight, Item.Type itemType) {
+	private void highlightSlot (bool hightlight, ItemData.Type itemType) {
 		if (!hightlight) {
 			foreach (HullSlot slot in shipData.getSlots()) {
 				slot.setSprite(false);

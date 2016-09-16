@@ -51,58 +51,58 @@ public class ItemInformation : MonoBehaviour {
 		itemName.text = item.getItemName ();
 
 		switch (item.getItemQuality()) {
-			case Item.Quality.NORMAL: itemName.color = new Color(Color.white.r, Color.white.g, Color.white.b, 1); break;
-			case Item.Quality.SUPERIOR: itemName.color = new Color(Color.yellow.r, Color.yellow.g, Color.yellow.b, 1); break;
-			case Item.Quality.UNIQUE: itemName.color = new Color(Color.blue.r, Color.blue.g, Color.blue.b, 1); break;
+			case ItemData.Quality.NORMAL: itemName.color = new Color(Color.white.r, Color.white.g, Color.white.b, 1); break;
+			case ItemData.Quality.SUPERIOR: itemName.color = new Color(Color.yellow.r, Color.yellow.g, Color.yellow.b, 1); break;
+			case ItemData.Quality.UNIQUE: itemName.color = new Color(Color.blue.r, Color.blue.g, Color.blue.b, 1); break;
 		}
 
 		switch (item.getItemType()) {
-			case Item.Type.WEAPON:
+			case ItemData.Type.WEAPON:
 				itemLabel_1.text = "Урон";
-				itemValue_1.text = ((Item.WeaponData)item.getItemData()).getMinDamage().ToString() + "-" +
-					((Item.WeaponData)item.getItemData()).getMaxDamage().ToString() + " ед.";
+				itemValue_1.text = ((WeaponData)item.getItemData()).minDamage.ToString() + "-" +
+					((WeaponData)item.getItemData()).maxDamage.ToString() + " ед.";
 				itemLabel_2.text = "Перезарядка";
-				itemValue_2.text = ((Item.WeaponData)item.getItemData()).getReloadTime().ToString("F2") + " c.";
+				itemValue_2.text = ((WeaponData)item.getItemData()).reloadTime.ToString("F2") + " c.";
 				break;
-			case Item.Type.ENGINE:
+			case ItemData.Type.ENGINE:
 				itemLabel_1.text = "Мощность";
-				itemValue_1.text = (((Item.EngineData)item.getItemData()).getPower() * 1000).ToString("F1") + " ед.";
+				itemValue_1.text = (((EngineData)item.getItemData()).power * 1000).ToString("F1") + " ед.";
 				itemLabel_2.text = "";
 				itemValue_2.text = "";
 				break;
-			case Item.Type.ARMOR:
+			case ItemData.Type.ARMOR:
 				itemLabel_1.text = "Броня";
-				itemValue_1.text = ((Item.ArmorData)item.getItemData()).getArmorClass().ToString() + " ед.";
+				itemValue_1.text = ((ArmorData)item.getItemData()).armorClass.ToString() + " ед.";
 				itemLabel_2.text = "";
 				itemValue_2.text = "";
 				break;
-			case Item.Type.GENERATOR:
+			case ItemData.Type.GENERATOR:
 				itemLabel_1.text = "Мощность";
-				itemValue_1.text = ((Item.GeneratorData)item.getItemData()).getMaxEnergy().ToString() + " ед.";
+				itemValue_1.text = ((GeneratorData)item.getItemData()).maxEnergy.ToString() + " ед.";
 				itemLabel_2.text = "";
 				itemValue_2.text = "";
 				break;
-			case Item.Type.RADAR:
+			case ItemData.Type.RADAR:
 				itemLabel_1.text = "Дальность";
-				itemValue_1.text = ((Item.RadarData)item.getItemData()).getRange().ToString() + " ед.";
+				itemValue_1.text = ((RadarData)item.getItemData()).range.ToString() + " ед.";
 				itemLabel_2.text = "";
 				itemValue_2.text = "";
 				break;
-			case Item.Type.SHIELD:
+			case ItemData.Type.SHIELD:
 				itemLabel_1.text = "Защита";
-				itemValue_1.text = ((Item.ShieldData)item.getItemData()).getShieldLevel().ToString() + " ед.";
+				itemValue_1.text = ((ShieldData)item.getItemData()).shieldLevel.ToString() + " ед.";
 				itemLabel_2.text = "Перезаряд";
-				itemValue_2.text = ((Item.ShieldData)item.getItemData()).getRechargeSpeed().ToString() + " ед/c.";
+				itemValue_2.text = ((ShieldData)item.getItemData()).rechargeSpeed.ToString() + " ед/c.";
 				break;
-			case Item.Type.REPAIR_DROID:
+			case ItemData.Type.REPAIR_DROID:
 				itemLabel_1.text = "Ремонт";
-				itemValue_1.text = ((Item.RepairDroidData)item.getItemData()).getRepairSpeed().ToString() + " ед/с.";
+				itemValue_1.text = ((RepairDroidData)item.getItemData()).repairSpeed.ToString() + " ед/с.";
 				itemLabel_2.text = "";
 				itemValue_2.text = "";
 				break;
-			case Item.Type.HARVESTER:
+			case ItemData.Type.HARVESTER:
 				itemLabel_1.text = "Поиск";
-				itemValue_1.text = ((Item.HarvesterData)item.getItemData()).getHarvestTime().ToString() + " с.";
+				itemValue_1.text = ((HarvesterData)item.getItemData()).harvestTime.ToString() + " с.";
 				itemLabel_2.text = "";
 				itemValue_2.text = "";
 				break;

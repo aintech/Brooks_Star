@@ -4,80 +4,63 @@ using System.Collections;
 
 public static class ItemFactory {
 
-	private static float qualityMult = 0;
-
-	public static void createItemData (Item item, Item.Type type) {
-
-
-
-		float maxRand = type == Item.Type.WEAPON? Enum.GetNames(typeof(WeaponType)).Length:
-						type == Item.Type.ENGINE?  Enum.GetNames(typeof(EngineType)).Length:
-						type == Item.Type.ARMOR?  Enum.GetNames(typeof(ArmorType)).Length:
-						type == Item.Type.GENERATOR?  Enum.GetNames(typeof(GeneratorType)).Length:
-						type == Item.Type.RADAR?  Enum.GetNames(typeof(RadarType)).Length:
-						type == Item.Type.SHIELD?  Enum.GetNames(typeof(ShieldType)).Length:
-						type == Item.Type.REPAIR_DROID?  Enum.GetNames(typeof(RepairDroidType)).Length:
-						type == Item.Type.HARVESTER?  Enum.GetNames(typeof(HarvesterType)).Length:
-						-1;
-
-		int rand = Mathf.RoundToInt (UnityEngine.Random.value * maxRand);
-		
-		setItemQualityAndLevel (item, type);
-
-		Item.ItemData data = null;
-
+	public static ItemData createItemData (ItemData.Type type) {
 		switch (type) {
-			case Item.Type.WEAPON: data = createWeaponData (item, rand); break;
-			case Item.Type.ENGINE: data = createEngineData (item, rand); break;
-			case Item.Type.ARMOR: data = createArmorData (item, rand); break;
-			case Item.Type.GENERATOR: data = createGeneratorData (item, rand); break;
-			case Item.Type.RADAR: data = createRadarData (item, rand); break;
-			case Item.Type.SHIELD: data = createShieldData (item, rand); break;
-			case Item.Type.REPAIR_DROID: data = createRepairDroidData (item, rand); break;
-			case Item.Type.HARVESTER: data = createHarvesterData (item, rand); break;
+			case ItemData.Type.WEAPON: return createWeaponData (); break;
+			case ItemData.Type.ENGINE: return createEngineData (); break;
+			case ItemData.Type.ARMOR: return createArmorData (); break;
+			case ItemData.Type.GENERATOR: return createGeneratorData (); break;
+			case ItemData.Type.RADAR: return createRadarData (); break;
+			case ItemData.Type.SHIELD: return createShieldData (); break;
+			case ItemData.Type.REPAIR_DROID: return createRepairDroidData (); break;
+			case ItemData.Type.HARVESTER: return createHarvesterData (); break;
+			default: Debug.Log("Unknown type: " + type); return null;
 		}
-
-		setItemValues (item, data, type);
 	}
 
-	private static void setItemQualityAndLevel (Item item, Item.Type type) {
-		if (type == Item.Type.ARMOR) {
-			item.setItemLevel(1);
-			item.setItemQuality(Item.Quality.NORMAL);
-		} else {
-			int randQuality = Mathf.RoundToInt (UnityEngine.Random.value * 100);
-			
-			if (randQuality > 90) item.setItemQuality(Item.Quality.UNIQUE);
-			else if (randQuality > 60) item.setItemQuality(Item.Quality.SUPERIOR);
-			else item.setItemQuality(Item.Quality.NORMAL);
+	private static ItemData.Quality randQuality () {
+		float rand = UnityEngine.Random.value;
+		return rand >= .9f? ItemData.Quality.UNIQUE: rand >= .6f? ItemData.Quality.SUPERIOR: ItemData.Quality.NORMAL;
+	}
 
-			item.setItemLevel(1 + (UnityEngine.Random.value * 0.3f));
+	private static float randLevel () {
+		return 1 + (UnityEngine.Random.value * .3f);
+	}
+
+	private static float qualityMultiplier (ItemData.Quality quality) {
+		return quality == ItemData.Quality.UNIQUE? 3: quality == ItemData.Quality.SUPERIOR? 2: 1;
+	}
+
+	private static int calculateCost (ItemData data) {
+		int cost = 0;
+		switch (data.itemType) {
+			case ItemData.Type.WEAPON: cost = Mathf.RoundToInt(data.level * ((WeaponData)data).type.getCost()); break;
+			case ItemData.Type.ENGINE: cost = Mathf.RoundToInt(data.level * ((EngineData)data).type.getCost()); break;
+			case ItemData.Type.ARMOR: return ((ArmorData)data).type.getCost();
+			case ItemData.Type.GENERATOR: cost = Mathf.RoundToInt(data.level * ((GeneratorData)data).type.getCost()); break;
+			case ItemData.Type.RADAR: cost = Mathf.RoundToInt(data.level * ((RadarData)data).type.getCost()); break;
+			case ItemData.Type.SHIELD: cost = Mathf.RoundToInt(data.level * ((ShieldData)data).type.getCost()); break;
+			case ItemData.Type.REPAIR_DROID: cost = Mathf.RoundToInt(data.level * ((RepairDroidData)data).type.getCost()); break;
+			case ItemData.Type.HARVESTER: cost = Mathf.RoundToInt(data.level * ((HarvesterData)data).type.getCost()); break;
+			default: Debug.Log("Unknown type: " + data.itemType); break;
 		}
-
-		qualityMult = item.getItemQuality() == Item.Quality.UNIQUE? 3: item.getItemQuality() == Item.Quality.SUPERIOR? 2: 1;
+		return Mathf.RoundToInt(cost * (data.quality == ItemData.Quality.UNIQUE? 2.5f: data.quality == ItemData.Quality.SUPERIOR? 1.5f: 1));
 	}
 
-	private static void setItemValues (Item item, Item.ItemData data, Item.Type type) {
-		item.setCost (calculateCost (data, type, item.getItemLevel(), item.getItemQuality()));
-		item.setEnergyNeeded(calculateEnergy(data, type, item.getItemLevel()));
-		item.setItemData(data);
+	private static int calculateEnergy (ItemData data) {
+		switch (data.itemType) {
+			case ItemData.Type.WEAPON: return Mathf.RoundToInt(data.level * ((WeaponData)data).type.getEnergyNeeded());
+			case ItemData.Type.ENGINE: return Mathf.RoundToInt(data.level * ((EngineData)data).type.getEnergyNeeded());
+			case ItemData.Type.RADAR: return Mathf.RoundToInt(data.level * ((RadarData)data).type.getEnergyNeeded());
+			case ItemData.Type.SHIELD: return Mathf.RoundToInt(data.level * ((ShieldData)data).type.getEnergyNeeded());
+			case ItemData.Type.REPAIR_DROID: return Mathf.RoundToInt(data.level * ((RepairDroidData)data).type.getEnergyNeeded());
+			default: return 0;
+		}
 	}
 
-	public static void createWeaponData (Item item, WeaponType type) {
-		setItemQualityAndLevel (item, Item.Type.WEAPON);
-		Item.WeaponData data = createWeaponData (item, type == WeaponType.Blaster? 0:
-		                                                  		type == WeaponType.Plasmer? 1:
-		                                                  		type == WeaponType.Charger? 2:
-		                                                  		type == WeaponType.Emitter? 3:
-		                                                  		type == WeaponType.Waver? 4:
-		                                                  		type == WeaponType.Launcher? 5: 6);
-
-		setItemValues(item, data, Item.Type.WEAPON);
-	}
-
-	private static Item.WeaponData createWeaponData (Item item, int random) {
+	public static WeaponData createWeaponData () {
 		WeaponType type = WeaponType.Blaster;
-		switch (random) {
+		switch (UnityEngine.Random.Range(0, Enum.GetNames(typeof(WeaponType)).Length)) {
 			case 0: type = WeaponType.Blaster; break;
 			case 1: type = WeaponType.Plasmer; break;
 			case 2: type = WeaponType.Charger; break;
@@ -85,151 +68,188 @@ public static class ItemFactory {
 			case 4: type = WeaponType.Waver; break;
 			case 5: type = WeaponType.Launcher; break;
 			case 6: type = WeaponType.Suppressor; break;
+			default: Debug.Log("Unmapped value for weapon"); break;
 		}
-
-		float reloadMulty = item.getItemQuality() == Item.Quality.UNIQUE? 0.6f: item.getItemQuality() == Item.Quality.SUPERIOR? 0.8f: 1;
-
-		int damage = Mathf.RoundToInt(type.getDamage() * item.getItemLevel() * qualityMult);
-		float reloadTime = (type.getReloadTime() / item.getItemLevel()) * reloadMulty;
-		item.setVolume (type.getVolume ());
-		return new Item.WeaponData (type, damage - type.getDamageRange(), damage + type.getDamageRange(), reloadTime);
+		return createWeaponData(type);
 	}
 
-	private static Item.EngineData createEngineData (Item item, int random) {
+	public static WeaponData createWeaponData (WeaponType type) {
+		ItemData.Quality quality = randQuality();
+		float level = randLevel();
+
+		int damage = Mathf.RoundToInt(type.getDamage() * level * qualityMultiplier(quality));
+		float reloadTime = (type.getReloadTime() / level) * (quality == ItemData.Quality.UNIQUE? 0.6f: quality == ItemData.Quality.SUPERIOR? 0.8f: 1);
+
+		WeaponData data = new WeaponData(quality, level, type, damage - type.getDamageRange(), damage + type.getDamageRange(), reloadTime);
+		data.initCommons(calculateCost(data), calculateEnergy(data));
+
+		return data;
+	}
+
+	public static EngineData createEngineData () {
 		EngineType type = EngineType.Force;
-		switch (random) {
+		switch (UnityEngine.Random.Range(0, Enum.GetNames(typeof(EngineType)).Length)) {
 			case 0: type = EngineType.Force; break;
 			case 1: type = EngineType.Gradual; break;
 			case 2: type = EngineType.Proton; break;
 			case 3: type = EngineType.Allur; break;
 			case 4: type = EngineType.Quazar; break;
+			default: Debug.Log("Unmapped value for engine"); break;
 		}
-
-		float power = type.getMainPower() * item.getItemLevel() * qualityMult;
-
-		item.setVolume (type.getVolume());
-		return new Item.EngineData (type, power);
+		return createEngineData(type);
 	}
-	
-	private static Item.ArmorData createArmorData (Item item, int random) {
+
+	public static EngineData createEngineData (EngineType type) {
+		ItemData.Quality quality = randQuality();
+		float level = randLevel();
+
+		float power = type.getMainPower() * level * qualityMultiplier(quality);
+
+		EngineData data = new EngineData(quality, level, type, power);
+		data.initCommons(calculateCost(data), calculateEnergy(data));
+
+		return data;
+	}
+
+	public static ArmorData createArmorData () {
 		ArmorType type = ArmorType.Steel;
-		switch (random) {
+		switch (UnityEngine.Random.Range(0, Enum.GetNames(typeof(ArmorType)).Length)) {
 			case 0: type = ArmorType.Steel; break;
 			case 1: type = ArmorType.HardenedSteel; break;
 			case 2: type = ArmorType.Titan; break;
 			case 3: type = ArmorType.Astron; break;
-			case 4: type = ArmorType.Adamant; break;	
+			case 4: type = ArmorType.Adamant; break;
+			default: Debug.Log("Unmapped value for armor"); break;
 		}
-		item.setVolume (type.getVolume());
-		return new Item.ArmorData (type, type.getArmorClass());
+		return createArmorData(type);
 	}
 
-	private static Item.GeneratorData createGeneratorData (Item item, int random) {
+	public static ArmorData createArmorData (ArmorType type) {
+		ArmorData data = new ArmorData(ItemData.Quality.NORMAL, 1, type, type.getArmorClass());
+		data.initCommons(type.getCost(), 0);
+		return data;
+	}
+
+	public static GeneratorData createGeneratorData () {
 		GeneratorType type = GeneratorType.Atomic;
-		switch (random) {
+		switch (UnityEngine.Random.Range(0, Enum.GetNames(typeof(GeneratorType)).Length)) {
 			case 0: type = GeneratorType.Atomic; break;
 			case 1: type = GeneratorType.Plasma; break;	
 			case 2: type = GeneratorType.Multyphase; break;	
 			case 3: type = GeneratorType.Tunnel; break;	
+			default: Debug.Log("Unmapped value for generator"); break;
 		}
+		return createGeneratorData(type);
+	}
 
-		int maxEnergy = Mathf.RoundToInt(type.getMaxEnergy() * item.getItemLevel() * qualityMult);
+	public static GeneratorData createGeneratorData (GeneratorType type) {
+		ItemData.Quality quality = randQuality();
+		float level = randLevel();
 
-		item.setVolume (type.getVolume());
-		return new Item.GeneratorData (type, maxEnergy);
+		int maxEnergy = Mathf.RoundToInt(type.getMaxEnergy() * level * qualityMultiplier(quality));
+
+		GeneratorData data = new GeneratorData(quality, level, type, maxEnergy);
+		data.initCommons(calculateCost(data), calculateEnergy(data));
+
+		return data;
 	}
 	
-	private static Item.RadarData createRadarData (Item item, int random) {
+	public static RadarData createRadarData () {
 		RadarType type = RadarType.Sequester;
-		switch (random) {
+		switch (UnityEngine.Random.Range(0, Enum.GetNames(typeof(RadarType)).Length)) {
 			case 0: type = RadarType.Sequester; break;
 			case 1: type = RadarType.Planar; break;
 			case 2: type = RadarType.Matrix; break;
 			case 3: type = RadarType.PatanCorsac; break;
 			case 4: type = RadarType.Snake; break;
 			case 5: type = RadarType.Astral; break;	
+			default: Debug.Log("Unmapped value for radar"); break;
 		}
-
-		int range = Mathf.RoundToInt(type.getRange() * item.getItemLevel() * qualityMult);
-
-		item.setVolume (type.getVolume());
-		return new Item.RadarData (type, range);
+		return createRadarData(type);
 	}
-	
-	private static Item.ShieldData createShieldData (Item item, int random) {
+
+	public static RadarData createRadarData (RadarType type) {
+		ItemData.Quality quality = randQuality();
+		float level = randLevel();
+
+		int range = Mathf.RoundToInt(type.getRange() * level * qualityMultiplier(quality));
+
+		RadarData data = new RadarData(quality, level, type, range);
+		data.initCommons(calculateCost(data), calculateEnergy(data));
+
+		return data;
+	}
+
+	public static ShieldData createShieldData () {
 		ShieldType type = ShieldType.Block;
-		switch (random) {
+		switch (UnityEngine.Random.Range(0, Enum.GetNames(typeof(ShieldType)).Length)) {
 			case 0: type = ShieldType.Block; break;
 			case 1: type = ShieldType.Quadratic; break;
 			case 2: type = ShieldType.Cell; break;
 			case 3: type = ShieldType.Phase; break;
+			default: Debug.Log("Unmapped value for shield"); break;
 		}
-
-		int shieldLevel = Mathf.RoundToInt(type.getShieldProtection() * item.getItemLevel() * qualityMult);
-		int rechargeSpeed = Mathf.RoundToInt(type.getRechargeSpeed() * item.getItemLevel() * qualityMult);
-
-		item.setVolume (type.getVolume());
-		return new Item.ShieldData (type, shieldLevel, rechargeSpeed);
+		return createShieldData(type);
 	}
 
-	private static Item.RepairDroidData createRepairDroidData (Item item, int random) {
+	public static ShieldData createShieldData (ShieldType type) {
+		ItemData.Quality quality = randQuality();
+		float level = randLevel();
+
+		int shieldLevel = Mathf.RoundToInt(type.getShieldProtection() * level * qualityMultiplier(quality));
+		int rechargeSpeed = Mathf.RoundToInt(type.getRechargeSpeed() * level * qualityMultiplier(quality));
+
+		ShieldData data = new ShieldData(quality, level, type, shieldLevel, rechargeSpeed);
+		data.initCommons(calculateCost(data), calculateEnergy(data));
+
+		return data;
+	}
+
+	public static RepairDroidData createRepairDroidData () {
 		RepairDroidType type = RepairDroidType.Rail;
-		switch (random) {
+		switch (UnityEngine.Random.Range(0, Enum.GetNames(typeof(RepairDroidType)).Length)) {
 			case 0: type = RepairDroidType.Rail; break;
 			case 1: type = RepairDroidType.Channel; break;
 			case 2: type = RepairDroidType.Biphasic; break;
-			case 3: type = RepairDroidType.Thread; break;	
+			case 3: type = RepairDroidType.Thread; break;
+			default: Debug.Log("Unmapped value for repair droid"); break;
 		}
-
-		int repairSpeed = Mathf.RoundToInt(type.getRepairSpeed() * item.getItemLevel() * qualityMult);
-
-		item.setVolume (type.getVolume());
-		return new Item.RepairDroidData (type, repairSpeed);
+		return createRepairDroidData(type);
 	}
-	
-	private static Item.HarvesterData createHarvesterData (Item item, int random) {
+
+	public static RepairDroidData createRepairDroidData (RepairDroidType type) {
+		ItemData.Quality quality = randQuality();
+		float level = randLevel();
+
+		int repairSpeed = Mathf.RoundToInt(type.getRepairSpeed() * level * qualityMultiplier(quality));
+
+		RepairDroidData data = new RepairDroidData(quality, level, type, repairSpeed);
+		data.initCommons(calculateCost(data), calculateEnergy(data));
+
+		return data;
+	}
+
+	public static HarvesterData createHarvesterData () {
 		HarvesterType type = HarvesterType.Mechanical;
-		switch (random) {
+		switch (UnityEngine.Random.Range(0, Enum.GetNames(typeof(HarvesterType)).Length)) {
 			case 0: type = HarvesterType.Mechanical; break;
 			case 1: type = HarvesterType.Plasmatic; break;
-			case 2: type = HarvesterType.Generative; break;	
+			case 2: type = HarvesterType.Generative; break;
+			default: Debug.Log("Unmapped value for harvester"); break;
 		}
-
-		float harvestMulty = item.getItemQuality() == Item.Quality.UNIQUE? 0.6f: item.getItemQuality() == Item.Quality.SUPERIOR? 0.8f: 1;
-		int harvestTime = Mathf.RoundToInt(type.getHarvestTime() / item.getItemLevel() * harvestMulty);
-
-		item.setVolume (type.getVolume());
-		return new Item.HarvesterData (type, harvestTime);
+		return createHarvesterData(type);
 	}
 
-	private static int calculateCost (Item.ItemData data, Item.Type type, float itemLevel, Item.Quality itemQuality) {
-		int cost = 0;
-		switch (type) {
-			case Item.Type.WEAPON: cost = Mathf.RoundToInt(itemLevel * ((Item.WeaponData)data).getType().getCost()); break;
-			case Item.Type.ENGINE: cost = Mathf.RoundToInt(itemLevel * ((Item.EngineData)data).getType().getCost()); break;
-			case Item.Type.ARMOR: return ((Item.ArmorData)data).getType().getCost();
-			case Item.Type.GENERATOR: cost = Mathf.RoundToInt(itemLevel * ((Item.GeneratorData)data).getType().getCost()); break;
-			case Item.Type.RADAR: cost = Mathf.RoundToInt(itemLevel * ((Item.RadarData)data).getType().getCost()); break;
-			case Item.Type.SHIELD: cost = Mathf.RoundToInt(itemLevel * ((Item.ShieldData)data).getType().getCost()); break;
-			case Item.Type.REPAIR_DROID: cost = Mathf.RoundToInt(itemLevel * ((Item.RepairDroidData)data).getType().getCost()); break;
-			case Item.Type.HARVESTER: cost = Mathf.RoundToInt(itemLevel * ((Item.HarvesterData)data).getType().getCost()); break;
-			default: cost = 0; break;
-		}
-		return Mathf.RoundToInt(cost * (itemQuality == Item.Quality.UNIQUE? 2.5f: itemQuality == Item.Quality.SUPERIOR? 1.5f: 1));
-	}
+	public static HarvesterData createHarvesterData (HarvesterType type) {
+		ItemData.Quality quality = randQuality();
+		float level = randLevel();
 
-	private static int calculateEnergy (Item.ItemData data, Item.Type type, float itemLevel) {
-		switch (type) {
-			case Item.Type.WEAPON: return Mathf.RoundToInt(itemLevel * ((Item.WeaponData)data).getType().getEnergyNeeded());//randomizeValue(((Item.WeaponData)data).getType().getEnergyNeeded());
-			case Item.Type.ENGINE: return Mathf.RoundToInt(itemLevel * ((Item.EngineData)data).getType().getEnergyNeeded());
-			case Item.Type.RADAR: return Mathf.RoundToInt(itemLevel * ((Item.RadarData)data).getType().getEnergyNeeded());
-			case Item.Type.SHIELD: return Mathf.RoundToInt(itemLevel * ((Item.ShieldData)data).getType().getEnergyNeeded());
-			case Item.Type.REPAIR_DROID: return Mathf.RoundToInt(itemLevel * ((Item.RepairDroidData)data).getType().getEnergyNeeded());
-			default: return 0;
-		}
-	}
+		float harvestMulty = quality == ItemData.Quality.UNIQUE? 0.6f: quality == ItemData.Quality.SUPERIOR? 0.8f: 1;
+		int harvestTime = Mathf.RoundToInt((type.getHarvestTime() / level) * harvestMulty);
 
-	private static int randomizeValue (int value) {
-		return Utils.getRandomValue(value, 30);
+		HarvesterData data = new HarvesterData(quality, level, type, harvestTime);
+		data.initCommons(calculateCost(data), calculateEnergy(data));
+
+		return data;
 	}
 }

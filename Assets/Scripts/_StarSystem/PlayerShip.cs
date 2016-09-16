@@ -26,8 +26,8 @@ public class PlayerShip : Ship {
 	
 	private void initEngine () {
 		Item engineItem = shipData.getSlotByName ("Engine Slot").getItem ();
-		Item.EngineData data = (Item.EngineData)engineItem.getItemData ();
-		engine.setEngine (data.getType(), data.getPower(), data.getType().getRotatePower());
+		EngineData data = (EngineData)engineItem.getItemData ();
+		engine.setEngine (data.type, data.power, data.type.getRotatePower());
 		setEngineSprite();
 	}
 
@@ -38,11 +38,11 @@ public class PlayerShip : Ship {
 		HullSlot slot4 = shipData.getSlotByName("Weapon Slot 4");
 		HullSlot slot5 = shipData.getSlotByName("Weapon Slot 5");
 
-		Item.WeaponData slot1WeaponData = slot1.getItem() == null? null: (Item.WeaponData)slot1.getItem().getItemData();
-		Item.WeaponData slot2WeaponData = slot2.getItem() == null? null: (Item.WeaponData)slot2.getItem().getItemData();
-		Item.WeaponData slot3WeaponData = slot3.getItem() == null? null: (Item.WeaponData)slot3.getItem().getItemData();
-		Item.WeaponData slot4WeaponData = slot4.getItem() == null? null: (Item.WeaponData)slot4.getItem().getItemData();
-		Item.WeaponData slot5WeaponData = slot5.getItem() == null? null: (Item.WeaponData)slot5.getItem().getItemData();
+		WeaponData slot1WeaponData = slot1.getItem() == null? null: (WeaponData)slot1.getItem().getItemData();
+		WeaponData slot2WeaponData = slot2.getItem() == null? null: (WeaponData)slot2.getItem().getItemData();
+		WeaponData slot3WeaponData = slot3.getItem() == null? null: (WeaponData)slot3.getItem().getItemData();
+		WeaponData slot4WeaponData = slot4.getItem() == null? null: (WeaponData)slot4.getItem().getItemData();
+		WeaponData slot5WeaponData = slot5.getItem() == null? null: (WeaponData)slot5.getItem().getItemData();
 
 		if (slot1WeaponData != null) initWeapon (slot1WeaponData, 1);
 		if (slot2WeaponData != null) initWeapon (slot2WeaponData, 2);
@@ -51,10 +51,10 @@ public class PlayerShip : Ship {
 		if (slot5WeaponData != null) initWeapon (slot5WeaponData, 5);
 	}
 	
-	private void initWeapon(Item.WeaponData data, int weaponIndex) {
+	private void initWeapon(WeaponData data, int weaponIndex) {
 		Weapon weapon = null;
 		
-		switch (data.getType()) {
+		switch (data.type) {
 			case WeaponType.Blaster: weapon = Instantiate<Transform>(blasterPrefab).GetComponent<Blaster>(); break;
 			case WeaponType.Plasmer: weapon = Instantiate<Transform>(plasmerPrefab).GetComponent<Plasmer>(); break;
 			case WeaponType.Charger: weapon = Instantiate<Transform>(chargerPrefab).GetComponent<Charger>(); break;
@@ -64,9 +64,9 @@ public class PlayerShip : Ship {
 			case WeaponType.Suppressor: weapon = Instantiate<Transform>(suppressorPrefab).GetComponent<Suppressor>(); break;
 		}
 		
-		weapon.setWeaponType(data.getType());
-		weapon.setDamage(data.getMinDamage(), data.getMaxDamage());
-		weapon.setReloadTime(data.getReloadTime());
+		weapon.setWeaponType(data.type);
+		weapon.setDamage(data.minDamage, data.maxDamage);
+		weapon.setReloadTime(data.reloadTime);
 		weapon.setAsPlayerWeapon();
 		
 		weapon.transform.SetParent(transform);

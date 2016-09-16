@@ -34,15 +34,13 @@ public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 			if (Utils.hit.name.Equals("Cell")) {
 				Item item = Utils.hit.transform.GetComponent<InventoryCell>().getItem();
 				if (item != null) {
-					if (item.getCell().getInventory().getInventoryType() != Inventory.InventoryType.INUSE) {
-						draggedItem = Utils.hit.transform.GetComponent<InventoryCell>().takeItem();
-						draggedItem.GetComponent<Renderer>().sortingOrder = 4;
-					}
+					draggedItem = Utils.hit.transform.GetComponent<InventoryCell>().takeItem();
+					draggedItem.GetComponent<Renderer>().sortingOrder = 4;
 					choseItem(item);
 					chosenItemBorder.transform.position = item.transform.position;
 					chosenItemBorder.gameObject.SetActive(true);
 				}
-			} else if (Utils.hit.name.Contains(" Slot")) {
+			} else if (Utils.hit.name.StartsWith("HullSlot")) {
 				Item item = Utils.hit.transform.GetComponent<HullSlot>().getItem();
 				if (item != null) {
 					choseDraggedItemFromSlot(Utils.hit.transform.GetComponent<HullSlot>());

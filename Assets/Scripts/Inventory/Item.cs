@@ -13,31 +13,14 @@ public class Item : MonoBehaviour {
 
 	private int index;
 
-	private Type itemType;
-
-	private Kind itemKind;
-
-	private Quality itemQuality;
-
-	private float itemLevel;
-
 	private ItemData itemData;
 
-	private int cost;
-
-	private int energyNeeded;
-	
-	private float volume;
-
-	private void initType (ItemData itemData, Type itemType) {
+	public Item init (ItemData itemData) {
 		this.itemData = itemData;
-		this.itemType = itemType;
-		setItemKind();
-
 		if (render == null) render = transform.GetComponent<SpriteRenderer>();
-		switch (itemType) {
-			case Type.WEAPON:
-				WeaponType weaponType = ((WeaponData)itemData).getType();
+		switch (itemData.itemType) {
+			case ItemData.Type.WEAPON:
+				WeaponType weaponType = ((WeaponData)itemData).type;
 				switch (weaponType) {
 					case WeaponType.Blaster: render.sprite = weaponSprites[0]; break;
 					case WeaponType.Plasmer: render.sprite = weaponSprites[1]; break;
@@ -48,8 +31,8 @@ public class Item : MonoBehaviour {
 					case WeaponType.Suppressor: render.sprite = weaponSprites[6]; break;
 					default: Debug.Log("Неизвестный тип оружия"); break;
 				} break;
-			case Type.ENGINE:
-				EngineType engineType = ((EngineData)itemData).getType();
+			case ItemData.Type.ENGINE:
+				EngineType engineType = ((EngineData)itemData).type;
 				switch (engineType) {
 					case EngineType.Force: render.sprite = engineSprites[0]; break;
 					case EngineType.Gradual: render.sprite = engineSprites[1]; break;
@@ -58,8 +41,8 @@ public class Item : MonoBehaviour {
 					case EngineType.Quazar: render.sprite = engineSprites[4]; break;
 					default: Debug.Log("Неизвестный тип двигателя"); break;
 				} break;
-			case Type.ARMOR:
-				ArmorType armorType = ((ArmorData)itemData).getType();
+			case ItemData.Type.ARMOR:
+				ArmorType armorType = ((ArmorData)itemData).type;
 				switch (armorType) {
 					case ArmorType.Steel: render.sprite = armorSprites[0]; break;
 					case ArmorType.HardenedSteel: render.sprite = armorSprites[1]; break;
@@ -68,8 +51,8 @@ public class Item : MonoBehaviour {
 					case ArmorType.Adamant: render.sprite = armorSprites[4]; break;
 					default: Debug.Log("Неизвестный тип брони"); break;
 				} break;
-			case Type.GENERATOR:
-				GeneratorType generatorType = ((GeneratorData)itemData).getType();
+			case ItemData.Type.GENERATOR:
+				GeneratorType generatorType = ((GeneratorData)itemData).type;
 				switch (generatorType) {
 					case GeneratorType.Atomic: render.sprite = generatorSprites[0]; break;
 					case GeneratorType.Plasma: render.sprite = generatorSprites[1]; break;
@@ -77,8 +60,8 @@ public class Item : MonoBehaviour {
 					case GeneratorType.Tunnel: render.sprite = generatorSprites[3]; break;
 					default: Debug.Log("Неизвестный тип генератора"); break;
 				} break;
-			case Type.RADAR:
-				RadarType radarType = ((RadarData)itemData).getType();
+			case ItemData.Type.RADAR:
+				RadarType radarType = ((RadarData)itemData).type;
 				switch (radarType) {
 					case RadarType.Sequester: render.sprite = radarSprites[0]; break;
 					case RadarType.Planar: render.sprite = radarSprites[1]; break;
@@ -88,8 +71,8 @@ public class Item : MonoBehaviour {
 					case RadarType.Astral: render.sprite = radarSprites[5]; break;
 					default: Debug.Log("Неизвестный тип радара"); break;
 				} break;
-			case Type.SHIELD:
-				ShieldType shieldType = ((ShieldData)itemData).getType();
+			case ItemData.Type.SHIELD:
+				ShieldType shieldType = ((ShieldData)itemData).type;
 				switch (shieldType) {
 					case ShieldType.Block: render.sprite = shieldSprites[0]; break;
 					case ShieldType.Quadratic: render.sprite = shieldSprites[1]; break;
@@ -97,8 +80,8 @@ public class Item : MonoBehaviour {
 					case ShieldType.Phase: render.sprite = shieldSprites[3]; break;
 					default: Debug.Log("Неизвестный тип щита"); break;
 				} break;
-			case Type.REPAIR_DROID:
-				RepairDroidType droidType = ((RepairDroidData)itemData).getType();
+			case ItemData.Type.REPAIR_DROID:
+				RepairDroidType droidType = ((RepairDroidData)itemData).type;
 				switch (droidType) {
 					case RepairDroidType.Rail: render.sprite = repairDroidSprites[0]; break;
 					case RepairDroidType.Channel: render.sprite = repairDroidSprites[1]; break;
@@ -106,8 +89,8 @@ public class Item : MonoBehaviour {
 					case RepairDroidType.Thread: render.sprite = repairDroidSprites[3]; break;
 					default: Debug.Log("Неизвестный тип ремонтного робота"); break;
 				} break;
-			case Type.HARVESTER:
-				HarvesterType harvesterType = ((HarvesterData)itemData).getType();
+			case ItemData.Type.HARVESTER:
+				HarvesterType harvesterType = ((HarvesterData)itemData).type;
 				switch (harvesterType) {
 					case HarvesterType.Mechanical: render.sprite = harvesterSprites[0]; break;
 					case HarvesterType.Plasmatic: render.sprite = harvesterSprites[1]; break;
@@ -115,25 +98,11 @@ public class Item : MonoBehaviour {
 					default: Debug.Log("Неизвестный тип сборщика"); break;
 				} break;
 		}
+		return this;
 	}
 
-	private void setItemKind () {
-		switch (itemType) {
-			case Type.ARMOR: case Type.ENGINE: case Type.GENERATOR: case Type.HARVESTER: case Type.RADAR: case Type.REPAIR_DROID: case Type.SHIELD: case Type.WEAPON:
-				itemKind = Kind.EQUIPMENT;
-				break;
-			case Type.HAND_WEAPON: case Type.BODY_ARMOR:
-				itemKind = Kind.GEAR;
-				break;
-			case Type.GOLD:
-				itemKind = Kind.GOOD;
-				break;
-			default: Debug.Log("Unknown item type: " + itemType); break;
-		}
-	}
-
-	public Kind getItemKind () {
-		return itemKind;
+	public ItemData.Kind getItemKind () {
+		return  itemData.kind;
 	}
 
 	public void returnToParentInventory () {
@@ -157,59 +126,28 @@ public class Item : MonoBehaviour {
 		this.hullSlot = hullSlot;
 	}
 
-	public void setVolume (float volume) {
-		this.volume = volume;
-	}
-
 	public float getVolume () {
-		return volume;
+		return itemData.volume;
 	}
-
-	public void setCost (int cost) {
-		this.cost = cost;
-	} 
 
 	public int getCost () {
-		return cost;
-	}
-
-	public void setEnergyNeeded (int energyNeeded) {
-		this.energyNeeded = energyNeeded;
+		return itemData.cost;
 	}
 
 	public int getEnergyNeeded () {
-		return energyNeeded;
+		return itemData.energyNeeded;
 	}
 
-	public Type getItemType () {
-		return itemType;
+	public ItemData.Type getItemType () {
+		return itemData.itemType;
 	}
 
-	public void setItemQuality (Quality itemQuality) {
-		this.itemQuality = itemQuality;
-	}
-
-	public Quality getItemQuality () {
-		return itemQuality;
-	}
-
-	public void setItemLevel (float itemLevel) {
-		this.itemLevel = itemLevel;
+	public ItemData.Quality getItemQuality () {
+		return itemData.quality;
 	}
 
 	public float getItemLevel () {
-		return itemLevel;
-	}
-	
-	public void setItemData (ItemData itemData) {
-		if (itemData is WeaponData) initType (itemData, Type.WEAPON);
-		else if (itemData is EngineData) initType (itemData, Type.ENGINE);
-		else if (itemData is ArmorData) initType (itemData, Type.ARMOR);
-		else if (itemData is GeneratorData) initType (itemData, Type.GENERATOR);
-		else if (itemData is RadarData) initType (itemData, Type.RADAR);
-		else if (itemData is ShieldData) initType (itemData, Type.SHIELD);
-		else if (itemData is RepairDroidData) initType (itemData, Type.REPAIR_DROID);
-		else if (itemData is HarvesterData) initType (itemData, Type.HARVESTER);
+		return itemData.level;
 	}
 
 	public ItemData getItemData () {
@@ -217,165 +155,10 @@ public class Item : MonoBehaviour {
 	}
 
 	public string getItemName () {
-		return getItemData ().getItemName ();
+		return itemData.name;
 	}
 
 	public string getItemDescription () {
-		return getItemData ().getItemDescription ();
-	}
-
-	public void initialaizeFromSource (Item source) {
-		setItemData (source.getItemData ());
-		setItemLevel (source.getItemLevel ());
-		setItemQuality (source.getItemQuality ());
-		setCost (source.getCost ());
-		setEnergyNeeded (source.getEnergyNeeded ());
-		setVolume (source.getVolume ());
-	}
-
-	public enum Kind {
-		GOOD, GEAR, EQUIPMENT
-	}
-
-	public enum Type {
-		WEAPON, ENGINE, ARMOR, GENERATOR, RADAR, SHIELD, REPAIR_DROID, HARVESTER,
-		HAND_WEAPON, BODY_ARMOR,
-		GOLD
-	}
-
-	public enum Quality {
-		NORMAL, SUPERIOR, UNIQUE//Normal - обычное, Superior - отличное, Unique - уникальное
-	}
-
-	public abstract class ItemData {
-		public abstract string getItemName ();
-		public abstract string getItemDescription ();
-	}
-
-	public class WeaponData : ItemData {
-		private WeaponType type;
-		private int minDamage, maxDamage;
-		private float reloadTime;
-
-		public WeaponData (WeaponType type, int minDamage, int maxDamage, float reloadTime) {
-			this.type = type;
-			this.minDamage = minDamage;
-			this.maxDamage = maxDamage;
-			this.reloadTime = reloadTime;
-		}
-		
-		public int getMinDamage () { return minDamage; }
-		public int getMaxDamage () { return maxDamage; }
-		public float getReloadTime () { return reloadTime; }
-		public WeaponType getType () { return type; }
-		public override string getItemName () { return type.getName(); }
-		public override string getItemDescription () { return type.getDescription(); }
-	}
-
-	public class EngineData : ItemData {
-		private EngineType type;
-		private float power;
-
-		public EngineData (EngineType type, float power) {
-			this.type = type;
-			this.power = power;
-		}
-
-		public float getPower () { return power; }
-		public EngineType getType () { return type; }
-		public override string getItemName () { return type.getName(); }
-		public override string getItemDescription () { return type.getDescription(); }
-	}
-	
-	public class ArmorData : ItemData {
-		private ArmorType type;
-		private int armorClass;
-
-		public ArmorData (ArmorType type, int armorClass) {
-			this.type = type;
-			this.armorClass = armorClass;
-		}
-
-		public int getArmorClass () { return armorClass; }
-		public ArmorType getType () { return type; }
-		public override string getItemName () { return type.getName(); }
-		public override string getItemDescription () { return type.getDescription(); }
-	}
-
-	public class GeneratorData : ItemData {
-		private GeneratorType type;
-		private int maxEnergy;
-		
-		public GeneratorData (GeneratorType type, int maxEnergy) {
-			this.type = type;
-			this.maxEnergy = maxEnergy;
-		}
-		
-		public int getMaxEnergy () { return maxEnergy; }
-		public GeneratorType getType () { return type; }
-		public override string getItemName () { return type.getName(); }
-		public override string getItemDescription () { return type.getDescription(); }
-	}
-
-	public class RadarData : ItemData {
-		private RadarType type;
-		private int range;
-
-		public RadarData (RadarType type, int range) {
-			this.type = type;
-			this.range = range;
-		}
-
-		public int getRange () { return range; }
-		public RadarType getType () { return type; }
-		public override string getItemName () { return type.getName(); }
-		public override string getItemDescription () { return type.getDescription(); }
-	}
-	
-	public class ShieldData : ItemData {
-		private ShieldType type;
-		private int shieldLevel, rechargeSpeed;
-		
-		public ShieldData (ShieldType type, int shieldLevel, int rechargeSpeed) {
-			this.type = type;
-			this.shieldLevel = shieldLevel;
-			this.rechargeSpeed = rechargeSpeed;
-		}
-
-		public int getShieldLevel () { return shieldLevel; }
-		public int getRechargeSpeed () { return rechargeSpeed; }
-		public ShieldType getType () { return type; }
-		public override string getItemName () { return type.getName(); }
-		public override string getItemDescription () { return type.getDescription(); }
-	}
-
-	public class RepairDroidData : ItemData {
-		private RepairDroidType type;
-		private int repairSpeed;
-		
-		public RepairDroidData (RepairDroidType type, int repairSpeed) {
-			this.type = type;
-			this.repairSpeed = repairSpeed;
-		}
-
-		public int getRepairSpeed () { return repairSpeed; }
-		public RepairDroidType getType () { return type; }
-		public override string getItemName () { return type.getName(); }
-		public override string getItemDescription () { return type.getDescription(); }
-	}
-	
-	public class HarvesterData : ItemData {
-		private HarvesterType type;
-		private int harvestTime;
-
-		public HarvesterData (HarvesterType type, int harvestTime) {
-			this.type = type;
-			this.harvestTime = harvestTime;
-		}
-
-		public int getHarvestTime () { return harvestTime; }
-		public HarvesterType getType () { return type; }
-		public override string getItemName () { return type.getName(); }
-		public override string getItemDescription () { return type.getDescription(); }
+		return itemData.description;
 	}
 }

@@ -143,8 +143,6 @@ public class HullsMarket : MonoBehaviour, ButtonHolder {
 
 		chosenHull.setHullType(oldHullType);
 		selectCell(chosenHull.getCell());
-
-		transform.parent.GetComponent<MarketScreen>().transform.FindChild("Equipments Market").GetComponent<EquipmentsMarket>().updateInUseInventory();
 	}
 
 	private void checkInventoryCapacity () {
