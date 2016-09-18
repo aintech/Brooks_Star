@@ -46,7 +46,7 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 
 		statusScreen = GameObject.Find("Status Screen").GetComponent<StatusScreen>().init(true, inventory, storage, null);
 
-		Vars.userInterface = GameObject.FindGameObjectWithTag("UserInterface").GetComponent<UserInterface>().init(statusScreen, null, null, null);
+		Vars.userInterface = GameObject.FindGameObjectWithTag("UserInterface").GetComponent<UserInterface>().init(statusScreen, null, null);
 
 		messageBox = GameObject.Find("Message Box").GetComponent<MessageBox>();
 		story = GameObject.Find("Storyline").GetComponent<Storyline>();
@@ -88,7 +88,7 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 	public void leavePlanet () {
 		if (statusScreen.getShipData().getEnergyNeeded() < 0) {
 			Messenger.showMessage("Кораблю не хватает энергии");
-		} else if (statusScreen.getShipData().getSlotByType(HullSlot.HullSlotType.Engine, 0).getItem() == null) {
+		} else if (statusScreen.getShipData().getSlot(HullSlot.Type.ENGINE, 0).item == null) {
 			Messenger.showMessage("У корабля отсутствует двигатель");
 		} else {
 			sendToVars();

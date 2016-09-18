@@ -8,9 +8,7 @@ public class StarSystem : MonoBehaviour {
 	public Transform planetPrefab, playerShipPrefab, enemyShipPrefab;
 
 	public static bool gamePaused {  get; private set;}
-
-	private static ShipInformationScreen shipInfoScreen;
-
+    
 	private static StatusScreen statusScreen;
 
 	private SpriteRenderer backgroundGalaxy, star;
@@ -47,9 +45,7 @@ public class StarSystem : MonoBehaviour {
 		backgroundGalaxy.gameObject.SetActive(true);
         star = transform.Find("Star").GetComponent<SpriteRenderer>();
         star.gameObject.SetActive(true);
-
-		shipInfoScreen = GameObject.Find ("Ship Information").GetComponent<ShipInformationScreen> ();
-
+        
 		inventory = GameObject.Find("Inventories").transform.Find ("Inventory").GetComponent<Inventory> ().init(Inventory.InventoryType.INVENTORY);
 		storage = GameObject.Find("Inventories").transform.Find ("Storage").GetComponent<Inventory> ().init(Inventory.InventoryType.STORAGE);
 
@@ -64,7 +60,7 @@ public class StarSystem : MonoBehaviour {
 		initPlayerShip ();
 //		shipInfoScreen.init(this, shipData, inventory);
 
-		Vars.userInterface = GameObject.FindGameObjectWithTag("UserInterface").GetComponent<UserInterface>().init(statusScreen, this, shipInfoScreen, playerShip);
+		Vars.userInterface = GameObject.FindGameObjectWithTag("UserInterface").GetComponent<UserInterface>().init(statusScreen, this, playerShip);
 
 		shieldsPool = GameObject.Find("ShieldsPool").GetComponent<ShieldsPool>();
 
@@ -132,7 +128,7 @@ public class StarSystem : MonoBehaviour {
 	}
 
 	public static void setGamePause (bool paused) {
-		if (!paused && ((shipInfoScreen != null && shipInfoScreen.gameObject.activeInHierarchy) || (statusScreen != null && statusScreen.gameObject.activeInHierarchy))) { return; }
+        if (!paused && (statusScreen != null && statusScreen.gameObject.activeInHierarchy)) { return; }
 		gamePaused = paused;
 	}
 

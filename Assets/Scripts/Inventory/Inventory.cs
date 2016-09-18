@@ -131,11 +131,11 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 
 		foreach (KeyValuePair<int, Item> pair in getItems ()) {
 			Item item = pair.Value;
-			item.setCell(null);
+			item.cell = null;
 			if (pair.Key >= offset && pair.Key < (cells.Length + offset)) {
 				InventoryCell cell = getCell (pair.Key - offset);
 				cell.setItem (item);
-				item.setCell (cell);
+				item.cell = cell;
 				item.transform.position = cell.transform.position;
 				item.gameObject.SetActive (true);
 			} else {
@@ -157,7 +157,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 	}
 
 	public void sellItemToTrader (Item item, Inventory buybackInventory) {
-		Inventory source = item.getCell ().transform.parent.GetComponent<Inventory> ();
+		Inventory source = item.cell.transform.parent.GetComponent<Inventory> ();
 		if (source != null) {
 			source.calculateFreeVolume();
 		}
@@ -171,7 +171,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 			return;
 		}
 
-		Inventory source = item.getCell() == null? null: item.getCell().getInventory();
+		Inventory source = item.cell == null? null: item.cell.getInventory();
 
 		if (source != this) {
 			if (inventoryType == InventoryType.BUYBACK) {
@@ -197,7 +197,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		}
 		if (source != null && source.inventoryType == InventoryType.INVENTORY) { source.calculateFreeVolume(); }
 
-		InventoryCell prevCell = item.getCell();
+		InventoryCell prevCell = item.cell;
 		Item prevItem = null;
 
 		if (cell.getItem () != null) prevItem = cell.takeItem ();
@@ -389,7 +389,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		int weight = 0;
 		foreach (Item item in list) {
 			if (type == ItemData.Type.WEAPON) {
-				WeaponData data = (WeaponData) item.getItemData();
+				WeaponData data = (WeaponData) item.itemData;
 				switch (data.type) {
 					case WeaponType.Blaster: weight = 1000000; break;
 					case WeaponType.Plasmer: weight = 2000000; break;
@@ -402,25 +402,25 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 				}
 				weight += item.getCost();
 			} else if (type == ItemData.Type.ENGINE) {
-				EngineData data = (EngineData) item.getItemData();
+				EngineData data = (EngineData) item.itemData;
 				weight = Mathf.RoundToInt(data.power * 1000);
 			} else if (type == ItemData.Type.ARMOR) {
-				ArmorData data = (ArmorData) item.getItemData();
+				ArmorData data = (ArmorData) item.itemData;
 				weight = data.armorClass * 1000;
 			} else if (type == ItemData.Type.GENERATOR) {
-				GeneratorData data = (GeneratorData) item.getItemData();
+				GeneratorData data = (GeneratorData) item.itemData;
 				weight = data.maxEnergy;
 			} else if (type == ItemData.Type.RADAR) {
-				RadarData data = (RadarData) item.getItemData();
+				RadarData data = (RadarData) item.itemData;
 				weight = data.range;
 			} else if (type == ItemData.Type.SHIELD) {
-				ShieldData data = (ShieldData) item.getItemData();
+				ShieldData data = (ShieldData) item.itemData;
 				weight = data.shieldLevel;
 			} else if (type == ItemData.Type.REPAIR_DROID) {
-				RepairDroidData data = (RepairDroidData) item.getItemData();
+				RepairDroidData data = (RepairDroidData) item.itemData;
 				weight = data.repairSpeed;
 			} else if (type == ItemData.Type.HARVESTER) {
-				HarvesterData data = (HarvesterData) item.getItemData();
+				HarvesterData data = (HarvesterData) item.itemData;
 				weight = 1000000 - data.harvestTime;
 			}
 			while(weights.ContainsKey(weight)) {
@@ -465,8 +465,8 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 	private void clearInventory () {
 		Dictionary<int, Item> spare = new Dictionary<int, Item>(getItems());
 		foreach (KeyValuePair<int, Item> pair in spare) {
-			if (pair.Value.getCell() != null) {
-				pair.Value.getCell().takeItem();
+			if (pair.Value.cell != null) {
+				pair.Value.cell.takeItem();
 			}
 			Destroy(pair.Value.gameObject);
 		}
@@ -489,7 +489,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		} else {
 			inventoryToSend.Clear();
 			foreach (KeyValuePair<int, Item> pair in items) {
-				inventoryToSend.Add(pair.Key, pair.Value.getItemData());
+				inventoryToSend.Add(pair.Key, pair.Value.itemData);
 			}
 			clearInventory();
 		}

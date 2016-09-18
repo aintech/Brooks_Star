@@ -25,20 +25,20 @@ public class PlayerShip : Ship {
 	}
 	
 	private void initEngine () {
-		Item engineItem = shipData.getSlotByName ("Engine Slot").getItem ();
-		EngineData data = (EngineData)engineItem.getItemData ();
+		Item engineItem = shipData.getSlot (HullSlot.Type.ENGINE, 0).item;
+		EngineData data = (EngineData)engineItem.itemData;
 		engine.setEngine (data.type, data.power, data.type.getRotatePower());
 		setEngineSprite();
 	}
 
 	private void initWeapons () {
-		HullSlot slot1 = shipData.getSlotByName("Weapon Slot 1");
-		HullSlot slot2 = shipData.getSlotByName("Weapon Slot 2");
-		HullSlot slot3 = shipData.getSlotByName("Weapon Slot 3");
-		HullSlot slot4 = shipData.getSlotByName("Weapon Slot 4");
-		HullSlot slot5 = shipData.getSlotByName("Weapon Slot 5");
+		HullSlot slot1 = shipData.getSlot(HullSlot.Type.WEAPON, 1);
+		HullSlot slot2 = shipData.getSlot(HullSlot.Type.WEAPON, 2);
+        HullSlot slot3 = shipData.getSlot(HullSlot.Type.WEAPON, 3);
+        HullSlot slot4 = shipData.getSlot(HullSlot.Type.WEAPON, 4);
+        HullSlot slot5 = shipData.getSlot(HullSlot.Type.WEAPON, 5);
 
-		WeaponData slot1WeaponData = slot1.getItem() == null? null: (WeaponData)slot1.getItem().getItemData();
+        WeaponData slot1WeaponData = slot1.getItem() == null? null: (WeaponData)slot1.getItem().getItemData();
 		WeaponData slot2WeaponData = slot2.getItem() == null? null: (WeaponData)slot2.getItem().getItemData();
 		WeaponData slot3WeaponData = slot3.getItem() == null? null: (WeaponData)slot3.getItem().getItemData();
 		WeaponData slot4WeaponData = slot4.getItem() == null? null: (WeaponData)slot4.getItem().getItemData();

@@ -7,13 +7,11 @@ public class Item : MonoBehaviour {
 
 	private SpriteRenderer render;
 
-	private InventoryCell cell;
+    public InventoryCell cell;
 
-	private HullSlot hullSlot;
-
-	private int index;
-
-	private ItemData itemData;
+	public HullSlot hullSlot;
+    
+	public ItemData itemData { get; private set; }
 
 	public Item init (ItemData itemData) {
 		this.itemData = itemData;
@@ -107,23 +105,7 @@ public class Item : MonoBehaviour {
 
 	public void returnToParentInventory () {
 		Inventory inventory = transform.parent.GetComponent<Inventory> ();
-		inventory.addItemToCell (this, getCell());
-	}
-
-	public InventoryCell getCell() {
-		return cell;
-	}
-
-	public void setCell(InventoryCell cell) {
-		this.cell = cell;
-	}
-
-	public HullSlot getHullSlot () {
-		return hullSlot;
-	}
-
-	public void setHullSlot (HullSlot hullSlot) {
-		this.hullSlot = hullSlot;
+		inventory.addItemToCell (this, cell);
 	}
 
 	public float getVolume () {
@@ -148,10 +130,6 @@ public class Item : MonoBehaviour {
 
 	public float getItemLevel () {
 		return itemData.level;
-	}
-
-	public ItemData getItemData () {
-		return itemData;
 	}
 
 	public string getItemName () {

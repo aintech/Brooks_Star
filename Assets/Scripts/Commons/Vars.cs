@@ -10,7 +10,7 @@ public static class Vars {
 
 	public static HullType shipHullType = HullType.Corvette;
 
-	public static Dictionary<string, ItemData> shipHullSlotsMap = new Dictionary<string, ItemData> ();
+	public static Dictionary<KeyValuePair<HullSlot.Type, int>, ItemData> shipHullSlotsMap = new Dictionary<KeyValuePair<HullSlot.Type, int>, ItemData> ();
 
 	public static int shipCurrentHealth = -1;
 

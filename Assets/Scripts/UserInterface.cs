@@ -15,7 +15,7 @@ public class UserInterface : MonoBehaviour {
 
 	private StarSystem starSystem;
 
-	private ShipInformationScreen shipInformation;
+	//private ShipInformationScreen shipInformation;
 
 	private StatusScreen statusScreen;
 
@@ -36,10 +36,9 @@ public class UserInterface : MonoBehaviour {
 				 planetDescriptRect = new Rect(Screen.width - 220, 80, 210, 290), 
 				 planetSurfaceRect, planetNameRect, planetLandRect;
 
-	public UserInterface init (StatusScreen statusScreen, StarSystem starSystem, ShipInformationScreen shipInformation, PlayerShip ship) {
+	public UserInterface init (StatusScreen statusScreen, StarSystem starSystem, PlayerShip ship) {
 		this.statusScreen = statusScreen;
 		this.starSystem = starSystem;
-		this.shipInformation = shipInformation;
 		this.ship = ship;
 
 		if (ship != null) { updateShip(); }
@@ -60,25 +59,25 @@ public class UserInterface : MonoBehaviour {
 		GUI.Label(cashRect, Vars.cash.ToString(), cashStyle);
 		if (GUI.Button(statusBtnRect, "", statusBtnStyle)) {
 			if (!statusScreen.gameObject.activeInHierarchy) {
-				if (shipInformation != null && shipInformation.gameObject.activeInHierarchy) {
-					shipInformation.closeScreen();
-				}
+//				if (shipInformation != null && shipInformation.gameObject.activeInHierarchy) {
+//					shipInformation.closeScreen();
+//				}
 				statusScreen.showScreen();
 			} else {
 				statusScreen.closeScreen();
 			}
 		}
 		if (starSystem != null) {
-			if (GUI.Button (shipInfoBtnRect, "", shipBtnStyle)) {
-				if (!shipInformation.gameObject.activeInHierarchy) {
-					if (statusScreen != null && statusScreen.gameObject.activeInHierarchy) {
-						statusScreen.closeScreen();
-					}
-					shipInformation.showScreen();
-				} else {
-					shipInformation.closeScreen();
-				}
-			}
+//			if (GUI.Button (shipInfoBtnRect, "", shipBtnStyle)) {
+//				if (!shipInformation.gameObject.activeInHierarchy) {
+//					if (statusScreen != null && statusScreen.gameObject.activeInHierarchy) {
+//						statusScreen.closeScreen();
+//					}
+//					shipInformation.showScreen();
+//				} else {
+//					shipInformation.closeScreen();
+//				}
+//			}
 
 			GUI.DrawTexture(healthBarRect, health);
 			GUI.DrawTexture(shieldBarRect, shield);

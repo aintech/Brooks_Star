@@ -143,16 +143,16 @@ public class StatusScreen : InventoryContainedScreen {
 
 	private void hideItemInfo (Button btn) {
 		if (getChosenItem() == null) { return; }
-		if (btn == perksBtn && getChosenItem().getCell() != null && getChosenItem().getCell().getInventory().getInventoryType() == Inventory.InventoryType.INVENTORY) {
+		if (btn == perksBtn && getChosenItem().cell != null && getChosenItem().cell.getInventory().getInventoryType() == Inventory.InventoryType.INVENTORY) {
 			hideItemInfo();
 		}
-		else if (btn == shipBtn && getChosenItem().getCell() != null && getChosenItem().getCell().getInventory().getInventoryType() != Inventory.InventoryType.INVENTORY) {
+		else if (btn == shipBtn && getChosenItem().cell != null && getChosenItem().cell.getInventory().getInventoryType() != Inventory.InventoryType.INVENTORY) {
 			hideItemInfo();
 		}
-		else if (btn == storageBtn && (getChosenItem().getHullSlot() != null || (getChosenItem().getCell() != null && getChosenItem().getCell().getInventory().getInventoryType() != Inventory.InventoryType.INVENTORY))) {
+		else if (btn == storageBtn && (getChosenItem().hullSlot != null || (getChosenItem().cell != null && getChosenItem().cell.getInventory().getInventoryType() != Inventory.InventoryType.INVENTORY))) {
 			hideItemInfo();
 		}
-		else if (btn == gearSlotsBtn && (getChosenItem().getHullSlot() != null || (getChosenItem().getCell() != null && getChosenItem().getCell().getInventory().getInventoryType() != Inventory.InventoryType.INVENTORY))) {
+		else if (btn == gearSlotsBtn && (getChosenItem().hullSlot != null || (getChosenItem().cell != null && getChosenItem().cell.getInventory().getInventoryType() != Inventory.InventoryType.INVENTORY))) {
 			hideItemInfo();
 		}
 	}
@@ -161,37 +161,37 @@ public class StatusScreen : InventoryContainedScreen {
 		if (Utils.hit != null && Utils.hit.name.Equals("Cell")) {
 			InventoryCell cell = Utils.hit.transform.GetComponent<InventoryCell>();
 			Inventory targetInv = cell.transform.parent.GetComponent<Inventory>();
-			if (draggedItem.getCell() == null) {
+			if (draggedItem.cell == null) {
 				shipData.updateHullInfo();
 			}
 			targetInv.addItemToCell(draggedItem, cell);
 		} else if (Utils.hit != null && Utils.hit.name.StartsWith("HullSlot")) {
 			HullSlot slot = Utils.hit.transform.GetComponent<HullSlot> ();
-			if (slot.getHullSlotType() != getHullToItemType (draggedItem.getItemType ())) {
-				if (draggedItem.getCell () == null) {
+			if (slot.slotType != getItemToSlotType (draggedItem.getItemType ())) {
+				if (draggedItem.cell == null) {
 					if (inventory.gameObject.activeInHierarchy) {
-						inventory.addItemToCell (draggedItem, draggedItem.getCell ());
+						inventory.addItemToCell (draggedItem, draggedItem.cell);
 					} else if (storage.gameObject.activeInHierarchy) {
-						storage.addItemToCell (draggedItem, draggedItem.getCell ());
+						storage.addItemToCell (draggedItem, draggedItem.cell);
 					}
 					shipData.updateHullInfo();
 				} else {
 					draggedItem.returnToParentInventory ();
 				}
-			} else if (slot.getItem () == null) {
+			} else if (slot.item == null) {
 				setItemToSlot (slot);
-			} else if (slot.getItem() != null) {
+			} else if (slot.item != null) {
 				Item currItem = slot.takeItem ();
 				if (inventory.gameObject.activeInHierarchy) {
-					inventory.addItemToCell (currItem, draggedItem.getCell ());
+					inventory.addItemToCell (currItem, draggedItem.cell);
 				} else if (storage.gameObject.activeInHierarchy) {
-					storage.addItemToCell (currItem, draggedItem.getCell ());
+					storage.addItemToCell (currItem, draggedItem.cell);
 				}
 				shipData.updateHullInfo ();
-				draggedItem.setCell (null);
+				draggedItem.cell = null;
 				setItemToSlot (slot);
 			}
-		} else if (draggedItem.getCell () == null) {
+		} else if (draggedItem.cell == null) {
 			if (inventory.gameObject.activeInHierarchy) {
 				inventory.addItemToCell (draggedItem, null);
 			} else if (storage.gameObject.activeInHierarchy) {
@@ -204,28 +204,28 @@ public class StatusScreen : InventoryContainedScreen {
 	}
 
 	private void setItemToSlot (HullSlot slot) {
-		if (draggedItem.getCell () != null) {
-			draggedItem.getCell ().takeItem ();
-			draggedItem.getCell().transform.parent.GetComponent<Inventory> ().calculateFreeVolume();
+		if (draggedItem.cell != null) {
+			draggedItem.cell.takeItem ();
+			draggedItem.cell.transform.parent.GetComponent<Inventory> ().calculateFreeVolume();
 		}
-		draggedItem.setCell (null);
+		draggedItem.cell = null;
 		slot.setItem (draggedItem);
 		draggedItem.transform.position = slot.transform.position;
 		draggedItem.transform.parent = shipData.transform;
 		shipData.updateHullInfo ();
 	}
 
-	private HullSlot.HullSlotType getHullToItemType (ItemData.Type itemType) {
+	private HullSlot.Type getItemToSlotType (ItemData.Type itemType) {
 		switch (itemType) {
-			case ItemData.Type.ARMOR: return HullSlot.HullSlotType.Armor;
-			case ItemData.Type.ENGINE: return HullSlot.HullSlotType.Engine;
-			case ItemData.Type.GENERATOR: return HullSlot.HullSlotType.Generator;
-			case ItemData.Type.HARVESTER: return HullSlot.HullSlotType.Harvester;
-			case ItemData.Type.RADAR: return HullSlot.HullSlotType.Radar;
-			case ItemData.Type.REPAIR_DROID: return HullSlot.HullSlotType.RepairDroid;
-			case ItemData.Type.SHIELD: return HullSlot.HullSlotType.Shield;
-			case ItemData.Type.WEAPON: return HullSlot.HullSlotType.Weapon;
-			default: Debug.Log("Unknown item type: " + itemType); return HullSlot.HullSlotType.Armor;
+			case ItemData.Type.ARMOR: return HullSlot.Type.ARMOR;
+			case ItemData.Type.ENGINE: return HullSlot.Type.ENGINE;
+			case ItemData.Type.GENERATOR: return HullSlot.Type.GENERATOR;
+			case ItemData.Type.HARVESTER: return HullSlot.Type.HARVESTER;
+			case ItemData.Type.RADAR: return HullSlot.Type.RADAR;
+			case ItemData.Type.REPAIR_DROID: return HullSlot.Type.REPAIR_DROID;
+			case ItemData.Type.SHIELD: return HullSlot.Type.SHIELD;
+			case ItemData.Type.WEAPON: return HullSlot.Type.WEAPON;
+			default: Debug.Log("Unknown item type: " + itemType); return HullSlot.Type.ARMOR;
 		}
 	}
 
@@ -248,9 +248,9 @@ public class StatusScreen : InventoryContainedScreen {
 				slot.setSprite(false);
 			}
 		} else {
-			HullSlot.HullSlotType hullType = getHullToItemType (itemType);
+			HullSlot.Type slotType = getItemToSlotType (itemType);
 			foreach (HullSlot slot in shipData.getSlots()) {
-				if (slot.getHullSlotType() == hullType) {
+				if (slot.slotType == slotType) {
 					slot.setSprite (true);
 				}
 			}

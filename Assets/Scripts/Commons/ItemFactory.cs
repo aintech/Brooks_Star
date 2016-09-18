@@ -6,14 +6,14 @@ public static class ItemFactory {
 
 	public static ItemData createItemData (ItemData.Type type) {
 		switch (type) {
-			case ItemData.Type.WEAPON: return createWeaponData (); break;
-			case ItemData.Type.ENGINE: return createEngineData (); break;
-			case ItemData.Type.ARMOR: return createArmorData (); break;
-			case ItemData.Type.GENERATOR: return createGeneratorData (); break;
-			case ItemData.Type.RADAR: return createRadarData (); break;
-			case ItemData.Type.SHIELD: return createShieldData (); break;
-			case ItemData.Type.REPAIR_DROID: return createRepairDroidData (); break;
-			case ItemData.Type.HARVESTER: return createHarvesterData (); break;
+			case ItemData.Type.WEAPON: return createWeaponData ();
+			case ItemData.Type.ENGINE: return createEngineData ();
+			case ItemData.Type.ARMOR: return createArmorData ();
+			case ItemData.Type.GENERATOR: return createGeneratorData ();
+			case ItemData.Type.RADAR: return createRadarData ();
+			case ItemData.Type.SHIELD: return createShieldData ();
+			case ItemData.Type.REPAIR_DROID: return createRepairDroidData ();
+			case ItemData.Type.HARVESTER: return createHarvesterData ();
 			default: Debug.Log("Unknown type: " + type); return null;
 		}
 	}

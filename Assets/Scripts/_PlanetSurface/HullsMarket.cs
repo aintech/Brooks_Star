@@ -159,8 +159,8 @@ public class HullsMarket : MonoBehaviour, ButtonHolder {
 		shipData.arrangeItemsToSlots();
 		bool addedToInv = false, addedToStorage = false;
 		foreach (HullSlot slot in shipData.getSlots()) {
-			if (!slot.isSlotAvailable() && slot.getItem() != null) {
-				if (inventory.getFreeVolume() >= slot.getItem().getVolume()) {
+			if (!slot.isSlotAvailable() && slot.item != null) {
+				if (inventory.getFreeVolume() >= slot.item.getVolume()) {
 					inventory.addItemToCell(slot.takeItem(), null);
 					addedToInv = true;
 				} else {

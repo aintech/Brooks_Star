@@ -41,7 +41,7 @@ public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 					chosenItemBorder.gameObject.SetActive(true);
 				}
 			} else if (Utils.hit.name.StartsWith("HullSlot")) {
-				Item item = Utils.hit.transform.GetComponent<HullSlot>().getItem();
+				Item item = Utils.hit.transform.GetComponent<HullSlot>().item;
 				if (item != null) {
 					choseDraggedItemFromSlot(Utils.hit.transform.GetComponent<HullSlot>());
 					chosenItemBorder.transform.position = item.transform.position;
@@ -98,7 +98,7 @@ public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 
 	public void updateChosenItemBorder () {
 		if (chosenItem != null) {
-			if (chosenItem.getCell() == null && chosenItem.getHullSlot() == null) {
+			if (chosenItem.cell == null && chosenItem.hullSlot == null) {
 				chosenItemBorder.gameObject.SetActive(false);
 			} else {
 				chosenItemBorder.transform.position = chosenItem.transform.position;
