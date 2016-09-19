@@ -186,9 +186,7 @@ public abstract class Ship : MonoBehaviour {
 	}
 
 	protected Vector3 getWeaponPosition (int weaponIndex) {
-		List<Vector3> list = new List<Vector3>();
-		weaponSlotsMap.TryGetValue(hullType, out list);
-		return list[weaponIndex-1];
+		return weaponSlotsMap[hullType][weaponIndex];
 	}
 
 	private static void initializeWeaponSlotsMap () {

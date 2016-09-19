@@ -29,6 +29,8 @@ public class StatusScreen : InventoryContainedScreen {
 		perks = transform.Find("Perks");
 		gearSlots = transform.Find("Gear Slots");
 
+		transform.Find("BG").gameObject.SetActive(true);
+
 		inventory.setCapacity(shipData.getHullType().getStorageCapacity());
 
 		closeScreen();

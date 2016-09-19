@@ -9,7 +9,8 @@ public static class Imager {
 
 	private static Array starSystemTypes = Enum.GetValues(typeof(StarSystemType)),
 						 planetTypes = Enum.GetValues(typeof(PlanetType)),
-						 characterTypes = Enum.GetValues(typeof(CharacterType));
+						 characterTypes = Enum.GetValues(typeof(CharacterType)),
+						 enemyTypes = Enum.GetValues(typeof(EnemyType));
 
 	private static Dictionary<StarSystemType, Sprite> starSystems = new Dictionary<StarSystemType, Sprite>(),
 													  stars = new Dictionary<StarSystemType, Sprite>();
@@ -19,20 +20,20 @@ public static class Imager {
 
 	private static Dictionary<CharacterType, Texture> portraits = new Dictionary<CharacterType, Texture>();
 
-	private static char delimiter = '_';
+	private static Dictionary<EnemyType, Sprite[]> enemies = new Dictionary<EnemyType, Sprite[]>();
+
+	private static char delimiter = '=';
 
 	private static string[] typeName = new string[2];
 
 	public static void initialize () {
 		if (initialized) { return; }
 
-		Sprite[] sprites = Resources.LoadAll<Sprite>("Sprites");
+		foreach (Sprite sprite in Resources.LoadAll<Sprite>("Sprites")) { addSpriteToList(sprite); }
 
-		Texture[] textures = Resources.LoadAll<Texture>("Textures");
+		foreach (Sprite sprite in Resources.LoadAll<Sprite>("Sprites/Enemy")) { addSpriteToList(sprite); }
 
-		foreach (Sprite sprite in sprites) { addSpriteToList(sprite); }
-
-		foreach (Texture texture in textures) { addTextureToList(texture); }
+		foreach (Texture texture in Resources.LoadAll<Texture>("Textures")) { addTextureToList(texture); }
 
 		initialized = true;
 	}
@@ -43,9 +44,23 @@ public static class Imager {
 	public static Sprite getPlanetSurface (PlanetType type) { return planetSurfaces[type]; }
 	public static Texture getPortrait (CharacterType type) { return portraits[type]; }
 
+	public static Sprite getEnemy (EnemyType type, float value) { return enemies[type][value <= .3f? 2: value <= .7f? 1: 0]; }
+
 	private static void addSpriteToList (Sprite sprite) {
 		typeName = sprite.name.ToUpper().Split(delimiter);
 		switch (typeName[0]) {
+			case "ENEMY":
+				int index;
+				foreach (EnemyType type in enemyTypes) {
+					index = typeName.Length == 2? 0: typeName[2].Equals("NUDE")? 2: 1;
+					if (type.ToString().Equals(typeName[1])) {
+						if (!enemies.ContainsKey(type)) { enemies.Add(type, new Sprite[3]); }
+						enemies[type][index] = sprite;
+						return;
+					}
+				}
+				Debug.Log("Unmapped enemy: " + typeName[1] + " " + typeName[2]);
+				break;
 			case "STARSYSTEM": 
 				foreach (StarSystemType type in starSystemTypes) {
 					if (type.ToString().Equals(typeName[1])) { 

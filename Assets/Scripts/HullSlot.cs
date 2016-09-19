@@ -82,12 +82,12 @@ public class HullSlot : MonoBehaviour {
         switch (slotType) {
             case Type.RADAR: return 0;
             case Type.ENGINE: return 1;
-            case Type.GENERATOR: return 1;
-            case Type.HARVESTER: return 4;
-            case Type.REPAIR_DROID: return 6;
-            case Type.SHIELD: return 10;
-            case Type.WEAPON: return 13;
-            case Type.ARMOR: return 18;
+            case Type.GENERATOR: return 2;
+            case Type.HARVESTER: return 5;
+            case Type.REPAIR_DROID: return 7;
+            case Type.SHIELD: return 11;
+            case Type.WEAPON: return 14;
+            case Type.ARMOR: return 19;
             default: Debug.Log("Unknown type: " + slotType); return 0;
         }
     }

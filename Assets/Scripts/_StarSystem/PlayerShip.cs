@@ -32,23 +32,23 @@ public class PlayerShip : Ship {
 	}
 
 	private void initWeapons () {
-		HullSlot slot1 = shipData.getSlot(HullSlot.Type.WEAPON, 1);
-		HullSlot slot2 = shipData.getSlot(HullSlot.Type.WEAPON, 2);
-        HullSlot slot3 = shipData.getSlot(HullSlot.Type.WEAPON, 3);
-        HullSlot slot4 = shipData.getSlot(HullSlot.Type.WEAPON, 4);
-        HullSlot slot5 = shipData.getSlot(HullSlot.Type.WEAPON, 5);
+		HullSlot slot1 = shipData.getSlot(HullSlot.Type.WEAPON, 0);
+		HullSlot slot2 = shipData.getSlot(HullSlot.Type.WEAPON, 1);
+        HullSlot slot3 = shipData.getSlot(HullSlot.Type.WEAPON, 2);
+        HullSlot slot4 = shipData.getSlot(HullSlot.Type.WEAPON, 3);
+        HullSlot slot5 = shipData.getSlot(HullSlot.Type.WEAPON, 4);
 
-        WeaponData slot1WeaponData = slot1.getItem() == null? null: (WeaponData)slot1.getItem().getItemData();
-		WeaponData slot2WeaponData = slot2.getItem() == null? null: (WeaponData)slot2.getItem().getItemData();
-		WeaponData slot3WeaponData = slot3.getItem() == null? null: (WeaponData)slot3.getItem().getItemData();
-		WeaponData slot4WeaponData = slot4.getItem() == null? null: (WeaponData)slot4.getItem().getItemData();
-		WeaponData slot5WeaponData = slot5.getItem() == null? null: (WeaponData)slot5.getItem().getItemData();
+        WeaponData slot1WeaponData = slot1.item == null? null: (WeaponData)slot1.item.itemData;
+		WeaponData slot2WeaponData = slot2.item == null? null: (WeaponData)slot2.item.itemData;
+		WeaponData slot3WeaponData = slot3.item == null? null: (WeaponData)slot3.item.itemData;
+		WeaponData slot4WeaponData = slot4.item == null? null: (WeaponData)slot4.item.itemData;
+		WeaponData slot5WeaponData = slot5.item == null? null: (WeaponData)slot5.item.itemData;
 
-		if (slot1WeaponData != null) initWeapon (slot1WeaponData, 1);
-		if (slot2WeaponData != null) initWeapon (slot2WeaponData, 2);
-		if (slot3WeaponData != null) initWeapon (slot3WeaponData, 3);
-		if (slot4WeaponData != null) initWeapon (slot4WeaponData, 4);
-		if (slot5WeaponData != null) initWeapon (slot5WeaponData, 5);
+		if (slot1WeaponData != null) initWeapon (slot1WeaponData, 0);
+		if (slot2WeaponData != null) initWeapon (slot2WeaponData, 1);
+		if (slot3WeaponData != null) initWeapon (slot3WeaponData, 2);
+		if (slot4WeaponData != null) initWeapon (slot4WeaponData, 3);
+		if (slot5WeaponData != null) initWeapon (slot5WeaponData, 4);
 	}
 	
 	private void initWeapon(WeaponData data, int weaponIndex) {
@@ -75,11 +75,11 @@ public class PlayerShip : Ship {
 		weapon.transform.position = new Vector3(transform.position.x + posit.x, transform.position.y + posit.y);
 		
 		switch (weaponIndex) {
-			case 1: weapon_1 = weapon; break;
-			case 2: weapon_2 = weapon; break;
-			case 3: weapon_3 = weapon; break;
-			case 4: weapon_4 = weapon; break;
-			case 5: weapon_5 = weapon; break;
+			case 0: weapon_1 = weapon; break;
+			case 1: weapon_2 = weapon; break;
+			case 2: weapon_3 = weapon; break;
+			case 3: weapon_4 = weapon; break;
+			case 4: weapon_5 = weapon; break;
 		}
 	}
 

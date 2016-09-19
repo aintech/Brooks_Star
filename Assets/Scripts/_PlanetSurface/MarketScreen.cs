@@ -19,7 +19,7 @@ public class MarketScreen : MonoBehaviour, ButtonHolder, Hideable {
 		this.buyback = buyback;
 
 		equipmentsMarket = transform.Find ("Equipments Market").GetComponent<EquipmentsMarket>();
-		equipmentsMarket.init(this, inventory, storage, market, buyback, shipData);
+		equipmentsMarket.init(this, inventory, storage, market, buyback);
 
 		hullsMarket = transform.Find ("Hulls Market").GetComponent<HullsMarket> ();
 		hullsMarket.init(inventory, storage, shipData);

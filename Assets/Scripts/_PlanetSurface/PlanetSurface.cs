@@ -8,9 +8,13 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 
 	public static Hideable topHideable;
 
-	private SpriteRenderer bgRender;
+//	private SpriteRenderer bgRender;
 
-	private Button marketBtn, industrialBtn, leaveBtn;
+	private Background background;
+
+	private Button exploreBtn, marketBtn, industrialBtn, leaveBtn;
+
+	private ExploreScreen exploreScreen;
 
 	private MarketScreen marketScreen;
 
@@ -25,10 +29,12 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 	private StatusScreen statusScreen;
 
 	void Awake () {
-		bgRender = GetComponent<SpriteRenderer>();
-
 		Imager.initialize();
+		Player.init();
 
+		background = transform.Find("Background").GetComponent<Background>().init();
+
+		exploreScreen = GameObject.Find("Explore Screen").GetComponent<ExploreScreen>();
 		marketScreen = GameObject.Find("Market Screen").GetComponent<MarketScreen> ();
 		industrialScreen = GameObject.Find("Industrial Screen").GetComponent<IndustrialScreen>();
 
@@ -38,6 +44,7 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 		market = inventories.Find ("Market").GetComponent<Inventory> ().init(Inventory.InventoryType.MARKET);
 		buyback = inventories.Find ("Buyback").GetComponent<Inventory> ().init(Inventory.InventoryType.BUYBACK);
 
+		exploreBtn = transform.Find("Explore Button").GetComponent<Button>().init();
 		marketBtn = transform.Find("Market Button").GetComponent<Button>().init();
 		industrialBtn = transform.Find("Industrial Button").GetComponent<Button>().init();
 		leaveBtn = transform.Find("Leave Button").GetComponent<Button>().init();
@@ -52,6 +59,7 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 		story = GameObject.Find("Storyline").GetComponent<Storyline>();
 
 		marketScreen.init(this, statusScreen.getShipData(), inventory, storage, market, buyback);
+		exploreScreen.init(this);
 		industrialScreen.init(this);
 
 		messageBox.init(this);
@@ -81,7 +89,8 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 		statusScreen.getShipData().setShieldToMax();
 		inventory.calculateFreeVolume();
 		Vars.userInterface.setEnabled(true);
-		bgRender.sprite = Imager.getPlanetSurface(Vars.planetType);
+		background.setBackground();
+//		bgRender.sprite = Imager.getPlanetSurface(Vars.planetType);
 		setVisible(true);
 	}
 
@@ -98,6 +107,7 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 
 	private void showScreen (ScreenType type) {
 		switch (type) {
+			case ScreenType.EXPLORE: exploreScreen.showScreen(); break;
 			case ScreenType.MARKET: marketScreen.showScreen(); break;
 			case ScreenType.INDUSTRIAL: industrialScreen.showScreen(); break;
 			default: Debug.Log("Unknown screen type"); break;
@@ -108,9 +118,12 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 	public void fireClickButton (Button btn) {
 		if (btn == marketBtn) { showScreen(ScreenType.MARKET); }
 		else if (btn == industrialBtn) { showScreen(ScreenType.INDUSTRIAL); }
+		else if (btn == exploreBtn) { showScreen(ScreenType.EXPLORE); }
 		else if (btn == leaveBtn) { leavePlanet(); }
 		else { Debug.Log("Unknown button: " + btn.name); }
 	}
+
+
 
 	private void sendToVars () {
 		statusScreen.sendToVars();
@@ -123,6 +136,7 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 	}
 
 	public void setVisible (bool visible) {
+		exploreBtn.setVisible(visible);
 		marketBtn.setVisible(visible);
 		industrialBtn.setVisible(visible);
 		leaveBtn.setVisible(visible);
@@ -130,6 +144,6 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 	}
 
 	private enum ScreenType {
-		MARKET, INDUSTRIAL
+		EXPLORE, MARKET, INDUSTRIAL
 	}
 }

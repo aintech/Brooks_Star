@@ -30,8 +30,6 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 
 	private Vector3 normalScale = new Vector3(.08f, .1f, 1), decimalScale = new Vector3(.065f, .1f, 1);
     
-	private Vector3 leftPosition = new Vector3(-4.5f, 0, 0), rightPosition = new Vector3(4.5f, 0, 0);
-
 	private Collider2D inventoryColl;
 
 	public Inventory init (InventoryType inventoryType) {
@@ -485,7 +483,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 				break;
 		}
 		if (inventoryToSend == null) {
-			Debug.Log("Unmapped inventory to send");
+			Debug.Log("Unmapped inventory to send: " + inventoryType);
 		} else {
 			inventoryToSend.Clear();
 			foreach (KeyValuePair<int, Item> pair in items) {

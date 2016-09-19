@@ -37,4 +37,13 @@ public static class PlanetDescriptor {
             default: Debug.Log("Unknown planet type: " + type); return 0;
         }
     }
+
+	public static EnemyType[] getEnemyTypes (this PlanetType type) {
+		return new EnemyType[]{EnemyType.PIRATE, EnemyType.DRAGON, EnemyType.DRUID, EnemyType.MINOTAUR, EnemyType.CAPTAIN, EnemyType.BEE, EnemyType.COMMANDER, EnemyType.FIGHTER, EnemyType.GUNNER, EnemyType.HARPY, EnemyType.KNIGHT, EnemyType.SWORDMASTER};
+//		switch (type) {
+//			case PlanetType.CORAS: return new EnemyType[]{EnemyType.PIRATE, EnemyType.DRAGON, EnemyType.DRUID, EnemyType.MINOTAUR, EnemyType.CAPTAIN, 
+//					EnemyType.BEE, EnemyType.COMMANDER, EnemyType.FIGHTER, EnemyType.GUNNER, EnemyType.HARPY, EnemyType.KNIGHT, EnemyType.SWORDMASTER};
+//			default: Debug.Log("Unknown planet type: " + type); return new EnemyType[0];
+//		}
+	}
 }

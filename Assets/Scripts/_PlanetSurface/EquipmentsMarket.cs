@@ -8,14 +8,11 @@ public class EquipmentsMarket : InventoryContainedScreen {
 
 	private Inventory market, buyback;
 
-	private ShipData shipData;
-
 	private Button marketBtn, buybackBtn;
 
-	public void init (MarketScreen marketScreen, Inventory inventory, Inventory storage, Inventory market, Inventory buyback, ShipData shipData) {
+	public void init (MarketScreen marketScreen, Inventory inventory, Inventory storage, Inventory market, Inventory buyback) {
 		this.market = market;
 		this.buyback = buyback;
-		this.shipData = shipData;
 
 		innerInit(inventory, storage);
 

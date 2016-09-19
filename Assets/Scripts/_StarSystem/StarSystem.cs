@@ -85,6 +85,8 @@ public class StarSystem : MonoBehaviour {
 			}
 		}
 
+		statusScreen.getShipData().setShieldToMax();
+
 		spawnAnEnemy();
     }
 

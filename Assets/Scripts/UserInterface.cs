@@ -15,8 +15,6 @@ public class UserInterface : MonoBehaviour {
 
 	private StarSystem starSystem;
 
-	//private ShipInformationScreen shipInformation;
-
 	private StatusScreen statusScreen;
 
 	private PlayerShip ship;
@@ -30,7 +28,6 @@ public class UserInterface : MonoBehaviour {
 	private Rect backgroundRect = new Rect (0, 10, Screen.width, 50),
 				 cashRect = new Rect(Screen.width - 20, 35, 0, 0),
 				 statusBtnRect = new Rect (10, 10, 50, 50),
-				 shipInfoBtnRect = new Rect (60, 10, 50, 50),
 				 shieldBarRect = new Rect(0, Screen.height - 70, 0, 50),
 				 healthBarRect = new Rect(0, Screen.height - 50, 0, 50),
 				 planetDescriptRect = new Rect(Screen.width - 220, 80, 210, 290), 

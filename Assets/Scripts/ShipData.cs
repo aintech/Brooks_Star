@@ -14,21 +14,14 @@ public class ShipData : MonoBehaviour {
 
 	private HullType hullType;
 
-	private HullSlot radarSlot;
-
-	private HullSlot engineSlot;
-
-	private HullSlot generatorSlot_1, generatorSlot_2, generatorSlot_3;
-
-	private HullSlot harvesterSlot_1, harvesterSlot_2;
-
-	private HullSlot repairDroidSlot_1, repairDroidSlot_2, repairDroidSlot_3, repairDroidSlot_4;
-
-	private HullSlot shieldSlot_1, shieldSlot_2, shieldSlot_3;
-
-	private HullSlot weaponSlot_1, weaponSlot_2, weaponSlot_3, weaponSlot_4, weaponSlot_5;
-	
-	private HullSlot armorSlot_1, armorSlot_2, armorSlot_3, armorSlot_4, armorSlot_5;
+	private HullSlot radarSlot,
+					 engineSlot,
+					 generatorSlot_1, generatorSlot_2, generatorSlot_3,
+					 harvesterSlot_1, harvesterSlot_2,
+					 repairDroidSlot_1, repairDroidSlot_2, repairDroidSlot_3, repairDroidSlot_4,
+					 shieldSlot_1, shieldSlot_2, shieldSlot_3,
+					 weaponSlot_1, weaponSlot_2, weaponSlot_3, weaponSlot_4, weaponSlot_5,
+					 armorSlot_1, armorSlot_2, armorSlot_3, armorSlot_4, armorSlot_5;
 
 	private Transform trans;
 
@@ -45,37 +38,58 @@ public class ShipData : MonoBehaviour {
 	public ShipData init (bool onPlanetSurface) {
 		this.onPlanetSurface = onPlanetSurface;
 		trans = transform;
-		radarSlot = trans.Find("HullSlot Radar").GetComponent<HullSlot>();
-		engineSlot = trans.Find("HullSlot Engine").GetComponent<HullSlot>();
-		generatorSlot_1 = trans.Find("HullSlot Generator 1").GetComponent<HullSlot>();
-		generatorSlot_2 = trans.Find("HullSlot Generator 2").GetComponent<HullSlot>();
-		generatorSlot_3 = trans.Find("HullSlot Generator 3").GetComponent<HullSlot>();
-		harvesterSlot_1 = trans.Find("HullSlot Harvester 1").GetComponent<HullSlot>();
-		harvesterSlot_2 = trans.Find("HullSlot Harvester 2").GetComponent<HullSlot>();
-		repairDroidSlot_1 = trans.Find("HullSlot RepairDroid 1").GetComponent<HullSlot>();
-		repairDroidSlot_2 = trans.Find("HullSlot RepairDroid 2").GetComponent<HullSlot>();
-		repairDroidSlot_3 = trans.Find("HullSlot RepairDroid 3").GetComponent<HullSlot>();
-		repairDroidSlot_4 = trans.Find("HullSlot RepairDroid 4").GetComponent<HullSlot>();
-		shieldSlot_1 = trans.Find("HullSlot Shield 1").GetComponent<HullSlot>();
-		shieldSlot_2 = trans.Find("HullSlot Shield 2").GetComponent<HullSlot>();
-		shieldSlot_3 = trans.Find("HullSlot Shield 3").GetComponent<HullSlot>();
-		weaponSlot_1 = trans.Find("HullSlot Weapon 1").GetComponent<HullSlot>();
-		weaponSlot_2 = trans.Find("HullSlot Weapon 2").GetComponent<HullSlot>();
-		weaponSlot_3 = trans.Find("HullSlot Weapon 3").GetComponent<HullSlot>();
-		weaponSlot_4 = trans.Find("HullSlot Weapon 4").GetComponent<HullSlot>();
-		weaponSlot_5 = trans.Find("HullSlot Weapon 5").GetComponent<HullSlot>();
-		armorSlot_1 = trans.Find("HullSlot Armor 1").GetComponent<HullSlot>();
-		armorSlot_2 = trans.Find("HullSlot Armor 2").GetComponent<HullSlot>();
-		armorSlot_3 = trans.Find("HullSlot Armor 3").GetComponent<HullSlot>();
-		armorSlot_4 = trans.Find("HullSlot Armor 4").GetComponent<HullSlot>();
-		armorSlot_5 = trans.Find("HullSlot Armor 5").GetComponent<HullSlot>();
+
+		HullSlot tempslot;
+		for (int i = 0; i < trans.childCount; i++) {
+			tempslot = trans.GetChild(i).GetComponent<HullSlot>();
+			if (tempslot != null) {
+				switch (tempslot.slotType) {
+					case HullSlot.Type.RADAR: radarSlot = tempslot; break;
+					case HullSlot.Type.ENGINE: engineSlot = tempslot; break;
+					case HullSlot.Type.GENERATOR:
+						if (tempslot.index == 0) { generatorSlot_1 = tempslot; }
+						else if (tempslot.index == 1) { generatorSlot_2 = tempslot; }
+						else if (tempslot.index == 2) { generatorSlot_3 = tempslot; }
+						break;
+					case HullSlot.Type.HARVESTER:
+						if (tempslot.index == 0) { harvesterSlot_1 = tempslot; }
+						else if (tempslot.index == 1) { harvesterSlot_2 = tempslot; }
+						break;
+					case HullSlot.Type.REPAIR_DROID:
+						if (tempslot.index == 0) { repairDroidSlot_1 = tempslot; }
+						else if (tempslot.index == 1) { repairDroidSlot_2 = tempslot; }
+						else if (tempslot.index == 2) { repairDroidSlot_3 = tempslot; }
+						else if (tempslot.index == 3) { repairDroidSlot_4 = tempslot; }
+						break;
+					case HullSlot.Type.SHIELD:
+						if (tempslot.index == 0) { shieldSlot_1 = tempslot; }
+						else if (tempslot.index == 1) { shieldSlot_2 = tempslot; }
+						else if (tempslot.index == 2) { shieldSlot_3 = tempslot; }
+						break;
+					case HullSlot.Type.WEAPON:
+						if (tempslot.index == 0) { weaponSlot_1 = tempslot; }
+						else if (tempslot.index == 1) { weaponSlot_2 = tempslot; }
+						else if (tempslot.index == 2) { weaponSlot_3 = tempslot; }
+						else if (tempslot.index == 3) { weaponSlot_4 = tempslot; }
+						else if (tempslot.index == 4) { weaponSlot_5 = tempslot; }
+						break;
+					case HullSlot.Type.ARMOR:
+						if (tempslot.index == 0) { armorSlot_1 = tempslot; }
+						else if (tempslot.index == 1) { armorSlot_2 = tempslot; }
+						else if (tempslot.index == 2) { armorSlot_3 = tempslot; }
+						else if (tempslot.index == 3) { armorSlot_4 = tempslot; }
+						else if (tempslot.index == 4) { armorSlot_5 = tempslot; }
+						break;
+					default: Debug.Log("Unknown slot type: " + tempslot.slotType); break;
+				}
+			}
+		}
 
 		slots = new HullSlot[]{radarSlot, engineSlot, generatorSlot_1, generatorSlot_2, generatorSlot_3, harvesterSlot_1, harvesterSlot_2,
 							   repairDroidSlot_1, repairDroidSlot_2, repairDroidSlot_3, repairDroidSlot_4, shieldSlot_1, shieldSlot_2, shieldSlot_3,
 							   weaponSlot_1, weaponSlot_2, weaponSlot_3, weaponSlot_4, weaponSlot_5,
 							   armorSlot_1, armorSlot_2, armorSlot_3, armorSlot_4, armorSlot_5};
 
-		
 		Transform hullInfo = transform.Find ("Hull Information");
 		hullInfo.gameObject.SetActive(true);
 
@@ -228,28 +242,28 @@ public class ShipData : MonoBehaviour {
 
 		getSlot(HullSlot.Type.RADAR, 0).setItem(radar);
 		getSlot(HullSlot.Type.ENGINE, 0).setItem(engine);
-		if (generatorSlots >= 1) getSlot(HullSlot.Type.GENERATOR, 1).setItem(generator_1);
-		if (generatorSlots >= 2) getSlot(HullSlot.Type.GENERATOR, 2).setItem(generator_2);
-		if (generatorSlots >= 3) getSlot(HullSlot.Type.GENERATOR, 3).setItem(generator_3);
-		if (harvesterSlots >= 1) getSlot(HullSlot.Type.HARVESTER, 1).setItem(harvester_1);
-		if (harvesterSlots >= 2) getSlot(HullSlot.Type.HARVESTER, 2).setItem(harvester_2);
-		if (repairDroids >= 1) getSlot(HullSlot.Type.REPAIR_DROID, 1).setItem(repairDroid_1);
-		if (repairDroids >= 2) getSlot(HullSlot.Type.REPAIR_DROID, 2).setItem(repairDroid_2);
-		if (repairDroids >= 3) getSlot(HullSlot.Type.REPAIR_DROID, 3).setItem(repairDroid_3);
-		if (repairDroids >= 4) getSlot(HullSlot.Type.REPAIR_DROID, 4).setItem(repairDroid_4);
-		if (shieldSlots >= 1) getSlot(HullSlot.Type.SHIELD, 1).setItem(shield_1);
-		if (shieldSlots >= 2) getSlot(HullSlot.Type.SHIELD, 2).setItem(shield_2);
-		if (shieldSlots >= 3) getSlot(HullSlot.Type.SHIELD, 3).setItem(shield_3);
-		if (weaponSlots >= 1) getSlot(HullSlot.Type.WEAPON, 1).setItem(weapon_1);
-		if (weaponSlots >= 2) getSlot(HullSlot.Type.WEAPON, 2).setItem(weapon_2);
-		if (weaponSlots >= 3) getSlot(HullSlot.Type.WEAPON, 3).setItem(weapon_3);
-		if (weaponSlots >= 4) getSlot(HullSlot.Type.WEAPON, 4).setItem(weapon_4);
-		if (weaponSlots >= 5) getSlot(HullSlot.Type.WEAPON, 5).setItem(weapon_5);
-		if (armorSlots >= 1) getSlot(HullSlot.Type.ARMOR, 1).setItem(armor_1);
-		if (armorSlots >= 2) getSlot(HullSlot.Type.ARMOR, 2).setItem(armor_2);
-		if (armorSlots >= 3) getSlot(HullSlot.Type.ARMOR, 3).setItem(armor_3);
-		if (armorSlots >= 4) getSlot(HullSlot.Type.ARMOR, 4).setItem(armor_4);
-		if (armorSlots >= 5) getSlot(HullSlot.Type.ARMOR, 5).setItem(armor_5);
+		if (generatorSlots >= 1) getSlot(HullSlot.Type.GENERATOR, 0).setItem(generator_1);
+		if (generatorSlots >= 2) getSlot(HullSlot.Type.GENERATOR, 1).setItem(generator_2);
+		if (generatorSlots >= 3) getSlot(HullSlot.Type.GENERATOR, 2).setItem(generator_3);
+		if (harvesterSlots >= 1) getSlot(HullSlot.Type.HARVESTER, 0).setItem(harvester_1);
+		if (harvesterSlots >= 2) getSlot(HullSlot.Type.HARVESTER, 1).setItem(harvester_2);
+		if (repairDroids >= 1) getSlot(HullSlot.Type.REPAIR_DROID, 0).setItem(repairDroid_1);
+		if (repairDroids >= 2) getSlot(HullSlot.Type.REPAIR_DROID, 1).setItem(repairDroid_2);
+		if (repairDroids >= 3) getSlot(HullSlot.Type.REPAIR_DROID, 2).setItem(repairDroid_3);
+		if (repairDroids >= 4) getSlot(HullSlot.Type.REPAIR_DROID, 3).setItem(repairDroid_4);
+		if (shieldSlots >= 1) getSlot(HullSlot.Type.SHIELD, 0).setItem(shield_1);
+		if (shieldSlots >= 2) getSlot(HullSlot.Type.SHIELD, 1).setItem(shield_2);
+		if (shieldSlots >= 3) getSlot(HullSlot.Type.SHIELD, 2).setItem(shield_3);
+		if (weaponSlots >= 1) getSlot(HullSlot.Type.WEAPON, 0).setItem(weapon_1);
+		if (weaponSlots >= 2) getSlot(HullSlot.Type.WEAPON, 1).setItem(weapon_2);
+		if (weaponSlots >= 3) getSlot(HullSlot.Type.WEAPON, 2).setItem(weapon_3);
+		if (weaponSlots >= 4) getSlot(HullSlot.Type.WEAPON, 3).setItem(weapon_4);
+		if (weaponSlots >= 5) getSlot(HullSlot.Type.WEAPON, 4).setItem(weapon_5);
+		if (armorSlots >= 1) getSlot(HullSlot.Type.ARMOR, 0).setItem(armor_1);
+		if (armorSlots >= 2) getSlot(HullSlot.Type.ARMOR, 1).setItem(armor_2);
+		if (armorSlots >= 3) getSlot(HullSlot.Type.ARMOR, 2).setItem(armor_3);
+		if (armorSlots >= 4) getSlot(HullSlot.Type.ARMOR, 3).setItem(armor_4);
+		if (armorSlots >= 5) getSlot(HullSlot.Type.ARMOR, 4).setItem(armor_5);
 
 		radar.init(ItemFactory.createRadarData());
 		engine.init(ItemFactory.createEngineData());
@@ -319,97 +333,69 @@ public class ShipData : MonoBehaviour {
 		if (type == HullSlot.Type.ENGINE) { return engineSlot; }
 		if (type == HullSlot.Type.GENERATOR) {
 			switch (slotIndex) {
-				case 1: return generatorSlot_1;
-				case 2: return generatorSlot_2;
-				case 3: return generatorSlot_3;
+				case 0: return generatorSlot_1;
+				case 1: return generatorSlot_2;
+				case 2: return generatorSlot_3;
 				default: Debug.Log("Unknown generator slot: " + slotIndex); return null;
 			}
 		}
 		if (type == HullSlot.Type.HARVESTER) {
 			switch (slotIndex) {
-				case 1: return harvesterSlot_1;
-				case 2: return harvesterSlot_2;
+				case 0: return harvesterSlot_1;
+				case 1: return harvesterSlot_2;
 				default: Debug.Log("Unknown harvester slot: " + slotIndex); return null;
 			}
 		}
 		if (type == HullSlot.Type.REPAIR_DROID) {
 			switch (slotIndex) {
-				case 1: return repairDroidSlot_1;
-				case 2: return repairDroidSlot_2;
-				case 3: return repairDroidSlot_3;
-				case 4: return repairDroidSlot_4;
+				case 0: return repairDroidSlot_1;
+				case 1: return repairDroidSlot_2;
+				case 2: return repairDroidSlot_3;
+				case 3: return repairDroidSlot_4;
 				default: Debug.Log("Unknown repair droid slot: " + slotIndex); return null;
 			}
 		}
 		if (type == HullSlot.Type.SHIELD) {
 			switch (slotIndex) {
-				case 1: return shieldSlot_1;
-				case 2: return shieldSlot_2;
-				case 3: return shieldSlot_3;
+				case 0: return shieldSlot_1;
+				case 1: return shieldSlot_2;
+				case 2: return shieldSlot_3;
 				default: Debug.Log("Unknown shield slot: " + slotIndex); return null;
 			}
 		}
 		if (type == HullSlot.Type.WEAPON) {
 			switch (slotIndex) {
-				case 1: return weaponSlot_1;
-				case 2: return weaponSlot_2;
-				case 3: return weaponSlot_3;
-				case 4: return weaponSlot_4;
-				case 5: return weaponSlot_5;
+				case 0: return weaponSlot_1;
+				case 1: return weaponSlot_2;
+				case 2: return weaponSlot_3;
+				case 3: return weaponSlot_4;
+				case 4: return weaponSlot_5;
 				default: Debug.Log("Unknown weapon slot: " + slotIndex); return null;
 			}
 		}
 		if (type == HullSlot.Type.WEAPON) {
 			switch (slotIndex) {
-				case 1: return weaponSlot_1;
-				case 2: return weaponSlot_2;
-				case 3: return weaponSlot_3;
-				case 4: return weaponSlot_4;
-				case 5: return weaponSlot_5;
+				case 0: return weaponSlot_1;
+				case 1: return weaponSlot_2;
+				case 2: return weaponSlot_3;
+				case 3: return weaponSlot_4;
+				case 4: return weaponSlot_5;
 				default: Debug.Log("Unknown weapon slot: " + slotIndex); return null;
 			}
 		}
 		if (type == HullSlot.Type.ARMOR) {
 			switch (slotIndex) {
-				case 1: return armorSlot_1;
-				case 2: return armorSlot_2;
-				case 3: return armorSlot_3;
-				case 4: return armorSlot_4;
-				case 5: return armorSlot_5;
+				case 0: return armorSlot_1;
+				case 1: return armorSlot_2;
+				case 2: return armorSlot_3;
+				case 3: return armorSlot_4;
+				case 4: return armorSlot_5;
 				default: Debug.Log("Unknown armor slot: " + slotIndex); return null;
 			}
 		}
 
 		Debug.Log("Slot type not found");
 		return null;
-	}
-
-	private string getSlotName (HullSlot slot) {
-		if (slot == radarSlot) return "HullSlot Radar";
-		if (slot == engineSlot) return "HullSlot Engine";
-		if (slot == generatorSlot_1) return "HullSlot Generator 1";
-		if (slot == generatorSlot_2) return "HullSlot Generator 2";
-		if (slot == generatorSlot_3) return "HullSlot Generator 3";
-		if (slot == harvesterSlot_1) return "HullSlot Harvester 1";
-		if (slot == harvesterSlot_2) return "HullSlot Harvester 2";
-		if (slot == repairDroidSlot_1) return "HullSlot RepairDroid 1";
-		if (slot == repairDroidSlot_2) return "HullSlot RepairDroid 2";
-		if (slot == repairDroidSlot_3) return "HullSlot RepairDroid 3";
-		if (slot == repairDroidSlot_4) return "HullSlot RepairDroid 4";
-		if (slot == shieldSlot_1) return "HullSlot Shield 1";
-		if (slot == shieldSlot_2) return "HullSlot Shield 2";
-		if (slot == shieldSlot_3) return "HullSlot Shield 3";
-		if (slot == weaponSlot_1) return "HullSlot Weapon 1";
-		if (slot == weaponSlot_2) return "HullSlot Weapon 2";
-		if (slot == weaponSlot_3) return "HullSlot Weapon 3";
-		if (slot == weaponSlot_4) return "HullSlot Weapon 4";
-		if (slot == weaponSlot_5) return "HullSlot Weapon 5";
-		if (slot == armorSlot_1) return "HullSlot Armor 1";
-		if (slot == armorSlot_2) return "HullSlot Armor 2";
-		if (slot == armorSlot_3) return "HullSlot Armor 3";
-		if (slot == armorSlot_4) return "HullSlot Armor 4";
-		if (slot == armorSlot_5) return "HullSlot Armor 5";
-		return "";
 	}
 
 	public void updateHullInfo () {

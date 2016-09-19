@@ -94,11 +94,11 @@ public class EnemyShip : Ship {
 
 	private void initWeapons () {
 		int availSlots = getHullType().getWeaponSlots();
-		if (availSlots >= 1) initWeapon(1);
-		if (availSlots >= 2) initWeapon(2);
-		if (availSlots >= 3) initWeapon(3);
-		if (availSlots >= 4) initWeapon(4);
-		if (availSlots >= 5) initWeapon(5);
+		if (availSlots >= 1) initWeapon(0);
+		if (availSlots >= 2) initWeapon(1);
+		if (availSlots >= 3) initWeapon(2);
+		if (availSlots >= 4) initWeapon(3);
+		if (availSlots >= 5) initWeapon(4);
 	}
 
 	private void initWeapon (int weaponIndex) {
@@ -137,11 +137,11 @@ public class EnemyShip : Ship {
 		weapon.getRender().sortingOrder = sortingOrder + 2;
 
 		switch (weaponIndex) {
-			case 1: weapon_1 = weapon; break;
-			case 2: weapon_2 = weapon; break;
-			case 3: weapon_3 = weapon; break;
-			case 4: weapon_4 = weapon; break;
-			case 5: weapon_5 = weapon; break;
+			case 0: weapon_1 = weapon; break;
+			case 1: weapon_2 = weapon; break;
+			case 2: weapon_3 = weapon; break;
+			case 3: weapon_4 = weapon; break;
+			case 4: weapon_5 = weapon; break;
 		}
 	}
 
