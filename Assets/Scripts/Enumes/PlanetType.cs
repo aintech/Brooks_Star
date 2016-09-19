@@ -39,7 +39,7 @@ public static class PlanetDescriptor {
     }
 
 	public static EnemyType[] getEnemyTypes (this PlanetType type) {
-		return new EnemyType[]{EnemyType.PIRATE, EnemyType.DRAGON, EnemyType.DRUID, EnemyType.MINOTAUR, EnemyType.CAPTAIN, EnemyType.BEE, EnemyType.COMMANDER, EnemyType.FIGHTER, EnemyType.GUNNER, EnemyType.HARPY, EnemyType.KNIGHT, EnemyType.SWORDMASTER};
+		return new EnemyType[]{EnemyType.DRUID, EnemyType.BEE, EnemyType.GUNNER};
 //		switch (type) {
 //			case PlanetType.CORAS: return new EnemyType[]{EnemyType.PIRATE, EnemyType.DRAGON, EnemyType.DRUID, EnemyType.MINOTAUR, EnemyType.CAPTAIN, 
 //					EnemyType.BEE, EnemyType.COMMANDER, EnemyType.FIGHTER, EnemyType.GUNNER, EnemyType.HARPY, EnemyType.KNIGHT, EnemyType.SWORDMASTER};
