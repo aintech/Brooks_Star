@@ -3,8 +3,14 @@ using System.Collections;
 
 public class Messenger : MonoBehaviour {
 
+	private static UserInterface userInterface;
+
+	public void init (UserInterface userInterface) {
+		Messenger.userInterface = userInterface;
+	}
+
 	public static void showMessage (string message) {
-		//Показываем сообщение внизу экрана
-		Debug.Log(message);
+//		Debug.Log(message);
+		userInterface.setMessageText(message);
 	}
 }

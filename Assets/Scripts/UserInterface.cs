@@ -11,7 +11,7 @@ public class UserInterface : MonoBehaviour {
 
 	public Font font;
 
-	public GUIStyle statusBtnStyle, shipBtnStyle, cashStyle, planetNameStyle, planetLandStyle;
+	public GUIStyle statusBtnStyle, shipBtnStyle, cashStyle, messengerStyle, planetNameStyle, planetLandStyle;
 
 	private StarSystem starSystem;
 
@@ -25,12 +25,19 @@ public class UserInterface : MonoBehaviour {
 
 	private PlanetType planetType;
 
+	private string messageText = null;
+
+	private int counter;
+
+	private Color32 textColor;
+
 	private Rect backgroundRect = new Rect (0, 10, Screen.width, 50),
 				 cashRect = new Rect(Screen.width - 20, 35, 0, 0),
 				 statusBtnRect = new Rect (10, 10, 50, 50),
 				 shieldBarRect = new Rect(0, Screen.height - 70, 0, 50),
 				 healthBarRect = new Rect(0, Screen.height - 50, 0, 50),
 				 planetDescriptRect = new Rect(Screen.width - 220, 80, 210, 290), 
+				 messengerRect = new Rect(10, Screen.height - 50, Screen.width, 50),
 				 planetSurfaceRect, planetNameRect, planetLandRect;
 
 	public UserInterface init (StatusScreen statusScreen, StarSystem starSystem, PlayerShip ship) {
@@ -45,6 +52,10 @@ public class UserInterface : MonoBehaviour {
 		planetSurfaceRect = new Rect(planetDescriptRect.x + 5, planetDescriptRect.y + 5, 200, 125);
 		planetNameRect = new Rect(planetDescriptRect.x + planetDescriptRect.width / 2, planetDescriptRect.y + planetDescriptRect.height / 2 + 10, 0, 0);
 		planetLandRect = new Rect(planetDescriptRect.x + 5, planetDescriptRect.y + planetDescriptRect.height - 40, 200, 35);
+
+		textColor = messengerStyle.normal.textColor;
+
+		GetComponent<Messenger>().init(this);
 
 		setEnabled(true);
 
@@ -88,6 +99,18 @@ public class UserInterface : MonoBehaviour {
 				}
 			}
 		}
+
+		if (messageText != null) {
+			GUI.Label(messengerRect, messageText, messengerStyle);
+			if (--counter <= 0) {
+				if (textColor.a > 100) {
+					messengerStyle.normal.textColor = textColor;
+					--textColor.a;
+				} else {
+					messageText = null;
+				}
+			}
+		}
 	}
 
 	public void setEnabled (bool enabled) {
@@ -111,5 +134,12 @@ public class UserInterface : MonoBehaviour {
 
 		healthBarRect.width = maxWidth * ((float)ship.getHealth() / ship.getFullHealth());
 		healthBarRect.x = startX - healthBarRect.width;
+	}
+
+	public void setMessageText (string text) {
+		counter = 100;
+		textColor.a = 255;
+		messengerStyle.normal.textColor = textColor;
+		messageText = text;
 	}
 }

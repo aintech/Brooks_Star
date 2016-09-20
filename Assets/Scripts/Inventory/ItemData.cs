@@ -39,6 +39,40 @@ public abstract class ItemData {
 	}
 }
 
+public class HandWeaponData : ItemData {
+	public HandWeaponType type { get; private set; }
+	public int damage { get; private set; }
+
+	public HandWeaponData (Quality quality, float level, HandWeaponType type, int damage) : base (quality, level) {
+		this.type = type;
+		this.damage = damage;
+
+		this.name = type.getName();
+		this.description = type.getDescription();
+		this.volume = type.getVolume();
+
+		this.itemType = Type.HAND_WEAPON;
+		this.kind = Kind.GEAR;
+	}
+}
+
+public class BodyArmorData : ItemData {
+	public BodyArmorType type { get; private set; }
+	public int armorClass { get; private set; }
+
+	public BodyArmorData (Quality quality, float level, BodyArmorType type, int armorClass) : base(quality, level) {
+		this.type = type;
+		this.armorClass = armorClass;
+
+		this.name = type.getName();
+		this.description = type.getDescription();
+		this.volume = type.getVolume();
+
+		this.itemType = Type.BODY_ARMOR;
+		this.kind = Kind.GEAR;
+	}
+}
+
 public class WeaponData : ItemData {
 	public WeaponType type { get; private set; }
 	public int minDamage { get; private set; }

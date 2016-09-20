@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class StatusScreen : InventoryContainedScreen {
 
 	private bool onPlanetSurface;
 
-	private Transform gearSlots, perks;
+	private PerksView perksView;
+
+	private Transform gearsView;
 
 	private Button gearSlotsBtn, perksBtn, shipBtn, closeBtn;
 
@@ -26,8 +29,8 @@ public class StatusScreen : InventoryContainedScreen {
 		shipBtn = transform.Find("Ship Button").GetComponent<Button>().init();
 		closeBtn = transform.Find("Close Button").GetComponent<Button>().init();
 
-		perks = transform.Find("Perks");
-		gearSlots = transform.Find("Gear Slots");
+		perksView = transform.Find("Perks View").GetComponent<PerksView>().init(this);
+		gearsView = transform.Find("Gear Slots");
 
 		transform.Find("BG").gameObject.SetActive(true);
 
@@ -43,7 +46,6 @@ public class StatusScreen : InventoryContainedScreen {
 	}
 
 	public void showScreen () {
-		//TODO: прятать нижележащие экраны
 		if (gameObject.activeInHierarchy) { return; }
 
 		inventory.setContainerScreen(this);
@@ -70,14 +72,17 @@ public class StatusScreen : InventoryContainedScreen {
 		setInventoryActive();
 		setShipDataActive();
 
+		perksView.updatePerks();
+
 		gameObject.SetActive(true);
 	}
 
 	public void closeScreen () {
 		hideItemInfo();
-		perks.gameObject.SetActive(false);
+		perksView.hideInfo();
+		perksView.gameObject.SetActive(false);
 		inventory.gameObject.SetActive(false);
-		gearSlots.gameObject.SetActive(false);
+		gearsView.gameObject.SetActive(false);
 		shipData.gameObject.SetActive(false);
 		storage.gameObject.SetActive(false);
 		gameObject.SetActive(false);
@@ -99,7 +104,7 @@ public class StatusScreen : InventoryContainedScreen {
 	}
 
 	private void setPerksActive () {
-		perks.gameObject.SetActive(true);
+		perksView.gameObject.SetActive(true);
 		perksBtn.setActive(false);
 		inventory.gameObject.SetActive(false);
 		inventoryBtn.setActive(true);
@@ -107,7 +112,7 @@ public class StatusScreen : InventoryContainedScreen {
 	}
 
 	private void setInventoryActive () {
-		perks.gameObject.SetActive(false);
+		perksView.gameObject.SetActive(false);
 		perksBtn.setActive(true);
 		inventory.gameObject.SetActive(true);
 		inventoryBtn.setActive(false);
@@ -116,7 +121,7 @@ public class StatusScreen : InventoryContainedScreen {
 	private void setStorageActive () {
 		storage.gameObject.SetActive(true);
 		shipData.gameObject.SetActive (false);
-		gearSlots.gameObject.SetActive(false);
+		gearsView.gameObject.SetActive(false);
 		storageBtn.setActive(false);
 		shipBtn.setActive(true);
 		gearSlotsBtn.setActive(true);
@@ -126,7 +131,7 @@ public class StatusScreen : InventoryContainedScreen {
 	private void setShipDataActive () {
 		shipData.gameObject.SetActive (true);
 		storage.gameObject.SetActive(false);
-		gearSlots.gameObject.SetActive(false);
+		gearsView.gameObject.SetActive(false);
 		shipBtn.setActive(false);
 		storageBtn.setActive(true);
 		gearSlotsBtn.setActive(true);
@@ -134,7 +139,7 @@ public class StatusScreen : InventoryContainedScreen {
 	}
 
 	private void setGearSlotsActive () {
-		gearSlots.gameObject.SetActive(true);
+		gearsView.gameObject.SetActive(true);
 		storage.gameObject.SetActive(false);
 		shipData.gameObject.SetActive (false);
 		shipBtn.setActive(true);
@@ -143,8 +148,10 @@ public class StatusScreen : InventoryContainedScreen {
 		hideItemInfo(gearSlotsBtn);
 	}
 
-	private void hideItemInfo (Button btn) {
+	public void hideItemInfo (Button btn) {
 		if (getChosenItem() == null) { return; }
+		if (btn == null) { hideItemInfo(); }
+
 		if (btn == perksBtn && getChosenItem().cell != null && getChosenItem().cell.getInventory().getInventoryType() == Inventory.InventoryType.INVENTORY) {
 			hideItemInfo();
 		}
@@ -242,6 +249,7 @@ public class StatusScreen : InventoryContainedScreen {
 		if (draggedItem != null) {
 			highlightSlot (true, item.getItemType ());
 		}
+		perksView.hideInfo();
 	}
 
 	private void highlightSlot (bool hightlight, ItemData.Type itemType) {

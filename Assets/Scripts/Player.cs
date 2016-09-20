@@ -16,7 +16,15 @@ public class Player {
 
 	public static int damage { get { return weapon == null? 20: UnityEngine.Random.Range(weapon.getMinDamage(), weapon.getMaxDamage()+1); } private set {;} }
 
+	public static Dictionary<PerkType, float> perks { get; private set; }
+
 	public static void init () {
+		if (perks == null || perks.Count == 0) {
+			perks = new Dictionary<PerkType, float>();
+			foreach (PerkType type in Enum.GetValues(typeof(PerkType))) {
+				perks.Add(type, 0);
+			}
+		}
 		health = maxHealth = initHealth;
 	}
 
@@ -54,5 +62,22 @@ public class Player {
 	public static void setHealthToMax () {
 		health = maxHealth;
 //		UserInterface.updateHealth();
+	}
+
+	public static void updatePerk (PerkType type, float value) {
+		int prevValue = (int)perks[type];
+		perks[type] += (value / Mathf.Max(perks[type], 1f));
+//		Messenger.showMessage("Навык " + type.getName() + " = " + (int)((perks[type] - (int)perks[type]) * 100) + "%");
+		if ((int)perks[type] > prevValue) {
+			Messenger.showMessage("Навык " + type.getName() + " увеличен до " + getPerkLevel(type));
+		}
+	}
+
+	public static int getPerkLevel (PerkType type) {
+		return (int)perks[type];
+	}
+
+	public static float getPerkExp (PerkType type) {
+		return perks[type] - (int)perks[type];
 	}
 }

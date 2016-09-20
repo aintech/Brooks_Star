@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class Enemy : MonoBehaviour {
 
+	private const float damageToPerkMultiplier = .01f;
+
 	private SpriteRenderer render;
 
 	public int health { get; private set; }
@@ -78,6 +80,7 @@ public class Enemy : MonoBehaviour {
 		} else {
 			health -= (damageAmount - armor);
 			setSprite();
+			Player.updatePerk(PerkType.MARKSMAN, damageAmount * damageToPerkMultiplier);
 			return damageAmount - armor;
 		}
 	}

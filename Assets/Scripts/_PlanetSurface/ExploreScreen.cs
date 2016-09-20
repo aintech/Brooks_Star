@@ -94,6 +94,10 @@ public class ExploreScreen : MonoBehaviour, ButtonHolder, Hideable {
 	}
 
 	public void setVisible (bool visible) {
+		exploreBtn.setVisible(visible);
+		fightBtn.setVisible(visible);
+		nextBtn.setVisible(visible);
+		backBtn.setVisible(visible);
 		closeBtn.setVisible(visible);
 	}
 }

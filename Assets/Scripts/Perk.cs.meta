@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: c0fea5d8c38b20c4bafb31a3b4c71205
+timeCreated: 1474370295
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - bg: {fileID: 21300002, guid: dd390dab280bbe64bba8af3789225898, type: 3}
+  - bgActive: {fileID: 21300004, guid: dd390dab280bbe64bba8af3789225898, type: 3}
+  - gunner: {fileID: 21300010, guid: dd390dab280bbe64bba8af3789225898, type: 3}
+  - marksman: {fileID: 21300008, guid: dd390dab280bbe64bba8af3789225898, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
