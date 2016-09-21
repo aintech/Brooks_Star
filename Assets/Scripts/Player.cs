@@ -5,16 +5,22 @@ using System.Collections.Generic;
 
 public class Player {
 	
-	private const int initHealth = 1000, healthPerEndurance = 10;
+	private const int initHealth = 900;//, healthPerEndurance = 10;
+
+	private const int noWeaponDamage = 10;
 
 	public static int health { get; private set; }
 	public static int maxHealth { get; private set; }
 
-	public static HandWeapon weapon { get; private set; }
+	public static HandWeaponData weapon { get; private set; }
 
-	public static BodyArmor armor { get; private set; }
+	public static BodyArmorData armor { get; private set; }
 
-	public static int damage { get { return weapon == null? 20: UnityEngine.Random.Range(weapon.getMinDamage(), weapon.getMaxDamage()+1); } private set {;} }
+	public static int minDamage { get; private set; }
+
+	public static int maxDamage { get; private set; }
+
+	public static int randomDamage { get { return weapon == null? noWeaponDamage: UnityEngine.Random.Range(minDamage, maxDamage+1); } private set {;} }
 
 	public static Dictionary<PerkType, float> perks { get; private set; }
 
@@ -25,24 +31,31 @@ public class Player {
 				perks.Add(type, 0);
 			}
 		}
+		updateMinMaxDamage();
 		health = maxHealth = initHealth;
 	}
 
-	public static void equipWeapon (HandWeapon weapon) {
+	public static void equipWeapon (HandWeaponData weapon) {
 		Player.weapon = weapon;
+		updateMinMaxDamage();
 	}
 
-	public static void equipArmor (BodyArmor armor) {
+	public static void updateMinMaxDamage () {
+		minDamage = weapon == null? noWeaponDamage: weapon.minDamage + Mathf.RoundToInt(weapon.minDamage / 100f * getPerkLevel(PerkType.MARKSMAN) * PerkType.MARKSMAN.getValuePerLevel());
+		maxDamage = weapon == null? noWeaponDamage: weapon.maxDamage + Mathf.RoundToInt(weapon.maxDamage / 100f * getPerkLevel(PerkType.MARKSMAN) * PerkType.MARKSMAN.getValuePerLevel());
+	}
+
+	public static void equipArmor (BodyArmorData armor) {
 		Player.armor = armor;
 	}
 
 	public static int hitPlayer (int damageAmount)  {
-		if (armor != null && damageAmount < armor.getArmorClass()) {
+		if (armor != null && damageAmount < armor.armorClass) {
 			return 0;
 		} else {
-			health -= (damageAmount - (armor == null? 0: armor.getArmorClass()));
+			health -= (damageAmount - (armor == null? 0: armor.armorClass));
 //			UserInterface.updateHealth();
-			return damageAmount - (armor == null? 0: armor.getArmorClass());
+			return damageAmount - (armor == null? 0: armor.armorClass);
 		}
 	}
 

@@ -2,11 +2,10 @@
 using System.Collections;
 
 public abstract class ItemData {
-	public Type itemType { get; protected set; }
+	public ItemType itemType { get; protected set; }
 	public string name { get; protected set; }
 	public string description { get; protected set; }
 	public float volume { get; protected set; }
-	public Kind kind { get; protected set; }
 
 	public Quality quality { get; private set; }
 	public float level { get; private set; }
@@ -24,16 +23,6 @@ public abstract class ItemData {
 		this.energyNeeded = energyNeeded;
 	}
 
-	public enum Kind {
-		GOOD, GEAR, EQUIPMENT
-	}
-
-	public enum Type {
-		WEAPON, ENGINE, ARMOR, GENERATOR, RADAR, SHIELD, REPAIR_DROID, HARVESTER,
-		HAND_WEAPON, BODY_ARMOR,
-		MINERAL
-	}
-
 	public enum Quality {
 		NORMAL, SUPERIOR, UNIQUE//Normal - обычное, Superior - отличное, Unique - уникальное
 	}
@@ -41,18 +30,19 @@ public abstract class ItemData {
 
 public class HandWeaponData : ItemData {
 	public HandWeaponType type { get; private set; }
-	public int damage { get; private set; }
+	public int minDamage { get; private set; }
+	public int maxDamage { get; private set;}
 
-	public HandWeaponData (Quality quality, float level, HandWeaponType type, int damage) : base (quality, level) {
+	public HandWeaponData (Quality quality, float level, HandWeaponType type, int minDamage, int maxDamage) : base (quality, level) {
 		this.type = type;
-		this.damage = damage;
+		this.minDamage = minDamage;
+		this.maxDamage = maxDamage;
 
 		this.name = type.getName();
 		this.description = type.getDescription();
 		this.volume = type.getVolume();
 
-		this.itemType = Type.HAND_WEAPON;
-		this.kind = Kind.GEAR;
+		this.itemType = ItemType.HAND_WEAPON;
 	}
 }
 
@@ -68,8 +58,7 @@ public class BodyArmorData : ItemData {
 		this.description = type.getDescription();
 		this.volume = type.getVolume();
 
-		this.itemType = Type.BODY_ARMOR;
-		this.kind = Kind.GEAR;
+		this.itemType = ItemType.BODY_ARMOR;
 	}
 }
 
@@ -89,8 +78,7 @@ public class WeaponData : ItemData {
 		this.description = type.getDescription();
 		this.volume = type.getVolume();
 
-		this.itemType = Type.WEAPON;
-		this.kind = Kind.EQUIPMENT;
+		this.itemType = ItemType.WEAPON;
 	}
 }
 
@@ -106,8 +94,7 @@ public class EngineData : ItemData {
 		this.description = type.getDescription();
 		this.volume = type.getVolume();
 
-		this.itemType = Type.ENGINE;
-		this.kind = Kind.EQUIPMENT;
+		this.itemType = ItemType.ENGINE;
 	}
 }
 
@@ -123,8 +110,7 @@ public class ArmorData : ItemData {
 		this.description = type.getDescription();
 		this.volume = type.getVolume();
 
-		this.itemType = Type.ARMOR;
-		this.kind = Kind.EQUIPMENT;
+		this.itemType = ItemType.ARMOR;
 	}
 }
 
@@ -140,8 +126,7 @@ public class GeneratorData : ItemData {
 		this.description = type.getDescription();
 		this.volume = type.getVolume();
 
-		this.itemType = Type.GENERATOR;
-		this.kind = Kind.EQUIPMENT;
+		this.itemType = ItemType.GENERATOR;
 	}
 }
 
@@ -157,8 +142,7 @@ public class RadarData : ItemData {
 		this.description = type.getDescription();
 		this.volume = type.getVolume();
 
-		this.itemType = Type.RADAR;
-		this.kind = Kind.EQUIPMENT;
+		this.itemType = ItemType.RADAR;
 	}
 }
 
@@ -176,8 +160,7 @@ public class ShieldData : ItemData {
 		this.description = type.getDescription();
 		this.volume = type.getVolume();
 
-		this.itemType = Type.SHIELD;
-		this.kind = Kind.EQUIPMENT;
+		this.itemType = ItemType.SHIELD;
 	}
 }
 
@@ -193,8 +176,7 @@ public class RepairDroidData : ItemData {
 		this.description = type.getDescription();
 		this.volume = type.getVolume();
 
-		this.itemType = Type.REPAIR_DROID;
-		this.kind = Kind.EQUIPMENT;
+		this.itemType = ItemType.REPAIR_DROID;
 	}
 }
 
@@ -210,7 +192,6 @@ public class HarvesterData : ItemData {
 		this.description = type.getDescription();
 		this.volume = type.getVolume();
 
-		this.itemType = Type.HARVESTER;
-		this.kind = Kind.EQUIPMENT;
+		this.itemType = ItemType.HARVESTER;
 	}
 }

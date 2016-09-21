@@ -137,9 +137,9 @@ public class FightProcessor : MonoBehaviour {
 		if (turnResults.Count == 0) { return; }
 
 		foreach (TurnResult result in turnResults) {
-			int damage = Player.damage;
+			int damage = Player.randomDamage;
 			if (result.getCount() > 3) {
-				damage += Mathf.RoundToInt((float)Player.damage * .5f) *  (result.getCount() - 3);
+				damage += Mathf.RoundToInt((float)Player.randomDamage * .5f) *  (result.getCount() - 3);
 			}
 			fightScreen.getIconEffectPlayer().addEffect(result.getElementType(), damage, result.getPosition(), result.getCount());
 		}

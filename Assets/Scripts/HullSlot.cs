@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class HullSlot : MonoBehaviour {
+public class HullSlot : Slot {
 
 	public Type slotType;
 
@@ -13,46 +13,30 @@ public class HullSlot : MonoBehaviour {
 
 	private SpriteRenderer render;
 
-	public Item item { get; private set; }
-	
 	private static Dictionary<HullType, List<Vector3>> slotPositions;
 
 	private static Dictionary<HullType, List<bool>> slotAvailables;
 
 	private bool slotAvailable;
 
-	void Awake () {
-		init ();
-	}
-
-	private void init () {
+	public void init () {
+		render = GetComponent<SpriteRenderer> ();
+		kind = ItemKind.EQUIPMENT;
 		setSprite (false);
 	}
 
-	public void setSprite (bool cellActive) {
-		if (render == null) render = gameObject.GetComponent<SpriteRenderer> ();
+	override public void setSprite (bool asActive) {
 		switch (slotType) {
-			case Type.WEAPON: render.sprite = cellActive? hullSlotSprites[8]: hullSlotSprites[0]; break;
-			case Type.ENGINE: render.sprite = cellActive? hullSlotSprites[9]: hullSlotSprites[1]; break;
-			case Type.ARMOR: render.sprite = cellActive? hullSlotSprites[10]: hullSlotSprites[2]; break;
-			case Type.GENERATOR: render.sprite = cellActive? hullSlotSprites[11]: hullSlotSprites[3]; break;
-			case Type.RADAR: render.sprite = cellActive? hullSlotSprites[12]: hullSlotSprites[4]; break;
-			case Type.SHIELD: render.sprite = cellActive? hullSlotSprites[13]: hullSlotSprites[5]; break;
-			case Type.REPAIR_DROID: render.sprite = cellActive? hullSlotSprites[14]: hullSlotSprites[6]; break;
-			case Type.HARVESTER: render.sprite = cellActive? hullSlotSprites[15]: hullSlotSprites[7]; break;
+			case Type.WEAPON: render.sprite = asActive? hullSlotSprites[8]: hullSlotSprites[0]; break;
+			case Type.ENGINE: render.sprite = asActive? hullSlotSprites[9]: hullSlotSprites[1]; break;
+			case Type.ARMOR: render.sprite = asActive? hullSlotSprites[10]: hullSlotSprites[2]; break;
+			case Type.GENERATOR: render.sprite = asActive? hullSlotSprites[11]: hullSlotSprites[3]; break;
+			case Type.RADAR: render.sprite = asActive? hullSlotSprites[12]: hullSlotSprites[4]; break;
+			case Type.SHIELD: render.sprite = asActive? hullSlotSprites[13]: hullSlotSprites[5]; break;
+			case Type.REPAIR_DROID: render.sprite = asActive? hullSlotSprites[14]: hullSlotSprites[6]; break;
+			case Type.HARVESTER: render.sprite = asActive? hullSlotSprites[15]: hullSlotSprites[7]; break;
+			default: Debug.Log("Unknown hull slot type: " + slotType); break;
 		}
-	}
-
-	public void setItem (Item item) {
-		item.hullSlot = this;
-		this.item = item;
-	}
-
-	public Item takeItem () {
-		Item itemRef = item;
-		item.hullSlot = null;
-		item = null;
-		return itemRef;
 	}
 
 	public void setSlotAvailable (bool slotAvailable) {
@@ -607,6 +591,7 @@ public class HullSlot : MonoBehaviour {
 	}
 
     public enum Type {
+		NONE,
         WEAPON,
         ENGINE,
         ARMOR,

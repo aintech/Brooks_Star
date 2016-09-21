@@ -57,50 +57,63 @@ public class ItemInformation : MonoBehaviour {
 		}
 
 		switch (item.getItemType()) {
-			case ItemData.Type.WEAPON:
+			case ItemType.HAND_WEAPON:
+				itemLabel_1.text = "Урон";
+				itemValue_1.text = ((HandWeaponData)item.itemData).minDamage.ToString() + "-" +
+					((HandWeaponData)item.itemData).maxDamage.ToString() + " ед.";
+				itemLabel_2.text = "";
+				itemValue_2.text = "";
+				break;
+			case ItemType.BODY_ARMOR:
+				itemLabel_1.text = "Броня";
+				itemValue_1.text = ((BodyArmorData)item.itemData).armorClass.ToString() + " ед.";
+				itemLabel_2.text = "";
+				itemValue_2.text = "";
+				break;
+			case ItemType.WEAPON:
 				itemLabel_1.text = "Урон";
 				itemValue_1.text = ((WeaponData)item.itemData).minDamage.ToString() + "-" +
 					((WeaponData)item.itemData).maxDamage.ToString() + " ед.";
 				itemLabel_2.text = "Перезарядка";
 				itemValue_2.text = ((WeaponData)item.itemData).reloadTime.ToString("F2") + " c.";
 				break;
-			case ItemData.Type.ENGINE:
+			case ItemType.ENGINE:
 				itemLabel_1.text = "Мощность";
 				itemValue_1.text = (((EngineData)item.itemData).power * 1000).ToString("F1") + " ед.";
 				itemLabel_2.text = "";
 				itemValue_2.text = "";
 				break;
-			case ItemData.Type.ARMOR:
+			case ItemType.ARMOR:
 				itemLabel_1.text = "Броня";
 				itemValue_1.text = ((ArmorData)item.itemData).armorClass.ToString() + " ед.";
 				itemLabel_2.text = "";
 				itemValue_2.text = "";
 				break;
-			case ItemData.Type.GENERATOR:
+			case ItemType.GENERATOR:
 				itemLabel_1.text = "Мощность";
 				itemValue_1.text = ((GeneratorData)item.itemData).maxEnergy.ToString() + " ед.";
 				itemLabel_2.text = "";
 				itemValue_2.text = "";
 				break;
-			case ItemData.Type.RADAR:
+			case ItemType.RADAR:
 				itemLabel_1.text = "Дальность";
 				itemValue_1.text = ((RadarData)item.itemData).range.ToString() + " ед.";
 				itemLabel_2.text = "";
 				itemValue_2.text = "";
 				break;
-			case ItemData.Type.SHIELD:
+			case ItemType.SHIELD:
 				itemLabel_1.text = "Защита";
 				itemValue_1.text = ((ShieldData)item.itemData).shieldLevel.ToString() + " ед.";
 				itemLabel_2.text = "Перезаряд";
 				itemValue_2.text = ((ShieldData)item.itemData).rechargeSpeed.ToString() + " ед/c.";
 				break;
-			case ItemData.Type.REPAIR_DROID:
+			case ItemType.REPAIR_DROID:
 				itemLabel_1.text = "Ремонт";
 				itemValue_1.text = ((RepairDroidData)item.itemData).repairSpeed.ToString() + " ед/с.";
 				itemLabel_2.text = "";
 				itemValue_2.text = "";
 				break;
-			case ItemData.Type.HARVESTER:
+			case ItemType.HARVESTER:
 				itemLabel_1.text = "Поиск";
 				itemValue_1.text = ((HarvesterData)item.itemData).harvestTime.ToString() + " с.";
 				itemLabel_2.text = "";
@@ -114,8 +127,8 @@ public class ItemInformation : MonoBehaviour {
 				break;
 		}
 
-		itemEnergyLabel.text = "Питание";
-		itemEnergyValue.text = item.getEnergyNeeded().ToString() + "E";
+		itemEnergyLabel.text = item.getEnergyNeeded() > 0? "Питание": "";
+		itemEnergyValue.text = item.getEnergyNeeded() > 0? item.getEnergyNeeded().ToString() + "E": "";
 		itemVolumeLabel.text = "Объем";
 		itemVolumeValue.text = item.getVolume().ToString("F1") + "V";
 		itemCostLabel.text = "Стоимость";

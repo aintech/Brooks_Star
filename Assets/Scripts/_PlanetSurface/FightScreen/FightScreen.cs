@@ -70,6 +70,7 @@ public class FightScreen : MonoBehaviour {
 	}
 
 	public void startFight (EnemyType type) {
+		Player.updateMinMaxDamage();
 		enemy.initEnemy(type);
 //		giveSwordToHero();
 		holderColor = new Color(1, 1, 1, 0);

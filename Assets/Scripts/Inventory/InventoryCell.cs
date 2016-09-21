@@ -22,7 +22,6 @@ public class InventoryCell : MonoBehaviour {
 	}
 
 	public Item takeItem () {
-		Inventory inventory = transform.parent.GetComponent<Inventory> ();
 		inventory.getItems ().Remove (index + inventory.getOffset ());
 		Item returnItem = item;
 		item = null;

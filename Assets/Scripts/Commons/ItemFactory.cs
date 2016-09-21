@@ -4,16 +4,18 @@ using System.Collections;
 
 public static class ItemFactory {
 
-	public static ItemData createItemData (ItemData.Type type) {
+	public static ItemData createItemData (ItemType type) {
 		switch (type) {
-			case ItemData.Type.WEAPON: return createWeaponData ();
-			case ItemData.Type.ENGINE: return createEngineData ();
-			case ItemData.Type.ARMOR: return createArmorData ();
-			case ItemData.Type.GENERATOR: return createGeneratorData ();
-			case ItemData.Type.RADAR: return createRadarData ();
-			case ItemData.Type.SHIELD: return createShieldData ();
-			case ItemData.Type.REPAIR_DROID: return createRepairDroidData ();
-			case ItemData.Type.HARVESTER: return createHarvesterData ();
+			case ItemType.WEAPON: return createWeaponData ();
+			case ItemType.ENGINE: return createEngineData ();
+			case ItemType.ARMOR: return createArmorData ();
+			case ItemType.GENERATOR: return createGeneratorData ();
+			case ItemType.RADAR: return createRadarData ();
+			case ItemType.SHIELD: return createShieldData ();
+			case ItemType.REPAIR_DROID: return createRepairDroidData ();
+			case ItemType.HARVESTER: return createHarvesterData ();
+			case ItemType.HAND_WEAPON: return createHandWeaponData ();
+			case ItemType.BODY_ARMOR: return createBodyArmorData ();
 			default: Debug.Log("Unknown type: " + type); return null;
 		}
 	}
@@ -34,14 +36,16 @@ public static class ItemFactory {
 	private static int calculateCost (ItemData data) {
 		int cost = 0;
 		switch (data.itemType) {
-			case ItemData.Type.WEAPON: cost = Mathf.RoundToInt(data.level * ((WeaponData)data).type.getCost()); break;
-			case ItemData.Type.ENGINE: cost = Mathf.RoundToInt(data.level * ((EngineData)data).type.getCost()); break;
-			case ItemData.Type.ARMOR: return ((ArmorData)data).type.getCost();
-			case ItemData.Type.GENERATOR: cost = Mathf.RoundToInt(data.level * ((GeneratorData)data).type.getCost()); break;
-			case ItemData.Type.RADAR: cost = Mathf.RoundToInt(data.level * ((RadarData)data).type.getCost()); break;
-			case ItemData.Type.SHIELD: cost = Mathf.RoundToInt(data.level * ((ShieldData)data).type.getCost()); break;
-			case ItemData.Type.REPAIR_DROID: cost = Mathf.RoundToInt(data.level * ((RepairDroidData)data).type.getCost()); break;
-			case ItemData.Type.HARVESTER: cost = Mathf.RoundToInt(data.level * ((HarvesterData)data).type.getCost()); break;
+			case ItemType.WEAPON: cost = Mathf.RoundToInt(data.level * ((WeaponData)data).type.getCost()); break;
+			case ItemType.ENGINE: cost = Mathf.RoundToInt(data.level * ((EngineData)data).type.getCost()); break;
+			case ItemType.ARMOR: return ((ArmorData)data).type.getCost();
+			case ItemType.GENERATOR: cost = Mathf.RoundToInt(data.level * ((GeneratorData)data).type.getCost()); break;
+			case ItemType.RADAR: cost = Mathf.RoundToInt(data.level * ((RadarData)data).type.getCost()); break;
+			case ItemType.SHIELD: cost = Mathf.RoundToInt(data.level * ((ShieldData)data).type.getCost()); break;
+			case ItemType.REPAIR_DROID: cost = Mathf.RoundToInt(data.level * ((RepairDroidData)data).type.getCost()); break;
+			case ItemType.HARVESTER: cost = Mathf.RoundToInt(data.level * ((HarvesterData)data).type.getCost()); break;
+			case ItemType.HAND_WEAPON: cost = Mathf.RoundToInt(data.level * ((HandWeaponData)data).type.getCost()); break;
+			case ItemType.BODY_ARMOR: cost = Mathf.RoundToInt(data.level * ((BodyArmorData)data).type.getCost()); break;
 			default: Debug.Log("Unknown type: " + data.itemType); break;
 		}
 		return Mathf.RoundToInt(cost * (data.quality == ItemData.Quality.UNIQUE? 2.5f: data.quality == ItemData.Quality.SUPERIOR? 1.5f: 1));
@@ -49,13 +53,63 @@ public static class ItemFactory {
 
 	private static int calculateEnergy (ItemData data) {
 		switch (data.itemType) {
-			case ItemData.Type.WEAPON: return Mathf.RoundToInt(data.level * ((WeaponData)data).type.getEnergyNeeded());
-			case ItemData.Type.ENGINE: return Mathf.RoundToInt(data.level * ((EngineData)data).type.getEnergyNeeded());
-			case ItemData.Type.RADAR: return Mathf.RoundToInt(data.level * ((RadarData)data).type.getEnergyNeeded());
-			case ItemData.Type.SHIELD: return Mathf.RoundToInt(data.level * ((ShieldData)data).type.getEnergyNeeded());
-			case ItemData.Type.REPAIR_DROID: return Mathf.RoundToInt(data.level * ((RepairDroidData)data).type.getEnergyNeeded());
+			case ItemType.WEAPON: return Mathf.RoundToInt(data.level * ((WeaponData)data).type.getEnergyNeeded());
+			case ItemType.ENGINE: return Mathf.RoundToInt(data.level * ((EngineData)data).type.getEnergyNeeded());
+			case ItemType.RADAR: return Mathf.RoundToInt(data.level * ((RadarData)data).type.getEnergyNeeded());
+			case ItemType.SHIELD: return Mathf.RoundToInt(data.level * ((ShieldData)data).type.getEnergyNeeded());
+			case ItemType.REPAIR_DROID: return Mathf.RoundToInt(data.level * ((RepairDroidData)data).type.getEnergyNeeded());
 			default: return 0;
 		}
+	}
+
+	public static HandWeaponData createHandWeaponData () {
+		HandWeaponType type = HandWeaponType.GUN;
+		switch (UnityEngine.Random.Range(0, Enum.GetNames(typeof(HandWeaponType)).Length)) {
+			case 0: type = HandWeaponType.GUN; break;
+			case 1: type = HandWeaponType.REVOLVER; break;
+			case 2: type = HandWeaponType.MINIGUN; break;
+			case 3: type = HandWeaponType.GAUSSE; break;
+			case 4: type = HandWeaponType.RAILGUN; break;
+			default: Debug.Log("Unmapped value for hand weapon"); break;
+		}
+		return createHandWeaponData(type);
+	}
+
+	public static HandWeaponData createHandWeaponData (HandWeaponType type) {
+		ItemData.Quality quality = randQuality();
+		float level = randLevel();
+
+		int damage = Mathf.RoundToInt(type.getDamage() * level * qualityMultiplier(quality));
+		int minDamage = damage - Mathf.RoundToInt((float)damage * .25f);
+		int maxDamage = damage + Mathf.RoundToInt((float)damage * .25f);
+
+		HandWeaponData data = new HandWeaponData(quality, level, type, minDamage, maxDamage);
+		data.initCommons(calculateCost(data), 0);
+
+		return data;
+	}
+
+	public static BodyArmorData createBodyArmorData () {
+		BodyArmorType type = BodyArmorType.SUIT;
+		switch (UnityEngine.Random.Range(0, Enum.GetNames(typeof(BodyArmorType)).Length)) {
+			case 0: type = BodyArmorType.SUIT; break;
+			case 1: type = BodyArmorType.METAL; break;
+			case 2: type = BodyArmorType.HEAVY; break;
+			default: Debug.Log("Unmapped value for body armor"); break;
+		}
+		return createBodyArmorData (type);
+	}
+
+	public static BodyArmorData createBodyArmorData (BodyArmorType type) {
+		ItemData.Quality quality = randQuality();
+		float level = randLevel();
+
+		int armorClass = Mathf.RoundToInt(type.getArmorClass() * level * qualityMultiplier(quality));
+
+		BodyArmorData data = new BodyArmorData(quality, level, type, armorClass);
+		data.initCommons(calculateCost(data), 0);
+
+		return data;
 	}
 
 	public static WeaponData createWeaponData () {

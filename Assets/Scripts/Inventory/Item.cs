@@ -3,13 +3,16 @@ using System.Collections;
 
 public class Item : MonoBehaviour {
 
-	public Sprite[] weaponSprites, engineSprites, armorSprites, generatorSprites, radarSprites, shieldSprites, repairDroidSprites, harvesterSprites;
+	public Sprite[] weaponSprites, engineSprites, armorSprites, generatorSprites, radarSprites, shieldSprites, repairDroidSprites, harvesterSprites,
+					handWeaponSprites, bodyArmorSprites;
 
 	private SpriteRenderer render;
 
+	[HideInInspector]
     public InventoryCell cell;
 
-	public HullSlot hullSlot;
+	[HideInInspector]
+	public Slot slot;
     
 	public ItemData itemData { get; private set; }
 
@@ -17,7 +20,7 @@ public class Item : MonoBehaviour {
 		this.itemData = itemData;
 		if (render == null) render = transform.GetComponent<SpriteRenderer>();
 		switch (itemData.itemType) {
-			case ItemData.Type.WEAPON:
+			case ItemType.WEAPON:
 				WeaponType weaponType = ((WeaponData)itemData).type;
 				switch (weaponType) {
 					case WeaponType.Blaster: render.sprite = weaponSprites[0]; break;
@@ -29,7 +32,7 @@ public class Item : MonoBehaviour {
 					case WeaponType.Suppressor: render.sprite = weaponSprites[6]; break;
 					default: Debug.Log("Неизвестный тип оружия"); break;
 				} break;
-			case ItemData.Type.ENGINE:
+			case ItemType.ENGINE:
 				EngineType engineType = ((EngineData)itemData).type;
 				switch (engineType) {
 					case EngineType.Force: render.sprite = engineSprites[0]; break;
@@ -39,7 +42,7 @@ public class Item : MonoBehaviour {
 					case EngineType.Quazar: render.sprite = engineSprites[4]; break;
 					default: Debug.Log("Неизвестный тип двигателя"); break;
 				} break;
-			case ItemData.Type.ARMOR:
+			case ItemType.ARMOR:
 				ArmorType armorType = ((ArmorData)itemData).type;
 				switch (armorType) {
 					case ArmorType.Steel: render.sprite = armorSprites[0]; break;
@@ -49,7 +52,7 @@ public class Item : MonoBehaviour {
 					case ArmorType.Adamant: render.sprite = armorSprites[4]; break;
 					default: Debug.Log("Неизвестный тип брони"); break;
 				} break;
-			case ItemData.Type.GENERATOR:
+			case ItemType.GENERATOR:
 				GeneratorType generatorType = ((GeneratorData)itemData).type;
 				switch (generatorType) {
 					case GeneratorType.Atomic: render.sprite = generatorSprites[0]; break;
@@ -58,7 +61,7 @@ public class Item : MonoBehaviour {
 					case GeneratorType.Tunnel: render.sprite = generatorSprites[3]; break;
 					default: Debug.Log("Неизвестный тип генератора"); break;
 				} break;
-			case ItemData.Type.RADAR:
+			case ItemType.RADAR:
 				RadarType radarType = ((RadarData)itemData).type;
 				switch (radarType) {
 					case RadarType.Sequester: render.sprite = radarSprites[0]; break;
@@ -69,7 +72,7 @@ public class Item : MonoBehaviour {
 					case RadarType.Astral: render.sprite = radarSprites[5]; break;
 					default: Debug.Log("Неизвестный тип радара"); break;
 				} break;
-			case ItemData.Type.SHIELD:
+			case ItemType.SHIELD:
 				ShieldType shieldType = ((ShieldData)itemData).type;
 				switch (shieldType) {
 					case ShieldType.Block: render.sprite = shieldSprites[0]; break;
@@ -78,7 +81,7 @@ public class Item : MonoBehaviour {
 					case ShieldType.Phase: render.sprite = shieldSprites[3]; break;
 					default: Debug.Log("Неизвестный тип щита"); break;
 				} break;
-			case ItemData.Type.REPAIR_DROID:
+			case ItemType.REPAIR_DROID:
 				RepairDroidType droidType = ((RepairDroidData)itemData).type;
 				switch (droidType) {
 					case RepairDroidType.Rail: render.sprite = repairDroidSprites[0]; break;
@@ -87,7 +90,7 @@ public class Item : MonoBehaviour {
 					case RepairDroidType.Thread: render.sprite = repairDroidSprites[3]; break;
 					default: Debug.Log("Неизвестный тип ремонтного робота"); break;
 				} break;
-			case ItemData.Type.HARVESTER:
+			case ItemType.HARVESTER:
 				HarvesterType harvesterType = ((HarvesterData)itemData).type;
 				switch (harvesterType) {
 					case HarvesterType.Mechanical: render.sprite = harvesterSprites[0]; break;
@@ -95,12 +98,28 @@ public class Item : MonoBehaviour {
 					case HarvesterType.Generative: render.sprite = harvesterSprites[2]; break;
 					default: Debug.Log("Неизвестный тип сборщика"); break;
 				} break;
+			case ItemType.HAND_WEAPON:
+				HandWeaponType handWeaponType = ((HandWeaponData)itemData).type;
+				switch (handWeaponType) {
+					case HandWeaponType.GUN: render.sprite = handWeaponSprites[0]; break;
+					case HandWeaponType.REVOLVER: render.sprite = handWeaponSprites[1]; break;
+					case HandWeaponType.MINIGUN: render.sprite = handWeaponSprites[2]; break;
+					case HandWeaponType.GAUSSE: render.sprite = handWeaponSprites[3]; break;
+					case HandWeaponType.RAILGUN: render.sprite = handWeaponSprites[4]; break;
+				} break;
+			case ItemType.BODY_ARMOR:
+				BodyArmorType bodyArmorType = ((BodyArmorData)itemData).type;
+				switch (bodyArmorType) {
+					case BodyArmorType.SUIT: render.sprite = bodyArmorSprites[0]; break;
+					case BodyArmorType.METAL: render.sprite = bodyArmorSprites[1]; break;
+					case BodyArmorType.HEAVY: render.sprite = bodyArmorSprites[2]; break;
+				} break;
 		}
 		return this;
 	}
 
-	public ItemData.Kind getItemKind () {
-		return  itemData.kind;
+	public ItemKind getItemKind () {
+		return  itemData.itemType.getKind();
 	}
 
 	public void returnToParentInventory () {
@@ -120,7 +139,7 @@ public class Item : MonoBehaviour {
 		return itemData.energyNeeded;
 	}
 
-	public ItemData.Type getItemType () {
+	public ItemType getItemType () {
 		return itemData.itemType;
 	}
 

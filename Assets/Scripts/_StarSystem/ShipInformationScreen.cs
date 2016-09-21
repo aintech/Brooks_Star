@@ -70,7 +70,7 @@ public class ShipInformationScreen : InventoryContainedScreen {
 		StarSystem.setGamePause(false);
 	}
 
-	protected override void choseDraggedItemFromSlot (HullSlot slot) {}
+	protected override void chooseDraggedItemFromSlot (Slot slot) {}
 
 	protected override void checkBtnPress (Button btn) {
 		if (btn == closeBtn) {

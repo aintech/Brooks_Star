@@ -43,7 +43,15 @@ public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 			} else if (Utils.hit.name.StartsWith("HullSlot")) {
 				Item item = Utils.hit.transform.GetComponent<HullSlot>().item;
 				if (item != null) {
-					choseDraggedItemFromSlot(Utils.hit.transform.GetComponent<HullSlot>());
+					chooseDraggedItemFromSlot(Utils.hit.transform.GetComponent<HullSlot>());
+					chosenItemBorder.transform.position = item.transform.position;
+					choseItem(item);
+					chosenItemBorder.gameObject.SetActive(true);
+				}
+			} else if (Utils.hit.name.StartsWith("GearSlot")) {
+				Item item = Utils.hit.transform.GetComponent<GearSlot>().item;
+				if (item != null) {
+					chooseDraggedItemFromSlot(Utils.hit.transform.GetComponent<GearSlot>());
 					chosenItemBorder.transform.position = item.transform.position;
 					choseItem(item);
 					chosenItemBorder.gameObject.SetActive(true);
@@ -64,7 +72,7 @@ public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 
 	abstract protected void checkBtnPress (Button btn);
 	
-	virtual protected void choseDraggedItemFromSlot (HullSlot slot) {
+	virtual protected void chooseDraggedItemFromSlot (Slot slot) {
 		draggedItem = slot.takeItem();
 		draggedItem.GetComponent<Renderer>().sortingOrder = 4;
 	}
@@ -98,7 +106,7 @@ public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 
 	public void updateChosenItemBorder () {
 		if (chosenItem != null) {
-			if (chosenItem.cell == null && chosenItem.hullSlot == null) {
+			if (chosenItem.cell == null && chosenItem.slot == null) {
 				chosenItemBorder.gameObject.SetActive(false);
 			} else {
 				chosenItemBorder.transform.position = chosenItem.transform.position;

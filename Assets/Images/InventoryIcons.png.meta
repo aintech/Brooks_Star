@@ -1,5 +1,7 @@
 fileFormatVersion: 2
 guid: 1e54c3ae9abb4be42a9a775f202bdddb
+timeCreated: 1474451417
+licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: Weapon_Blaster
@@ -40,6 +42,14 @@ TextureImporter:
     21300070: Harvester_Plasmatic
     21300072: Harvester_Generative
     21300074: Radar_Astral
+    21300076: BodyArmor_Suit
+    21300078: BodyArmor_Metal
+    21300080: BodyArmor_Heavy
+    21300082: HandWeapon_Gun
+    21300084: HandWeapon_Revolver
+    21300086: HandWeapon_Minigun
+    21300088: HandWeapon_Gausse
+    21300090: HandWeapon_Railgun
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -53,11 +63,14 @@ TextureImporter:
   bumpmap:
     convertToNormalMap: 0
     externalNormalMap: 0
-    heightScale: .25
+    heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
   grayScaleToAlpha: 0
   generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
   textureFormat: -1
   maxTextureSize: 1024
@@ -68,20 +81,25 @@ TextureImporter:
     wrapMode: 1
   nPOTScale: 0
   lightmap: 0
+  rGBM: 0
   compressionQuality: 50
+  allowsAlphaSplitting: 0
   spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
-  spritePivot: {x: .5, y: .5}
+  spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 60
   alphaIsTransparency: 1
+  spriteTessellationDetail: -1
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
+    serializedVersion: 2
     sprites:
-    - name: Weapon_Blaster
+    - serializedVersion: 2
+      name: Weapon_Blaster
       rect:
         serializedVersion: 2
         x: 0
@@ -89,9 +107,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Weapon_Plasmer
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Weapon_Plasmer
       rect:
         serializedVersion: 2
         x: 64
@@ -99,9 +120,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Engine_Force
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Engine_Force
       rect:
         serializedVersion: 2
         x: 0
@@ -109,9 +133,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Armor_HardenedSteel
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Armor_HardenedSteel
       rect:
         serializedVersion: 2
         x: 128
@@ -119,9 +146,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Generator_Atomic
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Generator_Atomic
       rect:
         serializedVersion: 2
         x: 0
@@ -129,9 +159,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Radar_Sequester
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Radar_Sequester
       rect:
         serializedVersion: 2
         x: 0
@@ -139,9 +172,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Weapon_Charger
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Weapon_Charger
       rect:
         serializedVersion: 2
         x: 128
@@ -149,9 +185,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Weapon_Emitter
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Weapon_Emitter
       rect:
         serializedVersion: 2
         x: 192
@@ -159,9 +198,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Weapon_Waver
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Weapon_Waver
       rect:
         serializedVersion: 2
         x: 256
@@ -169,9 +211,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Weapon_Launcher
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Weapon_Launcher
       rect:
         serializedVersion: 2
         x: 320
@@ -179,9 +224,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Weapon_Suppressor
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Weapon_Suppressor
       rect:
         serializedVersion: 2
         x: 384
@@ -189,9 +237,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Engine_Gradual
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Engine_Gradual
       rect:
         serializedVersion: 2
         x: 64
@@ -199,9 +250,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Engine_Proton
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Engine_Proton
       rect:
         serializedVersion: 2
         x: 128
@@ -209,9 +263,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Engine_Allur
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Engine_Allur
       rect:
         serializedVersion: 2
         x: 192
@@ -219,9 +276,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Engine_Quazar
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Engine_Quazar
       rect:
         serializedVersion: 2
         x: 256
@@ -229,9 +289,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Armor_Steel
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Armor_Steel
       rect:
         serializedVersion: 2
         x: 64
@@ -239,9 +302,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Armor_Titan
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Armor_Titan
       rect:
         serializedVersion: 2
         x: 192
@@ -249,9 +315,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Armor_Astron
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Armor_Astron
       rect:
         serializedVersion: 2
         x: 256
@@ -259,9 +328,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Armor_Adamant
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Armor_Adamant
       rect:
         serializedVersion: 2
         x: 320
@@ -269,9 +341,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Generator_Plasma
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Generator_Plasma
       rect:
         serializedVersion: 2
         x: 64
@@ -279,9 +354,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Generator_Multyphase
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Generator_Multyphase
       rect:
         serializedVersion: 2
         x: 128
@@ -289,9 +367,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Generator_Tunnel
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Generator_Tunnel
       rect:
         serializedVersion: 2
         x: 192
@@ -299,9 +380,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Radar_Planar
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Radar_Planar
       rect:
         serializedVersion: 2
         x: 64
@@ -309,9 +393,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Radar_Matrix
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Radar_Matrix
       rect:
         serializedVersion: 2
         x: 128
@@ -319,9 +406,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Radar_PatanCorsac
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Radar_PatanCorsac
       rect:
         serializedVersion: 2
         x: 192
@@ -329,9 +419,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Radar_Snake
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Radar_Snake
       rect:
         serializedVersion: 2
         x: 256
@@ -339,9 +432,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Shield_Block
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Shield_Block
       rect:
         serializedVersion: 2
         x: 0
@@ -349,9 +445,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Shield_Quadratic
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Shield_Quadratic
       rect:
         serializedVersion: 2
         x: 64
@@ -359,9 +458,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Shield_Cell
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Shield_Cell
       rect:
         serializedVersion: 2
         x: 128
@@ -369,9 +471,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Shield_Phase
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Shield_Phase
       rect:
         serializedVersion: 2
         x: 192
@@ -379,9 +484,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: RepairDroid_Rail
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: RepairDroid_Rail
       rect:
         serializedVersion: 2
         x: 0
@@ -389,9 +497,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: RepairDroid_Channel
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: RepairDroid_Channel
       rect:
         serializedVersion: 2
         x: 64
@@ -399,9 +510,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: RepairDroid_Biphasic
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: RepairDroid_Biphasic
       rect:
         serializedVersion: 2
         x: 128
@@ -409,9 +523,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: RepairDroid_Thread
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: RepairDroid_Thread
       rect:
         serializedVersion: 2
         x: 192
@@ -419,9 +536,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Harvester_Mechanical
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Harvester_Mechanical
       rect:
         serializedVersion: 2
         x: 0
@@ -429,9 +549,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Harvester_Plasmatic
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Harvester_Plasmatic
       rect:
         serializedVersion: 2
         x: 64
@@ -439,9 +562,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Harvester_Generative
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Harvester_Generative
       rect:
         serializedVersion: 2
         x: 128
@@ -449,9 +575,12 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Radar_Astral
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Radar_Astral
       rect:
         serializedVersion: 2
         x: 320
@@ -459,7 +588,116 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: BodyArmor_Suit
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 448
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: BodyArmor_Metal
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 448
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: BodyArmor_Heavy
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 448
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: HandWeapon_Gun
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 384
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: HandWeapon_Revolver
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 385
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: HandWeapon_Minigun
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 384
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: HandWeapon_Gausse
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 384
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: HandWeapon_Railgun
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 384
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    outline: []
   spritePackingTag: 
   userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class ShipData : MonoBehaviour {
 
-	public Transform inventoryItemPrefab;
+	public Transform itemPrefab;
 
 	public Sprite[] hullSprites;
 
@@ -43,6 +43,7 @@ public class ShipData : MonoBehaviour {
 		for (int i = 0; i < trans.childCount; i++) {
 			tempslot = trans.GetChild(i).GetComponent<HullSlot>();
 			if (tempslot != null) {
+				tempslot.init();
 				switch (tempslot.slotType) {
 					case HullSlot.Type.RADAR: radarSlot = tempslot; break;
 					case HullSlot.Type.ENGINE: engineSlot = tempslot; break;
@@ -215,30 +216,30 @@ public class ShipData : MonoBehaviour {
 		  	 weapon_1 = null, weapon_2 = null, weapon_3 = null, weapon_4 = null, weapon_5 = null,
 		  	 armor_1 = null, armor_2 = null, armor_3 = null, armor_4 = null, armor_5 = null;
 
-		radar = Instantiate<Transform>(inventoryItemPrefab).GetComponent<Item>();
-		engine = Instantiate<Transform>(inventoryItemPrefab).GetComponent<Item>();
-		if (generatorSlots >= 1) generator_1 = Instantiate<Transform>(inventoryItemPrefab).GetComponent<Item>();
-		if (generatorSlots >= 2) generator_2 = Instantiate<Transform>(inventoryItemPrefab).GetComponent<Item>();
-		if (generatorSlots >= 3) generator_3 = Instantiate<Transform>(inventoryItemPrefab).GetComponent<Item>();
-		if (harvesterSlots >= 1) harvester_1 = Instantiate<Transform>(inventoryItemPrefab).GetComponent<Item>();
-		if (harvesterSlots >= 2) harvester_2 = Instantiate<Transform>(inventoryItemPrefab).GetComponent<Item>();
-		if (repairDroids >= 1) repairDroid_1 = Instantiate<Transform>(inventoryItemPrefab).GetComponent<Item>();
-		if (repairDroids >= 2) repairDroid_2 = Instantiate<Transform>(inventoryItemPrefab).GetComponent<Item>();
-		if (repairDroids >= 3) repairDroid_3 = Instantiate<Transform>(inventoryItemPrefab).GetComponent<Item>();
-		if (repairDroids >= 4) repairDroid_4 = Instantiate<Transform>(inventoryItemPrefab).GetComponent<Item>();
-		if (shieldSlots >= 1) shield_1 = Instantiate<Transform>(inventoryItemPrefab).GetComponent<Item>();
-		if (shieldSlots >= 2) shield_2 = Instantiate<Transform>(inventoryItemPrefab).GetComponent<Item>();
-		if (shieldSlots >= 3) shield_3 = Instantiate<Transform>(inventoryItemPrefab).GetComponent<Item>();
-		if (weaponSlots >= 1) weapon_1 = Instantiate<Transform>(inventoryItemPrefab).GetComponent<Item>();
-		if (weaponSlots >= 2) weapon_2 = Instantiate<Transform>(inventoryItemPrefab).GetComponent<Item>();
-		if (weaponSlots >= 3) weapon_3 = Instantiate<Transform>(inventoryItemPrefab).GetComponent<Item>();
-		if (weaponSlots >= 4) weapon_4 = Instantiate<Transform>(inventoryItemPrefab).GetComponent<Item>();
-		if (weaponSlots >= 5) weapon_5 = Instantiate<Transform>(inventoryItemPrefab).GetComponent<Item>();
-		if (armorSlots >= 1) armor_1 = Instantiate<Transform>(inventoryItemPrefab).GetComponent<Item>();
-		if (armorSlots >= 2) armor_2 = Instantiate<Transform>(inventoryItemPrefab).GetComponent<Item>();
-		if (armorSlots >= 3) armor_3 = Instantiate<Transform>(inventoryItemPrefab).GetComponent<Item>();
-		if (armorSlots >= 4) armor_4 = Instantiate<Transform>(inventoryItemPrefab).GetComponent<Item>();
-		if (armorSlots >= 5) armor_5 = Instantiate<Transform>(inventoryItemPrefab).GetComponent<Item>();
+		radar = Instantiate<Transform>(itemPrefab).GetComponent<Item>();
+		engine = Instantiate<Transform>(itemPrefab).GetComponent<Item>();
+		if (generatorSlots >= 1) generator_1 = Instantiate<Transform>(itemPrefab).GetComponent<Item>();
+		if (generatorSlots >= 2) generator_2 = Instantiate<Transform>(itemPrefab).GetComponent<Item>();
+		if (generatorSlots >= 3) generator_3 = Instantiate<Transform>(itemPrefab).GetComponent<Item>();
+		if (harvesterSlots >= 1) harvester_1 = Instantiate<Transform>(itemPrefab).GetComponent<Item>();
+		if (harvesterSlots >= 2) harvester_2 = Instantiate<Transform>(itemPrefab).GetComponent<Item>();
+		if (repairDroids >= 1) repairDroid_1 = Instantiate<Transform>(itemPrefab).GetComponent<Item>();
+		if (repairDroids >= 2) repairDroid_2 = Instantiate<Transform>(itemPrefab).GetComponent<Item>();
+		if (repairDroids >= 3) repairDroid_3 = Instantiate<Transform>(itemPrefab).GetComponent<Item>();
+		if (repairDroids >= 4) repairDroid_4 = Instantiate<Transform>(itemPrefab).GetComponent<Item>();
+		if (shieldSlots >= 1) shield_1 = Instantiate<Transform>(itemPrefab).GetComponent<Item>();
+		if (shieldSlots >= 2) shield_2 = Instantiate<Transform>(itemPrefab).GetComponent<Item>();
+		if (shieldSlots >= 3) shield_3 = Instantiate<Transform>(itemPrefab).GetComponent<Item>();
+		if (weaponSlots >= 1) weapon_1 = Instantiate<Transform>(itemPrefab).GetComponent<Item>();
+		if (weaponSlots >= 2) weapon_2 = Instantiate<Transform>(itemPrefab).GetComponent<Item>();
+		if (weaponSlots >= 3) weapon_3 = Instantiate<Transform>(itemPrefab).GetComponent<Item>();
+		if (weaponSlots >= 4) weapon_4 = Instantiate<Transform>(itemPrefab).GetComponent<Item>();
+		if (weaponSlots >= 5) weapon_5 = Instantiate<Transform>(itemPrefab).GetComponent<Item>();
+		if (armorSlots >= 1) armor_1 = Instantiate<Transform>(itemPrefab).GetComponent<Item>();
+		if (armorSlots >= 2) armor_2 = Instantiate<Transform>(itemPrefab).GetComponent<Item>();
+		if (armorSlots >= 3) armor_3 = Instantiate<Transform>(itemPrefab).GetComponent<Item>();
+		if (armorSlots >= 4) armor_4 = Instantiate<Transform>(itemPrefab).GetComponent<Item>();
+		if (armorSlots >= 5) armor_5 = Instantiate<Transform>(itemPrefab).GetComponent<Item>();
 
 		getSlot(HullSlot.Type.RADAR, 0).setItem(radar);
 		getSlot(HullSlot.Type.ENGINE, 0).setItem(engine);
@@ -314,7 +315,7 @@ public class ShipData : MonoBehaviour {
 
 		setHullType (Vars.shipHullType, Vars.shipCurrentHealth);
 		foreach (KeyValuePair<KeyValuePair<HullSlot.Type, int>, ItemData> pair in Vars.shipHullSlotsMap) {
-			Item item = Instantiate<Transform>(inventoryItemPrefab).GetComponent<Item>().init(pair.Value);
+			Item item = Instantiate<Transform>(itemPrefab).GetComponent<Item>().init(pair.Value);
 			item.transform.parent = trans;
 			item.GetComponent<SpriteRenderer>().sortingOrder = 3;
 			getSlot(pair.Key.Key, pair.Key.Value).setItem(item);
@@ -443,7 +444,7 @@ public class ShipData : MonoBehaviour {
 	public int getShield () {
 		int shield = 0;
 		foreach (HullSlot slot in slots) {
-			if (slot.item != null && slot.item.getItemType() == ItemData.Type.SHIELD) {
+			if (slot.item != null && slot.item.getItemType() == ItemType.SHIELD) {
 				shield += ((ShieldData) slot.item.itemData).shieldLevel;
 			}	
 		}
@@ -453,7 +454,7 @@ public class ShipData : MonoBehaviour {
 	public int getArmor () {
 		int armor = 0;
 		foreach (HullSlot slot in slots) {
-			if (slot.item != null && slot.item.getItemType() == ItemData.Type.ARMOR) {
+			if (slot.item != null && slot.item.getItemType() == ItemType.ARMOR) {
 				armor += ((ArmorData)slot.item.itemData).armorClass;
 			}
 		}
@@ -469,7 +470,7 @@ public class ShipData : MonoBehaviour {
 		int energy = 0;
 		foreach (HullSlot slot in slots) {
 			if (slot.item != null) {
-				if (slot.item.getItemType() == ItemData.Type.GENERATOR) {
+				if (slot.item.getItemType() == ItemType.GENERATOR) {
 					energy += ((GeneratorData)slot.item.itemData).maxEnergy;
 				}
 				energy -= slot.item.getEnergyNeeded();

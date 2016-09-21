@@ -2,7 +2,7 @@
 using UnityEngine.SceneManagement;
 using System.Collections;
 
-public class Menu : MonoBehaviour {
+public class Title : MonoBehaviour {
 	
 	public void startNewGame () {
 		PlanetSurface.newGame = true;
