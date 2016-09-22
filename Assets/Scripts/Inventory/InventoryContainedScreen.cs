@@ -25,7 +25,10 @@ public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 
 		chosenItemBorder = transform.Find ("Chosen Item Border").transform;
 
-		inventoryBtn = transform.Find("Inventory Button") == null? null: transform.Find("Inventory Button").GetComponent<Button>().init();
+		inventoryBtn = transform.Find("Equipment Button") == null? null: transform.Find("Equipment Button").GetComponent<Button>().init();
+		if (inventoryBtn == null) {
+			inventoryBtn = transform.Find("Inventory Button") == null? null: transform.Find("Inventory Button").GetComponent<Button>().init();
+		}
 		storageBtn = transform.Find("Storage Button") == null? null: transform.Find("Storage Button").GetComponent<Button>().init();
 	}
 

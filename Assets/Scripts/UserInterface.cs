@@ -33,7 +33,7 @@ public class UserInterface : MonoBehaviour {
 
 	private Rect backgroundRect = new Rect (0, 10, Screen.width, 50),
 				 cashRect = new Rect(Screen.width - 20, 35, 0, 0),
-				 statusBtnRect = new Rect (10, 10, 50, 50),
+				 statusBtnRect = new Rect (-5, Screen.height - 52, 48, 48),
 				 shieldBarRect = new Rect(0, Screen.height - 70, 0, 50),
 				 healthBarRect = new Rect(0, Screen.height - 50, 0, 50),
 				 planetDescriptRect = new Rect(Screen.width - 220, 80, 210, 290), 
@@ -63,16 +63,19 @@ public class UserInterface : MonoBehaviour {
 	}
 
 	void OnGUI () {
-		GUI.DrawTexture(backgroundRect, background);
-		GUI.Label(cashRect, Vars.cash.ToString(), cashStyle);
-		if (GUI.Button(statusBtnRect, "", statusBtnStyle)) {
-			if (!statusScreen.gameObject.activeInHierarchy) {
-//				if (shipInformation != null && shipInformation.gameObject.activeInHierarchy) {
-//					shipInformation.closeScreen();
-//				}
+//		GUI.DrawTexture(backgroundRect, background);
+//		GUI.Label(cashRect, Vars.cash.ToString(), cashStyle);
+		if (!statusScreen.gameObject.activeInHierarchy) {
+			if (GUI.Button(statusBtnRect, "", statusBtnStyle)) {
 				statusScreen.showScreen();
-			} else {
-				statusScreen.closeScreen();
+	//			if (!statusScreen.gameObject.activeInHierarchy) {
+	////				if (shipInformation != null && shipInformation.gameObject.activeInHierarchy) {
+	////					shipInformation.closeScreen();
+	////				}
+	//				statusScreen.showScreen();
+	//			} else {
+	//				statusScreen.closeScreen();
+	//			}
 			}
 		}
 		if (starSystem != null) {

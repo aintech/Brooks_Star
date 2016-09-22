@@ -53,7 +53,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		meshRend.sortingOrder = 3;
 
 		if (inventoryType == InventoryType.INVENTORY) {
-			transform.Find("VolumeBG").gameObject.SetActive(false);
+//			transform.Find("VolumeBG").gameObject.SetActive(false);
 			volumeMesh.gameObject.SetActive(false);
 		}
 

@@ -1,0 +1,493 @@
+fileFormatVersion: 2
+guid: 1056e969b7409cd45a614aee66976e67
+timeCreated: 1474557890
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Inventory_Equipment_BG
+    21300002: Inventory_Shuttle_BG
+    21300004: Inventory_ShowBtn
+    21300006: Inventory_ShowBtnHover
+    21300008: Inventory_CloseBtn
+    21300010: Inventory_CloseBtnHover
+    21300012: Inventory_PerksBtn
+    21300014: Inventory_PerksBtn_Hover
+    21300016: Inventory_ShuttleBtn
+    21300018: InventoryShuttleBtn_Hover
+    21300020: Inventory_EquipmentBtn
+    21300022: Inventory_EquipmentBtn_Hover
+    21300024: Inventory_UpBtn
+    21300026: Inventory_DownBtn
+    21300028: Inventory_SortBtn
+    21300030: Inventory_UpBtn_Hover
+    21300032: Inventory_DownBtn_Hover
+    21300034: Inventory_SortBtn_Hover
+    21300036: Inventory_Icon_HandWeapon
+    21300038: Inventory_Icon_BodyArmor
+    21300040: Inventory_Icon_Radar
+    21300042: Inventory_Icon_Generator
+    21300044: Inventory_Icon_Shield
+    21300046: Inventory_Icon_Armor
+    21300048: Inventory_Icon_Droid
+    21300050: Inventory_Icon_Weapon
+    21300052: Inventory_Icon_Harvester
+    21300054: Inventory_Icon_Engine
+    21300056: Inventory_SlotBG
+    21300058: Inventory_SlotBorder
+    21300060: Inventory_SlotActive
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Inventory_Equipment_BG
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1600
+        height: 1000
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_Shuttle_BG
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1031
+        width: 1600
+        height: 1001
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_ShowBtn
+      rect:
+        serializedVersion: 2
+        x: 1619
+        y: 10
+        width: 56
+        height: 65
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_ShowBtnHover
+      rect:
+        serializedVersion: 2
+        x: 1707
+        y: 10
+        width: 56
+        height: 65
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_CloseBtn
+      rect:
+        serializedVersion: 2
+        x: 1619
+        y: 100
+        width: 274
+        height: 65
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_CloseBtnHover
+      rect:
+        serializedVersion: 2
+        x: 1619
+        y: 186
+        width: 274
+        height: 65
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_PerksBtn
+      rect:
+        serializedVersion: 2
+        x: 1619
+        y: 280
+        width: 331
+        height: 61
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_PerksBtn_Hover
+      rect:
+        serializedVersion: 2
+        x: 1619
+        y: 368
+        width: 331
+        height: 61
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_ShuttleBtn
+      rect:
+        serializedVersion: 2
+        x: 1619
+        y: 460
+        width: 331
+        height: 61
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: InventoryShuttleBtn_Hover
+      rect:
+        serializedVersion: 2
+        x: 1619
+        y: 551
+        width: 331
+        height: 61
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_EquipmentBtn
+      rect:
+        serializedVersion: 2
+        x: 1619
+        y: 637
+        width: 331
+        height: 61
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_EquipmentBtn_Hover
+      rect:
+        serializedVersion: 2
+        x: 1619
+        y: 728
+        width: 331
+        height: 61
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_UpBtn
+      rect:
+        serializedVersion: 2
+        x: 1634
+        y: 960
+        width: 40
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_DownBtn
+      rect:
+        serializedVersion: 2
+        x: 1634
+        y: 889
+        width: 40
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_SortBtn
+      rect:
+        serializedVersion: 2
+        x: 1634
+        y: 807
+        width: 39
+        height: 58
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_UpBtn_Hover
+      rect:
+        serializedVersion: 2
+        x: 1736
+        y: 960
+        width: 40
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_DownBtn_Hover
+      rect:
+        serializedVersion: 2
+        x: 1736
+        y: 889
+        width: 40
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_SortBtn_Hover
+      rect:
+        serializedVersion: 2
+        x: 1736
+        y: 807
+        width: 40
+        height: 58
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_Icon_HandWeapon
+      rect:
+        serializedVersion: 2
+        x: 1636
+        y: 1046
+        width: 104
+        height: 68
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_Icon_BodyArmor
+      rect:
+        serializedVersion: 2
+        x: 1786
+        y: 1036
+        width: 104
+        height: 78
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_Icon_Radar
+      rect:
+        serializedVersion: 2
+        x: 1638
+        y: 1160
+        width: 99
+        height: 99
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_Icon_Generator
+      rect:
+        serializedVersion: 2
+        x: 1789
+        y: 1155
+        width: 98
+        height: 109
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_Icon_Shield
+      rect:
+        serializedVersion: 2
+        x: 1634
+        y: 1299
+        width: 109
+        height: 109
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_Icon_Armor
+      rect:
+        serializedVersion: 2
+        x: 1786
+        y: 1301
+        width: 105
+        height: 105
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_Icon_Droid
+      rect:
+        serializedVersion: 2
+        x: 1643
+        y: 1428
+        width: 92
+        height: 95
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_Icon_Weapon
+      rect:
+        serializedVersion: 2
+        x: 1778
+        y: 1425
+        width: 116
+        height: 111
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_Icon_Harvester
+      rect:
+        serializedVersion: 2
+        x: 1637
+        y: 1559
+        width: 113
+        height: 110
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_Icon_Engine
+      rect:
+        serializedVersion: 2
+        x: 1771
+        y: 1560
+        width: 115
+        height: 114
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_SlotBG
+      rect:
+        serializedVersion: 2
+        x: 1629
+        y: 1740
+        width: 120
+        height: 121
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_SlotBorder
+      rect:
+        serializedVersion: 2
+        x: 1777
+        y: 1739
+        width: 123
+        height: 123
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_SlotActive
+      rect:
+        serializedVersion: 2
+        x: 1629
+        y: 1891
+        width: 120
+        height: 121
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

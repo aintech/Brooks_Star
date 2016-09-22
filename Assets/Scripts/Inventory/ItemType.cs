@@ -8,15 +8,15 @@ public enum ItemType {
 }
 
 public enum ItemKind {
-	GOOD, GEAR, EQUIPMENT
+	GOOD, EQUIPMENTS, SHUTTLE
 }
 
 public static class TypeDescriptor {
 	public static ItemKind getKind (this ItemType type) {
 		switch (type) {
-			case ItemType.HAND_WEAPON: case ItemType.BODY_ARMOR: return ItemKind.GEAR;
+			case ItemType.HAND_WEAPON: case ItemType.BODY_ARMOR: return ItemKind.EQUIPMENTS;
 			case ItemType.WEAPON: case ItemType.ENGINE: case ItemType.ARMOR: case ItemType.GENERATOR: case ItemType.RADAR: case ItemType.SHIELD:
-			case ItemType.REPAIR_DROID: case ItemType.HARVESTER: return ItemKind.EQUIPMENT;
+			case ItemType.REPAIR_DROID: case ItemType.HARVESTER: return ItemKind.SHUTTLE;
 			case ItemType.MINERAL: return ItemKind.GOOD;
 			default: Debug.Log("Unknown type: " + type); return ItemKind.GOOD;
 		}

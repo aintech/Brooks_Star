@@ -32,7 +32,7 @@ public class StatusScreen : InventoryContainedScreen {
 
 		perksView = transform.Find("Perks View").GetComponent<PerksView>().init(this);
 
-		transform.Find("BG").gameObject.SetActive(true);
+		transform.Find("Background").gameObject.SetActive(true);
 
 		inventory.setCapacity(shipData.getHullType().getStorageCapacity());
 

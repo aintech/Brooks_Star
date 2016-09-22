@@ -39,7 +39,7 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 		industrialScreen = GameObject.Find("Industrial Screen").GetComponent<IndustrialScreen>();
 
         Transform inventories = GameObject.Find("Inventories").transform;
-        inventory = inventories.Find ("Inventory").GetComponent<Inventory> ().init(Inventory.InventoryType.INVENTORY);
+		inventory = GameObject.Find("Status Screen").transform.Find ("Inventory").GetComponent<Inventory> ().init(Inventory.InventoryType.INVENTORY);
 		storage = inventories.Find ("Storage").GetComponent<Inventory> ().init(Inventory.InventoryType.STORAGE);
 		market = inventories.Find ("Market").GetComponent<Inventory> ().init(Inventory.InventoryType.MARKET);
 		buyback = inventories.Find ("Buyback").GetComponent<Inventory> ().init(Inventory.InventoryType.BUYBACK);
