@@ -55,8 +55,8 @@ public class EquipmentsMarket : InventoryContainedScreen {
 	override protected void checkItemDrop () {
 		if (Utils.hit != null && Utils.hit.name.Equals("Cell")) {
 			InventoryCell cell = Utils.hit.transform.GetComponent<InventoryCell>();
-			Inventory source = draggedItem.transform.parent.GetComponent<Inventory>();
-			Inventory target = cell.transform.parent.GetComponent<Inventory>();
+			Inventory source = draggedItem.cell.getInventory();
+			Inventory target = cell.getInventory();
 			
 			if (source != target && (source == inventory || source == storage) && target == market) {
 				target.sellItemToTrader(draggedItem, buyback);
@@ -65,7 +65,7 @@ public class EquipmentsMarket : InventoryContainedScreen {
 				target.addItemToCell(draggedItem, cell);
 			}
 		} else {
-			draggedItem.returnToParentInventory();
+			draggedItem.returnToParent();
 		}
 	}
 
@@ -123,7 +123,7 @@ public class EquipmentsMarket : InventoryContainedScreen {
 	public void closeScreen () {
 		if (inventory != null) {
 			if (draggedItem != null) {
-				draggedItem.returnToParentInventory();
+				draggedItem.returnToParent();
 				draggedItem = null;
 			}
 			hideItemInfo(null);

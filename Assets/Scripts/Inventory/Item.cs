@@ -122,9 +122,14 @@ public class Item : MonoBehaviour {
 		return  itemData.itemType.getKind();
 	}
 
-	public void returnToParentInventory () {
-		Inventory inventory = transform.parent.GetComponent<Inventory> ();
-		inventory.addItemToCell (this, cell);
+	public void returnToParent () {
+		if (cell != null) {
+			cell.getInventory().addItemToCell (this, cell);
+		} else if (slot != null) {
+			slot.setItem(this);
+		} else {
+			Debug.Log("Dont know where return item: " + getItemName());
+		}
 	}
 
 	public float getVolume () {

@@ -36,10 +36,10 @@ public class ShipInformationScreen : InventoryContainedScreen {
 				inventory.addItemToCell(draggedItem, cell);
 			} else if (Utils.hit.name.Contains(" Slot")) {
 				Messenger.showMessage("Оборудование на корабле можно менять только на планетах");
-				draggedItem.returnToParentInventory();
+				draggedItem.returnToParent();
 			}
 		} else {
-			draggedItem.returnToParentInventory();
+			draggedItem.returnToParent();
 		}
 	}
 

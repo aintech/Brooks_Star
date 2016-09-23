@@ -49,7 +49,9 @@ public class StarSystem : MonoBehaviour {
 		inventory = GameObject.Find("Inventories").transform.Find ("Inventory").GetComponent<Inventory> ().init(Inventory.InventoryType.INVENTORY);
 		storage = GameObject.Find("Inventories").transform.Find ("Storage").GetComponent<Inventory> ().init(Inventory.InventoryType.STORAGE);
 
-		statusScreen = GameObject.Find("Status Screen").GetComponent<StatusScreen>().init(false, inventory, storage, this);
+		ItemDescriptor descriptor = GameObject.Find("Item Descriptor").GetComponent<ItemDescriptor>().init();
+
+		statusScreen = GameObject.Find("Status Screen").GetComponent<StatusScreen>().init(false, inventory, storage, this, descriptor);
 
 		if (Vars.shipCurrentHealth == -1) {
 			statusScreen.getShipData().initializeRandomShip (HullType.Corvette);

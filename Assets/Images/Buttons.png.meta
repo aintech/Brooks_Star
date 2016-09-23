@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: b7718f50a00abc44898d77d6cfd1d54d
-timeCreated: 1473688967
+timeCreated: 1474638863
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -14,6 +14,7 @@ TextureImporter:
     21300014: Buttons_SortHover
     21300016: Buttons_ShortestHover
     21300018: Buttons_ShortestNormal
+    21300020: ItemDescriptor_BG
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -189,6 +190,19 @@ TextureImporter:
         height: 101
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: ItemDescriptor_BG
+      rect:
+        serializedVersion: 2
+        x: 506
+        y: 430
+        width: 47
+        height: 38
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0

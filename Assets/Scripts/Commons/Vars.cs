@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public static class Vars {
 
+	public const bool NSFW = false;
+
 	public static StarSystemType starSystemType = StarSystemType.ALURIA;
 
 	public static PlanetType planetType = PlanetType.CORAS;

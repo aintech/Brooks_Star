@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class InventoryCell : MonoBehaviour {
+public class InventoryCell : Describable {
 
 	public int index;
 
-	private Item item;
+	public Item item { get; private set; }
 
     private Inventory inventory;
 
@@ -13,12 +13,14 @@ public class InventoryCell : MonoBehaviour {
         this.inventory = inventory;
     }
 
-	public void setItem (Item item) {
-		this.item = item;
-	}
-
-	public Item getItem () {
-		return item;
+	public void setItem (Item newItem) {
+		item = newItem;
+		if (item != null) {
+			item.slot = null;
+			item.cell = this;
+			item.transform.parent = transform;
+			item.transform.localPosition = Vector3.zero;
+		}
 	}
 
 	public Item takeItem () {
@@ -31,4 +33,7 @@ public class InventoryCell : MonoBehaviour {
     public Inventory getInventory () {
         return inventory;
     }
+
+	public override string getQuality () { return item == null? null: item.getItemQuality().ToString(); }
+	public override string getName () { return item == null? null: item.getItemName(); }
 }

@@ -13,10 +13,13 @@ public class MarketScreen : MonoBehaviour, ButtonHolder, Hideable {
 
 	private Inventory market, buyback;
 
-	public void init (PlanetSurface planetSurface, ShipData shipData, Inventory inventory, Inventory storage, Inventory market, Inventory buyback) {
+	private ItemDescriptor descriptor;
+
+	public void init (PlanetSurface planetSurface, ShipData shipData, Inventory inventory, Inventory storage, Inventory market, Inventory buyback, ItemDescriptor descriptor) {
 		this.planetSurface = planetSurface;
 		this.market = market;
 		this.buyback = buyback;
+		this.descriptor = descriptor;
 
 		equipmentsMarket = transform.Find ("Equipments Market").GetComponent<EquipmentsMarket>();
 		equipmentsMarket.init(this, inventory, storage, market, buyback);

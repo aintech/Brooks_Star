@@ -1,19 +1,19 @@
 fileFormatVersion: 2
 guid: 1056e969b7409cd45a614aee66976e67
-timeCreated: 1474557890
+timeCreated: 1474626044
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: Inventory_Equipment_BG
-    21300002: Inventory_Shuttle_BG
+    21300002: Inventory_Ship_BG
     21300004: Inventory_ShowBtn
     21300006: Inventory_ShowBtnHover
     21300008: Inventory_CloseBtn
     21300010: Inventory_CloseBtnHover
     21300012: Inventory_PerksBtn
     21300014: Inventory_PerksBtn_Hover
-    21300016: Inventory_ShuttleBtn
-    21300018: InventoryShuttleBtn_Hover
+    21300016: Inventory_ShipBtn
+    21300018: InventoryShipBtn_Hover
     21300020: Inventory_EquipmentBtn
     21300022: Inventory_EquipmentBtn_Hover
     21300024: Inventory_UpBtn
@@ -35,6 +35,7 @@ TextureImporter:
     21300056: Inventory_SlotBG
     21300058: Inventory_SlotBorder
     21300060: Inventory_SlotActive
+    21300062: Inventory_ShipBtn_Hover
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -97,11 +98,11 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Inventory_Shuttle_BG
+      name: Inventory_Ship_BG
       rect:
         serializedVersion: 2
         x: 0
-        y: 1031
+        y: 1020
         width: 1600
         height: 1001
       alignment: 0
@@ -188,7 +189,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Inventory_ShuttleBtn
+      name: Inventory_ShipBtn
       rect:
         serializedVersion: 2
         x: 1619
@@ -201,7 +202,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: InventoryShuttleBtn_Hover
+      name: Inventory_ShipBtn_Hover
       rect:
         serializedVersion: 2
         x: 1619

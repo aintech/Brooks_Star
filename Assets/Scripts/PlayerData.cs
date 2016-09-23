@@ -7,15 +7,13 @@ public class PlayerData : MonoBehaviour {
 
 	public Sprite[] playerSprites;
 
-	private bool initialized = false;
-
 	private SpriteRenderer render;
 
-	private GearSlot handWeaponSlot, bodyArmorSlot;
+	private EquipmentSlot handWeaponSlot, bodyArmorSlot;
 
 	private Transform trans;
 
-	private GearSlot[] slots;
+	private EquipmentSlot[] slots;
 
 //	private int currentHealth, currentShield;
 
@@ -28,20 +26,20 @@ public class PlayerData : MonoBehaviour {
 	public PlayerData init () {
 		trans = transform;
 
-		GearSlot slot;
+		EquipmentSlot slot;
 		for (int i = 0; i < trans.childCount; i++) {
-			slot = trans.GetChild(i).GetComponent<GearSlot>();
+			slot = trans.GetChild(i).GetComponent<EquipmentSlot>();
 			if (slot != null) {
 				slot.init();
-				switch (slot.gearType) {
-					case GearSlot.Type.HAND_WEAPON: handWeaponSlot = slot; break;
-					case GearSlot.Type.BODY_ARMOR: bodyArmorSlot = slot; break;
-					default: Debug.Log("Unknown slot type: " + slot.gearType); break;
+				switch (slot.slotType) {
+					case EquipmentSlot.Type.HAND_WEAPON: handWeaponSlot = slot; break;
+					case EquipmentSlot.Type.BODY_ARMOR: bodyArmorSlot = slot; break;
+					default: Debug.Log("Unknown slot type: " + slot.slotType); break;
 				}
 			}
 		}
 
-		slots = new GearSlot[]{handWeaponSlot, bodyArmorSlot};
+		slots = new EquipmentSlot[]{handWeaponSlot, bodyArmorSlot};
 
 		Transform playerInfo = transform.Find ("Player Information");
 		playerInfo.gameObject.SetActive(true);
@@ -69,7 +67,6 @@ public class PlayerData : MonoBehaviour {
 
 		render =  transform.Find("Player Image").GetComponent<SpriteRenderer>();
 		render.gameObject.SetActive(true);
-		transform.Find("Player BG").gameObject.SetActive(true);
 
 		updatePlayerInfo();
 

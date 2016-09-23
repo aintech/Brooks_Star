@@ -62,6 +62,16 @@ public class UserInterface : MonoBehaviour {
 		return this;
 	}
 
+	void Update () {
+		if (Input.GetKeyDown(KeyCode.I)) {
+			if (statusScreen.gameObject.activeInHierarchy) {
+				statusScreen.closeScreen();
+			} else {
+				statusScreen.showScreen();
+			}
+		}
+	}
+
 	void OnGUI () {
 //		GUI.DrawTexture(backgroundRect, background);
 //		GUI.Label(cashRect, Vars.cash.ToString(), cashStyle);

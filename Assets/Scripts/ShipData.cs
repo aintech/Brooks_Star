@@ -124,7 +124,6 @@ public class ShipData : MonoBehaviour {
 		energyValue.GetComponent<MeshRenderer> ().sortingOrder = 3;
 
         transform.Find("Hull Image").gameObject.SetActive(true);
-        transform.Find("Hull BG").gameObject.SetActive(true);
 
 		gameObject.SetActive(false);
 
@@ -316,7 +315,6 @@ public class ShipData : MonoBehaviour {
 		setHullType (Vars.shipHullType, Vars.shipCurrentHealth);
 		foreach (KeyValuePair<KeyValuePair<HullSlot.Type, int>, ItemData> pair in Vars.shipHullSlotsMap) {
 			Item item = Instantiate<Transform>(itemPrefab).GetComponent<Item>().init(pair.Value);
-			item.transform.parent = trans;
 			item.GetComponent<SpriteRenderer>().sortingOrder = 3;
 			getSlot(pair.Key.Key, pair.Key.Value).setItem(item);
 		}

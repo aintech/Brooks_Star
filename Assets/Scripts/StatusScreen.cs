@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class StatusScreen : InventoryContainedScreen {
 
+	public Sprite equipmentBG, shipBG, perksBG;
+
 	private bool onPlanetSurface;
 
 	private PerksView perksView;
@@ -16,9 +18,14 @@ public class StatusScreen : InventoryContainedScreen {
 
 	private StarSystem starSystem;
 
-	public StatusScreen init (bool onPlanetSurface, Inventory inventory, Inventory storage, StarSystem starSystem) {
+	private SpriteRenderer background;
+
+	private ItemDescriptor descriptor;
+
+	public StatusScreen init (bool onPlanetSurface, Inventory inventory, Inventory storage, StarSystem starSystem, ItemDescriptor descriptor) {
 		this.onPlanetSurface = onPlanetSurface;
 		this.starSystem = starSystem;
+		this.descriptor = descriptor;
 
 		shipData = transform.Find("Ship Data").GetComponent<ShipData>().init(onPlanetSurface);
 		playerData = transform.Find("Player Data").GetComponent<PlayerData>().init();
@@ -32,7 +39,8 @@ public class StatusScreen : InventoryContainedScreen {
 
 		perksView = transform.Find("Perks View").GetComponent<PerksView>().init(this);
 
-		transform.Find("Background").gameObject.SetActive(true);
+		background = transform.Find("Background").GetComponent<SpriteRenderer>();
+		background.gameObject.SetActive(true);
 
 		inventory.setCapacity(shipData.getHullType().getStorageCapacity());
 
@@ -74,8 +82,9 @@ public class StatusScreen : InventoryContainedScreen {
 			StarSystem.setGamePause(true);
 		}
 
-		setInventoryActive();
-		setShipDataActive();
+		show (ItemKind.EQUIPMENTS);
+//		setInventoryActive();
+//		setShipDataActive();
 
 		gameObject.SetActive(true);
 	}
@@ -96,61 +105,76 @@ public class StatusScreen : InventoryContainedScreen {
 		else { StarSystem.setGamePause(false); }
 	}
 
+	private void show (ItemKind kind) {
+		background.sprite = kind == ItemKind.SHIP_EQUIPMENT? shipBG: kind == ItemKind.EQUIPMENTS? equipmentBG: perksBG;
+
+		shipData.gameObject.SetActive(kind == ItemKind.SHIP_EQUIPMENT);
+		playerData.gameObject.SetActive(kind == ItemKind.EQUIPMENTS);
+		inventory.gameObject.SetActive(kind == ItemKind.SHIP_EQUIPMENT || kind == ItemKind.EQUIPMENTS || kind == ItemKind.GOOD);
+		perksView.gameObject.SetActive(kind == ItemKind.NONE);
+
+		playerBtn.setActive (kind != ItemKind.EQUIPMENTS);
+		shipBtn.setActive (kind != ItemKind.SHIP_EQUIPMENT);
+		perksBtn.setActive (kind != ItemKind.NONE);
+
+		hideItemInfo();
+	}
+
 	protected override void checkBtnPress (Button btn) {
-		if (btn == inventoryBtn) { setInventoryActive(); }
-		else if (btn == storageBtn) { setStorageActive(); }
-		else if (btn == playerBtn) { setPlayerDataActive(); }
-		else if (btn == perksBtn) { setPerksActive(); }
-		else if (btn == shipBtn) { setShipDataActive(); }
+//		if (btn == inventoryBtn) { setInventoryActive(); }
+//		else if (btn == storageBtn) { setStorageActive(); }
+		if (btn == playerBtn) { show(ItemKind.EQUIPMENTS); }
+		else if (btn == perksBtn) { show(ItemKind.NONE); }
+		else if (btn == shipBtn) { show(ItemKind.SHIP_EQUIPMENT); }
 		else if (btn == closeBtn) { closeScreen(); }
 		else { Debug.Log("Unknown button: " + btn.name); }
 	}
 
-	private void setPerksActive () {
-		perksView.gameObject.SetActive(true);
-		perksBtn.setActive(false);
-		inventory.gameObject.SetActive(false);
-		inventoryBtn.setActive(true);
-		hideItemInfo(perksBtn);
-	}
-
-	private void setInventoryActive () {
-		perksView.gameObject.SetActive(false);
-		perksBtn.setActive(true);
-		inventory.gameObject.SetActive(true);
-		inventoryBtn.setActive(false);
-	}
-
-	private void setStorageActive () {
-		storage.gameObject.SetActive(true);
-		shipData.gameObject.SetActive (false);
-		playerData.gameObject.SetActive(false);
-		storageBtn.setActive(false);
-		shipBtn.setActive(true);
-		playerBtn.setActive(true);
-		hideItemInfo(storageBtn);
-	}
-
-	private void setShipDataActive () {
-		shipData.gameObject.SetActive (true);
-		storage.gameObject.SetActive(false);
-		playerData.gameObject.SetActive(false);
-		shipBtn.setActive(false);
-		storageBtn.setActive(true);
-		playerBtn.setActive(true);
-		hideItemInfo(shipBtn);
-	}
-
-	private void setPlayerDataActive () {
-		playerData.updatePlayerInfo();
-		playerData.gameObject.SetActive(true);
-		storage.gameObject.SetActive(false);
-		shipData.gameObject.SetActive (false);
-		shipBtn.setActive(true);
-		storageBtn.setActive(true);
-		playerBtn.setActive(false);
-		hideItemInfo(playerBtn);
-	}
+//	private void setPerksActive () {
+//		perksView.gameObject.SetActive(true);
+//		perksBtn.setActive(false);
+//		inventory.gameObject.SetActive(false);
+//		inventoryBtn.setActive(true);
+//		hideItemInfo(perksBtn);
+//	}
+//
+//	private void setInventoryActive () {
+//		perksView.gameObject.SetActive(false);
+//		perksBtn.setActive(true);
+//		inventory.gameObject.SetActive(true);
+//		inventoryBtn.setActive(false);
+//	}
+//
+//	private void setStorageActive () {
+//		storage.gameObject.SetActive(true);
+//		shipData.gameObject.SetActive (false);
+//		playerData.gameObject.SetActive(false);
+//		storageBtn.setActive(false);
+//		shipBtn.setActive(true);
+//		playerBtn.setActive(true);
+//		hideItemInfo(storageBtn);
+//	}
+//
+//	private void setShipDataActive () {
+//		shipData.gameObject.SetActive (true);
+//		storage.gameObject.SetActive(false);
+//		playerData.gameObject.SetActive(false);
+//		shipBtn.setActive(false);
+//		storageBtn.setActive(true);
+//		playerBtn.setActive(true);
+//		hideItemInfo(shipBtn);
+//	}
+//
+//	private void setPlayerDataActive () {
+//		playerData.updatePlayerInfo();
+//		playerData.gameObject.SetActive(true);
+//		storage.gameObject.SetActive(false);
+//		shipData.gameObject.SetActive (false);
+//		shipBtn.setActive(true);
+//		storageBtn.setActive(true);
+//		playerBtn.setActive(false);
+//		hideItemInfo(playerBtn);
+//	}
 
 	public void hideItemInfo (Button btn) {
 		if (getChosenItem() == null) { return; }
@@ -173,18 +197,18 @@ public class StatusScreen : InventoryContainedScreen {
 	override protected void checkItemDrop () {
 		if (Utils.hit != null && Utils.hit.name.Equals("Cell")) {
 			InventoryCell cell = Utils.hit.transform.GetComponent<InventoryCell>();
-			Inventory targetInv = cell.transform.parent.GetComponent<Inventory>();
+			Inventory targetInv = cell.getInventory();
 			if (draggedItem.cell == null) {
 				switch (draggedItem.getItemType().getKind()) {
-					case ItemKind.EQUIPMENT: shipData.updateHullInfo(); break;
-					case ItemKind.GEAR: playerData.updatePlayerInfo(); break;
+					case ItemKind.SHIP_EQUIPMENT: shipData.updateHullInfo(); break;
+					case ItemKind.EQUIPMENTS: playerData.updatePlayerInfo(); break;
 				}
 			}
 			targetInv.addItemToCell(draggedItem, cell);
 		} else if (Utils.hit != null && Utils.hit.name.StartsWith("HullSlot")) {
 			HullSlot slot = Utils.hit.transform.GetComponent<HullSlot> ();
 			if (slot.slotType != getItemToHullSlotType (draggedItem.getItemType ())) {
-				if (draggedItem.cell == null) {
+				if (draggedItem.cell == null && draggedItem.slot == null) {
 					if (inventory.gameObject.activeInHierarchy) {
 						inventory.addItemToCell (draggedItem, draggedItem.cell);
 					} else if (storage.gameObject.activeInHierarchy) {
@@ -192,25 +216,28 @@ public class StatusScreen : InventoryContainedScreen {
 					}
 					shipData.updateHullInfo();
 				} else {
-					draggedItem.returnToParentInventory ();
+					draggedItem.returnToParent ();
 				}
 			} else if (slot.item == null) {
 				setItemToSlot (slot);
 			} else if (slot.item != null) {
 				Item currItem = slot.takeItem ();
-				if (inventory.gameObject.activeInHierarchy) {
+				if (draggedItem.slot != null && draggedItem.slot.slotType == slot.slotType) {
+					draggedItem.slot.setItem(currItem);
+				} else if (draggedItem.slot != null) {
+					draggedItem.returnToParent();
+				} else if (inventory.gameObject.activeInHierarchy) {
 					inventory.addItemToCell (currItem, draggedItem.cell);
 				} else if (storage.gameObject.activeInHierarchy) {
 					storage.addItemToCell (currItem, draggedItem.cell);
 				}
 				shipData.updateHullInfo ();
-				draggedItem.cell = null;
 				setItemToSlot (slot);
 			}
-		} else if (Utils.hit != null && Utils.hit.name.StartsWith("GearSlot")) {
-			GearSlot slot = Utils.hit.transform.GetComponent<GearSlot> ();
-			if (slot.gearType != getItemToGearSlotType (draggedItem.getItemType ())) {
-				if (draggedItem.cell == null) {
+		} else if (Utils.hit != null && Utils.hit.name.StartsWith("EquipmentSlot")) {
+			EquipmentSlot slot = Utils.hit.transform.GetComponent<EquipmentSlot> ();
+			if (slot.slotType != getItemToEquipmentSlotType (draggedItem.getItemType ())) {
+				if (draggedItem.cell == null && draggedItem.slot == null) {
 					if (inventory.gameObject.activeInHierarchy) {
 						inventory.addItemToCell (draggedItem, draggedItem.cell);
 					} else if (storage.gameObject.activeInHierarchy) {
@@ -218,49 +245,47 @@ public class StatusScreen : InventoryContainedScreen {
 					}
 					playerData.updatePlayerInfo();
 				} else {
-					draggedItem.returnToParentInventory ();
+					draggedItem.returnToParent ();
 				}
 			} else if (slot.item == null) {
 				setItemToSlot (slot);
 			} else if (slot.item != null) {
 				Item currItem = slot.takeItem ();
-				if (inventory.gameObject.activeInHierarchy) {
+				if (draggedItem.slot != null && draggedItem.slot.slotType == slot.slotType) {
+					draggedItem.slot.setItem(currItem);
+				} else if (draggedItem.slot != null) {
+					draggedItem.returnToParent();
+				} else if (inventory.gameObject.activeInHierarchy) {
 					inventory.addItemToCell (currItem, draggedItem.cell);
 				} else if (storage.gameObject.activeInHierarchy) {
 					storage.addItemToCell (currItem, draggedItem.cell);
 				}
-				draggedItem.cell = null;
 				setItemToSlot (slot);
 				playerData.updatePlayerInfo ();
 			}
-		} else if (draggedItem.cell == null) {
+		} else if (draggedItem.cell == null && draggedItem.slot == null) {
 			if (inventory.gameObject.activeInHierarchy) {
 				inventory.addItemToCell (draggedItem, null);
 			} else if (storage.gameObject.activeInHierarchy) {
 				storage.addItemToCell (draggedItem, null);
 			}
 			switch (draggedItem.getItemType().getKind()) {
-				case ItemKind.EQUIPMENT: shipData.updateHullInfo(); break;
-				case ItemKind.GEAR: playerData.updatePlayerInfo(); break;
+				case ItemKind.SHIP_EQUIPMENT: shipData.updateHullInfo(); break;
+				case ItemKind.EQUIPMENTS: playerData.updatePlayerInfo(); break;
 			}
 		} else {
-			draggedItem.returnToParentInventory();
+			draggedItem.returnToParent();
 		}
 	}
 
 	private void setItemToSlot (Slot slot) {
 		if (draggedItem.cell != null) {
-			draggedItem.cell.takeItem ();
 			draggedItem.cell.getInventory().calculateFreeVolume();
 		}
-		draggedItem.cell = null;
 		slot.setItem (draggedItem);
-		draggedItem.transform.position = slot.transform.position;
-		if (slot.kind == ItemKind.EQUIPMENT) {
-			draggedItem.transform.parent = shipData.transform;
+		if (slot.kind == ItemKind.SHIP_EQUIPMENT) {
 			shipData.updateHullInfo ();
-		} else if (slot.kind == ItemKind.GEAR) {
-			draggedItem.transform.parent = playerData.transform;
+		} else if (slot.kind == ItemKind.EQUIPMENTS) {
 			playerData.updatePlayerInfo();
 		}
 	}
@@ -279,11 +304,11 @@ public class StatusScreen : InventoryContainedScreen {
 		}
 	}
 
-	private GearSlot.Type getItemToGearSlotType (ItemType itemType) {
+	private EquipmentSlot.Type getItemToEquipmentSlotType (ItemType itemType) {
 		switch (itemType) {
-			case ItemType.HAND_WEAPON: return GearSlot.Type.HAND_WEAPON;
-			case ItemType.BODY_ARMOR: return GearSlot.Type.BODY_ARMOR;
-			default: Debug.Log("Unknown item type: " + itemType); return GearSlot.Type.NONE;
+			case ItemType.HAND_WEAPON: return EquipmentSlot.Type.HAND_WEAPON;
+			case ItemType.BODY_ARMOR: return EquipmentSlot.Type.BODY_ARMOR;
+			default: Debug.Log("Unknown item type: " + itemType); return EquipmentSlot.Type.NONE;
 		}
 	}
 
@@ -303,27 +328,27 @@ public class StatusScreen : InventoryContainedScreen {
 
 	private void highlightSlot (bool hightlight, ItemType itemType) {
 		if (!hightlight) {
-			if (itemType.getKind() == ItemKind.EQUIPMENT) {
-				foreach (Slot slot in shipData.getSlots()) { slot.setSprite(false); }
-			} else if (itemType.getKind() == ItemKind.GEAR) {
-				foreach (Slot slot in playerData.getSlots()) { slot.setSprite(false); }
+			if (itemType.getKind() == ItemKind.SHIP_EQUIPMENT) {
+				foreach (Slot slot in shipData.getSlots()) { slot.setActive(false); }
+			} else if (itemType.getKind() == ItemKind.EQUIPMENTS) {
+				foreach (Slot slot in playerData.getSlots()) { slot.setActive(false); }
 			} else {
-				foreach (Slot slot in shipData.getSlots()) { slot.setSprite(false); }
-				foreach (Slot slot in playerData.getSlots()) { slot.setSprite(false); }
+				foreach (Slot slot in shipData.getSlots()) { slot.setActive(false); }
+				foreach (Slot slot in playerData.getSlots()) { slot.setActive(false); }
 			}
 		} else {
-			if (itemType.getKind() == ItemKind.EQUIPMENT) {
+			if (itemType.getKind() == ItemKind.SHIP_EQUIPMENT) {
 				HullSlot.Type slotType = getItemToHullSlotType (itemType);
 				foreach (HullSlot slot in shipData.getSlots()) {
 					if (slot.slotType == slotType) {
-						slot.setSprite (true);
+						slot.setActive (true);
 					}
 				}
 			} else {
-				GearSlot.Type gearType = getItemToGearSlotType (itemType);
-				foreach (GearSlot slot in playerData.getSlots()) {
-					if (slot.gearType == gearType) {
-						slot.setSprite (true);
+				EquipmentSlot.Type slotType = getItemToEquipmentSlotType (itemType);
+				foreach (EquipmentSlot slot in playerData.getSlots()) {
+					if (slot.slotType == slotType) {
+						slot.setActive (true);
 					}
 				}
 			}

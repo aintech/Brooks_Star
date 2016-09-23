@@ -4,14 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class HullSlot : Slot {
-
-	public Type slotType;
-
+	
     public int index;
-
-	public Sprite[] hullSlotSprites;
-
-	private SpriteRenderer render;
 
 	private static Dictionary<HullType, List<Vector3>> slotPositions;
 
@@ -19,24 +13,9 @@ public class HullSlot : Slot {
 
 	private bool slotAvailable;
 
-	public void init () {
-		render = GetComponent<SpriteRenderer> ();
-		kind = ItemKind.EQUIPMENT;
-		setSprite (false);
-	}
-
-	override public void setSprite (bool asActive) {
-		switch (slotType) {
-			case Type.WEAPON: render.sprite = asActive? hullSlotSprites[8]: hullSlotSprites[0]; break;
-			case Type.ENGINE: render.sprite = asActive? hullSlotSprites[9]: hullSlotSprites[1]; break;
-			case Type.ARMOR: render.sprite = asActive? hullSlotSprites[10]: hullSlotSprites[2]; break;
-			case Type.GENERATOR: render.sprite = asActive? hullSlotSprites[11]: hullSlotSprites[3]; break;
-			case Type.RADAR: render.sprite = asActive? hullSlotSprites[12]: hullSlotSprites[4]; break;
-			case Type.SHIELD: render.sprite = asActive? hullSlotSprites[13]: hullSlotSprites[5]; break;
-			case Type.REPAIR_DROID: render.sprite = asActive? hullSlotSprites[14]: hullSlotSprites[6]; break;
-			case Type.HARVESTER: render.sprite = asActive? hullSlotSprites[15]: hullSlotSprites[7]; break;
-			default: Debug.Log("Unknown hull slot type: " + slotType); break;
-		}
+	override public void init () {
+		base.init();
+		kind = ItemKind.SHIP_EQUIPMENT;
 	}
 
 	public void setSlotAvailable (bool slotAvailable) {
@@ -589,16 +568,4 @@ public class HullSlot : Slot {
 		avails.Add(hullType.getArmorSlots() >= 4);// armor 4
 		avails.Add(hullType.getArmorSlots() >= 5);// armor 5
 	}
-
-    public enum Type {
-		NONE,
-        WEAPON,
-        ENGINE,
-        ARMOR,
-        GENERATOR,
-        RADAR,
-        SHIELD,
-        REPAIR_DROID,
-        HARVESTER
-    }
 }

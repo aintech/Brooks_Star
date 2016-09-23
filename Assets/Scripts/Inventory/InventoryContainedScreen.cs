@@ -35,7 +35,7 @@ public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 	void Update () {
 		if (Input.GetMouseButtonDown(0) && Utils.hit != null) {
 			if (Utils.hit.name.Equals("Cell")) {
-				Item item = Utils.hit.transform.GetComponent<InventoryCell>().getItem();
+				Item item = Utils.hit.transform.GetComponent<InventoryCell>().item;
 				if (item != null) {
 					draggedItem = Utils.hit.transform.GetComponent<InventoryCell>().takeItem();
 					draggedItem.GetComponent<Renderer>().sortingOrder = 4;
@@ -52,9 +52,9 @@ public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 					chosenItemBorder.gameObject.SetActive(true);
 				}
 			} else if (Utils.hit.name.StartsWith("GearSlot")) {
-				Item item = Utils.hit.transform.GetComponent<GearSlot>().item;
+				Item item = Utils.hit.transform.GetComponent<EquipmentSlot>().item;
 				if (item != null) {
-					chooseDraggedItemFromSlot(Utils.hit.transform.GetComponent<GearSlot>());
+					chooseDraggedItemFromSlot(Utils.hit.transform.GetComponent<EquipmentSlot>());
 					chosenItemBorder.transform.position = item.transform.position;
 					choseItem(item);
 					chosenItemBorder.gameObject.SetActive(true);

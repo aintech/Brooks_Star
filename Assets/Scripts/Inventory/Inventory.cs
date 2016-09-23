@@ -52,7 +52,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		meshRend.sortingLayerName = "Inventory";
 		meshRend.sortingOrder = 3;
 
-		if (inventoryType == InventoryType.INVENTORY) {
+		if (inventoryType != InventoryType.INVENTORY) {
 //			transform.Find("VolumeBG").gameObject.SetActive(false);
 			volumeMesh.gameObject.SetActive(false);
 		}
@@ -108,7 +108,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		Item chosenItem = containerScreen.getChosenItem ();
 		if (chosenItem != null && chosenItem.transform.parent == this.transform) {
 			foreach (InventoryCell cell in cells) {
-				if (cell.getItem() == chosenItem) {
+				if (cell.item == chosenItem) {
 					containerScreen.updateChosenItemBorder (false);
 					return;
 				}
@@ -129,17 +129,12 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 
 		foreach (KeyValuePair<int, Item> pair in getItems ()) {
 			Item item = pair.Value;
-			item.cell = null;
 			if (pair.Key >= offset && pair.Key < (cells.Length + offset)) {
-				InventoryCell cell = getCell (pair.Key - offset);
-				cell.setItem (item);
-				item.cell = cell;
-				item.transform.position = cell.transform.position;
+				getCell (pair.Key - offset).setItem (item);
 				item.gameObject.SetActive (true);
 			} else {
 				item.gameObject.SetActive (false);
 			}
-			item.transform.SetParent(transform);
 		}
 
 		calculateFreeVolume();
@@ -173,16 +168,16 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 
 		if (source != this) {
 			if (inventoryType == InventoryType.BUYBACK) {
-				item.returnToParentInventory ();
+				item.returnToParent ();
 				return;
 			} else if (inventoryType == InventoryType.INVENTORY) {
 				if (getFreeVolume() < item.getVolume()) {
-					item.returnToParentInventory();
+					item.returnToParent ();
 					Messenger.showMessage("Объёма инвентаря не достаточно для добавления предмета");
 					return;
 				} else if (source != null && (source.inventoryType == InventoryType.MARKET || source.inventoryType == InventoryType.BUYBACK)) {
 					if (!buyItem (item)) {
-						item.returnToParentInventory ();
+						item.returnToParent ();
 						return;
 					}
 				}
@@ -198,7 +193,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		InventoryCell prevCell = item.cell;
 		Item prevItem = null;
 
-		if (cell.getItem () != null) prevItem = cell.takeItem ();
+		if (cell.item != null) prevItem = cell.takeItem ();
 
 		items.Add (cell.index + offset, item);
 
@@ -328,7 +323,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 
 	public Item takeLastItem () {
 		int index = getMaximumItemIndex();
-		if (getCell(index) != null && getCell(index).getItem() != null) {
+		if (getCell(index) != null && getCell(index).item != null) {
 			return getCell(index).takeItem();
 		}
 		Item item;
