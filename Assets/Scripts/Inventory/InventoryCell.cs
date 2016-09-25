@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class InventoryCell : Describable {
+public class InventoryCell : ItemHolder {
 
 	public int index;
 
-	public Item item { get; private set; }
+//	public Item item { get; private set; }
 
     private Inventory inventory;
 
@@ -20,6 +20,7 @@ public class InventoryCell : Describable {
 			item.cell = this;
 			item.transform.parent = transform;
 			item.transform.localPosition = Vector3.zero;
+//			itemChanged = true;
 		}
 	}
 
@@ -34,6 +35,7 @@ public class InventoryCell : Describable {
         return inventory;
     }
 
-	public override string getQuality () { return item == null? null: item.getItemQuality().ToString(); }
-	public override string getName () { return item == null? null: item.getItemName(); }
+//	public override ItemQuality getQuality () { return item.getItemQuality(); }
+//	public override string getName () { return item.getItemName(); }
+//	public override bool haveDescribableObject () { return item != null; }
 }

@@ -20,17 +20,17 @@ public static class ItemFactory {
 		}
 	}
 
-	private static ItemData.Quality randQuality () {
+	private static ItemQuality randQuality () {
 		float rand = UnityEngine.Random.value;
-		return rand >= .9f? ItemData.Quality.UNIQUE: rand >= .6f? ItemData.Quality.SUPERIOR: ItemData.Quality.NORMAL;
+		return rand <= .5f ? ItemQuality.COMMON : rand <= .7f ? ItemQuality.GOOD : rand <= .85f ? ItemQuality.SUPERIOR : rand <= .95 ? ItemQuality.RARE : ItemQuality.UNIQUE;
 	}
 
 	private static float randLevel () {
 		return 1 + (UnityEngine.Random.value * .3f);
 	}
 
-	private static float qualityMultiplier (ItemData.Quality quality) {
-		return quality == ItemData.Quality.UNIQUE? 3: quality == ItemData.Quality.SUPERIOR? 2: 1;
+	private static float qualityMultiplier (ItemQuality quality) {
+		return quality == ItemQuality.UNIQUE? 3: quality == ItemQuality.RARE? 2.5f: quality == ItemQuality.SUPERIOR? 2: quality == ItemQuality.GOOD? 1.5f: 1;
 	}
 
 	private static int calculateCost (ItemData data) {
@@ -48,7 +48,7 @@ public static class ItemFactory {
 			case ItemType.BODY_ARMOR: cost = Mathf.RoundToInt(data.level * ((BodyArmorData)data).type.getCost()); break;
 			default: Debug.Log("Unknown type: " + data.itemType); break;
 		}
-		return Mathf.RoundToInt(cost * (data.quality == ItemData.Quality.UNIQUE? 2.5f: data.quality == ItemData.Quality.SUPERIOR? 1.5f: 1));
+		return Mathf.RoundToInt (cost * qualityMultiplier (data.quality));//(data.quality == ItemQuality.UNIQUE? 2.5f: data.quality == ItemQuality.SUPERIOR? 1.5f: 1));
 	}
 
 	private static int calculateEnergy (ItemData data) {
@@ -76,7 +76,7 @@ public static class ItemFactory {
 	}
 
 	public static HandWeaponData createHandWeaponData (HandWeaponType type) {
-		ItemData.Quality quality = randQuality();
+		ItemQuality quality = randQuality();
 		float level = randLevel();
 
 		int damage = Mathf.RoundToInt(type.getDamage() * level * qualityMultiplier(quality));
@@ -101,7 +101,7 @@ public static class ItemFactory {
 	}
 
 	public static BodyArmorData createBodyArmorData (BodyArmorType type) {
-		ItemData.Quality quality = randQuality();
+		ItemQuality quality = randQuality();
 		float level = randLevel();
 
 		int armorClass = Mathf.RoundToInt(type.getArmorClass() * level * qualityMultiplier(quality));
@@ -128,11 +128,11 @@ public static class ItemFactory {
 	}
 
 	public static WeaponData createWeaponData (WeaponType type) {
-		ItemData.Quality quality = randQuality();
+		ItemQuality quality = randQuality();
 		float level = randLevel();
 
 		int damage = Mathf.RoundToInt(type.getDamage() * level * qualityMultiplier(quality));
-		float reloadTime = (type.getReloadTime() / level) * (quality == ItemData.Quality.UNIQUE? 0.6f: quality == ItemData.Quality.SUPERIOR? 0.8f: 1);
+		float reloadTime = (type.getReloadTime() / level) * (quality == ItemQuality.UNIQUE? 0.6f: quality == ItemQuality.SUPERIOR? 0.8f: 1);
 
 		WeaponData data = new WeaponData(quality, level, type, damage - type.getDamageRange(), damage + type.getDamageRange(), reloadTime);
 		data.initCommons(calculateCost(data), calculateEnergy(data));
@@ -154,7 +154,7 @@ public static class ItemFactory {
 	}
 
 	public static EngineData createEngineData (EngineType type) {
-		ItemData.Quality quality = randQuality();
+		ItemQuality quality = randQuality();
 		float level = randLevel();
 
 		float power = type.getMainPower() * level * qualityMultiplier(quality);
@@ -179,7 +179,7 @@ public static class ItemFactory {
 	}
 
 	public static ArmorData createArmorData (ArmorType type) {
-		ArmorData data = new ArmorData(ItemData.Quality.NORMAL, 1, type, type.getArmorClass());
+		ArmorData data = new ArmorData(ItemQuality.COMMON, 1, type, type.getArmorClass());
 		data.initCommons(type.getCost(), 0);
 		return data;
 	}
@@ -197,7 +197,7 @@ public static class ItemFactory {
 	}
 
 	public static GeneratorData createGeneratorData (GeneratorType type) {
-		ItemData.Quality quality = randQuality();
+		ItemQuality quality = randQuality();
 		float level = randLevel();
 
 		int maxEnergy = Mathf.RoundToInt(type.getMaxEnergy() * level * qualityMultiplier(quality));
@@ -223,7 +223,7 @@ public static class ItemFactory {
 	}
 
 	public static RadarData createRadarData (RadarType type) {
-		ItemData.Quality quality = randQuality();
+		ItemQuality quality = randQuality();
 		float level = randLevel();
 
 		int range = Mathf.RoundToInt(type.getRange() * level * qualityMultiplier(quality));
@@ -247,7 +247,7 @@ public static class ItemFactory {
 	}
 
 	public static ShieldData createShieldData (ShieldType type) {
-		ItemData.Quality quality = randQuality();
+		ItemQuality quality = randQuality();
 		float level = randLevel();
 
 		int shieldLevel = Mathf.RoundToInt(type.getShieldProtection() * level * qualityMultiplier(quality));
@@ -272,7 +272,7 @@ public static class ItemFactory {
 	}
 
 	public static RepairDroidData createRepairDroidData (RepairDroidType type) {
-		ItemData.Quality quality = randQuality();
+		ItemQuality quality = randQuality();
 		float level = randLevel();
 
 		int repairSpeed = Mathf.RoundToInt(type.getRepairSpeed() * level * qualityMultiplier(quality));
@@ -295,10 +295,10 @@ public static class ItemFactory {
 	}
 
 	public static HarvesterData createHarvesterData (HarvesterType type) {
-		ItemData.Quality quality = randQuality();
+		ItemQuality quality = randQuality();
 		float level = randLevel();
 
-		float harvestMulty = quality == ItemData.Quality.UNIQUE? 0.6f: quality == ItemData.Quality.SUPERIOR? 0.8f: 1;
+		float harvestMulty = quality == ItemQuality.UNIQUE? 0.6f: quality == ItemQuality.SUPERIOR? 0.8f: 1;
 		int harvestTime = Mathf.RoundToInt((type.getHarvestTime() / level) * harvestMulty);
 
 		HarvesterData data = new HarvesterData(quality, level, type, harvestTime);

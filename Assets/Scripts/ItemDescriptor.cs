@@ -3,97 +3,77 @@ using System.Collections;
 
 public class ItemDescriptor : MonoBehaviour {
 
-	private Transform trans, qualityBG, nameBG;
-
-//	private Transform trans, quality, body, stretch, footer, actionMsgTrans, errorMsgTrans, costTrans;
-
-	private const float SCREEN_HALF_HEIGHT = 5, FOOTER_SIZE = .5f;
-
-	private float containerOffset;
+	private Transform 	trans, 
+						namePre, nameBG,
+						qualityPre, qualityBG,
+						pre1, bg1,
+						pre2, bg2,
+						pre3, bg3,
+						pre4, bg4,
+						pre5, bg5;
 
 	public bool onScreen { get; private set; }
 
-	public Describable descriable { get; private set; }
+	private ItemHolder holder, tempHolder;
 
-//    private Buff buff;
+	private Item item;
 
-	private TextMesh qualityValue, nameValue;//, stat_1, stat_2, description, costText, actionMsg, errorMsg;
+	private TextMesh qualityValue, nameValue, value1, value2, value3, value4, value5;
 
-	private float minY, maxX = 4.8f, footerInitY = -1.1f, footerStep = .3f;
+	private Vector2 pos = Vector2.zero;
 
-	private Vector2 pos = Vector2.zero, footerPos = Vector2.zero, 
-					bodyPosStat_1 = Vector2.zero, bodyPosStat_2 = new Vector2(0, -.3f),
-					descriptPos_1 = new Vector2(1.7f, -1.35f), descriptPos_2 = new Vector2(1.7f, -1.65f);
+	private Color32 goodColor = new Color32(176, 195, 217, 255),
+					superiorColor = new Color32(94, 152, 217, 255),
+					rareColor = new Color32(136, 71, 255, 255),
+					uniqueColor = new Color32(173, 229, 92, 255),
+					artefactColor = new Color32(235, 75, 75, 255);
 
-    private Vector2 costPos_1 = new Vector2(.88f, -.26f), costPos_2 = new Vector2(.88f, -.73f);
+	private Vector3 scale = Vector3.one;
 
-	private Vector3 stretchScale = Vector3.one;
-
-//	private PotionItem tempPotion;
-
-	private bool shopDescriptor;
+//	private Vector2[,] positions = new Vector2[,]{
+//		{new Vector2(.15f, -.57f), new Vector2(.297f, -.57f), new Vector2(.295f, -.76f)},
+//		{new Vector2(.15f, -.95f), new Vector2(.297f, -.95f), new Vector2(.295f, -1.14f)},
+//		{new Vector2(.15f, -1.33f), new Vector2(.297f, -1.33f), new Vector2(.295f, -1.52f)},
+//		{new Vector2(.15f, -1.71f), new Vector2(.297f, -1.71f), new Vector2(.295f, -1.9f)},
+//		{new Vector2(.15f, -2.09f), new Vector2(.297f, -2.09f), new Vector2(.295f, -2.28f)},
+//		{new Vector2(.15f, -2.47f), new Vector2(.297f, -2.47f), new Vector2(.295f, -2.66f)}
+//	}; 
 
 	public ItemDescriptor init () {
-		trans = transform;
-		qualityBG = transform.Find("Quality Background");
-		nameBG = transform.Find("Name Background");
+		trans = transform.Find ("Descriptor");
+		qualityPre = trans.Find ("Quality Pre");
+		qualityBG = trans.Find("Quality Background");
+		namePre = trans.Find ("Name Pre");
+		nameBG = trans.Find("Name Background");
+		pre1 = trans.Find ("Pre 1");
+		bg1 = trans.Find ("Background 1");
+		pre2 = trans.Find ("Pre 2");
+		bg2 = trans.Find ("Background 2");
+		pre3 = trans.Find ("Pre 3");
+		bg3 = trans.Find ("Background 3");
+		pre4 = trans.Find ("Pre 4");
+		bg4 = trans.Find ("Background 4");
+		pre5 = trans.Find ("Pre 5");
+		bg5 = trans.Find ("Background 5");
 
-		qualityValue = transform.Find("Quality Value").GetComponent<TextMesh>();
-		nameValue = transform.Find("Name Value").GetComponent<TextMesh>();
+		qualityValue = trans.Find("Quality Value").GetComponent<TextMesh>();
+		nameValue = trans.Find("Name Value").GetComponent<TextMesh>();
+		value1 = trans.Find ("Value 1").GetComponent<TextMesh> ();
+		value2 = trans.Find ("Value 2").GetComponent<TextMesh> ();
+		value3 = trans.Find ("Value 3").GetComponent<TextMesh> ();
+		value4 = trans.Find ("Value 4").GetComponent<TextMesh> ();
+		value5 = trans.Find ("Value 5").GetComponent<TextMesh> ();
 
-//		Transform container = trans.Find("Container");
-//		containerOffset = -container.localPosition.y;
-//        container.gameObject.SetActive(true);
-//		quality = container.Find("Quality");
-//		body = container.Find("Body");
-//		stretch = body.Find("Stretch");
-//		footer = body.Find("Footer");
-//		footerPos = footer.localPosition;
-//		actionMsgTrans = footer.Find("ActionMsg");
-//        costTrans = footer.Find("CostValue");
-//        errorMsgTrans = footer.Find("ErrorMsg");
+		MeshRenderer mesh;
+		for (int i = 0; i < trans.childCount; i++) {
+			mesh = trans.GetChild (i).GetComponent<MeshRenderer> ();
+			if (mesh != null) {
+				mesh.sortingLayerName = "User Interface";
+				mesh.sortingOrder = 9;
+			}
+		}
 
-//		stat_1 = body.Find("Stat_1").GetComponent<TextMesh>();
-//		stat_2 = body.Find("Stat_2").GetComponent<TextMesh>();
-//		description = trans.Find("Description").GetComponent<TextMesh>();
-//		actionMsg = actionMsgTrans.Find("ActionText").GetComponent<TextMesh>();
-//        costText = costTrans.Find("CostText").GetComponent<TextMesh>();
-//        errorMsg = errorMsgTrans.Find("ErrorText").GetComponent<TextMesh>();
-
-        int layer = 9;
-		string layerName = "User Interface";
-		MeshRenderer mesh = qualityValue.GetComponent<MeshRenderer>();
-		mesh.sortingLayerName = "User Interface";
-		mesh.sortingOrder = layer;
-		mesh = nameValue.GetComponent<MeshRenderer>();
-		mesh.sortingLayerName = "User Interface";
-		mesh.sortingOrder = layer;
-//		mesh = stat_1.GetComponent<MeshRenderer>();
-//		mesh.sortingLayerName = "InventoryLayer";
-//		mesh.sortingOrder = layer;
-//		mesh = stat_2.GetComponent<MeshRenderer>();
-//		mesh.sortingLayerName = "InventoryLayer";
-//		mesh.sortingOrder = layer;
-//		mesh = description.GetComponent<MeshRenderer>();
-//		mesh.sortingLayerName = "InventoryLayer";
-//		mesh.sortingOrder = layer;
-//        mesh = actionMsg.GetComponent<MeshRenderer>();
-//        mesh.sortingLayerName = "InventoryLayer";
-//        mesh.sortingOrder = layer;
-//        mesh = costText.GetComponent<MeshRenderer>();
-//		mesh.sortingLayerName = "InventoryLayer";
-//		mesh.sortingOrder = layer;
-//        mesh = errorMsg.GetComponent<MeshRenderer>();
-//        mesh.sortingLayerName = "InventoryLayer";
-//        mesh.sortingOrder = layer;
-//
-//		description.gameObject.SetActive(true);
-		qualityBG.gameObject.SetActive(true);
-		qualityValue.gameObject.SetActive(true);
-		nameBG.gameObject.SetActive(true);
-		nameValue.gameObject.SetActive(true);
-
-        gameObject.SetActive(false);
+		hide ();
 
 		return this;
 	}
@@ -101,75 +81,367 @@ public class ItemDescriptor : MonoBehaviour {
 	void Update () {
 		if (onScreen) {
 			if (Utils.hit == null) {
-				onScreen = false;
-				gameObject.SetActive(false);
+				hide ();
 			} else if (Utils.hit != null) {
-//				HERE проверка, Utils.hit - наш describable или нет
+				tempHolder = Utils.hit.GetComponent<ItemHolder> ();
+				if (tempHolder == null || tempHolder.item == null) {
+					hide ();
+				} else if (tempHolder != holder || tempHolder.item != item) {
+					showDescription (tempHolder);
+				}
 			}
+			pos = Utils.mousePos;
+			//			if (pos.x > maxX) {
+			//				pos.x = maxX;
+			//			}
+			//			if (pos.y < minY) {
+			//				pos.y = minY;
+			//			}
+			trans.localPosition = pos;
 		} else {
 			if (Utils.hit != null) {
-				descriable = Utils.hit.GetComponent<Describable>();
-				if (descriable != null) {
-					showDescription();
+				holder = Utils.hit.GetComponent<ItemHolder>();
+				if (holder != null && holder.item != null) {
+					showDescription(holder);
 				}
 			}
 		}
-//		if (!onScreen && Utils.hit != null) {
-//			if (Utils.hit.name.Equals("Cell")) {
-//				
-//			}
-//		}
-		if (onScreen) {
-			pos = Utils.mousePos;
-			if (pos.x > maxX) {
-				pos.x = maxX;
-			}
-			if (pos.y < minY) {
-				pos.y = minY;
-			}
-			trans.localPosition = pos;
+	}
+
+	private void showDescription (ItemHolder holder) {
+		this.holder = holder;
+		this.item = holder.item;
+
+		for (int i = 0; i < trans.childCount; i++) {
+			trans.GetChild (i).gameObject.SetActive (false);
+		}
+
+		showTexts (item.itemData);
+
+		onScreen = true;
+		Update();
+		trans.gameObject.SetActive(true);
+	}
+
+	private void showTexts (ItemData data) {
+		if (data.quality != ItemQuality.COMMON) {
+			qualityPre.gameObject.SetActive (true);
+			qualityBG.gameObject.SetActive (true);
+			qualityValue.gameObject.SetActive (true);
+
+			qualityValue.text = item.getItemQuality().getName();
+			scale.x = qualityValue.text.Length + 1;
+			qualityBG.localScale = scale;
+			qualityValue.color = (data.quality == ItemQuality.ARTEFACT? artefactColor:
+								  data.quality == ItemQuality.UNIQUE? uniqueColor: 
+								  data.quality == ItemQuality.RARE? rareColor:
+								  data.quality == ItemQuality.SUPERIOR? superiorColor:
+								  goodColor);
+		}
+
+		namePre.gameObject.SetActive (true);
+		nameBG.gameObject.SetActive (true);
+		nameValue.gameObject.SetActive (true);
+
+		nameValue.text = data.name.Replace('\n', ' ');
+		scale.x = nameValue.text.Length + 1;
+		nameBG.localScale = scale;
+
+		switch (data.itemType) {
+			case ItemType.HAND_WEAPON:
+				pre1.gameObject.SetActive (true);
+				bg1.gameObject.SetActive (true);
+				value1.gameObject.SetActive (true);
+				pre2.gameObject.SetActive (true);
+				bg2.gameObject.SetActive (true);
+				value2.gameObject.SetActive (true);
+
+				HandWeaponData hwd = (HandWeaponData)data;
+				value1.text = "Урон: <color=orange>" + hwd.minDamage + " - " + hwd.maxDamage + "</color>";
+				scale.x = value1.text.Length - 24;// + 1 - (количество спецсимволов)
+				bg1.localScale = scale;
+
+				value2.text = "Стоимость: <color=yellow>" + data.cost + "$</color>";
+				scale.x = value2.text.Length - 22.5F;
+				bg2.localScale = scale;
+
+//				pre2.localPosition = positions [1, 0];
+//				bg2.localPosition = positions [1, 1];
+//				value2.transform.localPosition = positions [1, 2];
+				break;
+
+			case ItemType.BODY_ARMOR:
+				pre1.gameObject.SetActive (true);
+				bg1.gameObject.SetActive (true);
+				value1.gameObject.SetActive (true);
+				pre2.gameObject.SetActive (true);
+				bg2.gameObject.SetActive (true);
+				value2.gameObject.SetActive (true);
+
+				BodyArmorData bad = (BodyArmorData)data;
+				value1.text = "Защита: <color=orange>" + bad.armorClass + "</color>";
+				scale.x = value1.text.Length - 22;// + 1 - (количество спецсимволов)
+				bg1.localScale = scale;
+
+				value2.text = "Стоимость: <color=yellow>" + data.cost + "$</color>";
+				scale.x = value2.text.Length - 22.5F;
+				bg2.localScale = scale;
+				break;
+
+			case ItemType.WEAPON:
+				pre1.gameObject.SetActive (true);
+				bg1.gameObject.SetActive (true);
+				value1.gameObject.SetActive (true);
+				pre2.gameObject.SetActive (true);
+				bg2.gameObject.SetActive (true);
+				value2.gameObject.SetActive (true);
+				pre3.gameObject.SetActive (true);
+				bg3.gameObject.SetActive (true);
+				value3.gameObject.SetActive (true);
+				pre4.gameObject.SetActive (true);
+				bg4.gameObject.SetActive (true);
+				value4.gameObject.SetActive (true);
+				pre5.gameObject.SetActive (true);
+				bg5.gameObject.SetActive (true);
+				value5.gameObject.SetActive (true);
+
+				WeaponData wd = (WeaponData)data;
+				value1.text = "Урон: <color=orange>" + wd.minDamage + " - " + wd.maxDamage + "</color>";
+				scale.x = value1.text.Length - 24;
+				bg1.localScale = scale;
+
+				value2.text = "Перезарядка: <color=orange>" + wd.reloadTime.ToString("0.00") + "</color>";
+				scale.x = value2.text.Length - 22.5F;
+				bg2.localScale = scale;
+
+				value3.text = "Питание: <color=cyan>" + data.energyNeeded + "</color>";
+				scale.x = value3.text.Length - 20.5f;
+				bg3.localScale = scale;
+
+				value4.text = "Объём: <color=orange>" + data.volume.ToString("0.0") + "</color>";
+				scale.x = value4.text.Length - 22.5F;
+				bg4.localScale = scale;
+
+				value5.text = "Стоимость: <color=yellow>" + data.cost + "$</color>";
+				scale.x = value5.text.Length - 22.5F;
+				bg5.localScale = scale;
+				break;
+
+			case ItemType.ENGINE:
+				pre1.gameObject.SetActive (true);
+				bg1.gameObject.SetActive (true);
+				value1.gameObject.SetActive (true);
+				pre2.gameObject.SetActive (true);
+				bg2.gameObject.SetActive (true);
+				value2.gameObject.SetActive (true);
+				pre3.gameObject.SetActive (true);
+				bg3.gameObject.SetActive (true);
+				value3.gameObject.SetActive (true);
+				pre4.gameObject.SetActive (true);
+				bg4.gameObject.SetActive (true);
+				value4.gameObject.SetActive (true);
+
+				EngineData ed = (EngineData)data;
+				value1.text = "Мощность: <color=orange>" + ((ed.power) * 1000).ToString("0") + "</color>";
+				scale.x = value1.text.Length - 22.5f;
+				bg1.localScale = scale;
+
+				value2.text = "Питание: <color=cyan>" + data.energyNeeded + "</color>";
+				scale.x = value2.text.Length - 20.5f;
+				bg2.localScale = scale;
+
+				value3.text = "Объём: <color=orange>" + data.volume.ToString("0.0") + "</color>";
+				scale.x = value3.text.Length - 22.5F;
+				bg3.localScale = scale;
+
+				value4.text = "Стоимость: <color=yellow>" + data.cost + "$</color>";
+				scale.x = value4.text.Length - 22.5F;
+				bg4.localScale = scale;
+				break;
+
+			case ItemType.ARMOR:
+				pre1.gameObject.SetActive (true);
+				bg1.gameObject.SetActive (true);
+				value1.gameObject.SetActive (true);
+				pre2.gameObject.SetActive (true);
+				bg2.gameObject.SetActive (true);
+				value2.gameObject.SetActive (true);
+				pre3.gameObject.SetActive (true);
+				bg3.gameObject.SetActive (true);
+				value3.gameObject.SetActive (true);
+
+				ArmorData ad = (ArmorData)data;
+				value1.text = "Броня: <color=orange>" + ad.armorClass + "</color>";
+				scale.x = value1.text.Length - 22.5f;
+				bg1.localScale = scale;
+
+				value2.text = "Объём: <color=orange>" + data.volume.ToString("0.0") + "</color>";
+				scale.x = value2.text.Length - 22.5F;
+				bg2.localScale = scale;
+
+				value3.text = "Стоимость: <color=yellow>" + data.cost + "$</color>";
+				scale.x = value3.text.Length - 22.5F;
+				bg3.localScale = scale;
+				break;
+
+			case ItemType.GENERATOR:
+				pre1.gameObject.SetActive (true);
+				bg1.gameObject.SetActive (true);
+				value1.gameObject.SetActive (true);
+				pre2.gameObject.SetActive (true);
+				bg2.gameObject.SetActive (true);
+				value2.gameObject.SetActive (true);
+				pre3.gameObject.SetActive (true);
+				bg3.gameObject.SetActive (true);
+				value3.gameObject.SetActive (true);
+
+				GeneratorData gd = (GeneratorData)data;
+				value1.text = "Мощность: <color=orange>" + gd.maxEnergy + "</color>";
+				scale.x = value1.text.Length - 22.5f;
+				bg1.localScale = scale;
+
+				value2.text = "Объём: <color=orange>" + data.volume.ToString("0.0") + "</color>";
+				scale.x = value2.text.Length - 22.5F;
+				bg2.localScale = scale;
+
+				value3.text = "Стоимость: <color=yellow>" + data.cost + "$</color>";
+				scale.x = value3.text.Length - 22.5F;
+				bg3.localScale = scale;
+				break;
+
+			case ItemType.RADAR:
+				pre1.gameObject.SetActive (true);
+				bg1.gameObject.SetActive (true);
+				value1.gameObject.SetActive (true);
+				pre2.gameObject.SetActive (true);
+				bg2.gameObject.SetActive (true);
+				value2.gameObject.SetActive (true);
+				pre3.gameObject.SetActive (true);
+				bg3.gameObject.SetActive (true);
+				value3.gameObject.SetActive (true);
+				pre4.gameObject.SetActive (true);
+				bg4.gameObject.SetActive (true);
+				value4.gameObject.SetActive (true);
+
+				RadarData rd = (RadarData)data;
+				value1.text = "Дальность: <color=orange>" + rd.range + "</color>";
+				scale.x = value1.text.Length - 22.5f;
+				bg1.localScale = scale;
+
+				value2.text = "Питание: <color=cyan>" + data.energyNeeded + "</color>";
+				scale.x = value2.text.Length - 20.5f;
+				bg2.localScale = scale;
+
+				value3.text = "Объём: <color=orange>" + data.volume.ToString("0.0") + "</color>";
+				scale.x = value3.text.Length - 22.5F;
+				bg3.localScale = scale;
+
+				value4.text = "Стоимость: <color=yellow>" + data.cost + "$</color>";
+				scale.x = value4.text.Length - 22.5F;
+				bg4.localScale = scale;
+				break;
+
+			case ItemType.SHIELD:
+				pre1.gameObject.SetActive (true);
+				bg1.gameObject.SetActive (true);
+				value1.gameObject.SetActive (true);
+				pre2.gameObject.SetActive (true);
+				bg2.gameObject.SetActive (true);
+				value2.gameObject.SetActive (true);
+				pre3.gameObject.SetActive (true);
+				bg3.gameObject.SetActive (true);
+				value3.gameObject.SetActive (true);
+				pre4.gameObject.SetActive (true);
+				bg4.gameObject.SetActive (true);
+				value4.gameObject.SetActive (true);
+				pre5.gameObject.SetActive (true);
+				bg5.gameObject.SetActive (true);
+				value5.gameObject.SetActive (true);
+
+				ShieldData sd = (ShieldData)data;
+				value1.text = "Защита: <color=orange>" + sd.shieldLevel + "</color>";
+				scale.x = value1.text.Length - 22.5f;
+				bg1.localScale = scale;
+
+				value2.text = "Перезарядка: <color=orange>" + sd.rechargeSpeed + "</color>";
+				scale.x = value2.text.Length - 22.5F;
+				bg2.localScale = scale;
+
+				value3.text = "Питание: <color=cyan>" + data.energyNeeded + "</color>";
+				scale.x = value3.text.Length - 20.5f;
+				bg3.localScale = scale;
+
+				value4.text = "Объём: <color=orange>" + data.volume.ToString("0.0") + "</color>";
+				scale.x = value4.text.Length - 22.5F;
+				bg4.localScale = scale;
+
+				value5.text = "Стоимость: <color=yellow>" + data.cost + "$</color>";
+				scale.x = value5.text.Length - 22.5F;
+				bg5.localScale = scale;
+				break;
+
+			case ItemType.REPAIR_DROID:
+				pre1.gameObject.SetActive (true);
+				bg1.gameObject.SetActive (true);
+				value1.gameObject.SetActive (true);
+				pre2.gameObject.SetActive (true);
+				bg2.gameObject.SetActive (true);
+				value2.gameObject.SetActive (true);
+				pre3.gameObject.SetActive (true);
+				bg3.gameObject.SetActive (true);
+				value3.gameObject.SetActive (true);
+				pre4.gameObject.SetActive (true);
+				bg4.gameObject.SetActive (true);
+				value4.gameObject.SetActive (true);
+
+				RepairDroidData rdd = (RepairDroidData)data;
+				value1.text = "Ремонт: <color=orange>" + rdd.repairSpeed + "</color>";
+				scale.x = value1.text.Length - 22.5f;
+				bg1.localScale = scale;
+
+				value2.text = "Питание: <color=cyan>" + data.energyNeeded + "</color>";
+				scale.x = value2.text.Length - 20.5f;
+				bg2.localScale = scale;
+
+				value3.text = "Объём: <color=orange>" + data.volume.ToString("0.0") + "</color>";
+				scale.x = value3.text.Length - 22.5F;
+				bg3.localScale = scale;
+
+				value4.text = "Стоимость: <color=yellow>" + data.cost + "$</color>";
+				scale.x = value4.text.Length - 22.5F;
+				bg4.localScale = scale;
+				break;
+
+			case ItemType.HARVESTER:
+				pre1.gameObject.SetActive (true);
+				bg1.gameObject.SetActive (true);
+				value1.gameObject.SetActive (true);
+				pre2.gameObject.SetActive (true);
+				bg2.gameObject.SetActive (true);
+				value2.gameObject.SetActive (true);
+				pre3.gameObject.SetActive (true);
+				bg3.gameObject.SetActive (true);
+				value3.gameObject.SetActive (true);
+
+				HarvesterData hd = (HarvesterData)data;
+				value1.text = "Поиск: <color=orange>" + hd.harvestTime + "</color>";
+				scale.x = value1.text.Length - 22.5f;
+				bg1.localScale = scale;
+
+				value2.text = "Объём: <color=orange>" + data.volume.ToString("0.0") + "</color>";
+				scale.x = value2.text.Length - 22.5F;
+				bg2.localScale = scale;
+
+				value3.text = "Стоимость: <color=yellow>" + data.cost + "$</color>";
+				scale.x = value3.text.Length - 22.5F;
+				bg3.localScale = scale;
+				break;
 		}
 	}
 
-	public void showDescription () {
-		nameValue.text = descriable.getName();
-
-//		stat_2.text = "";
-//		if (item is ArmorModifier) {
-//			stat_1.text = "Защита=> " + ((ArmorModifier)item).getArmor().ToString();
-//		} else if (item is WeaponItem) {
-//			stat_1.text = ((WeaponItem)item).getDamage().ToString() + " " + ((WeaponItem)item).getWeaponType().getSpeedType().getSpeedName();
-////			stat_2.text = "Урон=> " + ((WeaponItem)item).getDamage().ToString();
-////			stat_1.text = "Скорость=> " + ((WeaponItem)item).getWeaponType().getAttackSpeed().ToString();
-//		} else if (item is PotionItem) {
-//			stat_1.text = ((PotionItem)item).getPotionType().getEffectDescript();
-//		} else if (item is MaterialItem) {
-//			stat_1.text = "";
-//		}
-//
-//		if (stat_2.text.Equals("")) {
-//			body.localPosition = bodyPosStat_1;
-//			description.transform.localPosition = descriptPos_1;
-//		} else {
-//			body.localPosition = bodyPosStat_2;
-//			description.transform.localPosition = descriptPos_2;
-//		}
-//
-//		if (item.getItemQuality() != ItemQuality.COMMON) {
-//			qualityValue.text = item.getItemQuality().getDescription();
-//			qualityValue.color = item.getItemQuality().getColor();
-//			quality.gameObject.SetActive(true);
-//		} else {
-//			quality.gameObject.SetActive(false);
-//		}
-//
-//		description.text = item.getDescription();
-//		costText.text = item.getCost().ToString();
-//		stretchBody();
-//		setActionMsg(item.getHolder());
-		onScreen = true;
-		Update();
-		gameObject.SetActive(true);
+	private void hide () {
+		onScreen = false;
+		trans.gameObject.SetActive (false);
 	}
 
 //    public void showDescription(Buff buff) {

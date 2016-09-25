@@ -51,9 +51,9 @@ public class ItemInformation : MonoBehaviour {
 		itemName.text = item.getItemName ();
 
 		switch (item.getItemQuality()) {
-			case ItemData.Quality.NORMAL: itemName.color = new Color(Color.white.r, Color.white.g, Color.white.b, 1); break;
-			case ItemData.Quality.SUPERIOR: itemName.color = new Color(Color.yellow.r, Color.yellow.g, Color.yellow.b, 1); break;
-			case ItemData.Quality.UNIQUE: itemName.color = new Color(Color.blue.r, Color.blue.g, Color.blue.b, 1); break;
+			case ItemQuality.COMMON: itemName.color = new Color(Color.white.r, Color.white.g, Color.white.b, 1); break;
+			case ItemQuality.SUPERIOR: itemName.color = new Color(Color.yellow.r, Color.yellow.g, Color.yellow.b, 1); break;
+			case ItemQuality.UNIQUE: itemName.color = new Color(Color.blue.r, Color.blue.g, Color.blue.b, 1); break;
 		}
 
 		switch (item.getItemType()) {

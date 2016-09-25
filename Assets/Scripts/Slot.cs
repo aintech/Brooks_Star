@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public abstract class Slot : Describable {
+public abstract class Slot : ItemHolder {
 
 	public Type slotType;
 
@@ -11,7 +11,7 @@ public abstract class Slot : Describable {
 
 	public ItemKind kind { get; protected set; }
 
-	public Item item { get; private set; }
+//	public Item item;// { get; private set; }
 
 	virtual public void init () {
 		bgRender = GetComponent<SpriteRenderer>();
@@ -33,6 +33,7 @@ public abstract class Slot : Describable {
 		item.transform.localPosition = Vector3.zero;
 //		bgRender.enabled = false;
 		iconRender.enabled = false;
+//		itemChanged = true;
 	}
 
 	virtual public Item takeItem () {
@@ -43,8 +44,9 @@ public abstract class Slot : Describable {
 		return itemRef;
 	}
 
-	public override string getQuality () { return item == null? null: item.getItemQuality().ToString(); }
-	public override string getName () { return item == null? null: item.getItemName(); }
+//	public override ItemQuality getQuality () { return item.getItemQuality(); }
+//	public override string getName () { return item.getItemName(); }
+//	public override bool haveDescribableObject () { return item != null; }
 
 	public enum Type {
 		NONE,  WEAPON, ENGINE, ARMOR, GENERATOR, RADAR, SHIELD, REPAIR_DROID, HARVESTER, HAND_WEAPON, BODY_ARMOR

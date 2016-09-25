@@ -7,13 +7,13 @@ public abstract class ItemData {
 	public string description { get; protected set; }
 	public float volume { get; protected set; }
 
-	public Quality quality { get; private set; }
+	public ItemQuality quality { get; private set; }
 	public float level { get; private set; }
 
 	public int cost { get; private set; }
 	public int energyNeeded { get; private set; }
 
-	protected ItemData (Quality quality, float level) {
+	protected ItemData (ItemQuality quality, float level) {
 		this.quality = quality;
 		this.level = level;
 	}
@@ -22,10 +22,6 @@ public abstract class ItemData {
 		this.cost = cost;
 		this.energyNeeded = energyNeeded;
 	}
-
-	public enum Quality {
-		NORMAL, SUPERIOR, UNIQUE//Normal - обычное, Superior - отличное, Unique - уникальное
-	}
 }
 
 public class HandWeaponData : ItemData {
@@ -33,7 +29,7 @@ public class HandWeaponData : ItemData {
 	public int minDamage { get; private set; }
 	public int maxDamage { get; private set;}
 
-	public HandWeaponData (Quality quality, float level, HandWeaponType type, int minDamage, int maxDamage) : base (quality, level) {
+	public HandWeaponData (ItemQuality quality, float level, HandWeaponType type, int minDamage, int maxDamage) : base (quality, level) {
 		this.type = type;
 		this.minDamage = minDamage;
 		this.maxDamage = maxDamage;
@@ -50,7 +46,7 @@ public class BodyArmorData : ItemData {
 	public BodyArmorType type { get; private set; }
 	public int armorClass { get; private set; }
 
-	public BodyArmorData (Quality quality, float level, BodyArmorType type, int armorClass) : base(quality, level) {
+	public BodyArmorData (ItemQuality quality, float level, BodyArmorType type, int armorClass) : base(quality, level) {
 		this.type = type;
 		this.armorClass = armorClass;
 
@@ -68,7 +64,7 @@ public class WeaponData : ItemData {
 	public int maxDamage { get; private set; }
 	public float reloadTime { get; private set; }
 
-	public WeaponData (Quality quality, float level, WeaponType type, int minDamage, int maxDamage, float reloadTime) : base(quality, level) {
+	public WeaponData (ItemQuality quality, float level, WeaponType type, int minDamage, int maxDamage, float reloadTime) : base(quality, level) {
 		this.type = type;
 		this.minDamage = minDamage;
 		this.maxDamage = maxDamage;
@@ -86,7 +82,7 @@ public class EngineData : ItemData {
 	public EngineType type { get; private set; }
 	public float power { get; private set; }
 
-	public EngineData (Quality quality, float level, EngineType type, float power) : base(quality, level) {
+	public EngineData (ItemQuality quality, float level, EngineType type, float power) : base(quality, level) {
 		this.type = type;
 		this.power = power;
 
@@ -102,7 +98,7 @@ public class ArmorData : ItemData {
 	public ArmorType type { get; private set; }
 	public int armorClass { get; private set; }
 
-	public ArmorData (Quality quality, float level, ArmorType type, int armorClass) : base(quality, level) {
+	public ArmorData (ItemQuality quality, float level, ArmorType type, int armorClass) : base(quality, level) {
 		this.type = type;
 		this.armorClass = armorClass;
 
@@ -118,7 +114,7 @@ public class GeneratorData : ItemData {
 	public GeneratorType type { get; private set; }
 	public int maxEnergy { get; private set; }
 
-	public GeneratorData (Quality quality, float level, GeneratorType type, int maxEnergy) : base(quality, level) {
+	public GeneratorData (ItemQuality quality, float level, GeneratorType type, int maxEnergy) : base(quality, level) {
 		this.type = type;
 		this.maxEnergy = maxEnergy;
 
@@ -134,7 +130,7 @@ public class RadarData : ItemData {
 	public RadarType type { get; private set; }
 	public int range { get; private set; }
 
-	public RadarData (Quality quality, float level, RadarType type, int range) : base(quality, level) {
+	public RadarData (ItemQuality quality, float level, RadarType type, int range) : base(quality, level) {
 		this.type = type;
 		this.range = range;
 
@@ -151,7 +147,7 @@ public class ShieldData : ItemData {
 	public int shieldLevel { get; private set; }
 	public int rechargeSpeed { get; private set; }
 
-	public ShieldData (Quality quality, float level, ShieldType type, int shieldLevel, int rechargeSpeed) : base(quality, level) {
+	public ShieldData (ItemQuality quality, float level, ShieldType type, int shieldLevel, int rechargeSpeed) : base(quality, level) {
 		this.type = type;
 		this.shieldLevel = shieldLevel;
 		this.rechargeSpeed = rechargeSpeed;
@@ -168,7 +164,7 @@ public class RepairDroidData : ItemData {
 	public RepairDroidType type { get; private set; }
 	public int repairSpeed { get; private set; }
 
-	public RepairDroidData (Quality quality, float level, RepairDroidType type, int repairSpeed) : base(quality, level) {
+	public RepairDroidData (ItemQuality quality, float level, RepairDroidType type, int repairSpeed) : base(quality, level) {
 		this.type = type;
 		this.repairSpeed = repairSpeed;
 
@@ -184,7 +180,7 @@ public class HarvesterData : ItemData {
 	public HarvesterType type { get; private set; }
 	public int harvestTime { get; private set; }
 
-	public HarvesterData (Quality quality, float level, HarvesterType type, int harvestTime) : base(quality, level) {
+	public HarvesterData (ItemQuality quality, float level, HarvesterType type, int harvestTime) : base(quality, level) {
 		this.type = type;
 		this.harvestTime = harvestTime;
 

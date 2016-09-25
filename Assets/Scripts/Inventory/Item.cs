@@ -148,7 +148,7 @@ public class Item : MonoBehaviour {
 		return itemData.itemType;
 	}
 
-	public ItemData.Quality getItemQuality () {
+	public ItemQuality getItemQuality () {
 		return itemData.quality;
 	}
 

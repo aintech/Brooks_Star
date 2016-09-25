@@ -51,7 +51,7 @@ public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 					choseItem(item);
 					chosenItemBorder.gameObject.SetActive(true);
 				}
-			} else if (Utils.hit.name.StartsWith("GearSlot")) {
+			} else if (Utils.hit.name.StartsWith("EquipmentSlot")) {
 				Item item = Utils.hit.transform.GetComponent<EquipmentSlot>().item;
 				if (item != null) {
 					chooseDraggedItemFromSlot(Utils.hit.transform.GetComponent<EquipmentSlot>());

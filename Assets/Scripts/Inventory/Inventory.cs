@@ -170,7 +170,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 			if (inventoryType == InventoryType.BUYBACK) {
 				item.returnToParent ();
 				return;
-			} else if (inventoryType == InventoryType.INVENTORY) {
+			} else if (inventoryType == InventoryType.INVENTORY && item.slot == null) {
 				if (getFreeVolume() < item.getVolume()) {
 					item.returnToParent ();
 					Messenger.showMessage("Объёма инвентаря не достаточно для добавления предмета");
@@ -280,16 +280,17 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		clearInventory();
 		for (int i = 0; i < count; i++) {
 			ItemData data = null;
-			switch (Mathf.RoundToInt (Random.value * 10)) {
-				case 0: data = ItemFactory.createItemData(ItemType.WEAPON); break;
-				case 1: case 2: data = ItemFactory.createItemData(ItemType.HAND_WEAPON); break;
-				case 3: case 4: data = ItemFactory.createItemData(ItemType.BODY_ARMOR); break;
+			switch (Mathf.FloorToInt (Random.value * 12)) {
+				case 0: case 1: data = ItemFactory.createItemData(ItemType.HAND_WEAPON); break;
+				case 2: case 3: data = ItemFactory.createItemData(ItemType.BODY_ARMOR); break;
+				case 4: data = ItemFactory.createItemData(ItemType.WEAPON); break;
 				case 5: data = ItemFactory.createItemData(ItemType.ENGINE); break;
 				case 6: data = ItemFactory.createItemData(ItemType.ARMOR); break;
 				case 7: data = ItemFactory.createItemData(ItemType.GENERATOR); break;
 				case 8: data = ItemFactory.createItemData(ItemType.RADAR); break;
 				case 9: data = ItemFactory.createItemData(ItemType.SHIELD); break;
 				case 10: data = ItemFactory.createItemData(ItemType.REPAIR_DROID); break;
+				case 11: data = ItemFactory.createItemData (ItemType.HARVESTER); break;
 			}
 			if (data != null) {
 				Item item = Instantiate<Transform>(inventoryItemPrefab).GetComponent<Item>().init(data);
