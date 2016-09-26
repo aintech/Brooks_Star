@@ -19,7 +19,6 @@ public static class Vars {
 	public static int cash = 90000;
 
 	public static Dictionary<int, ItemData> inventory = new Dictionary<int, ItemData>(),
-											storage = new Dictionary<int, ItemData>(),
 											marketCORAS = new Dictionary<int, ItemData> ();
 
 	public static int freeSortingOrder = 0;

@@ -4,137 +4,157 @@ using System.Collections.Generic;
 
 public class EquipmentsMarket : InventoryContainedScreen {
 
+	public Sprite buyBG, sellBG;
+
+	private SpriteRenderer bgRender;
+
 	public Transform inventoryItemPrefab;
 
-	private Inventory market, buyback;
+	private Inventory market;
 
-	private Button marketBtn, buybackBtn;
+	private Button buyBtn, sellBtn, closeBtn;
 
-	public void init (MarketScreen marketScreen, Inventory inventory, Inventory storage, Inventory market, Inventory buyback) {
-		this.market = market;
-		this.buyback = buyback;
+	private MarketScreen marketScreen;
 
-		innerInit(inventory, storage);
+	private ItemDescriptor itemDescriptor;
 
-		marketBtn = transform.FindChild ("Market Button").GetComponent<Button> ().init();
-		buybackBtn = transform.FindChild ("Buyback Button").GetComponent<Button> ().init();
+	private TextMesh actionMsg, cashValue;
+
+	public void init (MarketScreen marketScreen, Inventory inventory, ItemDescriptor itemDescriptor) {
+		this.marketScreen = marketScreen;
+		this.itemDescriptor = itemDescriptor;
+
+		market = transform.Find("Market").GetComponent<Inventory>().init(Inventory.InventoryType.MARKET);
+
+		bgRender = transform.Find("Background").GetComponent<SpriteRenderer>();
+
+		innerInit(market);
+
+		buyBtn = transform.Find ("Buy Button").GetComponent<Button> ().init();
+		sellBtn = transform.Find ("Sell Button").GetComponent<Button> ().init();
+		closeBtn = transform.Find("Close Button").GetComponent<Button>().init();
+
+		actionMsg = transform.Find("Action Description").GetComponent<TextMesh>();
+		cashValue = transform.Find("Cash Value").GetComponent<TextMesh>();
+		MeshRenderer mesh = actionMsg.GetComponent<MeshRenderer>();
+		mesh.sortingOrder = 1;
+		mesh = cashValue.GetComponent<MeshRenderer>();
+		mesh.sortingOrder = 1;
+
+		gameObject.SetActive(false);
 	}
 	
 	public void showScreen () {
-		inventory.setContainerScreen(this);
-		storage.setContainerScreen(this);
-		market.setContainerScreen(this);
-		buyback.setContainerScreen(this);
+		UserInterface.showInterface = false;
+		itemDescriptor.setEnabled(market);
+
+		inventory.setContainerScreen(this, 10);
+		market.setContainerScreen(this, 10);
 
 		inventory.setInventoryToBegin ();
-		storage.setInventoryToBegin ();
 		market.setInventoryToBegin ();
-		buyback.setInventoryToBegin ();
 
-		inventoryBtn.setVisible(true);
-		storageBtn.setVisible(true);
-		marketBtn.setVisible(true);
-		buybackBtn.setVisible(true);
+//		setInventoryActive ();
+		setBuyActive ();
 
-		storage.setPosition(true);
-
-		setInventoryActive ();
-		setMarketActive ();
+		updateCashTxt();
 
 		gameObject.SetActive (true);
 	}
 
 	override protected void checkBtnPress (Button btn) {
-		if (btn == inventoryBtn) { setInventoryActive(); }
-		else if (btn == storageBtn) { setStorageActive(); }
-		else if (btn == marketBtn) { setMarketActive(); }
-		else if (btn == buybackBtn) { setBuybackActive(); }
+		if (btn == buyBtn) { setBuyActive(); }
+		else if (btn == sellBtn) { setSellActive(); }
+		else if (btn == closeBtn) { closeScreen(); }
 		else { Debug.Log("Unknown btn: " + btn.name); }
 	}
 
-	override protected void checkItemDrop () {
-		if (Utils.hit != null && Utils.hit.name.Equals("Cell")) {
-			InventoryCell cell = Utils.hit.transform.GetComponent<InventoryCell>();
-			Inventory source = draggedItem.cell.getInventory();
-			Inventory target = cell.getInventory();
-			
-			if (source != target && (source == inventory || source == storage) && target == market) {
-				target.sellItemToTrader(draggedItem, buyback);
-				hideItemInfo(null);
-			} else {
-				target.addItemToCell(draggedItem, cell);
-			}
-		} else {
-			draggedItem.returnToParent();
-		}
+//	override protected void checkItemDrop () {
+//		if (Utils.hit != null && Utils.hit.name.Equals("Cell")) {
+//			InventoryCell cell = Utils.hit.transform.GetComponent<InventoryCell>();
+//			Inventory source = draggedItem.cell.getInventory();
+//			Inventory target = cell.getInventory();
+//			
+//			if (source != target && (source == inventory || source == storage) && target == market) {
+//				target.sellItemToTrader(draggedItem, buyback);
+//				hideItemInfo(null);
+//			} else {
+//				target.addItemToCell(draggedItem, cell);
+//			}
+//		} else {
+//			draggedItem.returnToParent();
+//		}
+//	}
+
+	private void setBuyActive () {
+		bgRender.sprite = buyBG;
+		actionMsg.text = "<color=orange>Покупка</color> - правая кнопка мыши.";
+		itemDescriptor.setInventoryType(ItemDescriptor.Type.MARKET_BUY);
+		buyBtn.setActive(false);
+		sellBtn.setActive(true);
+		inventory.gameObject.SetActive(false);
+		market.gameObject.SetActive(true);
+	}
+	
+	private void setSellActive () {
+		bgRender.sprite = sellBG;
+		actionMsg.text = "<color=orange>Продажа</color> - правая кнопка мыши.";
+		itemDescriptor.setInventoryType(ItemDescriptor.Type.MARKET_SELL);
+		buyBtn.setActive(true);
+		sellBtn.setActive(false);
+		inventory.gameObject.SetActive(true);
+		market.gameObject.SetActive(false);
 	}
 
-	private void setInventoryActive () {
-		inventory.gameObject.SetActive (true);
-		storage.gameObject.SetActive (false);
-		inventoryBtn.setActive(false);
-		storageBtn.setActive(true);
-		hideItemInfo (inventory);
-	}
-	
-	private void setStorageActive () {
-		storage.gameObject.SetActive (true);
-		inventory.gameObject.SetActive (false);
-		storageBtn.setActive(false);
-		inventoryBtn.setActive(true);
-		hideItemInfo (storage);
+//	protected void hideItemInfo (Inventory activeInventory) {
+//		if (chosenItem != null && activeInventory != null) {
+//			Inventory chosenItemInvetnory = chosenItem.transform.parent.GetComponent<Inventory> ();
+//			
+//			if ((chosenItemInvetnory == market || chosenItemInvetnory == buyback) && 
+//				(activeInventory == inventory || activeInventory == storage)) 
+//			{
+//				return;
+//			}
+//			
+//			if ((chosenItemInvetnory == inventory || chosenItemInvetnory == storage) &&
+//			    (activeInventory == market || activeInventory == buyback))
+//			{
+//				return;
+//			}
+//		}
+//		base.hideItemInfo ();
+//	}
+
+	public Inventory getMarket () {
+		return market;
 	}
 
-	private void setMarketActive () {
-		market.gameObject.SetActive (true);
-		buyback.gameObject.SetActive (false);
-		marketBtn.setActive(false);
-		buybackBtn.setActive(true);
-		hideItemInfo (market);
-	}
-	
-	private void setBuybackActive () {
-		market.gameObject.SetActive (false);
-		buyback.gameObject.SetActive (true);
-		marketBtn.setActive(true);
-		buybackBtn.setActive(false);
-		hideItemInfo (buyback);
-	}
-	
-	protected void hideItemInfo (Inventory activeInventory) {
-		if (chosenItem != null && activeInventory != null) {
-			Inventory chosenItemInvetnory = chosenItem.transform.parent.GetComponent<Inventory> ();
-			
-			if ((chosenItemInvetnory == market || chosenItemInvetnory == buyback) && 
-				(activeInventory == inventory || activeInventory == storage)) 
-			{
-				return;
-			}
-			
-			if ((chosenItemInvetnory == inventory || chosenItemInvetnory == storage) &&
-			    (activeInventory == market || activeInventory == buyback))
-			{
-				return;
-			}
-		}
-		base.hideItemInfo ();
+	private void updateCashTxt () {
+		cashValue.text = Vars.cash.ToString() + "$";
 	}
 
 	public void closeScreen () {
-		if (inventory != null) {
-			if (draggedItem != null) {
-				draggedItem.returnToParent();
-				draggedItem = null;
-			}
-			hideItemInfo(null);
-			chosenItem = null;
-
-			inventory.gameObject.SetActive (false);
-			storage.gameObject.SetActive (false);
-			market.gameObject.SetActive (false);
-			buyback.gameObject.SetActive (false);
-
-			gameObject.SetActive (false);
-		}
+		chosenItem = null;
+		inventory.gameObject.SetActive(false);
+		market.gameObject.SetActive(false);
+		gameObject.SetActive(false);
+		UserInterface.showInterface = true;
+		itemDescriptor.setEnabled(null);
+		marketScreen.setVisible(true);
+//		if (inventory != null) {
+//			if (draggedItem != null) {
+//				draggedItem.returnToParent();
+//				draggedItem = null;
+//			}
+//			hideItemInfo(null);
+//			chosenItem = null;
+//
+//			inventory.gameObject.SetActive (false);
+//			storage.gameObject.SetActive (false);
+//			market.gameObject.SetActive (false);
+//			buyback.gameObject.SetActive (false);
+//
+//			gameObject.SetActive (false);
+//		}
 	}
 }

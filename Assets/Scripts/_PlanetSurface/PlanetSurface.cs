@@ -20,7 +20,7 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 
 	private IndustrialScreen industrialScreen;
 
-	private Inventory inventory, storage, market, buyback;
+	private Inventory inventory, market;
 
 	private MessageBox messageBox;
 
@@ -38,12 +38,6 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 		marketScreen = GameObject.Find("Market Screen").GetComponent<MarketScreen> ();
 		industrialScreen = GameObject.Find("Industrial Screen").GetComponent<IndustrialScreen>();
 
-        Transform inventories = GameObject.Find("Inventories").transform;
-		inventory = GameObject.Find("Status Screen").transform.Find ("Inventory").GetComponent<Inventory> ().init(Inventory.InventoryType.INVENTORY);
-		storage = inventories.Find ("Storage").GetComponent<Inventory> ().init(Inventory.InventoryType.STORAGE);
-		market = inventories.Find ("Market").GetComponent<Inventory> ().init(Inventory.InventoryType.MARKET);
-		buyback = inventories.Find ("Buyback").GetComponent<Inventory> ().init(Inventory.InventoryType.BUYBACK);
-
 		exploreBtn = transform.Find("Explore Button").GetComponent<Button>().init();
 		marketBtn = transform.Find("Market Button").GetComponent<Button>().init();
 		industrialBtn = transform.Find("Industrial Button").GetComponent<Button>().init();
@@ -53,16 +47,19 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 
 		ItemDescriptor descriptor = GameObject.Find("Item Descriptor").GetComponent<ItemDescriptor>().init();
 
-		statusScreen = GameObject.Find("Status Screen").GetComponent<StatusScreen>().init(true, inventory, storage, null, descriptor);
+		statusScreen = GameObject.Find("Status Screen").GetComponent<StatusScreen>().init(null, descriptor);
+		inventory = statusScreen.getInventory();
 
 		Vars.userInterface = GameObject.FindGameObjectWithTag("UserInterface").GetComponent<UserInterface>().init(statusScreen, null, null);
 
 		messageBox = GameObject.Find("Message Box").GetComponent<MessageBox>();
 		story = GameObject.Find("Storyline").GetComponent<Storyline>();
 
-		marketScreen.init(this, statusScreen.getShipData(), inventory, storage, market, buyback, descriptor);
+		marketScreen.init(this, statusScreen.getShipData(), inventory, descriptor);
 		exploreScreen.init(this);
 		industrialScreen.init(this);
+
+		market = marketScreen.getMarket();
 
 		messageBox.init(this);
 		story.init();

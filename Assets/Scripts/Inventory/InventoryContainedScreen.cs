@@ -3,9 +3,9 @@ using System.Collections;
 
 public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 
-	protected Button inventoryBtn, storageBtn;
+	protected Button inventoryBtn;
 
-	protected Inventory inventory, storage;
+	protected Inventory inventory;
 	
 	protected Item draggedItem, chosenItem;
 	
@@ -17,9 +17,8 @@ public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 
 	private ItemInformation itemInformation;
 
-	protected void innerInit(Inventory inventory, Inventory storage) {
+	protected void innerInit(Inventory inventory) {
 		this.inventory = inventory;
-		this.storage = storage;
 
 		itemInformation = transform.Find("Item Information").GetComponent<ItemInformation>().init();
 
@@ -29,10 +28,12 @@ public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 		if (inventoryBtn == null) {
 			inventoryBtn = transform.Find("Inventory Button") == null? null: transform.Find("Inventory Button").GetComponent<Button>().init();
 		}
-		storageBtn = transform.Find("Storage Button") == null? null: transform.Find("Storage Button").GetComponent<Button>().init();
+
+
 	}
 
 	void Update () {
+		if (inventory.getInventoryType() == Inventory.InventoryType.MARKET) { return; }
 		if (Input.GetMouseButtonDown(0) && Utils.hit != null) {
 			if (Utils.hit.name.Equals("Cell")) {
 				Item item = Utils.hit.transform.GetComponent<InventoryCell>().item;

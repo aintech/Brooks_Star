@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class MarketScreen : MonoBehaviour, ButtonHolder, Hideable {
-
+	
 	private PlanetSurface planetSurface;
 
 	private HullsMarket hullsMarket;
@@ -11,35 +11,25 @@ public class MarketScreen : MonoBehaviour, ButtonHolder, Hideable {
 
 	private Button equipmentsBtn, hullsBtn, closeBtn;
 
-	private Inventory market, buyback;
-
-	private ItemDescriptor descriptor;
-
-	public void init (PlanetSurface planetSurface, ShipData shipData, Inventory inventory, Inventory storage, Inventory market, Inventory buyback, ItemDescriptor descriptor) {
+	public void init (PlanetSurface planetSurface, ShipData shipData, Inventory inventory, ItemDescriptor itemDescriptor) {
 		this.planetSurface = planetSurface;
-		this.market = market;
-		this.buyback = buyback;
-		this.descriptor = descriptor;
 
 		equipmentsMarket = transform.Find ("Equipments Market").GetComponent<EquipmentsMarket>();
-		equipmentsMarket.init(this, inventory, storage, market, buyback);
+		equipmentsMarket.init(this, inventory, itemDescriptor);
 
 		hullsMarket = transform.Find ("Hulls Market").GetComponent<HullsMarket> ();
-		hullsMarket.init(inventory, storage, shipData);
+		hullsMarket.init(inventory, shipData);
 		hullsMarket.fillWithRandomHulls(15, "Hull Item");
 
 		equipmentsBtn = transform.Find ("Equipments Button").GetComponent<Button> ().init();
 		hullsBtn = transform.Find("Hulls Button").GetComponent<Button>().init();
 		closeBtn = transform.Find ("Close Button").GetComponent<Button> ().init();
 
-		transform.Find("Market BG").gameObject.SetActive(true);
-
 		gameObject.SetActive(false);
 	}
 
 	public void showScreen () {
 		PlanetSurface.topHideable = this;
-		showEquipmentMarket();
 		gameObject.SetActive(true);
 	}
 
@@ -62,36 +52,34 @@ public class MarketScreen : MonoBehaviour, ButtonHolder, Hideable {
 		}
 	}
 
-	private void closeMarket () {
-		if (equipmentsMarket.gameObject.activeInHierarchy) { equipmentsMarket.closeScreen(); }
-		if (hullsMarket.gameObject.activeInHierarchy) { equipmentsMarket.gameObject.SetActive(false); }
-	}
-
 	private void showEquipmentMarket () {
-		hullsMarket.closeScreen();
 		equipmentsMarket.showScreen();
-		hullsBtn.setActive(true);
-		equipmentsBtn.setActive(false);
+		setVisible(false);
 	}
 
 	private void showHullsMarket () {
-		equipmentsMarket.closeScreen();
 		hullsMarket.showScreen();
-		hullsBtn.setActive(false);
-		equipmentsBtn.setActive(true);
+		setVisible(false);
 	}
 
 	public void setVisible (bool visible) {
-		if (!visible && equipmentsMarket.gameObject.activeInHierarchy) {
-			market.gameObject.SetActive(false);
-			buyback.gameObject.SetActive(false);
-		}
+		hullsBtn.gameObject.SetActive(visible);
+		equipmentsBtn.gameObject.SetActive(visible);
+		closeBtn.gameObject.SetActive(visible);
+//		if (!visible && equipmentsMarket.gameObject.activeInHierarchy) {
+//			market.gameObject.SetActive(false);
+//			buyback.gameObject.SetActive(false);
+//		}
 
-		gameObject.SetActive(visible);
+//		gameObject.SetActive(visible);
 
-		if (visible) {
-			if (equipmentsMarket.gameObject.activeInHierarchy) { showEquipmentMarket(); }
-			else { showHullsMarket(); }
-		}
+//		if (visible) {
+//			if (equipmentsMarket.gameObject.activeInHierarchy) { showEquipmentMarket(); }
+//			else { showHullsMarket(); }
+//		}
+	}
+
+	public Inventory getMarket () {
+		return equipmentsMarket.getMarket();
 	}
 }

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ItemDescriptor : MonoBehaviour {
 
-	private Transform 	trans, 
+	private Transform 	trans,
 						namePre, nameBG,
 						qualityPre, qualityBG,
 						pre1, bg1,
@@ -30,6 +30,10 @@ public class ItemDescriptor : MonoBehaviour {
 
 	private Vector3 scale = Vector3.one;
 
+	private Inventory targetInventory;
+
+//	private Vector2[] positions = new Vector2[] { new Vector2(.5f, -.57f), new Vector2(.5f, -.95f), new Vector2(0, -1.33f), new Vector2(0, -1.71f), new Vector2(0, -2.09f) };
+
 //	private Vector2[,] positions = new Vector2[,]{
 //		{new Vector2(.15f, -.57f), new Vector2(.297f, -.57f), new Vector2(.295f, -.76f)},
 //		{new Vector2(.15f, -.95f), new Vector2(.297f, -.95f), new Vector2(.295f, -1.14f)},
@@ -38,6 +42,8 @@ public class ItemDescriptor : MonoBehaviour {
 //		{new Vector2(.15f, -2.09f), new Vector2(.297f, -2.09f), new Vector2(.295f, -2.28f)},
 //		{new Vector2(.15f, -2.47f), new Vector2(.297f, -2.47f), new Vector2(.295f, -2.66f)}
 //	}; 
+
+	private Type inventoryType;
 
 	public ItemDescriptor init () {
 		trans = transform.Find ("Descriptor");
@@ -78,6 +84,15 @@ public class ItemDescriptor : MonoBehaviour {
 		return this;
 	}
 
+	public void setEnabled (Inventory inventory) {
+		this.targetInventory = inventory;
+		enabled = inventory != null;
+	}
+
+	public void setInventoryType (Type type) {
+		this.inventoryType = type;
+	}
+
 	void Update () {
 		if (onScreen) {
 			if (Utils.hit == null) {
@@ -108,6 +123,15 @@ public class ItemDescriptor : MonoBehaviour {
 		}
 	}
 
+	//	public void sellItemToTrader (Item item, Inventory buybackInventory) {
+	//		Inventory source = item.cell.transform.parent.GetComponent<Inventory> ();
+	//		if (source != null) {
+	//			source.calculateFreeVolume();
+	//		}
+	//		buybackInventory.addItemToFirstFreePosition (item, true);
+	//		Vars.cash += item.getCost ();
+	//	}
+
 	private void showDescription (ItemHolder holder) {
 		this.holder = holder;
 		this.item = holder.item;
@@ -121,6 +145,19 @@ public class ItemDescriptor : MonoBehaviour {
 		onScreen = true;
 		Update();
 		trans.gameObject.SetActive(true);
+	}
+
+	private void setCost(int index, int cost) {
+		string text = (inventoryType == Type.MARKET_BUY? "Купить за": inventoryType == Type.MARKET_SELL? "Продать за": "Стоимость:")  + " <color=yellow>" + cost + "$</color>";
+		scale.x = text.Length - 22.5f;
+		switch (index) {
+			case 1: value1.text = text; bg1.localScale = scale; break;
+			case 2: value2.text = text; bg2.localScale = scale; break;
+			case 3: value3.text = text; bg3.localScale = scale; break;
+			case 4: value4.text = text; bg4.localScale = scale; break;
+			case 5: value5.text = text; bg5.localScale = scale; break;
+			default: Debug.Log("Unknown index: " + index); break;
+		}
 	}
 
 	private void showTexts (ItemData data) {
@@ -161,13 +198,7 @@ public class ItemDescriptor : MonoBehaviour {
 				scale.x = value1.text.Length - 24;// + 1 - (количество спецсимволов)
 				bg1.localScale = scale;
 
-				value2.text = "Стоимость: <color=yellow>" + data.cost + "$</color>";
-				scale.x = value2.text.Length - 22.5F;
-				bg2.localScale = scale;
-
-//				pre2.localPosition = positions [1, 0];
-//				bg2.localPosition = positions [1, 1];
-//				value2.transform.localPosition = positions [1, 2];
+				setCost(2, data.cost);
 				break;
 
 			case ItemType.BODY_ARMOR:
@@ -183,9 +214,7 @@ public class ItemDescriptor : MonoBehaviour {
 				scale.x = value1.text.Length - 22;// + 1 - (количество спецсимволов)
 				bg1.localScale = scale;
 
-				value2.text = "Стоимость: <color=yellow>" + data.cost + "$</color>";
-				scale.x = value2.text.Length - 22.5F;
-				bg2.localScale = scale;
+				setCost(2, data.cost);
 				break;
 
 			case ItemType.WEAPON:
@@ -222,9 +251,7 @@ public class ItemDescriptor : MonoBehaviour {
 				scale.x = value4.text.Length - 22.5F;
 				bg4.localScale = scale;
 
-				value5.text = "Стоимость: <color=yellow>" + data.cost + "$</color>";
-				scale.x = value5.text.Length - 22.5F;
-				bg5.localScale = scale;
+				setCost(5, data.cost);
 				break;
 
 			case ItemType.ENGINE:
@@ -254,9 +281,7 @@ public class ItemDescriptor : MonoBehaviour {
 				scale.x = value3.text.Length - 22.5F;
 				bg3.localScale = scale;
 
-				value4.text = "Стоимость: <color=yellow>" + data.cost + "$</color>";
-				scale.x = value4.text.Length - 22.5F;
-				bg4.localScale = scale;
+				setCost(4, data.cost);
 				break;
 
 			case ItemType.ARMOR:
@@ -279,9 +304,7 @@ public class ItemDescriptor : MonoBehaviour {
 				scale.x = value2.text.Length - 22.5F;
 				bg2.localScale = scale;
 
-				value3.text = "Стоимость: <color=yellow>" + data.cost + "$</color>";
-				scale.x = value3.text.Length - 22.5F;
-				bg3.localScale = scale;
+				setCost(3, data.cost);
 				break;
 
 			case ItemType.GENERATOR:
@@ -304,9 +327,7 @@ public class ItemDescriptor : MonoBehaviour {
 				scale.x = value2.text.Length - 22.5F;
 				bg2.localScale = scale;
 
-				value3.text = "Стоимость: <color=yellow>" + data.cost + "$</color>";
-				scale.x = value3.text.Length - 22.5F;
-				bg3.localScale = scale;
+				setCost(3, data.cost);
 				break;
 
 			case ItemType.RADAR:
@@ -336,9 +357,7 @@ public class ItemDescriptor : MonoBehaviour {
 				scale.x = value3.text.Length - 22.5F;
 				bg3.localScale = scale;
 
-				value4.text = "Стоимость: <color=yellow>" + data.cost + "$</color>";
-				scale.x = value4.text.Length - 22.5F;
-				bg4.localScale = scale;
+				setCost(4, data.cost);
 				break;
 
 			case ItemType.SHIELD:
@@ -375,9 +394,7 @@ public class ItemDescriptor : MonoBehaviour {
 				scale.x = value4.text.Length - 22.5F;
 				bg4.localScale = scale;
 
-				value5.text = "Стоимость: <color=yellow>" + data.cost + "$</color>";
-				scale.x = value5.text.Length - 22.5F;
-				bg5.localScale = scale;
+				setCost(5, data.cost);
 				break;
 
 			case ItemType.REPAIR_DROID:
@@ -407,9 +424,7 @@ public class ItemDescriptor : MonoBehaviour {
 				scale.x = value3.text.Length - 22.5F;
 				bg3.localScale = scale;
 
-				value4.text = "Стоимость: <color=yellow>" + data.cost + "$</color>";
-				scale.x = value4.text.Length - 22.5F;
-				bg4.localScale = scale;
+				setCost(4, data.cost);
 				break;
 
 			case ItemType.HARVESTER:
@@ -432,9 +447,7 @@ public class ItemDescriptor : MonoBehaviour {
 				scale.x = value2.text.Length - 22.5F;
 				bg2.localScale = scale;
 
-				value3.text = "Стоимость: <color=yellow>" + data.cost + "$</color>";
-				scale.x = value3.text.Length - 22.5F;
-				bg3.localScale = scale;
+				setCost(3, data.cost);
 				break;
 		}
 	}
@@ -470,6 +483,10 @@ public class ItemDescriptor : MonoBehaviour {
 //		actionMsgTrans.gameObject.SetActive(false);
 //		errorMsgTrans.gameObject.SetActive(false);
 //		costTrans.localPosition = costPos_1;
+	}
+
+	public enum Type {
+		INVENTORY, MARKET_BUY, MARKET_SELL
 	}
 
 //    private void stretchBody () {

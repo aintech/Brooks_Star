@@ -14,10 +14,10 @@ public class ShipInformationScreen : InventoryContainedScreen {
 		this.shipData = shipData;
 		this.inventory = inventory;
 
-		inventory.setContainerScreen (this);
+		inventory.setContainerScreen (this, 6);
 		shipData.updateHullInfo ();
 
-		innerInit(inventory, null);
+		innerInit(inventory);
 
 		closeBtn = transform.Find("Close Button").GetComponent<Button>().init();
 
@@ -46,7 +46,7 @@ public class ShipInformationScreen : InventoryContainedScreen {
 	public void showScreen () {
 		if (gameObject.activeInHierarchy) { return; }
 
-		inventory.setContainerScreen(this);
+		inventory.setContainerScreen(this, 6);
 		inventory.setInventoryToBegin();
 
 		Camera.main.orthographicSize = 5;

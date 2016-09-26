@@ -37,13 +37,12 @@ public class HullsMarket : MonoBehaviour, ButtonHolder {
 
 	private Color greenColor = new Color(0, 1, 0); 
 
-	private Inventory inventory, storage;
+	private Inventory inventory;
 
 	private Collider2D hullsDisplayColl;
 
-	public void init (Inventory inventory, Inventory storage, ShipData shipData) {
+	public void init (Inventory inventory, ShipData shipData) {
 		this.inventory = inventory;
-		this.storage = storage;
 		this.shipData = shipData;
 
 		cells = transform.Find("Hulls Display").GetComponentsInChildren<HullsMarketCell> ();
@@ -138,44 +137,46 @@ public class HullsMarket : MonoBehaviour, ButtonHolder {
 		inventory.setCapacity(chosenHull.getHullType().getStorageCapacity());
 
 		shipData.setHullType(chosenHull.getHullType(), chosenHull.getHullType().getMaxHealth());
-		checkInventoryCapacity ();
+//		checkInventoryCapacity ();
 		updateHullSlots();
 
 		chosenHull.setHullType(oldHullType);
 		selectCell(chosenHull.getCell());
 	}
 
-	private void checkInventoryCapacity () {
-		if (inventory.getFreeVolume() < 0) {
-			while (true) {
-				storage.addItemToCell(inventory.takeLastItem(), null);
-				if (inventory.getFreeVolume() >= 0) break;
-			}
-			Messenger.showMessage("Часть оборудования перемещена из инвентаря в хранилище");
-		}
-	}
+//	private void checkInventoryCapacity () {
+//		if (inventory.getFreeVolume() < 0) {
+//			while (true) {
+//				storage.addItemToCell(inventory.takeLastItem(), null);
+//				if (inventory.getFreeVolume() >= 0) break;
+//			}
+//			Messenger.showMessage("Часть оборудования перемещена из инвентаря в хранилище");
+//		}
+//	}
 
 	private void updateHullSlots () {
 		shipData.arrangeItemsToSlots();
-		bool addedToInv = false, addedToStorage = false;
+		bool addedToInv = false;//, addedToStorage = false;
 		foreach (HullSlot slot in shipData.getSlots()) {
 			if (!slot.isSlotAvailable() && slot.item != null) {
-				if (inventory.getFreeVolume() >= slot.item.getVolume()) {
+//				if (inventory.getFreeVolume() >= slot.item.getVolume()) {
 					inventory.addItemToCell(slot.takeItem(), null);
-					addedToInv = true;
-				} else {
-					storage.addItemToCell(slot.takeItem(), null);
-					addedToStorage = true;
-				}
+//					addedToInv = true;
+//				} else {
+//					storage.addItemToCell(slot.takeItem(), null);
+//					addedToStorage = true;
+//				}
 			}
 		}
-		if (addedToInv && addedToStorage) {
-			Messenger.showMessage("Часть оборудования снята с корабля и перемещена в инвентарь и хранилище");
-		} else if (addedToInv) {
+//		if (addedToInv && addedToStorage) {
+//			Messenger.showMessage("Часть оборудования снята с корабля и перемещена в инвентарь и хранилище");
+//		} else 
+		if (addedToInv) {
 			Messenger.showMessage("Часть оборудования снята с корабля и перемещена в инвентарь");
-		} else if (addedToStorage) {
-			Messenger.showMessage("Часть оборудования снята с корабля и перемещена в хранилище");
 		}
+//		else if (addedToStorage) {
+//			Messenger.showMessage("Часть оборудования снята с корабля и перемещена в хранилище");
+//		}
 	}
 
 	private void refreshMarket () {

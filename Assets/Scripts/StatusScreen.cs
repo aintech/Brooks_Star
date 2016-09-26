@@ -20,17 +20,20 @@ public class StatusScreen : InventoryContainedScreen {
 
 	private SpriteRenderer background;
 
-	private ItemDescriptor descriptor;
+	private ItemDescriptor itemDescriptor;
 
-	public StatusScreen init (bool onPlanetSurface, Inventory inventory, Inventory storage, StarSystem starSystem, ItemDescriptor descriptor) {
-		this.onPlanetSurface = onPlanetSurface;
+	private TextMesh cashValue;
+
+	public StatusScreen init (StarSystem starSystem, ItemDescriptor itemDescriptor) {
 		this.starSystem = starSystem;
-		this.descriptor = descriptor;
+		this.itemDescriptor = itemDescriptor;
+
+		onPlanetSurface = starSystem == null;
 
 		shipData = transform.Find("Ship Data").GetComponent<ShipData>().init(onPlanetSurface);
 		playerData = transform.Find("Player Data").GetComponent<PlayerData>().init();
 
-		innerInit(inventory, storage);
+		innerInit(transform.Find("Inventory").GetComponent<Inventory>().init(Inventory.InventoryType.INVENTORY));
 
 		playerBtn = transform.Find("Player Button").GetComponent<Button>().init();
 		perksBtn = transform.Find("Perks Button").GetComponent<Button>().init();
@@ -42,11 +45,27 @@ public class StatusScreen : InventoryContainedScreen {
 		background = transform.Find("Background").GetComponent<SpriteRenderer>();
 		background.gameObject.SetActive(true);
 
+		cashValue = transform.Find("Cash Value").GetComponent<TextMesh>();
+		MeshRenderer mesh = cashValue.GetComponent<MeshRenderer>();
+		mesh.sortingLayerName = "Inventory";
+		mesh.sortingOrder = 1;
+		cashValue.gameObject.SetActive(true);
+
+		updateCashValue();
+
 		inventory.setCapacity(shipData.getHullType().getStorageCapacity());
 
 		closeScreen();
 
 		return this;
+	}
+
+	private void updateCashValue () {
+		cashValue.text = Vars.cash.ToString() + "$";
+	}
+
+	public Inventory getInventory () {
+		return inventory;
 	}
 
 	public ShipData getShipData () {
@@ -56,12 +75,12 @@ public class StatusScreen : InventoryContainedScreen {
 	public void showScreen () {
 		if (gameObject.activeInHierarchy) { return; }
 
-		inventory.setContainerScreen(this);
-		inventory.setInventoryToBegin ();
+		UserInterface.showInterface = false;
+		itemDescriptor.setEnabled(inventory);
+		itemDescriptor.setInventoryType(ItemDescriptor.Type.INVENTORY);
 
-		storage.setContainerScreen(this);
-		storage.setInventoryToBegin ();
-		storage.setPosition(false);
+		inventory.setContainerScreen(this, 6);
+		inventory.setInventoryToBegin ();
 
 		perksView.updatePerks();
 
@@ -96,17 +115,21 @@ public class StatusScreen : InventoryContainedScreen {
 		inventory.gameObject.SetActive(false);
 		playerData.gameObject.SetActive(false);
 		shipData.gameObject.SetActive(false);
-		storage.gameObject.SetActive(false);
 		gameObject.SetActive(false);
 
 		if (onPlanetSurface) {
 			PlanetSurface.topHideable.setVisible(true);
 		}
 		else { StarSystem.setGamePause(false); }
+
+		UserInterface.showInterface = true;
+		itemDescriptor.setEnabled(null);
 	}
 
 	private void show (ItemKind kind) {
 		background.sprite = kind == ItemKind.SHIP_EQUIPMENT? shipBG: kind == ItemKind.EQUIPMENTS? equipmentBG: perksBG;
+
+		cashValue.gameObject.SetActive (kind == ItemKind.EQUIPMENTS || kind == ItemKind.SHIP_EQUIPMENT);
 
 		shipData.gameObject.SetActive(kind == ItemKind.SHIP_EQUIPMENT);
 		playerData.gameObject.SetActive(kind == ItemKind.EQUIPMENTS);
@@ -186,9 +209,6 @@ public class StatusScreen : InventoryContainedScreen {
 		else if (btn == shipBtn && getChosenItem().cell != null && getChosenItem().cell.getInventory().getInventoryType() != Inventory.InventoryType.INVENTORY) {
 			hideItemInfo();
 		}
-		else if (btn == storageBtn && (getChosenItem().slot != null || (getChosenItem().cell != null && getChosenItem().cell.getInventory().getInventoryType() != Inventory.InventoryType.INVENTORY))) {
-			hideItemInfo();
-		}
 		else if (btn ==playerBtn && (getChosenItem().slot != null || (getChosenItem().cell != null && getChosenItem().cell.getInventory().getInventoryType() != Inventory.InventoryType.INVENTORY))) {
 			hideItemInfo();
 		}
@@ -211,8 +231,6 @@ public class StatusScreen : InventoryContainedScreen {
 				if (draggedItem.cell == null && draggedItem.slot == null) {
 					if (inventory.gameObject.activeInHierarchy) {
 						inventory.addItemToCell (draggedItem, draggedItem.cell);
-					} else if (storage.gameObject.activeInHierarchy) {
-						storage.addItemToCell (draggedItem, draggedItem.cell);
 					}
 					shipData.updateHullInfo();
 				} else {
@@ -228,8 +246,6 @@ public class StatusScreen : InventoryContainedScreen {
 					draggedItem.returnToParent();
 				} else if (inventory.gameObject.activeInHierarchy) {
 					inventory.addItemToCell (currItem, draggedItem.cell);
-				} else if (storage.gameObject.activeInHierarchy) {
-					storage.addItemToCell (currItem, draggedItem.cell);
 				}
 				shipData.updateHullInfo ();
 				setItemToSlot (slot);
@@ -240,8 +256,6 @@ public class StatusScreen : InventoryContainedScreen {
 				if (draggedItem.cell == null && draggedItem.slot == null) {
 					if (inventory.gameObject.activeInHierarchy) {
 						inventory.addItemToCell (draggedItem, draggedItem.cell);
-					} else if (storage.gameObject.activeInHierarchy) {
-						storage.addItemToCell (draggedItem, draggedItem.cell);
 					}
 					playerData.updatePlayerInfo();
 				} else {
@@ -257,8 +271,6 @@ public class StatusScreen : InventoryContainedScreen {
 					draggedItem.returnToParent();
 				} else if (inventory.gameObject.activeInHierarchy) {
 					inventory.addItemToCell (currItem, draggedItem.cell);
-				} else if (storage.gameObject.activeInHierarchy) {
-					storage.addItemToCell (currItem, draggedItem.cell);
 				}
 				setItemToSlot (slot);
 				playerData.updatePlayerInfo ();
@@ -266,8 +278,6 @@ public class StatusScreen : InventoryContainedScreen {
 		} else if (draggedItem.cell == null && draggedItem.slot == null) {
 			if (inventory.gameObject.activeInHierarchy) {
 				inventory.addItemToCell (draggedItem, null);
-			} else if (storage.gameObject.activeInHierarchy) {
-				storage.addItemToCell (draggedItem, null);
 			}
 			switch (draggedItem.getItemType().getKind()) {
 				case ItemKind.SHIP_EQUIPMENT: shipData.updateHullInfo(); break;
@@ -358,12 +368,10 @@ public class StatusScreen : InventoryContainedScreen {
 	public void sendToVars () {
 		shipData.sendToVars ();
 		inventory.sendToVars();
-		storage.sendToVars();
 	}
 
 	public void initFromVars () {
 		shipData.initializeFromVars();
 		inventory.initFromVars();
-		storage.initFromVars();
 	}
 }

@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 1056e969b7409cd45a614aee66976e67
-timeCreated: 1474626044
+timeCreated: 1474896124
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -36,6 +36,9 @@ TextureImporter:
     21300058: Inventory_SlotBorder
     21300060: Inventory_SlotActive
     21300062: Inventory_ShipBtn_Hover
+    21300064: ItemDescriptor_Button
+    21300066: ItemDescriptor_Loading
+    21300068: ItemDescriptor_ActionBtn
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -118,8 +121,8 @@ TextureImporter:
         y: 10
         width: 56
         height: 65
-      alignment: 4
-      pivot: {x: 0, y: 0.5}
+      alignment: 5
+      pivot: {x: 1, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -131,8 +134,8 @@ TextureImporter:
         y: 10
         width: 56
         height: 65
-      alignment: 4
-      pivot: {x: 0, y: 0.5}
+      alignment: 5
+      pivot: {x: 1, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -144,8 +147,8 @@ TextureImporter:
         y: 100
         width: 274
         height: 65
-      alignment: 4
-      pivot: {x: 0, y: 0.5}
+      alignment: 5
+      pivot: {x: 1, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -157,8 +160,8 @@ TextureImporter:
         y: 186
         width: 274
         height: 65
-      alignment: 4
-      pivot: {x: 0, y: 0.5}
+      alignment: 5
+      pivot: {x: 1, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -482,6 +485,19 @@ TextureImporter:
         y: 1891
         width: 120
         height: 121
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: ItemDescriptor_ActionBtn
+      rect:
+        serializedVersion: 2
+        x: 1821
+        y: 1899
+        width: 39
+        height: 30
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

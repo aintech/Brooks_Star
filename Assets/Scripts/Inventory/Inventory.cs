@@ -20,7 +20,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 
 	private int offset = 0;
 
-	private int offsetStep = 4;
+	private int offsetStep;
 
 	private bool scrollableUp, scrollableDown;
 
@@ -30,14 +30,14 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 
 	private Vector3 normalScale = new Vector3(.08f, .1f, 1), decimalScale = new Vector3(.065f, .1f, 1);
     
-	private Collider2D inventoryColl;
+//	private Collider2D inventoryColl;
 
 	public Inventory init (InventoryType inventoryType) {
-        this.inventoryType = inventoryType;
+		this.inventoryType = inventoryType;
 
 		cells = transform.GetComponentsInChildren<InventoryCell> ();
 
-		inventoryColl = transform.GetComponent<Collider2D>();
+//		inventoryColl = transform.GetComponent<Collider2D>();
 
         foreach (InventoryCell cell in cells) {
             cell.init(this);
@@ -47,15 +47,13 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		downBtn = transform.FindChild ("Down Button").GetComponent<Button> ().init();
 		sortBtn = transform.FindChild("Sort Button").GetComponent<Button>().init();
 
-		volumeMesh = transform.FindChild ("VolumeTxt").GetComponent<TextMesh> ();
-		MeshRenderer meshRend = transform.FindChild ("VolumeTxt").GetComponent<MeshRenderer> ();
+		volumeMesh = transform.Find ("VolumeTxt").GetComponent<TextMesh> ();
+		MeshRenderer meshRend = volumeMesh.GetComponent<MeshRenderer> ();
 		meshRend.sortingLayerName = "Inventory";
 		meshRend.sortingOrder = 3;
 
-		if (inventoryType != InventoryType.INVENTORY) {
-//			transform.Find("VolumeBG").gameObject.SetActive(false);
-			volumeMesh.gameObject.SetActive(false);
-		}
+		sortBtn.gameObject.SetActive(inventoryType == InventoryType.INVENTORY);
+		volumeMesh.gameObject.SetActive(inventoryType == InventoryType.INVENTORY);
 
 		checkButtons ();
 
@@ -64,30 +62,33 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		return this;
 	}
 
-	public void setPosition (bool left) {
-		if ((left && transform.localPosition.x > 0) || (!left && transform.localPosition.x < 0)) {
-			transform.localPosition = transform.localPosition * -1;
-			upBtn.transform.localPosition = new Vector2(upBtn.transform.localPosition.x * -1, upBtn.transform.localPosition.y);
-			downBtn.transform.localPosition = new Vector2(downBtn.transform.localPosition.x * -1, downBtn.transform.localPosition.y);
-			sortBtn.transform.localPosition = new Vector2(sortBtn.transform.localPosition.x * -1, sortBtn.transform.localPosition.y);
-		}
-	}
+//	public void setPosition (bool left) {
+//		if ((left && transform.localPosition.x > 0) || (!left && transform.localPosition.x < 0)) {
+//			transform.localPosition = transform.localPosition * -1;
+//			upBtn.transform.localPosition = new Vector2(upBtn.transform.localPosition.x * -1, upBtn.transform.localPosition.y);
+//			downBtn.transform.localPosition = new Vector2(downBtn.transform.localPosition.x * -1, downBtn.transform.localPosition.y);
+//			sortBtn.transform.localPosition = new Vector2(sortBtn.transform.localPosition.x * -1, sortBtn.transform.localPosition.y);
+//		}
+//	}
 
-	public void setContainerScreen (InventoryContainedScreen containerScreen) {
+	public void setContainerScreen (InventoryContainedScreen containerScreen, int columnsCount) {
 		this.containerScreen = containerScreen;
+		this.offsetStep = columnsCount;
 	}
 
 	void Update () {
 		if (Input.GetAxis("Mouse ScrollWheel") > 0 && Utils.hit != null) {
-			if (Utils.hit == inventoryColl) {
-				scroll(true);
-			} else if (Utils.hit.name.Equals("Cell") && Utils.hit.GetComponent<InventoryCell>().getInventory() == this) {
+//			if (Utils.hit == inventoryColl) {
+//				scroll(true);
+//			} else 
+			if (Utils.hit.name.Equals("Cell") && Utils.hit.GetComponent<InventoryCell>().getInventory() == this) {
 				scroll(true);
 			}
 		} else if (Input.GetAxis("Mouse ScrollWheel") < 0 && Utils.hit != null) {
-			if (Utils.hit == inventoryColl) {
-				scroll(false);
-			} else if (Utils.hit.name.Equals("Cell") && Utils.hit.GetComponent<InventoryCell>().getInventory() == this) {
+//			if (Utils.hit == inventoryColl) {
+//				scroll(false);
+//			} else 
+			if (Utils.hit.name.Equals("Cell") && Utils.hit.GetComponent<InventoryCell>().getInventory() == this) {
 				scroll(false);
 			}
 		}
@@ -149,14 +150,14 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		refreshInventory ();
 	}
 
-	public void sellItemToTrader (Item item, Inventory buybackInventory) {
-		Inventory source = item.cell.transform.parent.GetComponent<Inventory> ();
-		if (source != null) {
-			source.calculateFreeVolume();
-		}
-		buybackInventory.addItemToFirstFreePosition (item, true);
-		Vars.cash += item.getCost ();
-	}
+//	public void sellItemToTrader (Item item, Inventory buybackInventory) {
+//		Inventory source = item.cell.transform.parent.GetComponent<Inventory> ();
+//		if (source != null) {
+//			source.calculateFreeVolume();
+//		}
+//		buybackInventory.addItemToFirstFreePosition (item, true);
+//		Vars.cash += item.getCost ();
+//	}
 
 	public void addItemToCell (Item item, InventoryCell cell) {
 		if (cell == null) {
@@ -167,15 +168,16 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		Inventory source = item.cell == null? null: item.cell.getInventory();
 
 		if (source != this) {
-			if (inventoryType == InventoryType.BUYBACK) {
-				item.returnToParent ();
-				return;
-			} else if (inventoryType == InventoryType.INVENTORY && item.slot == null) {
+//			if (inventoryType == InventoryType.BUYBACK) {
+//				item.returnToParent ();
+//				return;
+//			} else 
+			if (inventoryType == InventoryType.INVENTORY && item.slot == null) {
 				if (getFreeVolume() < item.getVolume()) {
 					item.returnToParent ();
 					Messenger.showMessage("Объёма инвентаря не достаточно для добавления предмета");
 					return;
-				} else if (source != null && (source.inventoryType == InventoryType.MARKET || source.inventoryType == InventoryType.BUYBACK)) {
+				} else if (source != null && (source.inventoryType == InventoryType.MARKET)) {
 					if (!buyItem (item)) {
 						item.returnToParent ();
 						return;
@@ -184,10 +186,10 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 			}
 		}
 
-		if (inventoryType == InventoryType.BUYBACK) {
-			addItemToFirstFreePosition(item, true);
-			return;
-		}
+//		if (inventoryType == InventoryType.BUYBACK) {
+//			addItemToFirstFreePosition(item, true);
+//			return;
+//		}
 		if (source != null && source.inventoryType == InventoryType.INVENTORY) { source.calculateFreeVolume(); }
 
 		InventoryCell prevCell = item.cell;
@@ -306,16 +308,15 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 
 	private void updateVolumeTxt () {
 		if (inventoryType != InventoryType.INVENTORY) { return; }
-		if (freeVolume >= 100) {
-			volumeTxt = "99";
-		} else if (freeVolume < 0) {
-			volumeTxt = "0";
-		} else {
-			volumeTxt = string.Format(freeVolume < 10? "{0:F1}": "{0:D}", freeVolume.ToString());
-		}
-
-		volumeMesh.text = volumeTxt;
-		volumeMesh.transform.localScale = freeVolume < 10? decimalScale: normalScale;
+//		if (freeVolume >= 100) {
+//			volumeTxt = "99";
+//		} else if (freeVolume < 0) {
+//			volumeTxt = "0";
+//		} else {
+//			volumeTxt = string.Format(freeVolume < 10? "{0:F1}": "{0:D}", freeVolume.ToString());
+//		}
+		volumeMesh.text = "Объём: " + (freeVolume < 0? "<color=red>": "<color=orange>") + freeVolume.ToString("0.0") + "</color>";
+//		volumeMesh.transform.localScale = freeVolume < 10? decimalScale: normalScale;
 	}
 
 	public Dictionary<int, Item> getItems () {
@@ -487,7 +488,6 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		Dictionary<int, ItemData> inventoryToSend = null;
 		switch (inventoryType) {
 			case InventoryType.INVENTORY: inventoryToSend = Vars.inventory; break;
-			case InventoryType.STORAGE: inventoryToSend = Vars.storage; break;
 			case InventoryType.MARKET:
 				switch (Vars.planetType) {
 					case PlanetType.CORAS: inventoryToSend = Vars.marketCORAS; break;
@@ -516,6 +516,6 @@ public class Inventory : MonoBehaviour, ButtonHolder {
     }
 
     public enum InventoryType {
-        INVENTORY, STORAGE, MARKET, BUYBACK
+        INVENTORY,MARKET
     }
 }

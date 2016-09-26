@@ -1,9 +1,15 @@
 fileFormatVersion: 2
 guid: eef3cfa7f825fa746a04a04f473d42fa
-timeCreated: 1474614814
+timeCreated: 1474885687
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: MarketScreen_Sell_BG
+    21300002: MarketScreen_Buy_BG
+    21300004: MarketScreen_SellBtn_Hover
+    21300006: MarketScreen_SellBtn
+    21300008: MarketScreen_BuyBtn_Hover
+    21300010: MarketScreen_BuyBtn
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -30,7 +36,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     filterMode: -1
-    aniso: -1
+    aniso: 16
     mipBias: -1
     wrapMode: 1
   nPOTScale: 0
@@ -38,7 +44,7 @@ TextureImporter:
   rGBM: 0
   compressionQuality: 50
   allowsAlphaSplitting: 0
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -51,7 +57,85 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: MarketScreen_Sell_BG
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1020
+        width: 1600
+        height: 1001
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: MarketScreen_Buy_BG
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1600
+        height: 1000
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: MarketScreen_SellBtn_Hover
+      rect:
+        serializedVersion: 2
+        x: 1623
+        y: 286
+        width: 330
+        height: 61
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: MarketScreen_SellBtn
+      rect:
+        serializedVersion: 2
+        x: 1623
+        y: 195
+        width: 330
+        height: 61
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: MarketScreen_BuyBtn_Hover
+      rect:
+        serializedVersion: 2
+        x: 1623
+        y: 109
+        width: 330
+        height: 61
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: MarketScreen_BuyBtn
+      rect:
+        serializedVersion: 2
+        x: 1623
+        y: 19
+        width: 330
+        height: 61
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
     outline: []
   spritePackingTag: 
   userData: 
