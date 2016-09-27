@@ -75,6 +75,10 @@ public class Button : MonoBehaviour {
 		text.color = active? normalColor: notActiveColor;
 	}
 
+	public void setText (string text) {
+		this.text.text = text;
+	}
+
 	private enum State {
 		NORMAL, HOVER
 	}

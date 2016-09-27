@@ -75,45 +75,24 @@ public class UserInterface : MonoBehaviour {
 	}
 
 	void OnGUI () {
-		if (!showInterface) { return; }
-//		GUI.DrawTexture(backgroundRect, background);
-//		GUI.Label(cashRect, Vars.cash.ToString(), cashStyle);
-		if (GUI.Button(statusBtnRect, "", statusBtnStyle)) {
-			statusScreen.showScreen();
-//			if (!statusScreen.gameObject.activeInHierarchy) {
-////				if (shipInformation != null && shipInformation.gameObject.activeInHierarchy) {
-////					shipInformation.closeScreen();
-////				}
-//				statusScreen.showScreen();
-//			} else {
-//				statusScreen.closeScreen();
-//			}
-		}
-		if (starSystem != null) {
-//			if (GUI.Button (shipInfoBtnRect, "", shipBtnStyle)) {
-//				if (!shipInformation.gameObject.activeInHierarchy) {
-//					if (statusScreen != null && statusScreen.gameObject.activeInHierarchy) {
-//						statusScreen.closeScreen();
-//					}
-//					shipInformation.showScreen();
-//				} else {
-//					shipInformation.closeScreen();
-//				}
-//			}
+		if (showInterface) {
+			if (GUI.Button(statusBtnRect, "", statusBtnStyle)) {
+				statusScreen.showScreen();
+			}
+			if (starSystem != null) {
+				GUI.DrawTexture(healthBarRect, health);
+				GUI.DrawTexture(shieldBarRect, shield);
 
-			GUI.DrawTexture(healthBarRect, health);
-			GUI.DrawTexture(shieldBarRect, shield);
-
-			if (planetDescriptVisible) {
-				GUI.DrawTexture(planetDescriptRect, planetDescription);
-				GUI.DrawTexture(planetSurfaceRect, planetSurface);
-				GUI.Label(planetNameRect, planetName, planetNameStyle);
-				if (GUI.Button(planetLandRect, "", planetLandStyle)) {
-					starSystem.landOnPlanet(planetType);
+				if (planetDescriptVisible) {
+					GUI.DrawTexture(planetDescriptRect, planetDescription);
+					GUI.DrawTexture(planetSurfaceRect, planetSurface);
+					GUI.Label(planetNameRect, planetName, planetNameStyle);
+					if (GUI.Button(planetLandRect, "", planetLandStyle)) {
+						starSystem.landOnPlanet(planetType);
+					}
 				}
 			}
 		}
-
 		if (messageText != null) {
 			GUI.Label(messengerRect, messageText, messengerStyle);
 			if (--counter <= 0) {

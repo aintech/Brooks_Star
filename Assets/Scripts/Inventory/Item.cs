@@ -124,7 +124,7 @@ public class Item : MonoBehaviour {
 
 	public void returnToParent () {
 		if (cell != null) {
-			cell.getInventory().addItemToCell (this, cell);
+			cell.inventory.addItemToCell (this, cell);
 		} else if (slot != null) {
 			slot.setItem(this);
 		} else {

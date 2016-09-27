@@ -40,7 +40,7 @@ public static class HandWeaponDescriptor {
 	}
 
 	public static float getVolume (this HandWeaponType type) {
-		return .1f;
+		return 0;
 	}
 
 	public static int getCost (this HandWeaponType type) {

@@ -8,7 +8,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 
     private InventoryType inventoryType;
 
-	private InventoryContainedScreen containerScreen;
+	public InventoryContainedScreen containerScreen { get; private set; }
 
 	private float capacity = -1, freeVolume;
 
@@ -23,8 +23,6 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 	private int offsetStep;
 
 	private bool scrollableUp, scrollableDown;
-
-	private string volumeTxt = "";
 
 	private TextMesh volumeMesh;
 
@@ -81,14 +79,14 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 //			if (Utils.hit == inventoryColl) {
 //				scroll(true);
 //			} else 
-			if (Utils.hit.name.Equals("Cell") && Utils.hit.GetComponent<InventoryCell>().getInventory() == this) {
+			if (Utils.hit.name.Equals("Cell") && Utils.hit.GetComponent<InventoryCell>().inventory == this) {
 				scroll(true);
 			}
 		} else if (Input.GetAxis("Mouse ScrollWheel") < 0 && Utils.hit != null) {
 //			if (Utils.hit == inventoryColl) {
 //				scroll(false);
 //			} else 
-			if (Utils.hit.name.Equals("Cell") && Utils.hit.GetComponent<InventoryCell>().getInventory() == this) {
+			if (Utils.hit.name.Equals("Cell") && Utils.hit.GetComponent<InventoryCell>().inventory == this) {
 				scroll(false);
 			}
 		}
@@ -107,7 +105,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		offset += (up && scrollableUp)? -offsetStep: (!up && scrollableDown)? offsetStep: 0;
 		refreshInventory ();
 		Item chosenItem = containerScreen.getChosenItem ();
-		if (chosenItem != null && chosenItem.transform.parent == this.transform) {
+		if (chosenItem != null && chosenItem.cell != null && chosenItem.cell.inventory == this) {
 			foreach (InventoryCell cell in cells) {
 				if (cell.item == chosenItem) {
 					containerScreen.updateChosenItemBorder (false);
@@ -123,7 +121,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		refreshInventory ();
 	}
 
-	private void refreshInventory () {
+	public void refreshInventory () {
 		foreach (InventoryCell cell in cells) {
 			cell.setItem (null);
 		}
@@ -165,7 +163,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 			return;
 		}
 
-		Inventory source = item.cell == null? null: item.cell.getInventory();
+		Inventory source = item.cell == null? null: item.cell.inventory;
 
 		if (source != this) {
 //			if (inventoryType == InventoryType.BUYBACK) {
@@ -177,12 +175,13 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 					item.returnToParent ();
 					Messenger.showMessage("Объёма инвентаря не достаточно для добавления предмета");
 					return;
-				} else if (source != null && (source.inventoryType == InventoryType.MARKET)) {
-					if (!buyItem (item)) {
-						item.returnToParent ();
-						return;
-					}
 				}
+//				else if (source != null && (source.inventoryType == InventoryType.MARKET)) {
+//					if (!buyItem (item)) {
+//						item.returnToParent ();
+//						return;
+//					}
+//				}
 			}
 		}
 
@@ -231,17 +230,6 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 			}
 		}
 		return index;
-	}
-
-	private bool buyItem (Item item) {
-		if (Vars.cash >= item.getCost()) {
-			if (getCapacity() > 0.0 && (getFreeVolume() - item.getVolume() < 0.0)) {
-				return false;
-			}
-		} else { return false; }
-		Vars.cash -= item.getCost ();
-
-		return true;
 	}
 
 	private void checkButtons () {
@@ -321,6 +309,11 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 
 	public Dictionary<int, Item> getItems () {
 		return items;
+	}
+
+	public void setItemsFromOtherInventory (Inventory inventory) {
+		items = inventory.getItems();
+		refreshInventory();
 	}
 
 	public Item takeLastItem () {

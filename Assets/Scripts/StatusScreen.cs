@@ -22,8 +22,6 @@ public class StatusScreen : InventoryContainedScreen {
 
 	private ItemDescriptor itemDescriptor;
 
-	private TextMesh cashValue;
-
 	public StatusScreen init (StarSystem starSystem, ItemDescriptor itemDescriptor) {
 		this.starSystem = starSystem;
 		this.itemDescriptor = itemDescriptor;
@@ -33,7 +31,7 @@ public class StatusScreen : InventoryContainedScreen {
 		shipData = transform.Find("Ship Data").GetComponent<ShipData>().init(onPlanetSurface);
 		playerData = transform.Find("Player Data").GetComponent<PlayerData>().init();
 
-		innerInit(transform.Find("Inventory").GetComponent<Inventory>().init(Inventory.InventoryType.INVENTORY));
+		innerInit(transform.Find("Inventory").GetComponent<Inventory>().init(Inventory.InventoryType.INVENTORY), "Inventory");
 
 		playerBtn = transform.Find("Player Button").GetComponent<Button>().init();
 		perksBtn = transform.Find("Perks Button").GetComponent<Button>().init();
@@ -45,23 +43,11 @@ public class StatusScreen : InventoryContainedScreen {
 		background = transform.Find("Background").GetComponent<SpriteRenderer>();
 		background.gameObject.SetActive(true);
 
-		cashValue = transform.Find("Cash Value").GetComponent<TextMesh>();
-		MeshRenderer mesh = cashValue.GetComponent<MeshRenderer>();
-		mesh.sortingLayerName = "Inventory";
-		mesh.sortingOrder = 1;
-		cashValue.gameObject.SetActive(true);
-
-		updateCashValue();
-
 		inventory.setCapacity(shipData.getHullType().getStorageCapacity());
 
 		closeScreen();
 
 		return this;
-	}
-
-	private void updateCashValue () {
-		cashValue.text = Vars.cash.ToString() + "$";
 	}
 
 	public Inventory getInventory () {
@@ -129,7 +115,7 @@ public class StatusScreen : InventoryContainedScreen {
 	private void show (ItemKind kind) {
 		background.sprite = kind == ItemKind.SHIP_EQUIPMENT? shipBG: kind == ItemKind.EQUIPMENTS? equipmentBG: perksBG;
 
-		cashValue.gameObject.SetActive (kind == ItemKind.EQUIPMENTS || kind == ItemKind.SHIP_EQUIPMENT);
+		setCashTxtActive (kind == ItemKind.EQUIPMENTS || kind == ItemKind.SHIP_EQUIPMENT);
 
 		shipData.gameObject.SetActive(kind == ItemKind.SHIP_EQUIPMENT);
 		playerData.gameObject.SetActive(kind == ItemKind.EQUIPMENTS);
@@ -203,13 +189,13 @@ public class StatusScreen : InventoryContainedScreen {
 		if (getChosenItem() == null) { return; }
 		if (btn == null) { hideItemInfo(); }
 
-		if (btn == perksBtn && getChosenItem().cell != null && getChosenItem().cell.getInventory().getInventoryType() == Inventory.InventoryType.INVENTORY) {
+		if (btn == perksBtn && getChosenItem().cell != null && getChosenItem().cell.inventory.getInventoryType() == Inventory.InventoryType.INVENTORY) {
 			hideItemInfo();
 		}
-		else if (btn == shipBtn && getChosenItem().cell != null && getChosenItem().cell.getInventory().getInventoryType() != Inventory.InventoryType.INVENTORY) {
+		else if (btn == shipBtn && getChosenItem().cell != null && getChosenItem().cell.inventory.getInventoryType() != Inventory.InventoryType.INVENTORY) {
 			hideItemInfo();
 		}
-		else if (btn ==playerBtn && (getChosenItem().slot != null || (getChosenItem().cell != null && getChosenItem().cell.getInventory().getInventoryType() != Inventory.InventoryType.INVENTORY))) {
+		else if (btn ==playerBtn && (getChosenItem().slot != null || (getChosenItem().cell != null && getChosenItem().cell.inventory.getInventoryType() != Inventory.InventoryType.INVENTORY))) {
 			hideItemInfo();
 		}
 	}
@@ -217,7 +203,7 @@ public class StatusScreen : InventoryContainedScreen {
 	override protected void checkItemDrop () {
 		if (Utils.hit != null && Utils.hit.name.Equals("Cell")) {
 			InventoryCell cell = Utils.hit.transform.GetComponent<InventoryCell>();
-			Inventory targetInv = cell.getInventory();
+			Inventory targetInv = cell.inventory;
 			if (draggedItem.cell == null) {
 				switch (draggedItem.getItemType().getKind()) {
 					case ItemKind.SHIP_EQUIPMENT: shipData.updateHullInfo(); break;
@@ -290,7 +276,7 @@ public class StatusScreen : InventoryContainedScreen {
 
 	private void setItemToSlot (Slot slot) {
 		if (draggedItem.cell != null) {
-			draggedItem.cell.getInventory().calculateFreeVolume();
+			draggedItem.cell.inventory.calculateFreeVolume();
 		}
 		slot.setItem (draggedItem);
 		if (slot.kind == ItemKind.SHIP_EQUIPMENT) {

@@ -34,7 +34,7 @@ public static class BodyArmorDescriptor {
 	}
 
 	public static float getVolume (this BodyArmorType type) {
-		return .1f;
+		return 0;
 	}
 
 	public static int getCost (this BodyArmorType type) {

@@ -10,7 +10,7 @@ public class EquipmentsMarket : InventoryContainedScreen {
 
 	public Transform inventoryItemPrefab;
 
-	private Inventory market;
+	private Inventory playerInventory, buyMarket, sellMarket;
 
 	private Button buyBtn, sellBtn, closeBtn;
 
@@ -18,27 +18,24 @@ public class EquipmentsMarket : InventoryContainedScreen {
 
 	private ItemDescriptor itemDescriptor;
 
-	private TextMesh actionMsg, cashValue;
+	private TextMesh actionMsg;
 
-	public void init (MarketScreen marketScreen, Inventory inventory, ItemDescriptor itemDescriptor) {
+	public void init (MarketScreen marketScreen, Inventory playerInventory, ItemDescriptor itemDescriptor) {
 		this.marketScreen = marketScreen;
+		this.playerInventory = playerInventory;
 		this.itemDescriptor = itemDescriptor;
 
-		market = transform.Find("Market").GetComponent<Inventory>().init(Inventory.InventoryType.MARKET);
+		buyMarket = transform.Find("Buy Market").GetComponent<Inventory>().init(Inventory.InventoryType.MARKET);
+		sellMarket = transform.Find("Sell Market").GetComponent<Inventory>().init(Inventory.InventoryType.MARKET);
 
 		bgRender = transform.Find("Background").GetComponent<SpriteRenderer>();
-
-		innerInit(market);
 
 		buyBtn = transform.Find ("Buy Button").GetComponent<Button> ().init();
 		sellBtn = transform.Find ("Sell Button").GetComponent<Button> ().init();
 		closeBtn = transform.Find("Close Button").GetComponent<Button>().init();
 
 		actionMsg = transform.Find("Action Description").GetComponent<TextMesh>();
-		cashValue = transform.Find("Cash Value").GetComponent<TextMesh>();
 		MeshRenderer mesh = actionMsg.GetComponent<MeshRenderer>();
-		mesh.sortingOrder = 1;
-		mesh = cashValue.GetComponent<MeshRenderer>();
 		mesh.sortingOrder = 1;
 
 		gameObject.SetActive(false);
@@ -46,15 +43,16 @@ public class EquipmentsMarket : InventoryContainedScreen {
 	
 	public void showScreen () {
 		UserInterface.showInterface = false;
-		itemDescriptor.setEnabled(market);
 
-		inventory.setContainerScreen(this, 10);
-		market.setContainerScreen(this, 10);
+		buyMarket.setContainerScreen(this, 10);
+		sellMarket.setContainerScreen(this, 10);
 
-		inventory.setInventoryToBegin ();
-		market.setInventoryToBegin ();
+		buyMarket.setInventoryToBegin ();
+		sellMarket.setInventoryToBegin ();
 
-//		setInventoryActive ();
+		buyMarket.sortInventory();
+		sellMarket.setItemsFromOtherInventory(playerInventory);
+
 		setBuyActive ();
 
 		updateCashTxt();
@@ -88,22 +86,28 @@ public class EquipmentsMarket : InventoryContainedScreen {
 
 	private void setBuyActive () {
 		bgRender.sprite = buyBG;
+		innerInit(buyMarket, "default");
 		actionMsg.text = "<color=orange>Покупка</color> - правая кнопка мыши.";
+		itemDescriptor.setEnabled(buyMarket);
 		itemDescriptor.setInventoryType(ItemDescriptor.Type.MARKET_BUY);
 		buyBtn.setActive(false);
 		sellBtn.setActive(true);
-		inventory.gameObject.SetActive(false);
-		market.gameObject.SetActive(true);
+		buyMarket.refreshInventory();
+		sellMarket.gameObject.SetActive(false);
+		buyMarket.gameObject.SetActive(true);
 	}
 	
 	private void setSellActive () {
 		bgRender.sprite = sellBG;
+		innerInit(sellMarket, "default");
 		actionMsg.text = "<color=orange>Продажа</color> - правая кнопка мыши.";
+		itemDescriptor.setEnabled(sellMarket);
 		itemDescriptor.setInventoryType(ItemDescriptor.Type.MARKET_SELL);
 		buyBtn.setActive(true);
 		sellBtn.setActive(false);
-		inventory.gameObject.SetActive(true);
-		market.gameObject.SetActive(false);
+		sellMarket.refreshInventory();
+		buyMarket.gameObject.SetActive(false);
+		sellMarket.gameObject.SetActive(true);
 	}
 
 //	protected void hideItemInfo (Inventory activeInventory) {
@@ -125,19 +129,14 @@ public class EquipmentsMarket : InventoryContainedScreen {
 //		base.hideItemInfo ();
 //	}
 
-	public Inventory getMarket () {
-		return market;
-	}
-
-	private void updateCashTxt () {
-		cashValue.text = Vars.cash.ToString() + "$";
+	public Inventory getBuyMarket () {
+		return buyMarket;
 	}
 
 	public void closeScreen () {
 		chosenItem = null;
-		inventory.gameObject.SetActive(false);
-		market.gameObject.SetActive(false);
 		gameObject.SetActive(false);
+		playerInventory.setItemsFromOtherInventory(sellMarket);
 		UserInterface.showInterface = true;
 		itemDescriptor.setEnabled(null);
 		marketScreen.setVisible(true);

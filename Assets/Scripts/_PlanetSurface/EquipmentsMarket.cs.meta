@@ -1,26 +1,16 @@
 fileFormatVersion: 2
 guid: 6bef0e2614e56fb4a95620f51cdbfa35
+timeCreated: 1474957230
+licenseType: Free
 MonoImporter:
   serializedVersion: 2
   defaultReferences:
-  - inventoryBtnSprite: {fileID: 21300002, guid: a4a6b8c5652bc914eb4f084c0e06baf5,
-      type: 3}
-  - inventoryBtnSpriteDisabled: {fileID: 21300006, guid: a4a6b8c5652bc914eb4f084c0e06baf5,
-      type: 3}
-  - storageBtnSprite: {fileID: 21300000, guid: a4a6b8c5652bc914eb4f084c0e06baf5, type: 3}
-  - storageBtnSpriteDisabled: {fileID: 21300008, guid: a4a6b8c5652bc914eb4f084c0e06baf5,
-      type: 3}
+  - buyBG: {fileID: 21300002, guid: eef3cfa7f825fa746a04a04f473d42fa, type: 3}
+  - sellBG: {fileID: 21300000, guid: eef3cfa7f825fa746a04a04f473d42fa, type: 3}
   - inventoryItemPrefab: {fileID: 400000, guid: 1f5b736f2fd62a74c907553481368e00,
       type: 2}
-  - shipBtnSprite: {fileID: 21300004, guid: a4a6b8c5652bc914eb4f084c0e06baf5, type: 3}
-  - shipBtnSpriteDisabled: {fileID: 21300010, guid: a4a6b8c5652bc914eb4f084c0e06baf5,
-      type: 3}
-  - marketBtnSprite: {fileID: 21300022, guid: a4a6b8c5652bc914eb4f084c0e06baf5, type: 3}
-  - marketBtnSpriteDisabled: {fileID: 21300024, guid: a4a6b8c5652bc914eb4f084c0e06baf5,
-      type: 3}
-  - buybackBtnSprite: {fileID: 21300026, guid: a4a6b8c5652bc914eb4f084c0e06baf5, type: 3}
-  - buybackBtnSpriteDisabled: {fileID: 21300028, guid: a4a6b8c5652bc914eb4f084c0e06baf5,
-      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
+  assetBundleName: 
+  assetBundleVariant: 

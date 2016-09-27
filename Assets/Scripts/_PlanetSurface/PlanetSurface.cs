@@ -49,6 +49,7 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 
 		statusScreen = GameObject.Find("Status Screen").GetComponent<StatusScreen>().init(null, descriptor);
 		inventory = statusScreen.getInventory();
+		descriptor.setPlayerInventory(inventory);
 
 		Vars.userInterface = GameObject.FindGameObjectWithTag("UserInterface").GetComponent<UserInterface>().init(statusScreen, null, null);
 

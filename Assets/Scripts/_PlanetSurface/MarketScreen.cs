@@ -18,8 +18,7 @@ public class MarketScreen : MonoBehaviour, ButtonHolder, Hideable {
 		equipmentsMarket.init(this, inventory, itemDescriptor);
 
 		hullsMarket = transform.Find ("Hulls Market").GetComponent<HullsMarket> ();
-		hullsMarket.init(inventory, shipData);
-		hullsMarket.fillWithRandomHulls(15, "Hull Item");
+		hullsMarket.init(this, inventory, shipData);
 
 		equipmentsBtn = transform.Find ("Equipments Button").GetComponent<Button> ().init();
 		hullsBtn = transform.Find("Hulls Button").GetComponent<Button>().init();
@@ -80,6 +79,6 @@ public class MarketScreen : MonoBehaviour, ButtonHolder, Hideable {
 	}
 
 	public Inventory getMarket () {
-		return equipmentsMarket.getMarket();
+		return equipmentsMarket.getBuyMarket();
 	}
 }

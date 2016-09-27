@@ -17,7 +17,7 @@ public class ShipInformationScreen : InventoryContainedScreen {
 		inventory.setContainerScreen (this, 6);
 		shipData.updateHullInfo ();
 
-		innerInit(inventory);
+		innerInit(inventory, "Inventory");
 
 		closeBtn = transform.Find("Close Button").GetComponent<Button>().init();
 

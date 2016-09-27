@@ -3,8 +3,6 @@ using System.Collections;
 
 public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 
-	protected Button inventoryBtn;
-
 	protected Inventory inventory;
 	
 	protected Item draggedItem, chosenItem;
@@ -15,21 +13,16 @@ public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 
 	private Vector2 dragOffset;
 
-	private ItemInformation itemInformation;
+	private TextMesh cashValue;
 
-	protected void innerInit(Inventory inventory) {
+	protected void innerInit(Inventory inventory, string layerName) {
 		this.inventory = inventory;
-
-		itemInformation = transform.Find("Item Information").GetComponent<ItemInformation>().init();
-
 		chosenItemBorder = transform.Find ("Chosen Item Border").transform;
-
-		inventoryBtn = transform.Find("Equipment Button") == null? null: transform.Find("Equipment Button").GetComponent<Button>().init();
-		if (inventoryBtn == null) {
-			inventoryBtn = transform.Find("Inventory Button") == null? null: transform.Find("Inventory Button").GetComponent<Button>().init();
-		}
-
-
+		cashValue = transform.Find("Cash Value").GetComponent<TextMesh>();
+		MeshRenderer mesh = cashValue.GetComponent<MeshRenderer>();
+		mesh.sortingLayerName = layerName;
+		mesh.sortingOrder = 1;
+		setCashTxtActive(true);
 	}
 
 	void Update () {
@@ -82,7 +75,6 @@ public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 	}
 
 	virtual protected void choseItem (Item item) {
-		itemInformation.showItemInfo(item);
 		chosenItem = item;
 		dragOffset.Set(Utils.mousePos.x - item.transform.position.x, Utils.mousePos.y - item.transform.position.y);
 	}
@@ -99,7 +91,6 @@ public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 	virtual protected void afterItemDrop () {}
 
 	protected void hideItemInfo () {
-		itemInformation.clearInfo();
 		chosenItemBorder.gameObject.SetActive (false);
 		chosenItem = null;
 	}
@@ -120,7 +111,15 @@ public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 			chosenItemBorder.gameObject.SetActive (false);
 		}
 	}
-	
+
+	public void setCashTxtActive (bool asActive) {
+		cashValue.gameObject.SetActive(asActive);
+	}
+
+	public void updateCashTxt () {
+		cashValue.text = Vars.cash.ToString() + "$";
+	}
+
 	public void updateChosenItemBorder (bool hideBorder) {
 		if (hideBorder) chosenItemBorder.gameObject.SetActive (false);
 		else chosenItemBorder.gameObject.SetActive (true);

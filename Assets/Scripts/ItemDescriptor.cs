@@ -30,7 +30,7 @@ public class ItemDescriptor : MonoBehaviour {
 
 	private Vector3 scale = Vector3.one;
 
-	private Inventory targetInventory;
+	private Inventory playerInventory, targetInventory;
 
 //	private Vector2[] positions = new Vector2[] { new Vector2(.5f, -.57f), new Vector2(.5f, -.95f), new Vector2(0, -1.33f), new Vector2(0, -1.71f), new Vector2(0, -2.09f) };
 
@@ -84,6 +84,10 @@ public class ItemDescriptor : MonoBehaviour {
 		return this;
 	}
 
+	public void setPlayerInventory (Inventory playerInventory) {
+		this.playerInventory = playerInventory;
+	}
+
 	public void setEnabled (Inventory inventory) {
 		this.targetInventory = inventory;
 		enabled = inventory != null;
@@ -94,6 +98,10 @@ public class ItemDescriptor : MonoBehaviour {
 	}
 
 	void Update () {
+		if (Input.GetMouseButtonDown(1)) {
+			if (inventoryType == Type.MARKET_BUY) { buyItem(); }
+			else if (inventoryType == Type.MARKET_SELL) { sellItem(); }
+		}
 		if (onScreen) {
 			if (Utils.hit == null) {
 				hide ();
@@ -123,15 +131,6 @@ public class ItemDescriptor : MonoBehaviour {
 		}
 	}
 
-	//	public void sellItemToTrader (Item item, Inventory buybackInventory) {
-	//		Inventory source = item.cell.transform.parent.GetComponent<Inventory> ();
-	//		if (source != null) {
-	//			source.calculateFreeVolume();
-	//		}
-	//		buybackInventory.addItemToFirstFreePosition (item, true);
-	//		Vars.cash += item.getCost ();
-	//	}
-
 	private void showDescription (ItemHolder holder) {
 		this.holder = holder;
 		this.item = holder.item;
@@ -145,6 +144,23 @@ public class ItemDescriptor : MonoBehaviour {
 		onScreen = true;
 		Update();
 		trans.gameObject.SetActive(true);
+	}
+
+	private void buyItem () {
+		if (item == null) { return; }
+		if (inventoryType != Type.MARKET_BUY) { return; }
+		if (Vars.cash < item.getCost()) { Messenger.showMessage("Не достаточно кредитов на " + item.getItemName()); return; }
+		if (item.getVolume() > .001f && (playerInventory.getFreeVolume() - item.getVolume()) < 0) { Messenger.showMessage("Недостаточно места в инвентаре."); return; }
+		Vars.cash -= item.getCost ();
+		item.cell.inventory.containerScreen.updateCashTxt();
+		playerInventory.addItemToCell(item.cell.takeItem(), null);
+	}
+
+	private void sellItem () {
+		if (item == null) { return; }
+		Vars.cash += item.getCost();
+		item.cell.inventory.containerScreen.updateCashTxt();
+		Destroy(item.cell.takeItem().gameObject);
 	}
 
 	private void setCost(int index, int cost) {
@@ -454,6 +470,7 @@ public class ItemDescriptor : MonoBehaviour {
 
 	private void hide () {
 		onScreen = false;
+		item = null;
 		trans.gameObject.SetActive (false);
 	}
 
