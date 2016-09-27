@@ -58,6 +58,6 @@ public class HullDisplay : MonoBehaviour, ButtonHolder {
 
 	public void updateCost () {
 		int cost = hullType.getCost() - Mathf.RoundToInt((float)Vars.shipHullType.getCost() * ((float)shipData.getCurrentHealth() / (float)shipData.getHullType().getMaxHealth()));
-		buyBtn.setText("Заменить за\n" + cost + "$");
+		buyBtn.setText(cost + "$");
 	}
 }

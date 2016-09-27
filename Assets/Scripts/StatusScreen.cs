@@ -10,7 +10,7 @@ public class StatusScreen : InventoryContainedScreen {
 
 	private PerksView perksView;
 
-	private Button playerBtn, perksBtn, shipBtn, closeBtn;
+	private Button playerBtn, perksBtn, shipBtn, repairBtn, closeBtn;
 
 	private ShipData shipData;
 
@@ -36,6 +36,7 @@ public class StatusScreen : InventoryContainedScreen {
 		playerBtn = transform.Find("Player Button").GetComponent<Button>().init();
 		perksBtn = transform.Find("Perks Button").GetComponent<Button>().init();
 		shipBtn = transform.Find("Ship Button").GetComponent<Button>().init();
+		repairBtn = transform.Find ("Repair Button").GetComponent<Button> ().init ();
 		closeBtn = transform.Find("Close Button").GetComponent<Button>().init();
 
 		perksView = transform.Find("Perks View").GetComponent<PerksView>().init(this);
@@ -129,12 +130,17 @@ public class StatusScreen : InventoryContainedScreen {
 		hideItemInfo();
 	}
 
+	private void repairShip () {
+		
+	}
+
 	protected override void checkBtnPress (Button btn) {
 //		if (btn == inventoryBtn) { setInventoryActive(); }
 //		else if (btn == storageBtn) { setStorageActive(); }
 		if (btn == playerBtn) { show(ItemKind.EQUIPMENTS); }
 		else if (btn == perksBtn) { show(ItemKind.NONE); }
 		else if (btn == shipBtn) { show(ItemKind.SHIP_EQUIPMENT); }
+		else if (btn == repairBtn) { repairShip (); }
 		else if (btn == closeBtn) { closeScreen(); }
 		else { Debug.Log("Unknown button: " + btn.name); }
 	}
