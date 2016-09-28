@@ -49,7 +49,7 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 
 		statusScreen = GameObject.Find("Status Screen").GetComponent<StatusScreen>().init(null, descriptor);
 		inventory = statusScreen.getInventory();
-		descriptor.setPlayerInventory(inventory);
+		descriptor.initPlayerInventory(inventory);
 
 		Vars.userInterface = GameObject.FindGameObjectWithTag("UserInterface").GetComponent<UserInterface>().init(statusScreen, null, null);
 
@@ -96,9 +96,11 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 
 	public void leavePlanet () {
 		if (statusScreen.getShipData().getEnergyNeeded() < 0) {
-			Messenger.showMessage("Кораблю не хватает энергии");
+			Messenger.showMessage("Кораблю не хватает энергии!");
 		} else if (statusScreen.getShipData().getSlot(HullSlot.Type.ENGINE, 0).item == null) {
-			Messenger.showMessage("У корабля отсутствует двигатель");
+			Messenger.showMessage("У корабля отсутствует двигатель!");
+		} else if (inventory.getFreeVolume() < .01f) {
+			Messenger.showMessage("Корабль перегружен!");
 		} else {
 			sendToVars();
 			SceneManager.LoadScene("StarSystem");

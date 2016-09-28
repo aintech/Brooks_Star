@@ -15,11 +15,7 @@ public class PlayerData : MonoBehaviour {
 
 	private EquipmentSlot[] slots;
 
-//	private int currentHealth, currentShield;
-
 	private TextMesh healthValue, armorValue, damageValue;
-
-	private Color32 okColor, badColor = new Color32(255, 0, 0, 255);
 
 	private bool onPlanetSurface;
 
@@ -44,23 +40,14 @@ public class PlayerData : MonoBehaviour {
 		Transform playerInfo = transform.Find ("Player Information");
 		playerInfo.gameObject.SetActive(true);
 
-		TextMesh damageLabel = playerInfo.Find ("Damage Label").GetComponent<TextMesh> ();
-		TextMesh healthLabel = playerInfo.Find ("Health Label").GetComponent<TextMesh> ();
-		TextMesh armorLabel = playerInfo.Find ("Armor Label").GetComponent<TextMesh> ();
 		damageValue = playerInfo.Find ("Damage Value").GetComponent<TextMesh> ();
 		healthValue = playerInfo.Find ("Health Value").GetComponent<TextMesh> ();
 		armorValue = playerInfo.Find ("Armor Value").GetComponent<TextMesh> ();
 
-		damageLabel.GetComponent<MeshRenderer> ().sortingLayerName = "Inventory";
-		healthLabel.GetComponent<MeshRenderer> ().sortingLayerName = "Inventory";
-		armorLabel.GetComponent<MeshRenderer> ().sortingLayerName = "Inventory";
 		damageValue.GetComponent<MeshRenderer> ().sortingLayerName = "Inventory";
 		healthValue.GetComponent<MeshRenderer> ().sortingLayerName = "Inventory";
 		armorValue.GetComponent<MeshRenderer> ().sortingLayerName = "Inventory";
 
-		damageLabel.GetComponent<MeshRenderer> ().sortingOrder = 3;
-		healthLabel.GetComponent<MeshRenderer> ().sortingOrder = 3;
-		armorLabel.GetComponent<MeshRenderer> ().sortingOrder = 3;
 		damageValue.GetComponent<MeshRenderer> ().sortingOrder = 3;
 		healthValue.GetComponent<MeshRenderer> ().sortingOrder = 3;
 		armorValue.GetComponent<MeshRenderer> ().sortingOrder = 3;
@@ -90,7 +77,7 @@ public class PlayerData : MonoBehaviour {
 	}
 
 	public void updateHealthValue () {
-		healthValue.text = Player.health.ToString() + "/" + Player.maxHealth.ToString();
+		healthValue.text = Player.health.ToString() + (Player.health < Player.maxHealth? "/" + Player.maxHealth.ToString(): "");
 	}
 
 	public void updateArmorValue () {

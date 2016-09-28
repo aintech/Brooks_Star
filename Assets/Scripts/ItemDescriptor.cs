@@ -14,9 +14,13 @@ public class ItemDescriptor : MonoBehaviour {
 
 	public bool onScreen { get; private set; }
 
+	private bool perkDescriptor;
+
 	private ItemHolder holder, tempHolder;
 
 	private Item item;
+
+	private Perk perk, tempPerk;
 
 	private TextMesh qualityValue, nameValue, value1, value2, value3, value4, value5;
 
@@ -28,9 +32,12 @@ public class ItemDescriptor : MonoBehaviour {
 					uniqueColor = new Color32(173, 229, 92, 255),
 					artefactColor = new Color32(235, 75, 75, 255);
 
+	private Color32 normalDescriptionColor = new Color32(255, 255, 255, 255),
+					perkDescriptionColor = new Color32(94, 152, 217, 255);
+
 	private Vector3 scale = Vector3.one;
 
-	private Inventory playerInventory, targetInventory;
+	private Inventory playerInventory;
 
 //	private Vector2[] positions = new Vector2[] { new Vector2(.5f, -.57f), new Vector2(.5f, -.95f), new Vector2(0, -1.33f), new Vector2(0, -1.71f), new Vector2(0, -2.09f) };
 
@@ -84,13 +91,29 @@ public class ItemDescriptor : MonoBehaviour {
 		return this;
 	}
 
-	public void setPlayerInventory (Inventory playerInventory) {
+	public void initPlayerInventory (Inventory playerInventory) {
 		this.playerInventory = playerInventory;
 	}
 
+	public void setAsPerkDescriptor (bool perkDescriptor) {
+		this.perkDescriptor = perkDescriptor;
+		nameValue.color = perkDescriptor? perkDescriptionColor: normalDescriptionColor;
+		if (perkDescriptor) {
+			for (int i = 0; i < trans.childCount; i++) {
+				trans.GetChild (i).gameObject.SetActive (false);
+			}
+			namePre.gameObject.SetActive (true);
+			nameBG.gameObject.SetActive (true);
+			nameValue.gameObject.SetActive (true);
+			pre1.gameObject.SetActive (true);
+			bg1.gameObject.SetActive (true);
+			value1.gameObject.SetActive (true);
+		}
+	}
+
 	public void setEnabled (Inventory inventory) {
-		this.targetInventory = inventory;
 		enabled = inventory != null;
+		if (inventory == null) { hide(); }
 	}
 
 	public void setInventoryType (Type type) {
@@ -98,7 +121,7 @@ public class ItemDescriptor : MonoBehaviour {
 	}
 
 	void Update () {
-		if (Input.GetMouseButtonDown(1)) {
+		if (Input.GetMouseButtonDown(1) && !perkDescriptor) {
 			if (inventoryType == Type.MARKET_BUY) { buyItem(); }
 			else if (inventoryType == Type.MARKET_SELL) { sellItem(); }
 		}
@@ -106,11 +129,20 @@ public class ItemDescriptor : MonoBehaviour {
 			if (Utils.hit == null) {
 				hide ();
 			} else if (Utils.hit != null) {
-				tempHolder = Utils.hit.GetComponent<ItemHolder> ();
-				if (tempHolder == null || tempHolder.item == null) {
-					hide ();
-				} else if (tempHolder != holder || tempHolder.item != item) {
-					showDescription (tempHolder);
+				if (perkDescriptor) {
+					tempPerk = Utils.hit.GetComponent<Perk>();
+					if (tempPerk == null) {
+						hide();
+					} else if (tempPerk.perkType != perk.perkType) {
+						showDescription(tempPerk);
+					}
+				} else {
+					tempHolder = Utils.hit.GetComponent<ItemHolder> ();
+					if (tempHolder == null || tempHolder.item == null) {
+						hide ();
+					} else if (tempHolder != holder || tempHolder.item != item) {
+						showDescription (tempHolder);
+					}
 				}
 			}
 			pos = Utils.mousePos;
@@ -123,12 +155,33 @@ public class ItemDescriptor : MonoBehaviour {
 			trans.localPosition = pos;
 		} else {
 			if (Utils.hit != null) {
-				holder = Utils.hit.GetComponent<ItemHolder>();
-				if (holder != null && holder.item != null) {
-					showDescription(holder);
+				if (perkDescriptor) {
+					perk = Utils.hit.GetComponent<Perk>();
+					if (perk != null) { showDescription(perk); }
+				} else {
+					holder = Utils.hit.GetComponent<ItemHolder>();
+					if (holder != null && holder.item != null) {
+						showDescription(holder);
+					}
 				}
 			}
 		}
+	}
+
+	private void showDescription (Perk perk) {
+		this.perk = perk;
+
+		nameValue.text = perk.perkType.getName();
+		scale.x = nameValue.text.Length + 1;
+		nameBG.localScale = scale;
+
+		value1.text = perk.perkType.getDescription() + " <color=lime>+" + (perk.perkType.getValuePerLevel() * Player.getPerkLevel(perk.perkType)) + "%</color>";
+		scale.x = value1.text.Length - 20.5f;
+		bg1.localScale = scale;
+
+		onScreen = true;
+		Update();
+		trans.gameObject.SetActive(true);
 	}
 
 	private void showDescription (ItemHolder holder) {
@@ -503,7 +556,7 @@ public class ItemDescriptor : MonoBehaviour {
 	}
 
 	public enum Type {
-		INVENTORY, MARKET_BUY, MARKET_SELL
+		NONE, INVENTORY, MARKET_BUY, MARKET_SELL
 	}
 
 //    private void stretchBody () {

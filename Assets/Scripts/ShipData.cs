@@ -12,7 +12,7 @@ public class ShipData : MonoBehaviour {
 
 	private SpriteRenderer render;
 
-	private HullType hullType;
+	public HullType hullType { get; private set; }
 
 	private HullSlot radarSlot,
 					 engineSlot,
@@ -34,6 +34,8 @@ public class ShipData : MonoBehaviour {
 	private Color32 okColor, badColor = new Color32(255, 0, 0, 255);
 
 	private bool onPlanetSurface;
+
+	public int repairCost { get; private set; }
 
 	public ShipData init (bool onPlanetSurface) {
 		this.onPlanetSurface = onPlanetSurface;
@@ -94,10 +96,6 @@ public class ShipData : MonoBehaviour {
 		Transform hullInfo = transform.Find ("Hull Information");
 		hullInfo.gameObject.SetActive(true);
 
-		TextMesh healthLabel = hullInfo.Find ("Health Label").GetComponent<TextMesh> ();
-		TextMesh armorLabel = hullInfo.Find ("Armor Label").GetComponent<TextMesh> ();
-		TextMesh shieldLabel = hullInfo.Find ("Shield Label").GetComponent<TextMesh> ();
-		TextMesh energyLabel = hullInfo.Find ("Energy Label").GetComponent<TextMesh> ();
 		healthValue = hullInfo.Find ("Health Value").GetComponent<TextMesh> ();
 		armorValue = hullInfo.Find ("Armor Value").GetComponent<TextMesh> ();
 		shieldValue = hullInfo.Find("Shield Value").GetComponent<TextMesh>();
@@ -105,19 +103,11 @@ public class ShipData : MonoBehaviour {
 
 		okColor = energyValue.color;
 
-		healthLabel.GetComponent<MeshRenderer> ().sortingLayerName = "Inventory";
-		armorLabel.GetComponent<MeshRenderer> ().sortingLayerName = "Inventory";
-		shieldLabel.GetComponent<MeshRenderer> ().sortingLayerName = "Inventory";
-		energyLabel.GetComponent<MeshRenderer> ().sortingLayerName = "Inventory";
 		healthValue.GetComponent<MeshRenderer> ().sortingLayerName = "Inventory";
 		armorValue.GetComponent<MeshRenderer> ().sortingLayerName = "Inventory";
 		shieldValue.GetComponent<MeshRenderer> ().sortingLayerName = "Inventory";
 		energyValue.GetComponent<MeshRenderer> ().sortingLayerName = "Inventory";
 
-		healthLabel.GetComponent<MeshRenderer> ().sortingOrder = 3;
-		armorLabel.GetComponent<MeshRenderer> ().sortingOrder = 3;
-		shieldLabel.GetComponent<MeshRenderer> ().sortingOrder = 3;
-		energyLabel.GetComponent<MeshRenderer> ().sortingOrder = 3;
 		healthValue.GetComponent<MeshRenderer> ().sortingOrder = 3;
 		armorValue.GetComponent<MeshRenderer> ().sortingOrder = 3;
 		shieldValue.GetComponent<MeshRenderer> ().sortingOrder = 3;
@@ -136,10 +126,6 @@ public class ShipData : MonoBehaviour {
 		setSlotAvailables ();
 		setHullSprite ();
 		setCurrentHealth (health);
-	}
-
-	public HullType getHullType () {
-		return hullType;
 	}
 
 	private void setHullSprite () {
@@ -201,12 +187,12 @@ public class ShipData : MonoBehaviour {
 
 		setHullType (initType, initType.getMaxHealth());
 
-		int generatorSlots = getHullType().getGeneratorSlots();
-		int harvesterSlots = getHullType().getHarvesterSlots();
-		int repairDroids = getHullType().getRepairDroidSlots();
-		int shieldSlots = getHullType().getShieldSlots();
-		int weaponSlots = getHullType().getWeaponSlots();
-		int armorSlots = getHullType().getArmorSlots();
+		int generatorSlots = hullType.getGeneratorSlots();
+		int harvesterSlots = hullType.getHarvesterSlots();
+		int repairDroids = hullType.getRepairDroidSlots();
+		int shieldSlots = hullType.getShieldSlots();
+		int weaponSlots = hullType.getWeaponSlots();
+		int armorSlots = hullType.getArmorSlots();
 
 		Item radar = null, engine = null, generator_1 = null, generator_2 = null, generator_3 = null,
 		  	 harvester_1 = null, harvester_2 = null,
@@ -293,14 +279,16 @@ public class ShipData : MonoBehaviour {
 		arrangeItemsToSlots();
 
 		setCurrentShield (getShield());
-		setCurrentHealth (getHullType ().getMaxHealth ());
+		setCurrentHealth (hullType.getMaxHealth ());
+		setCurrentHealth ((int) ((float)currentHealth / 2));
+		calculateRepairCost();
 
 		initialized = true;
 	}
 
 	public void sendToVars () {
 		Vars.shipCurrentHealth = currentHealth;
-		Vars.shipHullType = getHullType ();
+		Vars.shipHullType =hullType;
 		Vars.shipHullSlotsMap.Clear ();
 		foreach (HullSlot slot in getSlots()) {
 			if (slot.item != null) {
@@ -322,9 +310,14 @@ public class ShipData : MonoBehaviour {
 		arrangeItemsToSlots ();
 
 		setCurrentShield(getShield());
-		setCurrentHealth(getHullType().getMaxHealth());
+		setCurrentHealth(Vars.shipCurrentHealth);
+		calculateRepairCost();
 
 		initialized = true;
+	}
+
+	private void calculateRepairCost () {
+		repairCost = Mathf.RoundToInt(hullType.getCost() * .1f * (1 - ((float)currentHealth / (float)hullType.getMaxHealth())));
 	}
 
     public HullSlot getSlot (HullSlot.Type type, int slotIndex) {
@@ -397,6 +390,16 @@ public class ShipData : MonoBehaviour {
 		return null;
 	}
 
+	public void repairShip (bool forceRepair) {
+		if (!forceRepair) {
+			if (Vars.cash < repairCost) { Messenger.showMessage("Недостаточно кредитов на ремонт!"); return; }
+			Vars.cash -= repairCost;
+		}
+		setCurrentHealth(hullType.getMaxHealth());
+		repairCost = 0;
+		updateHealthValue();
+	}
+
 	public void updateHullInfo () {
 		updateShieldValue();
 		updateHealthValue ();
@@ -406,7 +409,7 @@ public class ShipData : MonoBehaviour {
 	}
 
 	public void updateHealthValue () {
-		healthValue.text = currentHealth.ToString() + "/" + getHullType ().getMaxHealth ().ToString();
+		healthValue.text = currentHealth.ToString() + (currentHealth < hullType.getMaxHealth()? "/" + hullType.getMaxHealth(): "");
 	}
 
 	public void updateArmorValue () {
@@ -414,7 +417,9 @@ public class ShipData : MonoBehaviour {
 	}
 
 	public void updateShieldValue () {
-		shieldValue.text = (onPlanetSurface? "": currentShield.ToString() + "/") +  getShield().ToString();
+		int shield = getShield();
+		if (onPlanetSurface) { setCurrentShield(shield); }
+		shieldValue.text = currentShield.ToString() + (currentShield < shield? "/" + shield: ""); //(onPlanetSurface? "": currentShield.ToString() + "/") +  getShield().ToString();
 	}
 
 	public void updateEnergyValue () {

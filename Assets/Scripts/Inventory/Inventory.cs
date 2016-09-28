@@ -26,16 +26,10 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 
 	private TextMesh volumeMesh;
 
-	private Vector3 normalScale = new Vector3(.08f, .1f, 1), decimalScale = new Vector3(.065f, .1f, 1);
-    
-//	private Collider2D inventoryColl;
-
 	public Inventory init (InventoryType inventoryType) {
 		this.inventoryType = inventoryType;
 
 		cells = transform.GetComponentsInChildren<InventoryCell> ();
-
-//		inventoryColl = transform.GetComponent<Collider2D>();
 
         foreach (InventoryCell cell in cells) {
             cell.init(this);
@@ -60,15 +54,6 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		return this;
 	}
 
-//	public void setPosition (bool left) {
-//		if ((left && transform.localPosition.x > 0) || (!left && transform.localPosition.x < 0)) {
-//			transform.localPosition = transform.localPosition * -1;
-//			upBtn.transform.localPosition = new Vector2(upBtn.transform.localPosition.x * -1, upBtn.transform.localPosition.y);
-//			downBtn.transform.localPosition = new Vector2(downBtn.transform.localPosition.x * -1, downBtn.transform.localPosition.y);
-//			sortBtn.transform.localPosition = new Vector2(sortBtn.transform.localPosition.x * -1, sortBtn.transform.localPosition.y);
-//		}
-//	}
-
 	public void setContainerScreen (InventoryContainedScreen containerScreen, int columnsCount) {
 		this.containerScreen = containerScreen;
 		this.offsetStep = columnsCount;
@@ -76,16 +61,10 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 
 	void Update () {
 		if (Input.GetAxis("Mouse ScrollWheel") > 0 && Utils.hit != null) {
-//			if (Utils.hit == inventoryColl) {
-//				scroll(true);
-//			} else 
 			if (Utils.hit.name.Equals("Cell") && Utils.hit.GetComponent<InventoryCell>().inventory == this) {
 				scroll(true);
 			}
 		} else if (Input.GetAxis("Mouse ScrollWheel") < 0 && Utils.hit != null) {
-//			if (Utils.hit == inventoryColl) {
-//				scroll(false);
-//			} else 
 			if (Utils.hit.name.Equals("Cell") && Utils.hit.GetComponent<InventoryCell>().inventory == this) {
 				scroll(false);
 			}
@@ -148,15 +127,6 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		refreshInventory ();
 	}
 
-//	public void sellItemToTrader (Item item, Inventory buybackInventory) {
-//		Inventory source = item.cell.transform.parent.GetComponent<Inventory> ();
-//		if (source != null) {
-//			source.calculateFreeVolume();
-//		}
-//		buybackInventory.addItemToFirstFreePosition (item, true);
-//		Vars.cash += item.getCost ();
-//	}
-
 	public void addItemToCell (Item item, InventoryCell cell) {
 		if (cell == null) {
 			addItemToFirstFreePosition (item, true);
@@ -166,29 +136,15 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		Inventory source = item.cell == null? null: item.cell.inventory;
 
 		if (source != this) {
-//			if (inventoryType == InventoryType.BUYBACK) {
-//				item.returnToParent ();
-//				return;
-//			} else 
 			if (inventoryType == InventoryType.INVENTORY && item.slot == null) {
 				if (getFreeVolume() < item.getVolume()) {
 					item.returnToParent ();
 					Messenger.showMessage("Объёма инвентаря не достаточно для добавления предмета");
 					return;
 				}
-//				else if (source != null && (source.inventoryType == InventoryType.MARKET)) {
-//					if (!buyItem (item)) {
-//						item.returnToParent ();
-//						return;
-//					}
-//				}
 			}
 		}
 
-//		if (inventoryType == InventoryType.BUYBACK) {
-//			addItemToFirstFreePosition(item, true);
-//			return;
-//		}
 		if (source != null && source.inventoryType == InventoryType.INVENTORY) { source.calculateFreeVolume(); }
 
 		InventoryCell prevCell = item.cell;
@@ -296,15 +252,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 
 	private void updateVolumeTxt () {
 		if (inventoryType != InventoryType.INVENTORY) { return; }
-//		if (freeVolume >= 100) {
-//			volumeTxt = "99";
-//		} else if (freeVolume < 0) {
-//			volumeTxt = "0";
-//		} else {
-//			volumeTxt = string.Format(freeVolume < 10? "{0:F1}": "{0:D}", freeVolume.ToString());
-//		}
 		volumeMesh.text = "Объём: " + (freeVolume < 0? "<color=red>": "<color=orange>") + freeVolume.ToString("0.0") + "</color>";
-//		volumeMesh.transform.localScale = freeVolume < 10? decimalScale: normalScale;
 	}
 
 	public Dictionary<int, Item> getItems () {
@@ -313,6 +261,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 
 	public void setItemsFromOtherInventory (Inventory inventory) {
 		items = inventory.getItems();
+		Debug.Log("Setting from other");
 		refreshInventory();
 	}
 
@@ -354,7 +303,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 			}
 		}
 
-		getItems().Clear();
+		getItems().Clear(); Debug.Log("Clear items 2");
 
 		handWeapons = sortList(handWeapons, ItemType.HAND_WEAPON);
 		bodyArmors = sortList(bodyArmors, ItemType.BODY_ARMOR);
@@ -474,7 +423,15 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 			}
 			Destroy(pair.Value.gameObject);
 		}
-		getItems().Clear();
+
+		getItems().Clear(); Debug.Log("Clear Items 1");
+	}
+
+	//По странной причине иногда после боя ячейки теряют свои предметы...
+	//проверяем - если на сцене у ячейки есть предмет и он ссылается на эту ячейку - устанавливаем его в неё
+	public void checkInventory () {
+		// HERE
+		//при добавлении предмета указываем в нём его индекс и не стираем его при чистке инвентаря
 	}
 
 	public void sendToVars () {
@@ -490,7 +447,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		if (inventoryToSend == null) {
 			Debug.Log("Unmapped inventory to send: " + inventoryType);
 		} else {
-			inventoryToSend.Clear();
+			inventoryToSend.Clear(); Debug.Log("Clear items 3");
 			foreach (KeyValuePair<int, Item> pair in items) {
 				inventoryToSend.Add(pair.Key, pair.Value.itemData);
 			}

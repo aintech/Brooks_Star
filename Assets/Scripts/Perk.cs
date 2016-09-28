@@ -3,11 +3,7 @@ using System.Collections;
 
 public class Perk : MonoBehaviour {
 
-	public Sprite bg, bgActive;
-
 	public PerkType perkType;
-
-	private SpriteRenderer bgRender;
 
 	private Transform expBar;
 
@@ -16,7 +12,6 @@ public class Perk : MonoBehaviour {
 	private StrokeText levelText;
 
 	public Perk init () {
-		bgRender = transform.GetComponent<SpriteRenderer>();
 		expBar = transform.Find("Exp Bar");
 		levelText = transform.Find("Level").GetComponent<StrokeText>().init("Inventory", 6);
 		updatePerk();
@@ -28,9 +23,5 @@ public class Perk : MonoBehaviour {
 		levelText.setText(Player.getPerkLevel(perkType).ToString());
 		barScale.y = Player.getPerkExp(perkType) / 1f;
 		expBar.localScale = barScale;
-	}
-
-	public void setAsChoosed (bool choosed) {
-		bgRender.sprite = choosed? bgActive: bg;
 	}
 }

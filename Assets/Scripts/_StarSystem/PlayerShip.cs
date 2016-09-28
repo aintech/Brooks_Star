@@ -13,9 +13,9 @@ public class PlayerShip : Ship {
 		this.name = "Player ship";
 		initInner();
 		controller = transform.GetComponent<ShipController>();
-		setHullType (shipData.getHullType());
+		setHullType (shipData.hullType);
 		health = shipData.getCurrentHealth ();
-		fullHealth = shipData.getHullType().getMaxHealth();
+		fullHealth = shipData.hullType.getMaxHealth();
 		shield = fullShield = shipData.getShield ();
 		armor = shipData.getArmor ();
 		radarRange = shipData.getRadarRange();

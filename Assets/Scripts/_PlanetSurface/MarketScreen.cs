@@ -33,8 +33,6 @@ public class MarketScreen : MonoBehaviour, ButtonHolder, Hideable {
 	}
 
 	public void closeScreen () {
-		hullsMarket.closeScreen();
-		equipmentsMarket.closeScreen();
 		gameObject.SetActive(false);
 		planetSurface.setVisible(true);
 	}

@@ -44,7 +44,9 @@ public static class Imager {
 	public static Sprite getPlanetSurface (PlanetType type) { return planetSurfaces[type]; }
 	public static Texture getPortrait (CharacterType type) { return portraits[type]; }
 
-	public static Sprite getEnemy (EnemyType type, float healthLevel) { return enemies[type][Vars.EROTIC? 0: healthLevel <= .3f? 2: healthLevel <= .7f? 1: 0]; }
+	public static Sprite getEnemy (EnemyType type, float healthLevel) {
+		return enemies[type][(!Vars.EROTIC)? 0: healthLevel <= .3f? 2: healthLevel <= .7f? 1: 0];
+	}
 
 	private static void addSpriteToList (Sprite sprite) {
 		typeName = sprite.name.ToUpper().Split(delimiter);

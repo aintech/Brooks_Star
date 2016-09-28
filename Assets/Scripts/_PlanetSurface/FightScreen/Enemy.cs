@@ -20,30 +20,9 @@ public class Enemy : MonoBehaviour {
 
 	public EnemyType enemyType { get; private set; }
 
-	private Vector3 initPos = new Vector3(0, 0, 0);
-
 	public void init () {
-//		trans = transform;
-//		newPos = trans.localPosition;
-//		initX = newPos.x;
-//		maxX = initX + .16f;
 		render = GetComponent<SpriteRenderer>();
 	}
-	
-//	void Update () {
-//		if (animInAction) {
-//			if (endTime > Time.time) {
-//				if (newPos.x < maxX) {
-//					newPos.x += .01f;
-//				}
-//			} else {
-//				newPos.x = initX;
-//				animInAction = false;
-//				setSprite();
-//			}
-//			trans.localPosition = newPos;
-//		}
-//	}
 
 	public void initEnemy (EnemyType enemyType) {
 		this.enemyType = enemyType;
@@ -59,14 +38,6 @@ public class Enemy : MonoBehaviour {
 	private void setSprite () {
 		render.sprite = Imager.getEnemy(enemyType, (float) health / (float)maxHealth);
 	}
-
-//	public Sprite getRandomWinSprite () {
-//		return QuestParser.allImages.Length == 0? null: QuestParser.allImages[Random.Range(0, QuestParser.allImages.Length)];
-//	}
-
-//	public int getRankPoints () {
-//		return enemyType.getRankPoints() * 10;
-//	}
 
 	public void playHit () {
 //		animInAction = true;

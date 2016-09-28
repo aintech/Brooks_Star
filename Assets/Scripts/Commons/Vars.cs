@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public static class Vars {
 
-	public const bool EROTIC = true;
+	public static bool EROTIC = true;
 
 	public static StarSystemType starSystemType = StarSystemType.ALURIA;
 
@@ -27,7 +27,10 @@ public static class Vars {
 
 	public static UserInterface userInterface;
 }
-
+/* ERROR:
+	- иногда, после боя инвентарь отрубается
+	- неправильно считается цена - если прибор потребляет меньше энергии, то сейчас он стоит дороже
+*/
 /* TODO:
 	- планета (или астероид) сначала исследуется (используя навык "Геолог"), когда выясняется какие минералы есть - на неё засылается харвестер, который после сбора возвращается на указанную планету
 	- В инвенторе три кнопки - отображать только товары, снаряжение или оборудование

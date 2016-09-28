@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 1056e969b7409cd45a614aee66976e67
-timeCreated: 1474896124
+timeCreated: 1475044205
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -38,7 +38,8 @@ TextureImporter:
     21300062: Inventory_ShipBtn_Hover
     21300064: ItemDescriptor_Button
     21300066: ItemDescriptor_Loading
-    21300068: ItemDescriptor_ActionBtn
+    21300068: StatusScreen_RepairBtn
+    21300070: StatusScreen_RepairBtn_Hover
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -491,13 +492,26 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: ItemDescriptor_ActionBtn
+      name: StatusScreen_RepairBtn
       rect:
         serializedVersion: 2
-        x: 1821
-        y: 1899
-        width: 39
-        height: 30
+        x: 1793
+        y: 1906
+        width: 91
+        height: 91
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusScreen_RepairBtn_Hover
+      rect:
+        serializedVersion: 2
+        x: 1923
+        y: 1906
+        width: 91
+        height: 91
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

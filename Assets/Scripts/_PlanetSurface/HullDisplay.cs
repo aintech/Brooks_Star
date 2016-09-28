@@ -5,7 +5,7 @@ public class HullDisplay : MonoBehaviour, ButtonHolder {
 
 	private SpriteRenderer hullImage;
 
-	private TextMesh hullName, weaponCount, armorCount, shieldCount, generatorCount, repairDroidCount, harvesterCount;
+	private TextMesh hullName, hullHealth, weaponCount, armorCount, shieldCount, generatorCount, repairDroidCount, harvesterCount;
 
 	private Button buyBtn;
 
@@ -15,12 +15,15 @@ public class HullDisplay : MonoBehaviour, ButtonHolder {
 
 	private ShipData shipData;
 
+	public int cost { get; private set; }
+
 	public HullDisplay init (HullsMarket market, ShipData shipData) {
 		this.market = market;
 		this.shipData = shipData;
 
 		hullImage = transform.Find("Hull Image").GetComponent<SpriteRenderer>();
 		hullName = transform.Find("Hull Name").GetComponent<TextMesh>();
+		hullHealth = transform.Find("Hull Health").GetComponent<TextMesh>();
 		weaponCount = transform.Find("Weapon Count").GetComponent<TextMesh>();
 		armorCount = transform.Find("Armor Count").GetComponent<TextMesh>();
 		shieldCount = transform.Find("Shield Count").GetComponent<TextMesh>();
@@ -35,7 +38,7 @@ public class HullDisplay : MonoBehaviour, ButtonHolder {
 			mesh = transform.GetChild(i).GetComponent<MeshRenderer>();
 			if (mesh != null) { mesh.sortingOrder = 4; }
 		}
-		//NEXT: указать здоровье корпуса, правильно рассчитывать стоимтось
+
 		return this;
 	}
 
@@ -43,6 +46,7 @@ public class HullDisplay : MonoBehaviour, ButtonHolder {
 		this.hullType = hullType;
 		hullImage.sprite = image;
 		hullName.text = hullType.getName();
+		hullHealth.text = "HP: " + hullType.getMaxHealth();
 		weaponCount.text = hullType.getWeaponSlots().ToString();
 		armorCount.text = hullType.getArmorSlots().ToString();
 		shieldCount.text = hullType.getShieldSlots().ToString();
@@ -57,7 +61,7 @@ public class HullDisplay : MonoBehaviour, ButtonHolder {
 	}
 
 	public void updateCost () {
-		int cost = hullType.getCost() - Mathf.RoundToInt((float)Vars.shipHullType.getCost() * ((float)shipData.getCurrentHealth() / (float)shipData.getHullType().getMaxHealth()));
-		buyBtn.setText(cost + "$");
+		cost = -hullType.getCost() + (shipData.hullType.getCost() - shipData.repairCost);
+		buyBtn.setText((cost > 0? "+": "") + cost + "$");
 	}
 }

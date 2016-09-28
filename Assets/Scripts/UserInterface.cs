@@ -33,9 +33,7 @@ public class UserInterface : MonoBehaviour {
 
 	private Color32 textColor;
 
-	private Rect backgroundRect = new Rect (0, 10, Screen.width, 50),
-				 cashRect = new Rect(Screen.width - 20, 35, 0, 0),
-				 statusBtnRect = new Rect (Screen.width - 44, Screen.height - 56, 48, 48),
+	private Rect statusBtnRect = new Rect (Screen.width - 44, Screen.height - 56, 48, 48),
 				 shieldBarRect = new Rect(0, Screen.height - 70, 0, 50),
 				 healthBarRect = new Rect(0, Screen.height - 50, 0, 50),
 				 planetDescriptRect = new Rect(Screen.width - 220, 80, 210, 290), 
@@ -68,7 +66,7 @@ public class UserInterface : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.I)) {
 			if (statusScreen.gameObject.activeInHierarchy) {
 				statusScreen.closeScreen();
-			} else {
+			} else if (showInterface) {
 				statusScreen.showScreen();
 			}
 		}

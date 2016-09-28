@@ -17,8 +17,6 @@ public class StarSystem : MonoBehaviour {
 
 	private PlayerShip playerShip;
 
-	private Inventory inventory, storage;
-
 	private CameraController cameraController;
 
     private List<Planet> planets;
@@ -49,7 +47,6 @@ public class StarSystem : MonoBehaviour {
 		ItemDescriptor descriptor = GameObject.Find("Item Descriptor").GetComponent<ItemDescriptor>().init();
 
 		statusScreen = GameObject.Find("Status Screen").GetComponent<StatusScreen>().init(this, descriptor);
-		inventory = statusScreen.getInventory();
 
 		if (Vars.shipCurrentHealth == -1) {
 			statusScreen.getShipData().initializeRandomShip (HullType.Corvette);
@@ -58,7 +55,6 @@ public class StarSystem : MonoBehaviour {
 		}
 		
 		initPlayerShip ();
-//		shipInfoScreen.init(this, shipData, inventory);
 
 		Vars.userInterface = GameObject.FindGameObjectWithTag("UserInterface").GetComponent<UserInterface>().init(statusScreen, this, playerShip);
 

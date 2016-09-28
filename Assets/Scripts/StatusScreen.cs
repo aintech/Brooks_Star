@@ -36,15 +36,15 @@ public class StatusScreen : InventoryContainedScreen {
 		playerBtn = transform.Find("Player Button").GetComponent<Button>().init();
 		perksBtn = transform.Find("Perks Button").GetComponent<Button>().init();
 		shipBtn = transform.Find("Ship Button").GetComponent<Button>().init();
-		repairBtn = transform.Find ("Repair Button").GetComponent<Button> ().init ();
+		repairBtn = transform.Find ("Repair Button").GetComponent<Button> ().init (true);
 		closeBtn = transform.Find("Close Button").GetComponent<Button>().init();
 
-		perksView = transform.Find("Perks View").GetComponent<PerksView>().init(this);
+		perksView = transform.Find("Perks View").GetComponent<PerksView>().init();
 
 		background = transform.Find("Background").GetComponent<SpriteRenderer>();
 		background.gameObject.SetActive(true);
 
-		inventory.setCapacity(shipData.getHullType().getStorageCapacity());
+		inventory.setCapacity(shipData.hullType.getStorageCapacity());
 
 		closeScreen();
 
@@ -88,16 +88,24 @@ public class StatusScreen : InventoryContainedScreen {
 			StarSystem.setGamePause(true);
 		}
 
+		if (shipData.repairCost > 0) {
+			repairBtn.setText(shipData.repairCost.ToString() + "$");
+			repairBtn.setVisible(true);
+		} else {
+			repairBtn.setVisible(false);
+		}
+
 		show (ItemKind.EQUIPMENTS);
 //		setInventoryActive();
 //		setShipDataActive();
+		updateCashTxt();
 
 		gameObject.SetActive(true);
 	}
 
 	public void closeScreen () {
 		hideItemInfo();
-		perksView.hideInfo();
+//		perksView.hideInfo();
 		perksView.gameObject.SetActive(false);
 		inventory.gameObject.SetActive(false);
 		playerData.gameObject.SetActive(false);
@@ -111,12 +119,17 @@ public class StatusScreen : InventoryContainedScreen {
 
 		UserInterface.showInterface = true;
 		itemDescriptor.setEnabled(null);
+		itemDescriptor.setAsPerkDescriptor(false);
 	}
 
 	private void show (ItemKind kind) {
 		background.sprite = kind == ItemKind.SHIP_EQUIPMENT? shipBG: kind == ItemKind.EQUIPMENTS? equipmentBG: perksBG;
 
 		setCashTxtActive (kind == ItemKind.EQUIPMENTS || kind == ItemKind.SHIP_EQUIPMENT);
+
+		repairBtn.gameObject.SetActive(kind == ItemKind.SHIP_EQUIPMENT);
+
+		itemDescriptor.setAsPerkDescriptor(kind != ItemKind.EQUIPMENTS && kind != ItemKind.SHIP_EQUIPMENT);
 
 		shipData.gameObject.SetActive(kind == ItemKind.SHIP_EQUIPMENT);
 		playerData.gameObject.SetActive(kind == ItemKind.EQUIPMENTS);
@@ -131,7 +144,9 @@ public class StatusScreen : InventoryContainedScreen {
 	}
 
 	private void repairShip () {
-		
+		shipData.repairShip(false);
+		repairBtn.setText("");
+		repairBtn.setVisible(false);
 	}
 
 	protected override void checkBtnPress (Button btn) {
@@ -325,7 +340,7 @@ public class StatusScreen : InventoryContainedScreen {
 		if (draggedItem != null) {
 			highlightSlot (true, item.getItemType ());
 		}
-		perksView.hideInfo();
+//		perksView.hideInfo();
 	}
 
 	private void highlightSlot (bool hightlight, ItemType itemType) {

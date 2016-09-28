@@ -3,12 +3,13 @@ using System.Collections;
 
 public class Item : MonoBehaviour {
 
+	//TODO: перенести спрайты в Imager
 	public Sprite[] weaponSprites, engineSprites, armorSprites, generatorSprites, radarSprites, shieldSprites, repairDroidSprites, harvesterSprites,
 					handWeaponSprites, bodyArmorSprites;
 
 	private SpriteRenderer render;
 
-	[HideInInspector]
+//	[HideInInspector]
     public InventoryCell cell;
 
 	[HideInInspector]

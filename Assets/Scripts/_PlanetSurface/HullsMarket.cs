@@ -11,12 +11,6 @@ public class HullsMarket : MonoBehaviour, ButtonHolder {
 
 	public Sprite[] hullImages;
 
-	private Color blueColor = new Color(0.86f, 1, 1);
-
-	private Color redColor = new Color(1, 0, 0);
-
-	private Color greenColor = new Color(0, 1, 0); 
-
 	private Inventory inventory;
 
 	public List<HullDisplay> displays = new List<HullDisplay>();
@@ -35,6 +29,10 @@ public class HullsMarket : MonoBehaviour, ButtonHolder {
 			display = transform.GetChild(i).GetComponent<HullDisplay>();
 			if (display != null) { displays.Add(display.init(this, shipData)); }
 		}
+
+		cashValue = transform.Find("Cash Value").GetComponent<TextMesh>();
+		cashValue.GetComponent<MeshRenderer>().sortingOrder = 1;
+		cashValue.text = Vars.cash + "$";
 
 		closeBtn = transform.Find("Close Button").GetComponent<Button>().init();
 
@@ -76,6 +74,7 @@ public class HullsMarket : MonoBehaviour, ButtonHolder {
 
 	public void showScreen () {
 		UserInterface.showInterface = false;
+		foreach (HullDisplay dsp in displays) { dsp.updateCost(); }
 		gameObject.SetActive (true);
 	}
 
@@ -91,25 +90,24 @@ public class HullsMarket : MonoBehaviour, ButtonHolder {
 	}
 
 	public void buyHull (HullDisplay display) {
-		int cost = shipData.getHullType ().getCost () - display.hullType.getCost ();
-
-		if (Vars.cash + cost < 0) {
+		if (Vars.cash + display.cost < 0) {
 			Messenger.showMessage("Не хватает кредитов на замену корпуса");
 			return;
-		} else { Vars.cash += cost; }
+		} else { Vars.cash += display.cost; }
 
-		HullType oldHullType = shipData.getHullType();
+		HullType oldHullType = shipData.hullType;
 
 		inventory.setCapacity(display.hullType.getStorageCapacity());
 
 		shipData.setHullType(display.hullType, display.hullType.getMaxHealth());
+		shipData.repairShip(true);
 		updateHullSlots();
 
 		display.setHull(oldHullType, getHullSprite(oldHullType));
 
-		foreach (HullDisplay dsp in displays) {
-			dsp.updateCost();
-		}
+		foreach (HullDisplay dsp in displays) { dsp.updateCost(); }
+
+		cashValue.text = Vars.cash + "$";
 	}
 
 //	private void checkInventoryCapacity () {

@@ -21,7 +21,14 @@ public class Button : MonoBehaviour {
 	
 	private ButtonHolder holder;
 
-	private bool active = true;
+	private bool active = true, visible = true;
+
+	private bool hideableText;
+
+	public Button init (bool hideableText) {
+		this.hideableText = hideableText;
+		return init();
+	}
 
 	public Button init () {
 		render = GetComponent<SpriteRenderer>();
@@ -38,7 +45,7 @@ public class Button : MonoBehaviour {
 	}
 	
 	void Update () {
-		if (!active) { return; }
+		if (!active || !visible) { return; }
 		if (Utils.hit != null && Utils.hit == coll) {
 			if (state == State.NORMAL) {
 				changeState(State.HOVER);
@@ -56,12 +63,21 @@ public class Button : MonoBehaviour {
 	private void changeState (State state) {
 		this.state = state;
 		switch (state) {
-			case State.NORMAL: render.sprite = normal; text.color = normalTextColor; break;
-			case State.HOVER: render.sprite = hover; text.color = hoverTextColor; break;
+			case State.NORMAL:
+				render.sprite = normal;
+				text.color = normalTextColor;
+				if (hideableText) { textRender.gameObject.SetActive(false); }
+				break;
+			case State.HOVER:
+				render.sprite = hover;
+				text.color = hoverTextColor;
+				if (hideableText) { textRender.gameObject.SetActive(true); }
+				break;
 		}
 	}
 
 	public void setVisible (bool visible) {
+		this.visible = visible;
 		render.enabled = visible;
 		coll.enabled = visible;
 		textRender.enabled = visible;

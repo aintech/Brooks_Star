@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ExploreScreen : MonoBehaviour, ButtonHolder, Hideable {
 
-	private PlanetSurface surface;
+	private PlanetSurface planetSurface;
 
 	private FightScreen fightScreen;
 
@@ -15,8 +15,8 @@ public class ExploreScreen : MonoBehaviour, ButtonHolder, Hideable {
 
 	private EnemyType enemyType;
 
-	public void init (PlanetSurface surface) {
-		this.surface = surface;
+	public void init (PlanetSurface planetSurface) {
+		this.planetSurface = planetSurface;
 		enemyImage = transform.Find("Enemy Image").GetComponent<SpriteRenderer>();
 
 		fightBtn = transform.Find("Fight Button").GetComponent<Button>().init();
@@ -43,7 +43,7 @@ public class ExploreScreen : MonoBehaviour, ButtonHolder, Hideable {
 
 	private void closeScreen () {
 		gameObject.SetActive(false);
-		surface.setVisible(true);
+		planetSurface.setVisible(true);
 	}
 
 	private void startExplore () {
@@ -66,11 +66,13 @@ public class ExploreScreen : MonoBehaviour, ButtonHolder, Hideable {
 
 	private void startFight () {
 		gameObject.SetActive(false);
+		UserInterface.showInterface = false;
 		fightScreen.startFight(enemyType);
 	}
 
 	public void endFight () {
 		gameObject.SetActive(true);
+		UserInterface.showInterface = true;
 		turnBack();
 	}
 
