@@ -9,13 +9,20 @@ public class Item : MonoBehaviour {
 
 	private SpriteRenderer render;
 
-//	[HideInInspector]
+	public int index;
+
+	[HideInInspector]
     public InventoryCell cell;
 
 	[HideInInspector]
 	public Slot slot;
     
 	public ItemData itemData { get; private set; }
+
+	public Item init (ItemData itemData, int index) {
+		this.index = index;
+		return init(itemData);
+	}
 
 	public Item init (ItemData itemData) {
 		this.itemData = itemData;

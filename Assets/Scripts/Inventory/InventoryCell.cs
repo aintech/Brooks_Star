@@ -7,8 +7,11 @@ public class InventoryCell : ItemHolder {
 
 	public Inventory inventory { get; private set; }
 
-    public void init(Inventory inventory) {
+	private Transform itemsContainer;
+
+	public void init(Inventory inventory, Transform itemsContainer) {
         this.inventory = inventory;
+		this.itemsContainer = itemsContainer;
     }
 
 	public void setItem (Item newItem) {
@@ -16,8 +19,8 @@ public class InventoryCell : ItemHolder {
 		if (item != null) {
 			item.slot = null;
 			item.cell = this;
-			item.transform.parent = transform;
-			item.transform.localPosition = Vector3.zero;
+			item.transform.parent = itemsContainer;
+			item.transform.localPosition = transform.localPosition;
 		}
 	}
 

@@ -14,10 +14,11 @@ public class Utils : MonoBehaviour {
 	private static float seed = 0;
 	
 	void Awake () {
-		cam = Camera.main;
+		cam = GetComponent<Camera>();
 	}
 	
 	void Update () {
+		if (cam == null) { Debug.Log("Camera is null"); cam = GetComponent<Camera>(); }
 		mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
 		hit = Physics2D.Raycast(mousePos, zeroV, 1).collider;
 	}

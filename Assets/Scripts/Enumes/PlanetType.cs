@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public enum PlanetType {
 	CORAS,
@@ -10,23 +11,32 @@ public enum PlanetType {
 
 public static class PlanetDescriptor {
 
+	private static Dictionary<PlanetType, EnemyType[]> enemyTypesOnPlanet = new Dictionary<PlanetType, EnemyType[]>();
+
 	public static string getName (this PlanetType type) {
 		switch (type) {
-		case PlanetType.CORAS: return "Корас";
-		case PlanetType.PALETTE: return "Палетта";
-		case PlanetType.VADERPAN: return "Вадерпан";
-		case PlanetType.PARPARIS: return "Парпарис";
-		default: return "Неизвестное наименование планеты";
+			case PlanetType.CORAS: return "Корас";
+			case PlanetType.PALETTE: return "Палетта";
+			case PlanetType.VADERPAN: return "Вадерпан";
+			case PlanetType.PARPARIS: return "Парпарис";
+			default: return "Неизвестное наименование планеты";
 		}
+	}
+
+	public static bool isColonized (this PlanetType type) {
+		switch (type) {
+			case PlanetType.CORAS: return true;
+		}
+		return false;
 	}
 
 	public static string getDescription (this PlanetType type) {
 		switch (type) {
-		case PlanetType.CORAS: return "Планета-завод, основанная...";
-		case PlanetType.PALETTE: return "Небольшая планета-поселение...";
-		case PlanetType.VADERPAN: return "Планета известная горячими источниками...";
-		case PlanetType.PARPARIS: return "Центральная планета Союза...";
-		default: return "Неизвестное наименование планеты";
+			case PlanetType.CORAS: return "Планета-завод, основанная...";
+			case PlanetType.PALETTE: return "Небольшая планета-поселение...";
+			case PlanetType.VADERPAN: return "Планета известная горячими источниками...";
+			case PlanetType.PARPARIS: return "Центральная планета Союза...";
+			default: return "Неизвестное наименование планеты";
 		}
 	}
 
@@ -39,11 +49,11 @@ public static class PlanetDescriptor {
     }
 
 	public static EnemyType[] getEnemyTypes (this PlanetType type) {
-		return new EnemyType[]{EnemyType.DRUID, EnemyType.BEE, EnemyType.GUNNER};
-//		switch (type) {
-//			case PlanetType.CORAS: return new EnemyType[]{EnemyType.PIRATE, EnemyType.DRAGON, EnemyType.DRUID, EnemyType.MINOTAUR, EnemyType.CAPTAIN, 
-//					EnemyType.BEE, EnemyType.COMMANDER, EnemyType.FIGHTER, EnemyType.GUNNER, EnemyType.HARPY, EnemyType.KNIGHT, EnemyType.SWORDMASTER};
-//			default: Debug.Log("Unknown planet type: " + type); return new EnemyType[0];
-//		}
+		if (enemyTypesOnPlanet.Count == 0) { initEnemiesOnPlanets(); }
+		return enemyTypesOnPlanet[type];
+	}
+
+	private static void initEnemiesOnPlanets () {
+		enemyTypesOnPlanet.Add(PlanetType.CORAS, new EnemyType[]{EnemyType.DRUID, EnemyType.BEE, EnemyType.GUNNER});
 	}
 }

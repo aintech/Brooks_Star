@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class HullsMarket : MonoBehaviour, ButtonHolder {
+public class HangarScreen : MonoBehaviour, ButtonHolder {
 
 	private TextMesh cashValue;
 
@@ -13,19 +13,21 @@ public class HullsMarket : MonoBehaviour, ButtonHolder {
 
 	private Inventory inventory;
 
-	public List<HullDisplay> displays = new List<HullDisplay>();
+	public List<HullDisplay> displays { get; private set; }
 
 	private Button closeBtn;
 
-	private MarketScreen marketScreen;
+	private PlanetSurface planetSurface;
 
-	public void init (MarketScreen marketScreen, Inventory inventory, ShipData shipData) {
-		this.marketScreen = marketScreen;
+	public HangarScreen init (PlanetSurface planetSurface, Inventory inventory, ShipData shipData) {
+		this.planetSurface = planetSurface;
 		this.inventory = inventory;
 		this.shipData = shipData;
 
+		displays = new List<HullDisplay>();
 		HullDisplay display;
 		for (int i = 0; i < transform.childCount; i++) {
+			transform.GetChild(i).gameObject.SetActive(true);
 			display = transform.GetChild(i).GetComponent<HullDisplay>();
 			if (display != null) { displays.Add(display.init(this, shipData)); }
 		}
@@ -39,6 +41,8 @@ public class HullsMarket : MonoBehaviour, ButtonHolder {
 		refreshMarket();
 
 		gameObject.SetActive(false);
+
+		return this;
 	}
 
 	private void refreshMarket () {
@@ -80,7 +84,7 @@ public class HullsMarket : MonoBehaviour, ButtonHolder {
 
 	public void closeScreen () {
 		gameObject.SetActive(false);
-		marketScreen.setVisible(true);
+		planetSurface.setVisible(true);
 		UserInterface.showInterface = true;
 	}
 

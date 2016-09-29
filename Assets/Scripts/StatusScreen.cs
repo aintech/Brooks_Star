@@ -127,7 +127,7 @@ public class StatusScreen : InventoryContainedScreen {
 
 		setCashTxtActive (kind == ItemKind.EQUIPMENTS || kind == ItemKind.SHIP_EQUIPMENT);
 
-		repairBtn.gameObject.SetActive(kind == ItemKind.SHIP_EQUIPMENT);
+		repairBtn.gameObject.SetActive(onPlanetSurface && kind == ItemKind.SHIP_EQUIPMENT);
 
 		itemDescriptor.setAsPerkDescriptor(kind != ItemKind.EQUIPMENTS && kind != ItemKind.SHIP_EQUIPMENT);
 

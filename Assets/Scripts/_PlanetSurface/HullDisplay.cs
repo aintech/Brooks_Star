@@ -11,14 +11,14 @@ public class HullDisplay : MonoBehaviour, ButtonHolder {
 
 	public HullType hullType { get; private set; }
 
-	private HullsMarket market;
+	private HangarScreen hangar;
 
 	private ShipData shipData;
 
 	public int cost { get; private set; }
 
-	public HullDisplay init (HullsMarket market, ShipData shipData) {
-		this.market = market;
+	public HullDisplay init (HangarScreen hangar, ShipData shipData) {
+		this.hangar = hangar;
 		this.shipData = shipData;
 
 		hullImage = transform.Find("Hull Image").GetComponent<SpriteRenderer>();
@@ -57,7 +57,7 @@ public class HullDisplay : MonoBehaviour, ButtonHolder {
 	}
 
 	public void fireClickButton (Button btn) {
-		if (btn == buyBtn) { market.buyHull(this); }
+		if (btn == buyBtn) { hangar.buyHull(this); }
 	}
 
 	public void updateCost () {

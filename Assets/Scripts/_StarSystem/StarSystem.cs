@@ -38,6 +38,7 @@ public class StarSystem : MonoBehaviour {
 		mainCamera = Camera.main.transform;
 
 		Imager.initialize();
+		Player.init();
 
         backgroundGalaxy = transform.Find("BG").GetComponent<SpriteRenderer>();
 		backgroundGalaxy.gameObject.SetActive(true);
@@ -83,7 +84,7 @@ public class StarSystem : MonoBehaviour {
 
 		statusScreen.getShipData().setShieldToMax();
 
-		spawnAnEnemy();
+//		spawnAnEnemy();
     }
 
 	private void initPlayerShip () {

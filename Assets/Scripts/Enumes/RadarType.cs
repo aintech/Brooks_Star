@@ -13,12 +13,12 @@ public enum RadarType {
 public static class RadarDescriptor {
 	public static string getName (this RadarType type) {
 		switch(type) {
-		case RadarType.Sequester: return "Секвесторный\nрадар";
-		case RadarType.Planar: return "Планарный\nрадар";
-		case RadarType.Matrix: return "Матричный\nрадар";
-		case RadarType.PatanCorsac: return "Радар\nПатан-Корсака";
-		case RadarType.Snake: return "Змеевой\nрадар";
-		case RadarType.Astral: return "Астральный\nрадар";
+		case RadarType.Sequester: return "Секвесторный радар";
+		case RadarType.Planar: return "Планарный радар";
+		case RadarType.Matrix: return "Матричный радар";
+		case RadarType.PatanCorsac: return "Радар Патан-Корсака";
+		case RadarType.Snake: return "Змеевой радар";
+		case RadarType.Astral: return "Астральный радар";
 		default: return "Неизвестный тип радара";
 		}
 	}

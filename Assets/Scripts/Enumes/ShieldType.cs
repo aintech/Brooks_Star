@@ -11,10 +11,10 @@ public enum ShieldType {
 public static class ShieldDescriptor {
 	public static string getName (this ShieldType type) {
 		switch(type) {
-		case ShieldType.Block: return "Блочный\nщит";
-		case ShieldType.Quadratic: return "Квадратичный\nщит";
-		case ShieldType.Cell: return "Ячеестый\nщит";
-		case ShieldType.Phase: return "Фазовый\nщит";
+		case ShieldType.Block: return "Блочный щит";
+		case ShieldType.Quadratic: return "Квадратичный щит";
+		case ShieldType.Cell: return "Ячеестый щит";
+		case ShieldType.Phase: return "Фазовый щит";
 		default: return "Неизвестный тип щита";
 		}
 	}

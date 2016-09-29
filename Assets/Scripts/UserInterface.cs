@@ -5,15 +5,13 @@ public class UserInterface : MonoBehaviour {
 
 	public static bool showInterface = true;
 
-	public Texture background, shield, health, planetDescription;
+	public Texture shield, health, planetDescription, barsHolder;
 
 	private Texture planetSurface;
 
-	private float shieldWidth, startX = Screen.width - 10, maxWidth = 200;
+	private float shieldWidth, maxWidth = 200;//, startX = Screen.width - 10
 
-	public Font font;
-
-	public GUIStyle statusBtnStyle, shipBtnStyle, cashStyle, messengerStyle, planetNameStyle, planetLandStyle;
+	public GUIStyle statusBtnStyle, messengerStyle, planetNameStyle, planetLandStyle;
 
 	private StarSystem starSystem;
 
@@ -34,8 +32,9 @@ public class UserInterface : MonoBehaviour {
 	private Color32 textColor;
 
 	private Rect statusBtnRect = new Rect (Screen.width - 44, Screen.height - 56, 48, 48),
-				 shieldBarRect = new Rect(0, Screen.height - 70, 0, 50),
-				 healthBarRect = new Rect(0, Screen.height - 50, 0, 50),
+				 shieldBarRect = new Rect(13, Screen.height - 65, 10, 50),
+				 healthBarRect = new Rect(13, Screen.height - 45, 10, 50),
+				 barsHolderRect = new Rect(0, Screen.height - 128, 256, 128),
 				 planetDescriptRect = new Rect(Screen.width - 220, 80, 210, 290), 
 				 messengerRect = new Rect(10, Screen.height - 50, Screen.width, 50),
 				 planetSurfaceRect, planetNameRect, planetLandRect;
@@ -64,6 +63,7 @@ public class UserInterface : MonoBehaviour {
 
 	void Update () {
 		if (Input.GetKeyDown(KeyCode.I)) {
+			if (statusScreen == null) { return; }
 			if (statusScreen.gameObject.activeInHierarchy) {
 				statusScreen.closeScreen();
 			} else if (showInterface) {
@@ -80,6 +80,7 @@ public class UserInterface : MonoBehaviour {
 			if (starSystem != null) {
 				GUI.DrawTexture(healthBarRect, health);
 				GUI.DrawTexture(shieldBarRect, shield);
+				GUI.DrawTexture(barsHolderRect, barsHolder);
 
 				if (planetDescriptVisible) {
 					GUI.DrawTexture(planetDescriptRect, planetDescription);
@@ -121,10 +122,10 @@ public class UserInterface : MonoBehaviour {
 
 	public void updateShip () {
 		shieldBarRect.width = maxWidth * ((float)ship.getShield() / ship.getFullShield());
-		shieldBarRect.x = startX - shieldBarRect.width;
+//		shieldBarRect.x = startX - shieldBarRect.width;
 
 		healthBarRect.width = maxWidth * ((float)ship.getHealth() / ship.getFullHealth());
-		healthBarRect.x = startX - healthBarRect.width;
+//		healthBarRect.x = startX - healthBarRect.width;
 	}
 
 	public void setMessageText (string text) {

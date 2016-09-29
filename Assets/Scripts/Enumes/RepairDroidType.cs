@@ -11,10 +11,10 @@ public enum RepairDroidType {
 public static class RepairDroidDescriptor {
 	public static string getName (this RepairDroidType type) {
 		switch(type) {
-		case RepairDroidType.Rail: return "Рельсовый\nдроид";
-		case RepairDroidType.Channel: return "Канальный\nдроид";
-		case RepairDroidType.Biphasic: return "Бифазный\nдроид";
-		case RepairDroidType.Thread: return "Поточный\nдроид";
+		case RepairDroidType.Rail: return "Рельсовый дроид";
+		case RepairDroidType.Channel: return "Канальный дроид";
+		case RepairDroidType.Biphasic: return "Бифазный дроид";
+		case RepairDroidType.Thread: return "Поточный дроид";
 		default: return "Неизвестный тип дроида-ремонтника";
 		}
 	}

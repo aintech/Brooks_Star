@@ -12,11 +12,11 @@ public enum ArmorType {
 public static class ArmorDescriptor {
 	public static string getName (this ArmorType type) {
 		switch(type) {
-		case ArmorType.Steel: return "Стальная\nброня";
-		case ArmorType.HardenedSteel: return "Усиленная\nброня";
-		case ArmorType.Titan: return "Титановая\nброня";
-		case ArmorType.Astron: return "Астрониевая\nброня";
-		case ArmorType.Adamant: return "Адамантовая\nброня";
+		case ArmorType.Steel: return "Стальная броня";
+		case ArmorType.HardenedSteel: return "Усиленная броня";
+		case ArmorType.Titan: return "Титановая броня";
+		case ArmorType.Astron: return "Астрониевая броня";
+		case ArmorType.Adamant: return "Адамантовая броня";
 		default: return "Неизвестный материал защиты корпуса";
 		}
 	}

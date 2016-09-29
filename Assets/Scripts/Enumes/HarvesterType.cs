@@ -10,9 +10,9 @@ public enum HarvesterType {
 public static class HarvesterDescriptor {
 	public static string getName (this HarvesterType type) {
 		switch(type) {
-		case HarvesterType.Mechanical: return "Механический\nсборщик";
-		case HarvesterType.Plasmatic: return "Плазматический\nсборщик";
-		case HarvesterType.Generative: return "Генеративный\nсборщик";
+		case HarvesterType.Mechanical: return "Механический сборщик";
+		case HarvesterType.Plasmatic: return "Плазматический сборщик";
+		case HarvesterType.Generative: return "Генеративный сборщик";
 		default: return "Неизвестный тип сборщика";
 		}
 	}

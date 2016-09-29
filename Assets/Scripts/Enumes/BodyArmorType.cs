@@ -8,9 +8,9 @@ public enum BodyArmorType {
 public static class BodyArmorDescriptor {
 	public static string getName(this BodyArmorType type) {
 		switch (type) {
-			case BodyArmorType.SUIT: return "Космический\nскафандр";
-			case BodyArmorType.METAL: return "Металическая\nброня";
-			case BodyArmorType.HEAVY: return "Тяжёлый\nдоспех";
+			case BodyArmorType.SUIT: return "Космический скафандр";
+			case BodyArmorType.METAL: return "Металическая броня";
+			case BodyArmorType.HEAVY: return "Тяжёлый доспех";
 			default: Debug.Log("Unknown body armor type: " + type); return "";
 		}
 	}

@@ -7,7 +7,7 @@ public class IndustrialScreen : MonoBehaviour, ButtonHolder, Hideable {
 
 	private Button laboratoryBtn, workshopBtn, factoryshopBtn, closeBtn;
 
-	public void init (PlanetSurface planetSurface) {
+	public IndustrialScreen init (PlanetSurface planetSurface) {
 		this.planetSurface = planetSurface;
 
 		laboratoryBtn = transform.Find("Laboratory Button").GetComponent<Button>().init();
@@ -16,6 +16,8 @@ public class IndustrialScreen : MonoBehaviour, ButtonHolder, Hideable {
 		closeBtn = transform.Find("Close Button").GetComponent<Button>().init();
 
 		gameObject.SetActive(false);
+
+		return this;
 	}
 
 	public void showScreen () {

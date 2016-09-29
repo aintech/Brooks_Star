@@ -14,14 +14,14 @@ public class EquipmentsMarket : InventoryContainedScreen {
 
 	private Button buyBtn, sellBtn, closeBtn;
 
-	private MarketScreen marketScreen;
+	private PlanetSurface planetSurface;
 
 	private ItemDescriptor itemDescriptor;
 
 	private TextMesh actionMsg;
 
-	public void init (MarketScreen marketScreen, Inventory playerInventory, ItemDescriptor itemDescriptor) {
-		this.marketScreen = marketScreen;
+	public EquipmentsMarket init (PlanetSurface planetSurface, Inventory playerInventory, ItemDescriptor itemDescriptor) {
+		this.planetSurface = planetSurface;
 		this.playerInventory = playerInventory;
 		this.itemDescriptor = itemDescriptor;
 
@@ -38,7 +38,13 @@ public class EquipmentsMarket : InventoryContainedScreen {
 		MeshRenderer mesh = actionMsg.GetComponent<MeshRenderer>();
 		mesh.sortingOrder = 1;
 
+		for (int i = 0; i < transform.childCount; i++) {
+			transform.GetChild(i).gameObject.SetActive(true);
+		}
+
 		gameObject.SetActive(false);
+
+		return this;
 	}
 	
 	public void showScreen () {
@@ -139,7 +145,7 @@ public class EquipmentsMarket : InventoryContainedScreen {
 		playerInventory.setItemsFromOtherInventory(sellMarket);
 		UserInterface.showInterface = true;
 		itemDescriptor.setEnabled(null);
-		marketScreen.setVisible(true);
+		planetSurface.setVisible(true);
 //		if (inventory != null) {
 //			if (draggedItem != null) {
 //				draggedItem.returnToParent();

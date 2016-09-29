@@ -280,7 +280,7 @@ public class ShipData : MonoBehaviour {
 
 		setCurrentShield (getShield());
 		setCurrentHealth (hullType.getMaxHealth ());
-		setCurrentHealth ((int) ((float)currentHealth / 2));
+//		setCurrentHealth ((int) ((float)currentHealth / 2));
 		calculateRepairCost();
 
 		initialized = true;

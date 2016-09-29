@@ -15,7 +15,7 @@ public class ExploreScreen : MonoBehaviour, ButtonHolder, Hideable {
 
 	private EnemyType enemyType;
 
-	public void init (PlanetSurface planetSurface) {
+	public ExploreScreen init (PlanetSurface planetSurface) {
 		this.planetSurface = planetSurface;
 		enemyImage = transform.Find("Enemy Image").GetComponent<SpriteRenderer>();
 
@@ -34,6 +34,8 @@ public class ExploreScreen : MonoBehaviour, ButtonHolder, Hideable {
 		backBtn.gameObject.SetActive(false);
 
 		gameObject.SetActive(false);
+
+		return this;
 	}
 
 	public void showScreen () {

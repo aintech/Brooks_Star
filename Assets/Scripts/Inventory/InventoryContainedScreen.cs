@@ -17,7 +17,7 @@ public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 
 	protected void innerInit(Inventory inventory, string layerName) {
 		this.inventory = inventory;
-		chosenItemBorder = transform.Find ("Chosen Item Border").transform;
+		chosenItemBorder = transform.Find ("Chosen Item Border");
 		cashValue = transform.Find("Cash Value").GetComponent<TextMesh>();
 		MeshRenderer mesh = cashValue.GetComponent<MeshRenderer>();
 		mesh.sortingLayerName = layerName;

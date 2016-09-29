@@ -24,6 +24,8 @@ public class ItemDescriptor : MonoBehaviour {
 
 	private TextMesh qualityValue, nameValue, value1, value2, value3, value4, value5;
 
+	private MeshRenderer qualityRender, nameRender, value1Render, value2Render,value3Render, value4Render, value5Render;
+
 	private Vector2 pos = Vector2.zero;
 
 	private Color32 goodColor = new Color32(176, 195, 217, 255),
@@ -39,8 +41,10 @@ public class ItemDescriptor : MonoBehaviour {
 
 	private Inventory playerInventory;
 
-//	private Vector2[] positions = new Vector2[] { new Vector2(.5f, -.57f), new Vector2(.5f, -.95f), new Vector2(0, -1.33f), new Vector2(0, -1.71f), new Vector2(0, -2.09f) };
+	private float minY = -10, maxX = 10, screenWidth;
 
+//	private Vector2[] positions = new Vector2[] { new Vector2(.5f, -.57f), new Vector2(.5f, -.95f), new Vector2(0, -1.33f), new Vector2(0, -1.71f), new Vector2(0, -2.09f) };
+//
 //	private Vector2[,] positions = new Vector2[,]{
 //		{new Vector2(.15f, -.57f), new Vector2(.297f, -.57f), new Vector2(.295f, -.76f)},
 //		{new Vector2(.15f, -.95f), new Vector2(.297f, -.95f), new Vector2(.295f, -1.14f)},
@@ -77,6 +81,14 @@ public class ItemDescriptor : MonoBehaviour {
 		value4 = trans.Find ("Value 4").GetComponent<TextMesh> ();
 		value5 = trans.Find ("Value 5").GetComponent<TextMesh> ();
 
+		qualityRender = qualityValue.GetComponent<MeshRenderer>();
+		nameRender = nameValue.GetComponent<MeshRenderer>();
+		value1Render = value1.GetComponent<MeshRenderer>();
+		value2Render = value2.GetComponent<MeshRenderer>();
+		value3Render = value3.GetComponent<MeshRenderer>();
+		value4Render = value4.GetComponent<MeshRenderer>();
+		value5Render = value5.GetComponent<MeshRenderer>();
+
 		MeshRenderer mesh;
 		for (int i = 0; i < trans.childCount; i++) {
 			mesh = trans.GetChild (i).GetComponent<MeshRenderer> ();
@@ -85,6 +97,7 @@ public class ItemDescriptor : MonoBehaviour {
 				mesh.sortingOrder = 9;
 			}
 		}
+		screenWidth = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height)).x;
 
 		hide ();
 
@@ -109,6 +122,7 @@ public class ItemDescriptor : MonoBehaviour {
 			bg1.gameObject.SetActive (true);
 			value1.gameObject.SetActive (true);
 		}
+		minY = -10;
 	}
 
 	public void setEnabled (Inventory inventory) {
@@ -146,12 +160,9 @@ public class ItemDescriptor : MonoBehaviour {
 				}
 			}
 			pos = Utils.mousePos;
-			//			if (pos.x > maxX) {
-			//				pos.x = maxX;
-			//			}
-			//			if (pos.y < minY) {
-			//				pos.y = minY;
-			//			}
+			if (pos.y < minY) { pos.y = minY; }
+			if (pos.x > maxX) { pos.x = maxX; }
+			//HERE: неправльно работает в космосе
 			trans.localPosition = pos;
 		} else {
 			if (Utils.hit != null) {
@@ -216,20 +227,23 @@ public class ItemDescriptor : MonoBehaviour {
 		Destroy(item.cell.takeItem().gameObject);
 	}
 
-	private void setCost(int index, int cost) {
+	private float setCost(int index, int cost) {
 		string text = (inventoryType == Type.MARKET_BUY? "Купить за": inventoryType == Type.MARKET_SELL? "Продать за": "Стоимость:")  + " <color=yellow>" + cost + "$</color>";
 		scale.x = text.Length - 22.5f;
+		minY = -4.7f + (.4f * index);
 		switch (index) {
-			case 1: value1.text = text; bg1.localScale = scale; break;
-			case 2: value2.text = text; bg2.localScale = scale; break;
-			case 3: value3.text = text; bg3.localScale = scale; break;
-			case 4: value4.text = text; bg4.localScale = scale; break;
-			case 5: value5.text = text; bg5.localScale = scale; break;
-			default: Debug.Log("Unknown index: " + index); break;
+			case 1: value1.text = text; bg1.localScale = scale; return value1Render.bounds.size.x;
+			case 2: value2.text = text; bg2.localScale = scale; return value2Render.bounds.size.x;
+			case 3: value3.text = text; bg3.localScale = scale; return value3Render.bounds.size.x;
+			case 4: value4.text = text; bg4.localScale = scale; return value4Render.bounds.size.x;
+			case 5: value5.text = text; bg5.localScale = scale; return value5Render.bounds.size.x;
+			default: Debug.Log("Unknown index: " + index); return 0;
 		}
 	}
 
 	private void showTexts (ItemData data) {
+		float maxLenght = 0;
+
 		if (data.quality != ItemQuality.COMMON) {
 			qualityPre.gameObject.SetActive (true);
 			qualityBG.gameObject.SetActive (true);
@@ -243,15 +257,17 @@ public class ItemDescriptor : MonoBehaviour {
 								  data.quality == ItemQuality.RARE? rareColor:
 								  data.quality == ItemQuality.SUPERIOR? superiorColor:
 								  goodColor);
+			maxLenght = qualityRender.bounds.size.x;
 		}
 
 		namePre.gameObject.SetActive (true);
 		nameBG.gameObject.SetActive (true);
 		nameValue.gameObject.SetActive (true);
 
-		nameValue.text = data.name.Replace('\n', ' ');
+		nameValue.text = data.name;
 		scale.x = nameValue.text.Length + 1;
 		nameBG.localScale = scale;
+		maxLenght = Mathf.Max(maxLenght, nameRender.bounds.size.x);
 
 		switch (data.itemType) {
 			case ItemType.HAND_WEAPON:
@@ -264,10 +280,11 @@ public class ItemDescriptor : MonoBehaviour {
 
 				HandWeaponData hwd = (HandWeaponData)data;
 				value1.text = "Урон: <color=orange>" + hwd.minDamage + " - " + hwd.maxDamage + "</color>";
-				scale.x = value1.text.Length - 24;// + 1 - (количество спецсимволов)
+				scale.x = value1.text.Length - 24;// - (количество спецсимволов)
 				bg1.localScale = scale;
+				maxLenght = Mathf.Max(maxLenght, value1Render.bounds.size.x);
 
-				setCost(2, data.cost);
+				maxLenght = Mathf.Max(maxLenght, setCost(2, data.cost));
 				break;
 
 			case ItemType.BODY_ARMOR:
@@ -280,10 +297,11 @@ public class ItemDescriptor : MonoBehaviour {
 
 				BodyArmorData bad = (BodyArmorData)data;
 				value1.text = "Защита: <color=orange>" + bad.armorClass + "</color>";
-				scale.x = value1.text.Length - 22;// + 1 - (количество спецсимволов)
+				scale.x = value1.text.Length - 22;
 				bg1.localScale = scale;
+				maxLenght = Mathf.Max(maxLenght, value1Render.bounds.size.x);
 
-				setCost(2, data.cost);
+				maxLenght = Mathf.Max(maxLenght, setCost(2, data.cost));
 				break;
 
 			case ItemType.WEAPON:
@@ -307,20 +325,24 @@ public class ItemDescriptor : MonoBehaviour {
 				value1.text = "Урон: <color=orange>" + wd.minDamage + " - " + wd.maxDamage + "</color>";
 				scale.x = value1.text.Length - 24;
 				bg1.localScale = scale;
+				maxLenght = Mathf.Max(maxLenght, value1Render.bounds.size.x);
 
 				value2.text = "Перезарядка: <color=orange>" + wd.reloadTime.ToString("0.00") + "</color>";
 				scale.x = value2.text.Length - 22.5F;
 				bg2.localScale = scale;
+				maxLenght = Mathf.Max(maxLenght, value2Render.bounds.size.x);
 
 				value3.text = "Питание: <color=cyan>" + data.energyNeeded + "</color>";
 				scale.x = value3.text.Length - 20.5f;
 				bg3.localScale = scale;
+				maxLenght = Mathf.Max(maxLenght, value3Render.bounds.size.x);
 
 				value4.text = "Объём: <color=orange>" + data.volume.ToString("0.0") + "</color>";
 				scale.x = value4.text.Length - 22.5F;
 				bg4.localScale = scale;
+				maxLenght = Mathf.Max(maxLenght, value4Render.bounds.size.x);
 
-				setCost(5, data.cost);
+				maxLenght = Mathf.Max(maxLenght, setCost(5, data.cost));
 				break;
 
 			case ItemType.ENGINE:
@@ -341,16 +363,19 @@ public class ItemDescriptor : MonoBehaviour {
 				value1.text = "Мощность: <color=orange>" + ((ed.power) * 1000).ToString("0") + "</color>";
 				scale.x = value1.text.Length - 22.5f;
 				bg1.localScale = scale;
+				maxLenght = Mathf.Max(maxLenght, value1Render.bounds.size.x);
 
 				value2.text = "Питание: <color=cyan>" + data.energyNeeded + "</color>";
 				scale.x = value2.text.Length - 20.5f;
 				bg2.localScale = scale;
+				maxLenght = Mathf.Max(maxLenght, value2Render.bounds.size.x);
 
 				value3.text = "Объём: <color=orange>" + data.volume.ToString("0.0") + "</color>";
 				scale.x = value3.text.Length - 22.5F;
 				bg3.localScale = scale;
+				maxLenght = Mathf.Max(maxLenght, value3Render.bounds.size.x);
 
-				setCost(4, data.cost);
+				maxLenght = Mathf.Max(maxLenght, setCost(4, data.cost));
 				break;
 
 			case ItemType.ARMOR:
@@ -368,12 +393,14 @@ public class ItemDescriptor : MonoBehaviour {
 				value1.text = "Броня: <color=orange>" + ad.armorClass + "</color>";
 				scale.x = value1.text.Length - 22.5f;
 				bg1.localScale = scale;
+				maxLenght = Mathf.Max(maxLenght, value1Render.bounds.size.x);
 
 				value2.text = "Объём: <color=orange>" + data.volume.ToString("0.0") + "</color>";
 				scale.x = value2.text.Length - 22.5F;
 				bg2.localScale = scale;
+				maxLenght = Mathf.Max(maxLenght, value2Render.bounds.size.x);
 
-				setCost(3, data.cost);
+				maxLenght = Mathf.Max(maxLenght, setCost(3, data.cost));
 				break;
 
 			case ItemType.GENERATOR:
@@ -391,12 +418,14 @@ public class ItemDescriptor : MonoBehaviour {
 				value1.text = "Мощность: <color=orange>" + gd.maxEnergy + "</color>";
 				scale.x = value1.text.Length - 22.5f;
 				bg1.localScale = scale;
+				maxLenght = Mathf.Max(maxLenght, value1Render.bounds.size.x);
 
 				value2.text = "Объём: <color=orange>" + data.volume.ToString("0.0") + "</color>";
 				scale.x = value2.text.Length - 22.5F;
 				bg2.localScale = scale;
+				maxLenght = Mathf.Max(maxLenght, value2Render.bounds.size.x);
 
-				setCost(3, data.cost);
+				maxLenght = Mathf.Max(maxLenght, setCost(3, data.cost));
 				break;
 
 			case ItemType.RADAR:
@@ -417,16 +446,19 @@ public class ItemDescriptor : MonoBehaviour {
 				value1.text = "Дальность: <color=orange>" + rd.range + "</color>";
 				scale.x = value1.text.Length - 22.5f;
 				bg1.localScale = scale;
+				maxLenght = Mathf.Max(maxLenght, value1Render.bounds.size.x);
 
 				value2.text = "Питание: <color=cyan>" + data.energyNeeded + "</color>";
 				scale.x = value2.text.Length - 20.5f;
 				bg2.localScale = scale;
+				maxLenght = Mathf.Max(maxLenght, value2Render.bounds.size.x);
 
 				value3.text = "Объём: <color=orange>" + data.volume.ToString("0.0") + "</color>";
 				scale.x = value3.text.Length - 22.5F;
 				bg3.localScale = scale;
+				maxLenght = Mathf.Max(maxLenght, value3Render.bounds.size.x);
 
-				setCost(4, data.cost);
+				maxLenght = Mathf.Max(maxLenght, setCost(4, data.cost));
 				break;
 
 			case ItemType.SHIELD:
@@ -450,20 +482,24 @@ public class ItemDescriptor : MonoBehaviour {
 				value1.text = "Защита: <color=orange>" + sd.shieldLevel + "</color>";
 				scale.x = value1.text.Length - 22.5f;
 				bg1.localScale = scale;
+				maxLenght = Mathf.Max(maxLenght, value1Render.bounds.size.x);
 
 				value2.text = "Перезарядка: <color=orange>" + sd.rechargeSpeed + "</color>";
 				scale.x = value2.text.Length - 22.5F;
 				bg2.localScale = scale;
+				maxLenght = Mathf.Max(maxLenght, value2Render.bounds.size.x);
 
 				value3.text = "Питание: <color=cyan>" + data.energyNeeded + "</color>";
 				scale.x = value3.text.Length - 20.5f;
 				bg3.localScale = scale;
+				maxLenght = Mathf.Max(maxLenght, value3Render.bounds.size.x);
 
 				value4.text = "Объём: <color=orange>" + data.volume.ToString("0.0") + "</color>";
 				scale.x = value4.text.Length - 22.5F;
 				bg4.localScale = scale;
+				maxLenght = Mathf.Max(maxLenght, value4Render.bounds.size.x);
 
-				setCost(5, data.cost);
+				maxLenght = Mathf.Max(maxLenght, setCost(5, data.cost));
 				break;
 
 			case ItemType.REPAIR_DROID:
@@ -484,16 +520,19 @@ public class ItemDescriptor : MonoBehaviour {
 				value1.text = "Ремонт: <color=orange>" + rdd.repairSpeed + "</color>";
 				scale.x = value1.text.Length - 22.5f;
 				bg1.localScale = scale;
+				maxLenght = Mathf.Max(maxLenght, value1Render.bounds.size.x);
 
 				value2.text = "Питание: <color=cyan>" + data.energyNeeded + "</color>";
 				scale.x = value2.text.Length - 20.5f;
 				bg2.localScale = scale;
+				maxLenght = Mathf.Max(maxLenght, value2Render.bounds.size.x);
 
 				value3.text = "Объём: <color=orange>" + data.volume.ToString("0.0") + "</color>";
 				scale.x = value3.text.Length - 22.5F;
 				bg3.localScale = scale;
+				maxLenght = Mathf.Max(maxLenght, value3Render.bounds.size.x);
 
-				setCost(4, data.cost);
+				maxLenght = Mathf.Max(maxLenght, setCost(4, data.cost));
 				break;
 
 			case ItemType.HARVESTER:
@@ -511,14 +550,18 @@ public class ItemDescriptor : MonoBehaviour {
 				value1.text = "Поиск: <color=orange>" + hd.harvestTime + "</color>";
 				scale.x = value1.text.Length - 22.5f;
 				bg1.localScale = scale;
+				maxLenght = Mathf.Max(maxLenght, value1Render.bounds.size.x);
 
 				value2.text = "Объём: <color=orange>" + data.volume.ToString("0.0") + "</color>";
 				scale.x = value2.text.Length - 22.5F;
 				bg2.localScale = scale;
+				maxLenght = Mathf.Max(maxLenght, value2Render.bounds.size.x);
 
-				setCost(3, data.cost);
+				maxLenght = Mathf.Max(maxLenght, setCost(3, data.cost));
 				break;
 		}
+
+		maxX = screenWidth - maxLenght - .5f;
 	}
 
 	private void hide () {
@@ -527,135 +570,7 @@ public class ItemDescriptor : MonoBehaviour {
 		trans.gameObject.SetActive (false);
 	}
 
-//    public void showDescription(Buff buff) {
-//        this.buff = buff;
-//        BuffType buffType = buff.getBuffType();
-//        nameValue.text = buffType.getName();
-//
-//        stat_2.text = "";
-//		stat_1.text = buffType.getEffectName().Replace("?", buff.getEffectValue().ToString());
-//        
-//        body.localPosition = bodyPosStat_1;
-//        description.transform.localPosition = descriptPos_1;
-//
-//        quality.gameObject.SetActive(false);
-//
-//		description.text = buff.getDescription();
-//		costText.text = buff.getCost().ToString();
-//		stretchBody();
-//		setActionMsgForBuff(buff);
-//        onScreen = true;
-//        Update();
-//        gameObject.SetActive(true);
-//    }
-
-	public void hideActionMsg () {
-//		actionMsgTrans.gameObject.SetActive(false);
-//		errorMsgTrans.gameObject.SetActive(false);
-//		costTrans.localPosition = costPos_1;
-	}
-
 	public enum Type {
 		NONE, INVENTORY, MARKET_BUY, MARKET_SELL
 	}
-
-//    private void stretchBody () {
-//		int descriptLines = item == null? buff.getDescriptionLinesCount(): item.getDescriptionLinesCount();
-//        stretchScale.y = descriptLines + 1;
-//        stretch.localScale = stretchScale;
-//		footerPos.y = footerInitY - (footerStep * descriptLines);
-//		footer.localPosition = footerPos;
-//		minY = containerOffset - body.localPosition.y - footer.localPosition.y + FOOTER_SIZE - SCREEN_HALF_HEIGHT;
-//	}
-
-//	private void setActionMsg (ItemHolder holder) {
-//		if (shopDescriptor && holder == null) {//Подразумевает, что мы находимся в магазине, и смотрим на полки (у них нет холдера)
-//			if (item.getCost() <= Vars.gold) {
-//                adjustFooter("Купить", false);
-//            } else {
-//                adjustFooter("Не хватает монет", true);
-//            }
-//		} else if (shopDescriptor) {
-//            adjustFooter("Продать", false);
-//		} else if (workbenchDescriptor) {
-//			hideActionMsg();
-//		} else {
-//			switch (holder.getHolderType()) {
-//				case ItemHolderType.INVENTORY:
-//				case ItemHolderType.POTION_BAG:
-//					if (holder.getItem().getItemType() == ItemType.POTION) {
-//						tempPotion = (PotionItem)holder.getItem();
-//                        if ((tempPotion.getPotionType() == PotionType.HEALTH && Hero.getHealth() == Hero.getMaxHealth())) {
-//                            adjustFooter("Здоровье макс.", true);
-//                        } else if (Hero.isPotionAlreadyDrinked(tempPotion.getPotionType())) {
-//                            adjustFooter("Нельзя выпить", true);
-//                        } else {
-//							adjustFooter("Выпить", false);
-//						}
-//					} else if (holder.getItem().getItemType() == ItemType.MATERIAL) {
-//						hideActionMsg();
-//					} else if (holder.getItem().getItemType() == ItemType.WEAPON) {
-//                    	adjustFooter("Взять", false);
-//					} else {
-//                        adjustFooter("Надеть", false);
-//					}
-//					break;
-//				case ItemHolderType.EQUIPMENT: adjustFooter("Снять", false); break;
-//			}
-//		}
-//	}
-
-//	private void setActionMsgForBuff (Buff buff) {
-//		if (buff.isUsed()) {
-//			errorMsgTrans.gameObject.SetActive(false);
-//			actionMsgTrans.gameObject.SetActive(false);
-//			costTrans.localPosition = costPos_1;
-//		} else {
-//			if (!buff.isHavingTargetItem()) {
-//				errorMsg.text = (buff.getBuffItemType() == BuffItemType.SHIELD)? "Надень щит":
-//								(buff.getBuffItemType() == BuffItemType.ARMOR)? "Надень броню":
-//								(buff.getBuffItemType() == BuffItemType.WEAPON)? "Возьми оружие": "Я ХЗ что происходит(";
-//				costTrans.localPosition = costPos_2;
-//				errorMsgTrans.gameObject.SetActive(true);
-//				actionMsgTrans.gameObject.SetActive(false);
-//				minY += .5f;
-//			} else if (Vars.gold >= buff.getCost()) {
-//				actionMsg.text = "Чары";
-//				costTrans.localPosition = costPos_1;
-//				errorMsgTrans.gameObject.SetActive(false);
-//				actionMsgTrans.gameObject.SetActive(true);
-//			} else {
-//				errorMsg.text = "Не хватает монет";
-//				costTrans.localPosition = costPos_2;
-//				actionMsgTrans.gameObject.SetActive(false);
-//				errorMsgTrans.gameObject.SetActive(true);
-//				minY += .5f;
-//			}
-//		}
-//	}
-
-//    private void adjustFooter (string message, bool isError) {
-//        if (isError) {
-//            errorMsgTrans.gameObject.SetActive(true);
-//            errorMsg.text = message;
-//            actionMsgTrans.gameObject.SetActive(false);
-//            minY += .5f;
-//        } else {
-//            actionMsgTrans.gameObject.SetActive(true);
-//            actionMsg.text = message;
-//            errorMsgTrans.gameObject.SetActive(false);
-//        }
-//        costTrans.localPosition = isError ? costPos_2 : costPos_1;
-//    }
-//
-//	public void hideDescription () {
-//        item = null;
-//        buff = null;
-//		gameObject.SetActive(false);
-//		onScreen = false;
-//	}
-
-//    public void setShopDescriptor (bool shopDescriptor) {
-//        this.shopDescriptor = shopDescriptor;
-//    }
 }

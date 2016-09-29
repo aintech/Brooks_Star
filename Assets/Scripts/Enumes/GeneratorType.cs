@@ -11,10 +11,10 @@ public enum GeneratorType {
 public static class GeneratorDescriptor {
 	public static string getName (this GeneratorType type) {
 		switch(type) {
-		case GeneratorType.Atomic: return "Атомарный\nгенератор";
-		case GeneratorType.Plasma: return "Плазменный\nгенератор";
-		case GeneratorType.Multyphase: return "Мультифазный\nгенератор";
-		case GeneratorType.Tunnel: return "Тунельный\nгенератор";
+		case GeneratorType.Atomic: return "Атомарный генератор";
+		case GeneratorType.Plasma: return "Плазменный генератор";
+		case GeneratorType.Multyphase: return "Мультифазный генератор";
+		case GeneratorType.Tunnel: return "Тунельный генератор";
 		default: return "Неизвестный тип генератора";
 		}
 	}

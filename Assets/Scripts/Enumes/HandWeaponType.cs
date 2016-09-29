@@ -8,10 +8,10 @@ public enum HandWeaponType {
 public static class HandWeaponDescriptor {
 	public static string getName (this HandWeaponType type) {
 		switch (type) {
-			case HandWeaponType.GAUSSE: return "Ружьё\nГаусса";
+			case HandWeaponType.GAUSSE: return "Ружьё Гаусса";
 			case HandWeaponType.GUN: return "Пистолет";
 			case HandWeaponType.MINIGUN: return "Миниган";
-			case HandWeaponType.RAILGUN: return "Рельсовое\nружьё";
+			case HandWeaponType.RAILGUN: return "Рельсовое ружьё";
 			case HandWeaponType.REVOLVER: return "Револьвер";
 			default: Debug.Log("Unknown hand weapon type: " + type); return "";
 		}

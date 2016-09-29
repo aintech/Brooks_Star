@@ -30,7 +30,7 @@ public static class ItemFactory {
 	}
 
 	private static float qualityMultiplier (ItemQuality quality) {
-		return quality == ItemQuality.UNIQUE? 3: quality == ItemQuality.RARE? 2.5f: quality == ItemQuality.SUPERIOR? 2: quality == ItemQuality.GOOD? 1.5f: 1;
+		return quality == ItemQuality.UNIQUE? 2f: quality == ItemQuality.RARE? 1.7f: quality == ItemQuality.SUPERIOR? 1.4f: quality == ItemQuality.GOOD? 1.2f: 1;
 	}
 
 	private static int calculateCost (ItemData data) {
@@ -45,10 +45,12 @@ public static class ItemFactory {
 			case ItemType.REPAIR_DROID: cost = Mathf.RoundToInt(data.level * ((RepairDroidData)data).type.getCost()); break;
 			case ItemType.HARVESTER: cost = Mathf.RoundToInt(data.level * ((HarvesterData)data).type.getCost()); break;
 			case ItemType.HAND_WEAPON: cost = Mathf.RoundToInt(data.level * ((HandWeaponData)data).type.getCost()); break;
-			case ItemType.BODY_ARMOR: cost = Mathf.RoundToInt(data.level * ((BodyArmorData)data).type.getCost()); break;
+			case ItemType.BODY_ARMOR:
+				BodyArmorData bad = (BodyArmorData)data;
+				return Mathf.RoundToInt(bad.type.getCost() + (bad.armorClass * 10));
 			default: Debug.Log("Unknown type: " + data.itemType); break;
 		}
-		return Mathf.RoundToInt (cost * qualityMultiplier (data.quality));//(data.quality == ItemQuality.UNIQUE? 2.5f: data.quality == ItemQuality.SUPERIOR? 1.5f: 1));
+		return Mathf.RoundToInt (cost * qualityMultiplier (data.quality));
 	}
 
 	private static int calculateEnergy (ItemData data) {

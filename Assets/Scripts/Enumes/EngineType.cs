@@ -12,11 +12,11 @@ public enum EngineType {
 public static class EngineDescriptor {
 	public static string getName (this EngineType type) {
 		switch(type) {
-		case EngineType.Force: return "Силовой\nдвигатель";
-		case EngineType.Gradual: return "Поступательный\nдвигатель";
-		case EngineType.Proton: return "Протонный\nдвигатель";
-		case EngineType.Allur: return "Аллюровый\nдвигатель";
-		case EngineType.Quazar: return "Квазарный\nдвигатель";
+		case EngineType.Force: return "Силовой двигатель";
+		case EngineType.Gradual: return "Поступательный двигатель";
+		case EngineType.Proton: return "Протонный двигатель";
+		case EngineType.Allur: return "Аллюровый двигатель";
+		case EngineType.Quazar: return "Квазарный двигатель";
 		default: return "Неизвестный тип двигателя";
 		}
 	}
