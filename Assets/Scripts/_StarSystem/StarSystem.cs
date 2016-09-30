@@ -63,6 +63,8 @@ public class StarSystem : MonoBehaviour {
 
         loadStarSystem();
 
+		statusScreen.getInventory().fillWithRandomItems(50, null);
+
 		gamePaused = false;
 	}
 

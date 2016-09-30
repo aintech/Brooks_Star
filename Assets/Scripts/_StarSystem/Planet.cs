@@ -7,13 +7,13 @@ public class Planet : MonoBehaviour {
 
     private SpriteRenderer surfaceRender;
 
-    private Vector3 systemCenter = Vector3.zero, rotateVector = Vector3.back;
+	private Vector3 systemCenter = Vector3.zero, rotateVector = Vector3.back, shadowRot = Vector3.zero;
 
     private Quaternion noRotation = new Quaternion();
 
     private float orbitingSpeed, contactDistance = 3, toShipDistance;
 
-    private Transform trans, ship;
+    private Transform trans, ship, shadow;
 
     private bool shipIsNear;
 
@@ -21,7 +21,8 @@ public class Planet : MonoBehaviour {
         this.planetType = planetType;
         this.ship = ship;
         trans = transform;
-        surfaceRender = transform.Find("Surface").GetComponent<SpriteRenderer>();
+		shadow = trans.Find("Shadow");
+		surfaceRender = transform.Find("Surface").GetComponent<SpriteRenderer>();
         surfaceRender.sprite = Imager.getPlanet(planetType);
         float angle = Random.Range(0, 359);
         transform.localPosition = new Vector2(planetType.getDistanceToStar() * Mathf.Sin(angle), planetType.getDistanceToStar() * Mathf.Cos(angle));
@@ -38,7 +39,9 @@ public class Planet : MonoBehaviour {
 
     private void orbitingStar () {
         trans.RotateAround(systemCenter, rotateVector, orbitingSpeed * Time.deltaTime);
-        trans.rotation = noRotation;
+		trans.rotation = noRotation;
+		shadowRot.z = Mathf.Atan2(transform.position.y, transform.position.x) * 180f / Mathf.PI;
+		shadow.eulerAngles = shadowRot;
     }
 
     private void checkShipIsCloseEnought () {

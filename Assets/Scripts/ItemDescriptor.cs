@@ -26,7 +26,7 @@ public class ItemDescriptor : MonoBehaviour {
 
 	private MeshRenderer qualityRender, nameRender, value1Render, value2Render,value3Render, value4Render, value5Render;
 
-	private Vector2 pos = Vector2.zero;
+	private Vector3 pos = Vector3.zero, spaceOffset = Vector3.zero;
 
 	private Color32 goodColor = new Color32(176, 195, 217, 255),
 					superiorColor = new Color32(94, 152, 217, 255),
@@ -104,6 +104,10 @@ public class ItemDescriptor : MonoBehaviour {
 		return this;
 	}
 
+	public void setSpaceOffset (Vector3 spaceOffset) {
+		this.spaceOffset = spaceOffset;
+	}
+
 	public void initPlayerInventory (Inventory playerInventory) {
 		this.playerInventory = playerInventory;
 	}
@@ -160,9 +164,8 @@ public class ItemDescriptor : MonoBehaviour {
 				}
 			}
 			pos = Utils.mousePos;
-			if (pos.y < minY) { pos.y = minY; }
-			if (pos.x > maxX) { pos.x = maxX; }
-			//HERE: неправльно работает в космосе
+			if (pos.y < minY + spaceOffset.y) { pos.y = minY + spaceOffset.y; }
+			if (pos.x > maxX + spaceOffset.x) { pos.x = maxX + spaceOffset.x; }
 			trans.localPosition = pos;
 		} else {
 			if (Utils.hit != null) {
@@ -189,6 +192,8 @@ public class ItemDescriptor : MonoBehaviour {
 		value1.text = perk.perkType.getDescription() + " <color=lime>+" + (perk.perkType.getValuePerLevel() * Player.getPerkLevel(perk.perkType)) + "%</color>";
 		scale.x = value1.text.Length - 20.5f;
 		bg1.localScale = scale;
+
+		maxX = screenWidth - value1Render.bounds.size.x - .5f;
 
 		onScreen = true;
 		Update();
@@ -230,7 +235,7 @@ public class ItemDescriptor : MonoBehaviour {
 	private float setCost(int index, int cost) {
 		string text = (inventoryType == Type.MARKET_BUY? "Купить за": inventoryType == Type.MARKET_SELL? "Продать за": "Стоимость:")  + " <color=yellow>" + cost + "$</color>";
 		scale.x = text.Length - 22.5f;
-		minY = -4.7f + (.4f * index);
+		minY = - 4.7f + (.4f * index);// + transform.localPosition.y;
 		switch (index) {
 			case 1: value1.text = text; bg1.localScale = scale; return value1Render.bounds.size.x;
 			case 2: value2.text = text; bg2.localScale = scale; return value2Render.bounds.size.x;

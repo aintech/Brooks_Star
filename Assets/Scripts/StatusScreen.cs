@@ -86,6 +86,8 @@ public class StatusScreen : InventoryContainedScreen {
 				planet.setShipIsNear(false);
 			}
 			StarSystem.setGamePause(true);
+			itemDescriptor.setSpaceOffset(transform.localPosition);
+//			itemDescriptor.transform.localPosition = transform.localPosition;
 		}
 
 		if (shipData.repairCost > 0) {
