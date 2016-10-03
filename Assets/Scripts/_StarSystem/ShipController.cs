@@ -18,7 +18,12 @@ public class ShipController : MonoBehaviour {
 	private bool sPressed;
 	private bool dPressed;
 
+	private Transform trans;
+
+	private Vector3 pos = Vector3.zero, rotateAxis = Vector3.forward;
+
 	public void initController (PlayerShip ship) {
+		trans = transform;
 		Engine engine = ship.getEngine();
 		mainAcceleration = engine.getMainAcceleration();
 		maxMainPower = engine.getMaxMainPower();
@@ -26,11 +31,13 @@ public class ShipController : MonoBehaviour {
 		rotationAcceleration = engine.getRotationAcceleration();
 		maxRotationPower = engine.getMaxRotationPower();
 		maxRotationPowerNeg = maxRotationPower * -1;
+
+		pos.Set(trans.position.x, trans.position.y, StarField.zOffset);
+		trans.position = pos;
 	}
 
 	void Update () {
 		if (StarSystem.gamePaused) { return; }
-
 		checkInput ();
 	}
 	
@@ -72,7 +79,8 @@ public class ShipController : MonoBehaviour {
 			float zValue = transform.rotation.eulerAngles.z + 90;
 			float velX = mainPower * Mathf.Cos(Mathf.Deg2Rad * zValue);
 			float velY = mainPower * Mathf.Sin(Mathf.Deg2Rad * zValue);
-			transform.position = new Vector3(transform.position.x + velX, transform.position.y + velY, transform.position.z);
+			pos.Set(trans.position.x + velX, trans.position.y + velY, StarField.zOffset);
+			trans.position = pos;
 		}
 	}
 
@@ -95,6 +103,6 @@ public class ShipController : MonoBehaviour {
 
 			if (rotationPower < rotationAcceleration && rotationPower > (rotationAcceleration * -1)) rotationPower = 0.0f;
 		}
-		if (rotationPower != 0.0) transform.Rotate(new Vector3(0, 0, 1), rotationPower);
+		if (rotationPower != 0.0) transform.Rotate(rotateAxis, rotationPower);
 	}
 }

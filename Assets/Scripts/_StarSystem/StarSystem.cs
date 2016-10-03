@@ -11,7 +11,7 @@ public class StarSystem : MonoBehaviour {
     
 	private static StatusScreen statusScreen;
 
-	private SpriteRenderer backgroundGalaxy, star;
+	private SpriteRenderer star;
 
 	private Transform mainCamera;
 
@@ -23,6 +23,8 @@ public class StarSystem : MonoBehaviour {
 
 	private ShieldsPool shieldsPool;
 
+	private StarField starField;
+
 	//Выведеное опытным путем расстояние от центра до края сектора
 	//при условии что разрешение картинки сектора 4096х4096, pixelsToUnit = 50, sectorMoveSpeed = 0.1
 //	private float sectorHalfSide = 409.1f;
@@ -31,7 +33,7 @@ public class StarSystem : MonoBehaviour {
 //	private float sectorImageHeight = 81.9f;
 
 	void Awake () {
-		if (backgroundGalaxy == null) { init(); }
+		if (starField == null) { init(); }
 	}
 
 	private void init () {
@@ -40,8 +42,7 @@ public class StarSystem : MonoBehaviour {
 		Imager.initialize();
 		Player.init();
 
-        backgroundGalaxy = transform.Find("BG").GetComponent<SpriteRenderer>();
-		backgroundGalaxy.gameObject.SetActive(true);
+		starField = GameObject.Find("StarField").GetComponent<StarField>().init();
         star = transform.Find("Star").GetComponent<SpriteRenderer>();
         star.gameObject.SetActive(true);
         
@@ -74,11 +75,12 @@ public class StarSystem : MonoBehaviour {
         foreach (PlanetType type in types) {
             planets.Add(Instantiate<Transform>(planetPrefab).GetComponent<Planet>().init(type, playerShip.transform));
         }
-        backgroundGalaxy.sprite = Imager.getStarSystem(Vars.starSystemType);
+		starField.initStarField();
         star.sprite = Imager.getStar(Vars.starSystemType);
 		foreach (Planet planet in planets) {
 			if (planet.getPlanetType() == Vars.planetType) {
-				playerShip.transform.position = planet.transform.position;
+				Vector3 shipPos = new Vector3(planet.transform.position.x, planet.transform.position.y, StarField.zOffset);
+				playerShip.transform.position =  shipPos;
 				cameraController.setDirectlyToShip();
 				break;
 			}
@@ -93,7 +95,7 @@ public class StarSystem : MonoBehaviour {
 		playerShip = Instantiate<Transform> (playerShipPrefab).GetComponent<PlayerShip> ();
 		playerShip.initPlayerShip(statusScreen.getShipData());
 		cameraController = mainCamera.GetComponent<CameraController>();
-		cameraController.init(playerShip.transform);
+		cameraController.init(playerShip.transform, starField);
 	}
 
 	private void spawnAnEnemy () {

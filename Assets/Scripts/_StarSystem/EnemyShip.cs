@@ -132,7 +132,7 @@ public class EnemyShip : Ship {
 		weapon.transform.SetParent(transform);
 		
 		Vector3 posit = getWeaponPosition(weaponIndex);
-		weapon.transform.position = new Vector3(transform.position.x + posit.x, transform.position.y + posit.y);
+		weapon.transform.position = new Vector3(transform.position.x + posit.x, transform.position.y + posit.y, posit.z);
 
 		weapon.getRender().sortingOrder = sortingOrder + 2;
 

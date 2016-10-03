@@ -14,7 +14,7 @@ public static class StarSystemDescriptor {
 
     public static PlanetType[] getPlanetTypes (this StarSystemType type) {
         switch (type) {
-            case StarSystemType.ALURIA:  return new PlanetType[] { PlanetType.CORAS, PlanetType.PALETTE };
+			case StarSystemType.ALURIA:  return new PlanetType[] { PlanetType.CORAS, PlanetType.PALETTE };
             default: Debug.Log("Unknown system type: " + type); return new PlanetType[] { };
         }
     }

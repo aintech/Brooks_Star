@@ -191,83 +191,83 @@ public abstract class Ship : MonoBehaviour {
 
 	private static void initializeWeaponSlotsMap () {
 		weaponSlotsMap = new Dictionary<HullType, List<Vector3>>();
-		
+		int zOffset = StarField.zOffset;
 		List<Vector3> list = new List<Vector3>();
-		list.Add(new Vector3(-0.54f, -0.43f, 0));
-		list.Add(new Vector3(0.54f, -0.43f, 0));
+		list.Add(new Vector3(-0.54f, -0.43f, zOffset));
+		list.Add(new Vector3(0.54f, -0.43f, zOffset));
 		weaponSlotsMap.Add(HullType.Adventurer, list);
 		
 		list = new List<Vector3>();
-		list.Add(new Vector3(0, -0.48f, 0));
+		list.Add(new Vector3(0, -0.48f, zOffset));
 		weaponSlotsMap.Add(HullType.Argo, list);
 		
 		list = new List<Vector3>();
-		list.Add(new Vector3(-0.785f, 0.54f, 0));
-		list.Add(new Vector3(0.785f, 0.54f, 0));
-		list.Add(new Vector3(0, -0.11f, 0));
-		list.Add(new Vector3(-0.69f, -0.89f, 0));
-		list.Add(new Vector3(0.69f, -0.89f, 0));
+		list.Add(new Vector3(-0.785f, 0.54f, zOffset));
+		list.Add(new Vector3(0.785f, 0.54f, zOffset));
+		list.Add(new Vector3(0, -0.11f, zOffset));
+		list.Add(new Vector3(-0.69f, -0.89f, zOffset));
+		list.Add(new Vector3(0.69f, -0.89f, zOffset));
 		weaponSlotsMap.Add(HullType.Armageddon, list);
 		
 		list = new List<Vector3>();
-		list.Add(new Vector3(-0.61f, 0.225f, 0));
-		list.Add(new Vector3(0.61f, 0.225f, 0));
-		list.Add(new Vector3(0, -0.69f, 0));
+		list.Add(new Vector3(-0.61f, 0.225f, zOffset));
+		list.Add(new Vector3(0.61f, 0.225f, zOffset));
+		list.Add(new Vector3(0, -0.69f, zOffset));
 		weaponSlotsMap.Add(HullType.Asterix, list);
 		
 		list = new List<Vector3>();
-		list.Add(new Vector3(-0.57f, -0.37f, 0));
-		list.Add(new Vector3(0.57f, -0.37f, 0));
+		list.Add(new Vector3(-0.57f, -0.37f, zOffset));
+		list.Add(new Vector3(0.57f, -0.37f, zOffset));
 		weaponSlotsMap.Add(HullType.Buffalo, list);
 		
 		list = new List<Vector3>();
-		list.Add(new Vector3(-0.59f, -0.3f, 0));
-		list.Add(new Vector3(0.59f, -0.3f, 0));
+		list.Add(new Vector3(-0.59f, -0.3f, zOffset));
+		list.Add(new Vector3(0.59f, -0.3f, zOffset));
 		weaponSlotsMap.Add(HullType.Corvette, list);
 		
 		list = new List<Vector3>();
-		list.Add(new Vector3(0, -0.39f, 0));
+		list.Add(new Vector3(0, -0.39f, zOffset));
 		weaponSlotsMap.Add(HullType.Cricket, list);
 		
 		list = new List<Vector3>();
-		list.Add(new Vector3(-0.775f, 0.24f, 0));
-		list.Add(new Vector3(0.775f, 0.24f, 0));
-		list.Add(new Vector3(-0.765f, -0.9f, 0));
-		list.Add(new Vector3(0.765f, -0.9f, 0));
+		list.Add(new Vector3(-0.775f, 0.24f, zOffset));
+		list.Add(new Vector3(0.775f, 0.24f, zOffset));
+		list.Add(new Vector3(-0.765f, -0.9f, zOffset));
+		list.Add(new Vector3(0.765f, -0.9f, zOffset));
 		weaponSlotsMap.Add(HullType.Dreadnaut, list);
 		
 		list = new List<Vector3>();
-		list.Add(new Vector3(0, -0.545f, 0));
+		list.Add(new Vector3(0, -0.545f, zOffset));
 		weaponSlotsMap.Add(HullType.Falcon, list);
 		
 		list = new List<Vector3>();
-		list.Add(new Vector3(-0.575f, -0.425f, 0));
-		list.Add(new Vector3(0.575f, -0.425f, 0));
+		list.Add(new Vector3(-0.575f, -0.425f, zOffset));
+		list.Add(new Vector3(0.575f, -0.425f, zOffset));
 		weaponSlotsMap.Add(HullType.Legionnaire, list);
 		
 		list = new List<Vector3>();
-		list.Add(new Vector3(-0.64f, 0.26f, 0));
-		list.Add(new Vector3(0.64f, 0.26f, 0));
-		list.Add(new Vector3(0, -0.64f, 0));
+		list.Add(new Vector3(-0.64f, 0.26f, zOffset));
+		list.Add(new Vector3(0.64f, 0.26f, zOffset));
+		list.Add(new Vector3(0, -0.64f, zOffset));
 		weaponSlotsMap.Add(HullType.Prime, list);
 		
 		list = new List<Vector3>();
-		list.Add(new Vector3(-0.575f, 0.14f, 0));
-		list.Add(new Vector3(0.575f, 0.14f, 0));
-		list.Add(new Vector3(0, -0.8f, 0));
+		list.Add(new Vector3(-0.575f, 0.14f, zOffset));
+		list.Add(new Vector3(0.575f, 0.14f, zOffset));
+		list.Add(new Vector3(0, -0.8f, zOffset));
 		weaponSlotsMap.Add(HullType.StarWalker, list);
 		
 		list = new List<Vector3>();
-		list.Add(new Vector3(-0.705f, 0.24f, 0));
-		list.Add(new Vector3(0.705f, 0.24f, 0));
-		list.Add(new Vector3(-0.62f, -0.92f, 0));
-		list.Add(new Vector3(0.62f, -0.92f, 0));
+		list.Add(new Vector3(-0.705f, 0.24f, zOffset));
+		list.Add(new Vector3(0.705f, 0.24f, zOffset));
+		list.Add(new Vector3(-0.62f, -0.92f, zOffset));
+		list.Add(new Vector3(0.62f, -0.92f, zOffset));
 		weaponSlotsMap.Add(HullType.Titan, list);
 		
 		list = new List<Vector3>();
-		list.Add(new Vector3(-0.575f, 0.165f, 0));
-		list.Add(new Vector3(0.575f, 0.165f, 0));
-		list.Add(new Vector3(0, -0.735f, 0));
+		list.Add(new Vector3(-0.575f, 0.165f, zOffset));
+		list.Add(new Vector3(0.575f, 0.165f, zOffset));
+		list.Add(new Vector3(0, -0.735f, zOffset));
 		weaponSlotsMap.Add(HullType.Warship, list);
 	}
 

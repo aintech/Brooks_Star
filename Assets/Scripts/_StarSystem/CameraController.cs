@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CameraController : MonoBehaviour {
 
-	private Transform spaceship;
+	private Transform spaceship, trans;
 
 	private float followingSpeed = 0.075f;
 
@@ -11,9 +11,7 @@ public class CameraController : MonoBehaviour {
 
 	private float cameraZOffset = -10;
 
-	private Vector2 cameraPosition;
-
-	private Vector2 shipPosition;
+	private Vector2 cameraPosition, shipPosition;
 
 	private float cameraToShipDistance;
 
@@ -25,15 +23,22 @@ public class CameraController : MonoBehaviour {
 
 	private int cameraSizeMin = 2;
 
-	public void init (Transform spaceship) {
+	private StarField starField;
+
+	private Vector3 pos = Vector3.zero;
+
+	public void init (Transform spaceship, StarField starField) {
 		this.spaceship = spaceship;
+		this.starField = starField;
 		this.cameraStandartSize = (int) Camera.main.orthographicSize;
+		trans = transform;
 		cameraSizeMax = cameraStandartSize + 4;
 		setDirectlyToShip();
 	}
 
 	public void setDirectlyToShip () {
 		transform.position = new Vector3(spaceship.position.x, spaceship.position.y, transform.position.z);
+		starField.adjustStarField(trans.position);
 	}
 
 	void Update () {
@@ -49,7 +54,7 @@ public class CameraController : MonoBehaviour {
 	void FixedUpdate () {
 		if (StarSystem.gamePaused) { return; }
 
-		cameraPosition.Set(transform.position.x, transform.position.y);
+		cameraPosition.Set(trans.position.x, trans.position.y);
 		shipPosition.Set(spaceship.position.x, spaceship.position.y);
 		cameraToShipDistance = Vector2.Distance(cameraPosition, shipPosition);
 		if (cameraToShipDistance > cameraRestDistance) {
@@ -60,7 +65,9 @@ public class CameraController : MonoBehaviour {
 	private void moveCamera () {
 		float cameraFollow = Camera.main.orthographicSize <= 3? 0.15f: followingSpeed;
 		moveVector = Vector2.Lerp(cameraPosition, shipPosition, cameraFollow);
-		transform.position = new Vector3(moveVector.x, moveVector.y, cameraZOffset);
+		pos.Set(moveVector.x, moveVector.y, cameraZOffset);
+		trans.position = pos;
+		starField.adjustStarField(pos);
 	}
 
 	public Vector2 getCameraPosition () {

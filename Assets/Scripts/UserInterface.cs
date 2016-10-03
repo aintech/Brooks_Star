@@ -35,7 +35,7 @@ public class UserInterface : MonoBehaviour {
 				 shieldBarRect = new Rect(13, Screen.height - 65, 10, 50),
 				 healthBarRect = new Rect(13, Screen.height - 45, 10, 50),
 				 barsHolderRect = new Rect(0, Screen.height - 128, 256, 128),
-				 planetDescriptRect = new Rect(Screen.width - 220, 80, 210, 290), 
+				 planetDescriptRect = new Rect(20, 20, 210, 290),//planetDescriptRect = new Rect(Screen.width - 220, 80, 210, 290), 
 				 messengerRect = new Rect(10, Screen.height - 50, Screen.width, 50),
 				 planetSurfaceRect, planetNameRect, planetLandRect;
 
@@ -55,6 +55,7 @@ public class UserInterface : MonoBehaviour {
 		textColor = messengerStyle.normal.textColor;
 
 		GetComponent<Messenger>().init(this);
+		GetComponent<Minimap>().init(starSystem);
 
 		setEnabled(true);
 
