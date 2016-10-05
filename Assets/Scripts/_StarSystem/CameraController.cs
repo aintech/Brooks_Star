@@ -19,9 +19,9 @@ public class CameraController : MonoBehaviour {
 
 	private int cameraStandartSize;
 
-	private int cameraSizeMax;
-
-	private int cameraSizeMin = 2;
+	private int cameraSizeDefault,
+				cameraSizeMax,
+				cameraSizeMin = 2;
 
 	private StarField starField;
 
@@ -33,6 +33,7 @@ public class CameraController : MonoBehaviour {
 		this.cameraStandartSize = (int) Camera.main.orthographicSize;
 		trans = transform;
 		cameraSizeMax = cameraStandartSize + 4;
+		cameraSizeDefault = (int)Camera.main.orthographicSize;
 		setDirectlyToShip();
 	}
 
@@ -44,11 +45,15 @@ public class CameraController : MonoBehaviour {
 	void Update () {
 		if(StarSystem.gamePaused) { return; }
 
-		if (Input.GetAxis("Mouse ScrollWheel") < 0) {
-			Camera.main.orthographicSize = Mathf.Min(Camera.main.orthographicSize+1, cameraSizeMax);
-		} else if (Input.GetAxis("Mouse ScrollWheel") > 0) {
-			Camera.main.orthographicSize = Mathf.Max(Camera.main.orthographicSize-1, cameraSizeMin);
-		}
+//		if (Input.GetAxis("Mouse ScrollWheel") < 0) {
+//			Camera.main.orthographicSize = Mathf.Min(Camera.main.orthographicSize+1, cameraSizeMax);
+//		} else if (Input.GetAxis("Mouse ScrollWheel") > 0) {
+//			Camera.main.orthographicSize = Mathf.Max(Camera.main.orthographicSize-1, cameraSizeMin);
+//		}
+	}
+
+	public void setCameraSizeToDefault () {
+		Camera.main.orthographicSize = cameraSizeDefault;
 	}
 
 	void FixedUpdate () {

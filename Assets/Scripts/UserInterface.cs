@@ -55,7 +55,7 @@ public class UserInterface : MonoBehaviour {
 		textColor = messengerStyle.normal.textColor;
 
 		GetComponent<Messenger>().init(this);
-		GetComponent<Minimap>().init(starSystem);
+		GetComponent<Minimap>().init(starSystem, ship.transform);
 
 		setEnabled(true);
 

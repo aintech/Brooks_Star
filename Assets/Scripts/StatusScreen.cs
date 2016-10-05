@@ -22,6 +22,8 @@ public class StatusScreen : InventoryContainedScreen {
 
 	private ItemDescriptor itemDescriptor;
 
+	public CameraController cameraController;
+
 	public StatusScreen init (StarSystem starSystem, ItemDescriptor itemDescriptor) {
 		this.starSystem = starSystem;
 		this.itemDescriptor = itemDescriptor;
@@ -81,6 +83,7 @@ public class StatusScreen : InventoryContainedScreen {
 			PlanetSurface.topHideable.setVisible(false);
 		} else {
 			transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, transform.position.z);
+			cameraController.setCameraSizeToDefault();
 			inventory.transform.parent.position = transform.position;
 			foreach (Planet planet in starSystem.getPlanets()) {
 				planet.setShipIsNear(false);

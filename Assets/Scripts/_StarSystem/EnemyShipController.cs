@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ShipController : MonoBehaviour {
+public class EnemyShipController : ShipController {
 	
 }

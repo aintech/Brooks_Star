@@ -17,8 +17,6 @@ public class Planet : MonoBehaviour {
 
     private bool shipIsNear;
 
-	public float rotationAngle { get; private set; }
-
     public Planet init (PlanetType planetType, Transform ship) {
         this.planetType = planetType;
         this.ship = ship;
@@ -29,7 +27,7 @@ public class Planet : MonoBehaviour {
         surfaceRender.sprite = Imager.getPlanet(planetType);
         float angle = Random.Range(0, 359);
         transform.localPosition = new Vector2(planetType.getDistanceToStar() * Mathf.Sin(angle), planetType.getDistanceToStar() * Mathf.Cos(angle));
-        orbitingSpeed = 50f / planetType.getDistanceToStar();
+        orbitingSpeed = 2f / planetType.getDistanceToStar();
         return this;
     }
 
@@ -43,7 +41,7 @@ public class Planet : MonoBehaviour {
     private void orbitingStar () {
         trans.RotateAround(systemCenter, rotateVector, orbitingSpeed * Time.deltaTime);
 		trans.rotation = noRotation;
-		shadowRot.z = rotationAngle = Mathf.Atan2(transform.position.y, transform.position.x) * 180f / Mathf.PI;
+		shadowRot.z = Mathf.Atan2(transform.position.y, transform.position.x) * 180f / Mathf.PI;
 		shadow.eulerAngles = shadowRot;
 //		atmosphere.localPosition = new Vector3(atmosphere.localPosition.x - .001f, atmosphere.localPosition.y, atmosphere.localPosition.z);
     }

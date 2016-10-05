@@ -6,13 +6,13 @@ public class PlayerShip : Ship {
 
 	private ShipData shipData;
 
-	private ShipController controller;
+	private PlayerShipController controller;
 
 	public void initPlayerShip (ShipData shipData) {
 		this.shipData = shipData;
 		this.name = "Player ship";
 		initInner();
-		controller = transform.GetComponent<ShipController>();
+		controller = transform.GetComponent<PlayerShipController>();
 		setHullType (shipData.hullType);
 		health = shipData.getCurrentHealth ();
 		fullHealth = shipData.hullType.getMaxHealth();
@@ -93,7 +93,7 @@ public class PlayerShip : Ship {
 		return engine;
 	}
 
-	public ShipController getController () {
+	public PlayerShipController getController () {
 		return controller;
 	}
 

@@ -42,8 +42,8 @@ public static class PlanetDescriptor {
 
     public static float getDistanceToStar (this PlanetType type) {
         switch (type) {
-            case PlanetType.CORAS: return 8;
-            case PlanetType.PALETTE: return 20;
+            case PlanetType.CORAS: return 15;
+            case PlanetType.PALETTE: return 45;
             default: Debug.Log("Unknown planet type: " + type); return 0;
         }
     }

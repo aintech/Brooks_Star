@@ -58,6 +58,8 @@ public class StarSystem : MonoBehaviour {
 		
 		initPlayerShip ();
 
+		statusScreen.cameraController = cameraController;
+
 		Vars.userInterface = GameObject.FindGameObjectWithTag("UserInterface").GetComponent<UserInterface>().init(statusScreen, this, playerShip);
 
 		shieldsPool = GameObject.Find("ShieldsPool").GetComponent<ShieldsPool>();
@@ -88,7 +90,7 @@ public class StarSystem : MonoBehaviour {
 
 		statusScreen.getShipData().setShieldToMax();
 
-//		spawnAnEnemy();
+		spawnAnEnemy();
     }
 
 	private void initPlayerShip () {
