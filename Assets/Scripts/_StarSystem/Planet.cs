@@ -13,7 +13,7 @@ public class Planet : MonoBehaviour {
 
     private float orbitingSpeed, contactDistance = 3, toShipDistance;
 
-    private Transform trans, ship, shadow, atmosphere;
+	private Transform trans, ship, shadow;//, atmosphere;
 
     private bool shipIsNear;
 
@@ -23,7 +23,7 @@ public class Planet : MonoBehaviour {
         trans = transform;
 		shadow = trans.Find("Shadow");
 		surfaceRender = transform.Find("Surface").GetComponent<SpriteRenderer>();
-		atmosphere = trans.Find("Atmosphere");
+//		atmosphere = trans.Find("Atmosphere");
         surfaceRender.sprite = Imager.getPlanet(planetType);
         float angle = Random.Range(0, 359);
         transform.localPosition = new Vector2(planetType.getDistanceToStar() * Mathf.Sin(angle), planetType.getDistanceToStar() * Mathf.Cos(angle));
@@ -57,8 +57,8 @@ public class Planet : MonoBehaviour {
 
 	public void setShipIsNear (bool shipIsNear) {
         this.shipIsNear = shipIsNear;
-        if (shipIsNear) { Vars.userInterface.showPlanetInfo(planetType); }
-        else { Vars.userInterface.hidePlanetInfo(); }
+		if (shipIsNear) { Vars.userInterface.planetDescriptor.showPlanetInfo(planetType); }
+		else { Vars.userInterface.planetDescriptor.hidePlanetInfo(); }
     }
 
 	public PlanetType getPlanetType () {

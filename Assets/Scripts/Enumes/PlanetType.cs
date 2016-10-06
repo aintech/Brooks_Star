@@ -30,6 +30,13 @@ public static class PlanetDescriptor {
 		return false;
 	}
 
+	public static bool isPopulated (this PlanetType type) {
+		switch (type) {
+			case PlanetType.PALETTE: return true;
+		}
+		return false;
+	}
+
 	public static string getDescription (this PlanetType type) {
 		switch (type) {
 			case PlanetType.CORAS: return "Планета-завод, основанная...";
@@ -54,6 +61,6 @@ public static class PlanetDescriptor {
 	}
 
 	private static void initEnemiesOnPlanets () {
-		enemyTypesOnPlanet.Add(PlanetType.CORAS, new EnemyType[]{EnemyType.DRUID, EnemyType.BEE, EnemyType.GUNNER});
+		enemyTypesOnPlanet.Add(PlanetType.PALETTE, new EnemyType[]{EnemyType.DRUID, EnemyType.BEE, EnemyType.GUNNER});
 	}
 }

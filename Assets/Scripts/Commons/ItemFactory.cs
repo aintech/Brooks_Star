@@ -4,6 +4,8 @@ using System.Collections;
 
 public static class ItemFactory {
 
+	public static Transform itemPrefab;
+
 	public static ItemData createItemData (ItemType type) {
 		switch (type) {
 			case ItemType.WEAPON: return createWeaponData ();

@@ -379,11 +379,13 @@ public class StatusScreen : InventoryContainedScreen {
 
 	public void sendToVars () {
 		shipData.sendToVars ();
+		playerData.sendToVars();
 		inventory.sendToVars();
 	}
 
 	public void initFromVars () {
 		shipData.initializeFromVars();
+		playerData.initFromVars();
 		inventory.initFromVars();
 	}
 }

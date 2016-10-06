@@ -17,11 +17,9 @@ public class CameraController : MonoBehaviour {
 
 	private Vector2 moveVector;
 
-	private int cameraStandartSize;
-
-	private int cameraSizeDefault,
-				cameraSizeMax,
-				cameraSizeMin = 2;
+	private int cameraSizeDefault;
+//				cameraSizeMax,
+//				cameraSizeMin = 2;
 
 	private StarField starField;
 
@@ -30,9 +28,8 @@ public class CameraController : MonoBehaviour {
 	public void init (Transform spaceship, StarField starField) {
 		this.spaceship = spaceship;
 		this.starField = starField;
-		this.cameraStandartSize = (int) Camera.main.orthographicSize;
 		trans = transform;
-		cameraSizeMax = cameraStandartSize + 4;
+//		cameraSizeMax = cameraStandartSize + 4;
 		cameraSizeDefault = (int)Camera.main.orthographicSize;
 		setDirectlyToShip();
 	}

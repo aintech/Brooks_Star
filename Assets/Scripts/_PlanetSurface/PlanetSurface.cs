@@ -5,13 +5,15 @@ using System.Collections.Generic;
 
 public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 
+	public Transform itemPrefab;
+
 	public static bool newGame = true;
 
 	public static Hideable topHideable;
 
 	private Background background;
 
-	private Button exploreBtn, marketBtn, hangarBtn, industrialBtn, leaveBtn;
+	private Button marketBtn, hangarBtn, industrialBtn, leaveBtn;
 
 	private Button[] btns;
 
@@ -32,18 +34,18 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 	private StatusScreen statusScreen;
 
 	void Awake () {
+		ItemFactory.itemPrefab = itemPrefab;
 		Imager.initialize();
 		Player.init();
 
 		background = transform.Find("Background").GetComponent<Background>().init();
 
-		exploreBtn = transform.Find("Explore Button").GetComponent<Button>().init();
 		marketBtn = transform.Find("Market Button").GetComponent<Button>().init();
 		hangarBtn = transform.Find("Hangar Button").GetComponent<Button>().init();
 		industrialBtn = transform.Find("Industrial Button").GetComponent<Button>().init();
 		leaveBtn = transform.Find("Leave Button").GetComponent<Button>().init();
 
-		btns = new Button[]{exploreBtn, marketBtn, hangarBtn, industrialBtn, leaveBtn};
+		btns = new Button[]{marketBtn, hangarBtn, industrialBtn, leaveBtn};
 
 		PlanetSurface.topHideable = this;
 
@@ -87,12 +89,16 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 
 	public void landPlanet () {
 		initFromVars();
-		if (buyMarket.getItems().Count == 0) { buyMarket.fillWithRandomItems(); }
+		if (Vars.planetType.isColonized() && buyMarket.getItems().Count == 0) { buyMarket.fillWithRandomItems(); }
 		statusScreen.getShipData().setShieldToMax();
 		inventory.calculateFreeVolume();
 		Vars.userInterface.setEnabled(true);
 		background.setBackground();
-		setVisible(true);
+		if (Vars.planetType.isColonized()) {
+			setVisible(true);
+		} else if (Vars.planetType.isPopulated()) {
+			showScreen(ScreenType.EXPLORE);
+		}
 	}
 
 	public void leavePlanet () {
@@ -123,7 +129,6 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 		if (btn == marketBtn) { showScreen(ScreenType.MARKET); }
 		else if (btn == hangarBtn) { showScreen(ScreenType.HANGAR); }
 		else if (btn == industrialBtn) { showScreen(ScreenType.INDUSTRIAL); }
-		else if (btn == exploreBtn) { showScreen(ScreenType.EXPLORE); }
 		else if (btn == leaveBtn) { leavePlanet(); }
 		else { Debug.Log("Unknown button: " + btn.name); }
 	}
@@ -132,12 +137,12 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 
 	private void sendToVars () {
 		statusScreen.sendToVars();
-		buyMarket.sendToVars();
+		if (Vars.planetType.isColonized()) { buyMarket.sendToVars(); }
 	}
 	
 	private void initFromVars () {
 		statusScreen.initFromVars();
-		buyMarket.initFromVars();
+		if (Vars.planetType.isColonized()) { buyMarket.initFromVars(); }
 	}
 
 	public void setVisible (bool visible) {

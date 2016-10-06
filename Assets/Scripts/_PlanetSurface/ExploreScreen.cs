@@ -9,7 +9,7 @@ public class ExploreScreen : MonoBehaviour, ButtonHolder, Hideable {
 
 	private SpriteRenderer enemyImage;
 
-	private Button exploreBtn, fightBtn, nextBtn, backBtn, closeBtn;
+	private Button exploreBtn, fightBtn, nextBtn, backBtn, leaveBtn;
 
 	private StrokeText enemyName;
 
@@ -23,7 +23,7 @@ public class ExploreScreen : MonoBehaviour, ButtonHolder, Hideable {
 		nextBtn = transform.Find("Next Button").GetComponent<Button>().init();
 		backBtn = transform.Find("Back Button").GetComponent<Button>().init();
 		exploreBtn = transform.Find("Explore Button").GetComponent<Button>().init();
-		closeBtn = transform.Find("Close Button").GetComponent<Button>().init();
+		leaveBtn = transform.Find("Leave Button").GetComponent<Button>().init();
 
 		enemyName = transform.Find("Enemy Name").GetComponent<StrokeText>().init("default", 2);
 
@@ -43,9 +43,9 @@ public class ExploreScreen : MonoBehaviour, ButtonHolder, Hideable {
 		gameObject.SetActive(true);
 	}
 
-	private void closeScreen () {
+	private void leavePlanet () {
 		gameObject.SetActive(false);
-		planetSurface.setVisible(true);
+		planetSurface.leavePlanet();
 	}
 
 	private void startExplore () {
@@ -55,7 +55,7 @@ public class ExploreScreen : MonoBehaviour, ButtonHolder, Hideable {
 		nextBtn.gameObject.SetActive(true);
 		backBtn.gameObject.SetActive(true);
 		exploreBtn.gameObject.SetActive(false);
-		closeBtn.gameObject.SetActive(false);
+		leaveBtn.gameObject.SetActive(false);
 		findEnemy();
 	}
 
@@ -85,7 +85,7 @@ public class ExploreScreen : MonoBehaviour, ButtonHolder, Hideable {
 		nextBtn.gameObject.SetActive(false);
 		backBtn.gameObject.SetActive(false);
 		exploreBtn.gameObject.SetActive(true);
-		closeBtn.gameObject.SetActive(true);
+		leaveBtn.gameObject.SetActive(true);
 	}
 
 	public void fireClickButton (Button btn) {
@@ -93,7 +93,7 @@ public class ExploreScreen : MonoBehaviour, ButtonHolder, Hideable {
 		else if (btn == fightBtn) { startFight(); }
 		else if (btn == nextBtn) { findEnemy(); }
 		else if (btn == backBtn) { turnBack(); }
-		else if (btn == closeBtn) { closeScreen(); }
+		else if (btn == leaveBtn) { leavePlanet(); }
 		else { Debug.Log("Unknown button: " + btn.name); }
 	}
 
@@ -102,6 +102,6 @@ public class ExploreScreen : MonoBehaviour, ButtonHolder, Hideable {
 		fightBtn.setVisible(visible);
 		nextBtn.setVisible(visible);
 		backBtn.setVisible(visible);
-		closeBtn.setVisible(visible);
+		leaveBtn.setVisible(visible);
 	}
 }

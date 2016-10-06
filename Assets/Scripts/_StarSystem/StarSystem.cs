@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 public class StarSystem : MonoBehaviour {
 
+	public Transform itemPrefab;
+
 	public Transform planetPrefab, playerShipPrefab, enemyShipPrefab;
 
 	public static bool gamePaused {  get; private set;}
@@ -37,6 +39,7 @@ public class StarSystem : MonoBehaviour {
 	}
 
 	private void init () {
+		ItemFactory.itemPrefab = itemPrefab;
 		mainCamera = Camera.main.transform;
 
 		Imager.initialize();
@@ -65,8 +68,6 @@ public class StarSystem : MonoBehaviour {
 		shieldsPool = GameObject.Find("ShieldsPool").GetComponent<ShieldsPool>();
 
         loadStarSystem();
-
-		statusScreen.getInventory().fillWithRandomItems(50, null);
 
 		gamePaused = false;
 	}

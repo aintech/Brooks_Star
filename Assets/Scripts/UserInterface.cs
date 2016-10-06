@@ -5,25 +5,19 @@ public class UserInterface : MonoBehaviour {
 
 	public static bool showInterface = true;
 
-	public Texture shield, health, planetDescription, barsHolder;
+	public Texture shield, health, barsHolder;
 
-	private Texture planetSurface;
+	public StarSystemPlanetDescriptor planetDescriptor { get; private set;}
 
 	private float shieldWidth, maxWidth = 200;//, startX = Screen.width - 10
 
-	public GUIStyle statusBtnStyle, messengerStyle, planetNameStyle, planetLandStyle;
+	public GUIStyle statusBtnStyle, messengerStyle;
 
 	private StarSystem starSystem;
 
 	private StatusScreen statusScreen;
 
 	private PlayerShip ship;
-
-	private bool planetDescriptVisible;
-
-	private string planetName;
-
-	private PlanetType planetType;
 
 	private string messageText = null;
 
@@ -35,9 +29,7 @@ public class UserInterface : MonoBehaviour {
 				 shieldBarRect = new Rect(13, Screen.height - 65, 10, 50),
 				 healthBarRect = new Rect(13, Screen.height - 45, 10, 50),
 				 barsHolderRect = new Rect(0, Screen.height - 128, 256, 128),
-				 planetDescriptRect = new Rect(20, 20, 210, 290),//planetDescriptRect = new Rect(Screen.width - 220, 80, 210, 290), 
-				 messengerRect = new Rect(10, Screen.height - 50, Screen.width, 50),
-				 planetSurfaceRect, planetNameRect, planetLandRect;
+				 messengerRect = new Rect(10, Screen.height - 50, Screen.width, 50);
 
 	public UserInterface init (StatusScreen statusScreen, StarSystem starSystem, PlayerShip ship) {
 		this.statusScreen = statusScreen;
@@ -46,17 +38,16 @@ public class UserInterface : MonoBehaviour {
 
 		if (ship != null) { updateShip(); }
 
-		hidePlanetInfo();
-
-		planetSurfaceRect = new Rect(planetDescriptRect.x + 5, planetDescriptRect.y + 5, 200, 125);
-		planetNameRect = new Rect(planetDescriptRect.x + planetDescriptRect.width / 2, planetDescriptRect.y + planetDescriptRect.height / 2 + 10, 0, 0);
-		planetLandRect = new Rect(planetDescriptRect.x + 5, planetDescriptRect.y + planetDescriptRect.height - 40, 200, 35);
-
 		textColor = messengerStyle.normal.textColor;
 
 		GetComponent<Messenger>().init(this);
-		GetComponent<Minimap>().init(starSystem, ship.transform);
-
+		if (starSystem != null) {
+			GetComponent<Minimap>().init(starSystem, ship.transform);
+			planetDescriptor = GetComponent<StarSystemPlanetDescriptor>().init(starSystem);
+		} else {
+			GetComponent<Minimap>().enabled = false;
+			GetComponent<StarSystemPlanetDescriptor>().enabled = false;
+		}
 		setEnabled(true);
 
 		return this;
@@ -82,15 +73,6 @@ public class UserInterface : MonoBehaviour {
 				GUI.DrawTexture(healthBarRect, health);
 				GUI.DrawTexture(shieldBarRect, shield);
 				GUI.DrawTexture(barsHolderRect, barsHolder);
-
-				if (planetDescriptVisible) {
-					GUI.DrawTexture(planetDescriptRect, planetDescription);
-					GUI.DrawTexture(planetSurfaceRect, planetSurface);
-					GUI.Label(planetNameRect, planetName, planetNameStyle);
-					if (GUI.Button(planetLandRect, "", planetLandStyle)) {
-						starSystem.landOnPlanet(planetType);
-					}
-				}
 			}
 		}
 		if (messageText != null) {
@@ -109,17 +91,6 @@ public class UserInterface : MonoBehaviour {
 	public void setEnabled (bool enabled) {
 		gameObject.SetActive(enabled);
 	}
-
-	public void showPlanetInfo (PlanetType planetType) {
-		this.planetType = planetType;
-		planetDescriptVisible = true;
-		planetSurface = Imager.getPlanetSurface(planetType).texture;
-		planetName = planetType.getName();
-    }
-
-    public void hidePlanetInfo () {
-		planetDescriptVisible = false;
-    }
 
 	public void updateShip () {
 		shieldBarRect.width = maxWidth * ((float)ship.getShield() / ship.getFullShield());

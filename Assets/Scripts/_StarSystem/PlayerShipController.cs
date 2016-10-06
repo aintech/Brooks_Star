@@ -6,7 +6,7 @@ public class PlayerShipController : ShipController {
 	private float mainPower = 0.0f;
 	private float mainAcceleration;
 	private float maxMainPower;
-	private float maxBackwardPower;
+//	private float maxBackwardPower;
 	
 	private float rotationPower = 0.0f;
 	private float rotationAcceleration;
@@ -36,7 +36,7 @@ public class PlayerShipController : ShipController {
 		Engine engine = ship.getEngine();
 		mainAcceleration = engine.getMainAcceleration();
 		maxMainPower = engine.getMaxMainPower();
-		maxBackwardPower = engine.getMaxBackwardPower();
+//		maxBackwardPower = engine.getMaxBackwardPower();
 		rotationAcceleration = engine.getRotationAcceleration();
 		maxRotationPower = engine.getMaxRotationPower();
 		maxRotationPowerNeg = maxRotationPower * -1;

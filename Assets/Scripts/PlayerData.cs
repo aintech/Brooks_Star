@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerData : MonoBehaviour {
-
-	public Transform itemPrefab;
 
 	public Sprite[] playerSprites;
 
@@ -82,5 +82,31 @@ public class PlayerData : MonoBehaviour {
 
 	public void updateArmorValue () {
 		armorValue.text = Player.armor == null? "0": Player.armor.armorClass.ToString();
+	}
+
+	public void sendToVars () {
+		Vars.equipmentMap.Clear();
+		foreach (EquipmentSlot slot in slots) {
+			if (slot.item != null) {
+				Vars.equipmentMap.Add(slot.slotType, slot.item.itemData);
+			}
+		}
+	}
+
+	public void initFromVars () {
+		foreach (KeyValuePair<Slot.Type, ItemData> pair in Vars.equipmentMap) {
+			Item item = Instantiate<Transform>(ItemFactory.itemPrefab).GetComponent<Item>().init(pair.Value);
+			item.GetComponent<SpriteRenderer>().sortingOrder = 3;
+			getSlot(pair.Key).setItem(item);
+		}
+		Vars.equipmentMap.Clear();
+	}
+
+	private EquipmentSlot getSlot (Slot.Type type) {
+		foreach (EquipmentSlot slot in slots) {
+			if (slot.slotType == type) { return slot; }
+		}
+		Debug.Log("Unknown slot type: " + type);
+		return null;
 	}
 }

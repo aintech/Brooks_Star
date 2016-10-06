@@ -12,7 +12,7 @@ public static class Vars {
 
 	public static HullType shipHullType = HullType.Corvette;
 
-	public static Dictionary<KeyValuePair<HullSlot.Type, int>, ItemData> shipHullSlotsMap = new Dictionary<KeyValuePair<HullSlot.Type, int>, ItemData> ();
+	public static Dictionary<KeyValuePair<Slot.Type, int>, ItemData> shipHullSlotsMap = new Dictionary<KeyValuePair<HullSlot.Type, int>, ItemData> ();
 
 	public static int shipCurrentHealth = -1;
 
@@ -21,11 +21,21 @@ public static class Vars {
 	public static Dictionary<int, ItemData> inventory = new Dictionary<int, ItemData>(),
 											marketCORAS = new Dictionary<int, ItemData> ();
 
+	public static Dictionary<Slot.Type, ItemData> equipmentMap = new Dictionary<Slot.Type, ItemData>();
+
 	public static int freeSortingOrder = 0;
 
 	public static List<EnemyShip> enemyShipsPool = new List<EnemyShip>();
 
 	public static UserInterface userInterface;
+
+	public static List<PlanetType> exploredPlanets = new List<PlanetType>();
+
+	public static Dictionary<PlanetType, int> planetProbes = new Dictionary<PlanetType, int>();
+
+	public static Dictionary<PlanetType, float> planetExploredPercent = new Dictionary<PlanetType, float>();
+
+	public static int probesCount = 100;
 }
 /* FIX:
 	- переделать зум в космосе, чтобы колёсиком мыши не увеличивалось и не уменьшалось звёздное поле, а только корабли и планеты
@@ -42,5 +52,8 @@ public static class Vars {
 	- На планете есть медцентры в которых можно баффить персонажа
 */
 /* IDEAS:
+	- На исследование планеты тратяться зонды и исследование планеты занимает время, чем больше зондов, тем быстрее исследуется планета
+	или это миниигра, если проиграл - зонд утерян, выиграл - планета исследована, на необитаемых планетах можно оставлять харвестры для сбора ресурсов
+	- Если планета исследована и она обитаема - приземляемся и проводим разведку, чтобы найти противников
 	- магазин корпусов - широкий ангар в котором стоят корабли, он прокручивается по горизонтали как бекграунд поанеты и при наведении мыши на корабль появляет информация о его корпусе
 */

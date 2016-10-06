@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 public class Inventory : MonoBehaviour, ButtonHolder {
 
-	public Transform inventoryItemPrefab;
-
 	private Transform itemsContainer;
 
     private InventoryType inventoryType;
@@ -126,7 +124,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 	public void loadItems (Dictionary<int, ItemData> newItems) {
 		clearInventory();
 		foreach (KeyValuePair<int, ItemData> pair in newItems) {
-			items.Add(pair.Key, Instantiate<Transform>(inventoryItemPrefab).GetComponent<Item>().init(pair.Value, pair.Key));
+			items.Add(pair.Key, Instantiate<Transform>(ItemFactory.itemPrefab).GetComponent<Item>().init(pair.Value, pair.Key));
 		}
 		refreshInventory ();
 	}
@@ -243,7 +241,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 				case 11: data = ItemFactory.createItemData (ItemType.HARVESTER); break;
 			}
 			if (data != null) {
-				Item item = Instantiate<Transform>(inventoryItemPrefab).GetComponent<Item>().init(data);
+				Item item = Instantiate<Transform>(ItemFactory.itemPrefab).GetComponent<Item>().init(data);
 				item.transform.SetParent(itemsContainer);
 				if (label != null) { item.name = label; }
 				addItemToFirstFreePosition(item, false);

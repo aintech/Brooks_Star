@@ -8,8 +8,6 @@ public class EquipmentsMarket : InventoryContainedScreen {
 
 	private SpriteRenderer bgRender;
 
-	public Transform inventoryItemPrefab;
-
 	private Inventory playerInventory, buyMarket, sellMarket;
 
 	private Button buyBtn, sellBtn, closeBtn;

@@ -34,8 +34,7 @@ public abstract class Ship : MonoBehaviour {
 
 	private static Dictionary<HullType, Vector3> exhaustMap;
 
-	private Vector3 mainExhaustOffset = new Vector3(0, .2f, 0),
-					mirrorVector = new Vector3(-1, 1, 1);
+	private Vector3 mainExhaustOffset = new Vector3(0, .2f, 0);
 
 	private HullType hullType;
 
