@@ -11,17 +11,13 @@ public class EnemyShip : Ship {
 
 	private static List<Vector2> shipLevels = new List<Vector2>();
 
-	private Vector3 barOffset = new Vector3(1, 1);
-
-	private Transform trans, playerShip;
+	private Transform playerShip;
 
 	private Vector3 shieldValue = Vector3.one, healthValue = Vector3.one;
 	
 	private int sortingOrder = -1;
 	
 	private bool alive = true;
-
-	private float distanceToPlayer;
 
 	public void initRandomShip (int shipLevel, Transform playerShip) {
 		initInner();
@@ -58,12 +54,13 @@ public class EnemyShip : Ship {
 		initWeapons ();
 		initHealthBar ();
 
-		trans = transform;
 		getEngineRender().sortingOrder = sortingOrder;
 		getHullRender().sortingOrder = sortingOrder + 1;
 		shieldRenderOrder = sortingOrder + 3;
 		Vars.freeSortingOrder += getHullType().getWeaponSlots() > 0? 4: 3;
 		alive = true;
+		controller.init(this);
+		((EnemyShipController)controller).setStuff(playerShip, barTrans, radarRange, new Weapon[]{weapon_1, weapon_2, weapon_3, weapon_4, weapon_5});
 	}
 
 	private void initArmor (int shipLevel) {
@@ -149,36 +146,6 @@ public class EnemyShip : Ship {
 		barTrans = Instantiate<Transform>(healthBarPrefab);
 		shieldBar = barTrans.FindChild("Shield");
 		healthBar = barTrans.FindChild("Health");
-
-		barTrans.position = transform.position + barOffset;
-	}
-
-	void FixedUpdate () {
-		decideNextMove();
-		arrangeBarToShip();
-	}
-
-	private void decideNextMove () {
-		distanceToPlayer = Vector2.Distance(trans.position, playerShip.position);
-
-		if (distanceToPlayer <= radarRange) {
-			float maxRange = 0;
-			if (weapon_1 != null && weapon_1.getWeaponType().getRange() > maxRange) maxRange = weapon_1.getWeaponType().getRange();
-			if (weapon_2 != null && weapon_2.getWeaponType().getRange() > maxRange) maxRange = weapon_2.getWeaponType().getRange();
-			if (weapon_3 != null && weapon_3.getWeaponType().getRange() > maxRange) maxRange = weapon_3.getWeaponType().getRange();
-			if (weapon_4 != null && weapon_4.getWeaponType().getRange() > maxRange) maxRange = weapon_4.getWeaponType().getRange();
-			if (weapon_5 != null && weapon_5.getWeaponType().getRange() > maxRange) maxRange = weapon_5.getWeaponType().getRange();
-
-			if (maxRange == 0) {
-				//У корабля нет оружия
-			} else if (distanceToPlayer > maxRange) {
-				moveCloserToPlayer();
-			}
-		}
-	}
-
-	private void moveCloserToPlayer () {
-		//TODO: Lerp-ом поворачиваемся к игроку и двигаемся в его сторону
 	}
 
 	override protected void updateHealthAndShieldInfo () {
@@ -193,15 +160,6 @@ public class EnemyShip : Ship {
 		alive = false;
 		barTrans.gameObject.SetActive(false);
 		gameObject.SetActive(false);
-	}
-
-	private void moveShip () {
-		//Vector3 transPos = transform.position;
-		//transform.position = new Vector3(transPos.x, transPos.y + 0.1f, transPos.z);
-	}
-
-	private void arrangeBarToShip () {
-		barTrans.position = trans.position + barOffset;
 	}
 
 	public bool isAlive () {

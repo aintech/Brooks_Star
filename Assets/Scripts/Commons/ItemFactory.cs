@@ -118,16 +118,16 @@ public static class ItemFactory {
 
 	public static WeaponData createWeaponData () {
 		WeaponType type = WeaponType.Blaster;
-		switch (UnityEngine.Random.Range(0, Enum.GetNames(typeof(WeaponType)).Length)) {
-			case 0: type = WeaponType.Blaster; break;
-			case 1: type = WeaponType.Plasmer; break;
-			case 2: type = WeaponType.Charger; break;
-			case 3: type = WeaponType.Emitter; break;
-			case 4: type = WeaponType.Waver; break;
-			case 5: type = WeaponType.Launcher; break;
-			case 6: type = WeaponType.Suppressor; break;
-			default: Debug.Log("Unmapped value for weapon"); break;
-		}
+//		switch (UnityEngine.Random.Range(0, Enum.GetNames(typeof(WeaponType)).Length)) {
+//			case 0: type = WeaponType.Blaster; break;
+//			case 1: type = WeaponType.Plasmer; break;
+//			case 2: type = WeaponType.Charger; break;
+//			case 3: type = WeaponType.Emitter; break;
+//			case 4: type = WeaponType.Waver; break;
+//			case 5: type = WeaponType.Launcher; break;
+//			case 6: type = WeaponType.Suppressor; break;
+//			default: Debug.Log("Unmapped value for weapon"); break;
+//		}
 		return createWeaponData(type);
 	}
 

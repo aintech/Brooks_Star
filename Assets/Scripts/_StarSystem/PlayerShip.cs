@@ -6,13 +6,10 @@ public class PlayerShip : Ship {
 
 	private ShipData shipData;
 
-	private PlayerShipController controller;
-
 	public void initPlayerShip (ShipData shipData) {
 		this.shipData = shipData;
 		this.name = "Player ship";
 		initInner();
-		controller = transform.GetComponent<PlayerShipController>();
 		setHullType (shipData.hullType);
 		health = shipData.getCurrentHealth ();
 		fullHealth = shipData.hullType.getMaxHealth();
@@ -21,7 +18,7 @@ public class PlayerShip : Ship {
 		radarRange = shipData.getRadarRange();
 		initEngine ();
 		initWeapons ();
-		controller.initController(this);
+		controller.init(this);
 	}
 	
 	private void initEngine () {
@@ -87,14 +84,6 @@ public class PlayerShip : Ship {
 		shipData.setCurrentShield(getShield());
 		shipData.setCurrentHealth(getHealth());
 		Vars.userInterface.updateShip();
-	}
-
-	public Engine getEngine () {
-		return engine;
-	}
-
-	public PlayerShipController getController () {
-		return controller;
 	}
 
 	public override bool isPlayerShip () {

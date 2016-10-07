@@ -18,7 +18,7 @@ public abstract class Ship : MonoBehaviour {
 
 	protected int armor, health, shield, fullShield, fullHealth, radarRange;
 	
-	protected Engine engine;
+	public Engine engine { get; private set; }
 	
 	protected Weapon weapon_1, weapon_2, weapon_3, weapon_4, weapon_5;
 
@@ -40,6 +40,8 @@ public abstract class Ship : MonoBehaviour {
 
 	protected ShieldsPool shieldsPool;
 
+	public ShipController controller { get; private set; }
+
 	protected void initInner () {
 		if (weaponSlotsMap == null) {
 			initializeWeaponSlotsMap();
@@ -58,6 +60,7 @@ public abstract class Ship : MonoBehaviour {
 		engine = transform.FindChild("Engine").GetComponent<Engine>();
 		shieldsPool = GameObject.Find("ShieldsPool").GetComponent<ShieldsPool>();
 		shipCollider = transform.GetComponent<BoxCollider2D>();
+		controller = transform.GetComponent<ShipController>();
 	}
 
 	protected void setHullType (HullType hullType) {
