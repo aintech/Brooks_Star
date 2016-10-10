@@ -1,13 +1,11 @@
 fileFormatVersion: 2
 guid: d0b7ab40ae343cc40881cbf0a6bdf5da
-timeCreated: 1476110110
+timeCreated: 1476129337
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
   defaultReferences:
-  - explosionPrefab: {fileID: 4000010289711104, guid: 420ff4fbbb197f54599b04f1e59a0225,
-      type: 2}
-  - explosionBigPrefab: {fileID: 4000010281574948, guid: 91c98cff6c189ea4f961fe1654c61b29,
+  - explosionsPackPrefab: {fileID: 4000012672890788, guid: 3dfcb2c4b54f0bf4a8479921244b3a4f,
       type: 2}
   executionOrder: 0
   icon: {instanceID: 0}

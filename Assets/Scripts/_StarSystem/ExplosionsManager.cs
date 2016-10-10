@@ -4,37 +4,31 @@ using System.Collections.Generic;
 
 public class ExplosionsManager : MonoBehaviour {
 
-	public Transform explosionPrefab, explosionBigPrefab;
+	public Transform explosionsPackPrefab;
 
-	private static Transform trans;
+	private static Transform trans, explosionsPack;
 
-	private static Transform explosionTrans, explosionBigTrans;
-
-	private static List<Explosion> bigExplosions = new List<Explosion>();
-
-	private static List<Explosion> smallExplosions = new List<Explosion>();
+	private static List<ExplosionsPack> explosionsPacks = new List<ExplosionsPack>();
 
 	public void init () {
 		trans = transform;
-		explosionTrans = explosionPrefab;
-		explosionBigTrans = explosionBigPrefab;
+		explosionsPack = explosionsPackPrefab;
 	}
 
-	public static void playExplosion (EnemyShip ship) {
-		Explosion expl = getExplosion();
-		expl.transform.position = ship.transform.position;
-		expl.gameObject.SetActive(true);
-		expl.play();
+	public static void playExplosion (Ship ship) {
+		ExplosionsPack pack = getPack();
+		pack.transform.position = ship.transform.position;
+		pack.play(ship);
 	}
 
-	private static Explosion getExplosion () {
-		foreach (Explosion expl in bigExplosions) {
-			if (!expl.onScene) { return expl; }
+	private static ExplosionsPack getPack () {
+		foreach (ExplosionsPack ep in explosionsPacks) {
+			if (!ep.onScene) { return ep; }
 		}
-		Explosion explosion = Instantiate<Transform>(explosionBigTrans).GetComponent<Explosion>();
-		explosion.transform.parent = trans;
-		explosion.init();
-		bigExplosions.Add(explosion);
-		return explosion;
+		ExplosionsPack pack = Instantiate<Transform>(explosionsPack).GetComponent<ExplosionsPack>();
+		pack.transform.parent = trans;
+		pack.init();
+		explosionsPacks.Add(pack);
+		return pack;
 	}
 }

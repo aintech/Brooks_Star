@@ -61,6 +61,8 @@ public class EnemyShip : Ship {
 		alive = true;
 		controller.init(this);
 		((EnemyShipController)controller).setStuff(playerShip, barTrans, radarRange, new Weapon[]{weapon_1, weapon_2, weapon_3, weapon_4, weapon_5});
+		health = 10;
+		shield = 10;
 	}
 
 	private void initArmor (int shipLevel) {
@@ -156,11 +158,10 @@ public class EnemyShip : Ship {
 		healthBar.transform.localScale = healthValue;
 	}
 
-	override protected void destroyShip () {
+	override protected void disableShip () {
 		alive = false;
 		ExplosionsManager.playExplosion(this);
 		barTrans.gameObject.SetActive(false);
-		gameObject.SetActive(false);
 	}
 
 	public bool isAlive () {

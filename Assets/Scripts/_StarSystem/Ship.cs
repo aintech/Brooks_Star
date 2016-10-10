@@ -42,6 +42,8 @@ public abstract class Ship : MonoBehaviour {
 
 	public ShipController controller { get; private set; }
 
+	public bool destroed { get; private set; }
+
 	protected void initInner () {
 		if (weaponSlotsMap == null) {
 			initializeWeaponSlotsMap();
@@ -61,6 +63,8 @@ public abstract class Ship : MonoBehaviour {
 		shieldsPool = GameObject.Find("ShieldsPool").GetComponent<ShieldsPool>();
 		shipCollider = transform.GetComponent<BoxCollider2D>();
 		controller = transform.GetComponent<ShipController>();
+
+		destroed = false;
 	}
 
 	protected void setHullType (HullType hullType) {
@@ -185,12 +189,16 @@ public abstract class Ship : MonoBehaviour {
 		if (getHealth() > 0) {
 			updateHealthAndShieldInfo();
 		} else {
-			destroyShip();
+			disableShip();
 		}
 	}
 
 	virtual protected void updateHealthAndShieldInfo () {}
-	virtual protected void destroyShip () {}
+	virtual protected void disableShip () {}
+	virtual public void destroyShip () {
+		gameObject.SetActive(false);
+		destroed = true;
+	}
 
 	public int getShieldRenderOrder () {
 		return shieldRenderOrder;

@@ -107,7 +107,7 @@ public class StarSystem : MonoBehaviour {
 		bool found = false;
 		EnemyShip enemy = null;
 		foreach (EnemyShip ship in Vars.enemyShipsPool) {
-			if (!ship.isAlive()) {
+			if (ship.destroed) {
 				enemy = ship;
 				found = true;
 				break;

@@ -3,21 +3,29 @@ using System.Collections;
 
 public class Explosion : MonoBehaviour {
 
-	public bool onScene { get; private set; }
+	public bool isFinal;
+
+	public bool onScreen { get; private set; }
 
 	private Animator anim;
 
-	public void init () {
+	private ExplosionsPack pack;
+
+	public Explosion init (ExplosionsPack pack) {
+		this.pack = pack;
 		anim = GetComponent<Animator>();
+		return this;
 	}
 
 	public void play () {
-		onScene = true;
+		onScreen = true;
+		transform.localPosition = new Vector3(Random.Range (-1f, 1f), Random.Range (-1f, 1f), transform.position.z);
 		gameObject.SetActive(true);
 	}
 
 	public void stop () {
-		onScene = false;
+		onScreen = false;
+		pack.downCount ();
 		gameObject.SetActive(false);
 	}
 }
