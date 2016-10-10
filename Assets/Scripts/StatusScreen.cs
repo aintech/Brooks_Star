@@ -4,13 +4,13 @@ using System.Collections.Generic;
 
 public class StatusScreen : InventoryContainedScreen {
 
-	public Sprite equipmentBG, shipBG, perksBG;
+	public Sprite equipmentBG, shipBG, perksBG, cabinBG;
 
 	private bool onPlanetSurface;
 
 	private PerksView perksView;
 
-	private Button playerBtn, perksBtn, shipBtn, repairBtn, closeBtn;
+	private Button playerBtn, perksBtn, shipBtn, cabinBtn, repairBtn, closeBtn;
 
 	private ShipData shipData;
 
@@ -18,11 +18,16 @@ public class StatusScreen : InventoryContainedScreen {
 
 	private StarSystem starSystem;
 
+	private Cabin cabin;
+
 	private SpriteRenderer background;
 
 	private ItemDescriptor itemDescriptor;
 
+	[HideInInspector]
 	public CameraController cameraController;
+
+	private ScreenType lastOpened = ScreenType.EQUIPMENT;
 
 	public StatusScreen init (StarSystem starSystem, ItemDescriptor itemDescriptor) {
 		this.starSystem = starSystem;
@@ -39,9 +44,11 @@ public class StatusScreen : InventoryContainedScreen {
 		perksBtn = transform.Find("Perks Button").GetComponent<Button>().init();
 		shipBtn = transform.Find("Ship Button").GetComponent<Button>().init();
 		repairBtn = transform.Find ("Repair Button").GetComponent<Button> ().init (true);
+		cabinBtn = transform.Find("Cabin Button").GetComponent<Button>().init();
 		closeBtn = transform.Find("Close Button").GetComponent<Button>().init();
 
 		perksView = transform.Find("Perks View").GetComponent<PerksView>().init();
+		cabin = transform.Find("Cabin").GetComponent<Cabin>().init();
 
 		background = transform.Find("Background").GetComponent<SpriteRenderer>();
 		background.gameObject.SetActive(true);
@@ -100,9 +107,8 @@ public class StatusScreen : InventoryContainedScreen {
 			repairBtn.setVisible(false);
 		}
 
-		show (ItemKind.EQUIPMENTS);
-//		setInventoryActive();
-//		setShipDataActive();
+		show (lastOpened);
+
 		updateCashTxt();
 
 		gameObject.SetActive(true);
@@ -127,25 +133,29 @@ public class StatusScreen : InventoryContainedScreen {
 		itemDescriptor.setAsPerkDescriptor(false);
 	}
 
-	private void show (ItemKind kind) {
-		background.sprite = kind == ItemKind.SHIP_EQUIPMENT? shipBG: kind == ItemKind.EQUIPMENTS? equipmentBG: perksBG;
+	private void show (ScreenType type) {
+		background.sprite = type == ScreenType.SHIP? shipBG: type == ScreenType.EQUIPMENT? equipmentBG: type == ScreenType.PERKS? perksBG: cabinBG;
 
-		setCashTxtActive (kind == ItemKind.EQUIPMENTS || kind == ItemKind.SHIP_EQUIPMENT);
+		setCashTxtActive (type == ScreenType.SHIP || type == ScreenType.EQUIPMENT);
 
-		repairBtn.gameObject.SetActive(onPlanetSurface && kind == ItemKind.SHIP_EQUIPMENT);
+		repairBtn.gameObject.SetActive(onPlanetSurface && type == ScreenType.SHIP);
 
-		itemDescriptor.setAsPerkDescriptor(kind != ItemKind.EQUIPMENTS && kind != ItemKind.SHIP_EQUIPMENT);
+		itemDescriptor.setAsPerkDescriptor(type == ScreenType.PERKS);
 
-		shipData.gameObject.SetActive(kind == ItemKind.SHIP_EQUIPMENT);
-		playerData.gameObject.SetActive(kind == ItemKind.EQUIPMENTS);
-		inventory.gameObject.SetActive(kind == ItemKind.SHIP_EQUIPMENT || kind == ItemKind.EQUIPMENTS || kind == ItemKind.GOOD);
-		perksView.gameObject.SetActive(kind == ItemKind.NONE);
+		shipData.gameObject.SetActive(type == ScreenType.SHIP);
+		playerData.gameObject.SetActive(type == ScreenType.EQUIPMENT);
+		inventory.gameObject.SetActive(type == ScreenType.EQUIPMENT || type == ScreenType.SHIP);
+		perksView.gameObject.SetActive(type == ScreenType.PERKS);
+		cabin.gameObject.SetActive(type == ScreenType.CABIN);
 
-		playerBtn.setActive (kind != ItemKind.EQUIPMENTS);
-		shipBtn.setActive (kind != ItemKind.SHIP_EQUIPMENT);
-		perksBtn.setActive (kind != ItemKind.NONE);
+		playerBtn.setActive (type != ScreenType.EQUIPMENT);
+		shipBtn.setActive (type != ScreenType.SHIP);
+		perksBtn.setActive (type != ScreenType.PERKS);
+		cabinBtn.setActive (type != ScreenType.CABIN);
 
 		hideItemInfo();
+
+		lastOpened = type;
 	}
 
 	private void repairShip () {
@@ -155,11 +165,10 @@ public class StatusScreen : InventoryContainedScreen {
 	}
 
 	protected override void checkBtnPress (Button btn) {
-//		if (btn == inventoryBtn) { setInventoryActive(); }
-//		else if (btn == storageBtn) { setStorageActive(); }
-		if (btn == playerBtn) { show(ItemKind.EQUIPMENTS); }
-		else if (btn == perksBtn) { show(ItemKind.NONE); }
-		else if (btn == shipBtn) { show(ItemKind.SHIP_EQUIPMENT); }
+		if (btn == playerBtn) { show(ScreenType.EQUIPMENT); }
+		else if (btn == perksBtn) { show(ScreenType.PERKS); }
+		else if (btn == shipBtn) { show(ScreenType.SHIP); }
+		else if (btn == cabinBtn) { show(ScreenType.CABIN); }
 		else if (btn == repairBtn) { repairShip (); }
 		else if (btn == closeBtn) { closeScreen(); }
 		else { Debug.Log("Unknown button: " + btn.name); }
@@ -387,5 +396,9 @@ public class StatusScreen : InventoryContainedScreen {
 		shipData.initializeFromVars();
 		playerData.initFromVars();
 		inventory.initFromVars();
+	}
+
+	private enum ScreenType {
+		PERKS, EQUIPMENT, SHIP, CABIN
 	}
 }

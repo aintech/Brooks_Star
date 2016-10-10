@@ -67,6 +67,8 @@ public class StarSystem : MonoBehaviour {
 
 		shieldsPool = GameObject.Find("ShieldsPool").GetComponent<ShieldsPool>();
 
+		GameObject.Find("Explosions Manager").GetComponent<ExplosionsManager>().init();
+
         loadStarSystem();
 
 		gamePaused = false;
@@ -115,7 +117,7 @@ public class StarSystem : MonoBehaviour {
 			enemy = Instantiate<Transform>(enemyShipPrefab).GetComponent<EnemyShip>();
 			Vars.enemyShipsPool.Add(enemy);
 		}
-		enemy.initRandomShip(Random.Range(0, 6), playerShip.transform);
+		enemy.initRandomShip(Random.Range(0, 1), playerShip.transform);
 		enemy.transform.position = new Vector3(Random.Range(-1f, 1f) * 2, Random.Range(-1f, 1f) * 2);
 	}
 

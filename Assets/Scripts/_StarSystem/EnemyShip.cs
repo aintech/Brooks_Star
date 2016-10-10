@@ -158,6 +158,7 @@ public class EnemyShip : Ship {
 
 	override protected void destroyShip () {
 		alive = false;
+		ExplosionsManager.playExplosion(this);
 		barTrans.gameObject.SetActive(false);
 		gameObject.SetActive(false);
 	}

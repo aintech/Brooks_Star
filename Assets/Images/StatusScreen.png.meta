@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 1056e969b7409cd45a614aee66976e67
-timeCreated: 1475044205
+timeCreated: 1476102368
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -40,6 +40,8 @@ TextureImporter:
     21300066: ItemDescriptor_Loading
     21300068: StatusScreen_RepairBtn
     21300070: StatusScreen_RepairBtn_Hover
+    21300072: Inventory_CabinBtn
+    21300074: Inventory_CabinBtn_Hover
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -144,10 +146,10 @@ TextureImporter:
       name: Inventory_CloseBtn
       rect:
         serializedVersion: 2
-        x: 1619
-        y: 100
-        width: 274
-        height: 65
+        x: 1817
+        y: 830
+        width: 188
+        height: 64
       alignment: 5
       pivot: {x: 1, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -157,10 +159,10 @@ TextureImporter:
       name: Inventory_CloseBtnHover
       rect:
         serializedVersion: 2
-        x: 1619
-        y: 186
-        width: 274
-        height: 65
+        x: 1817
+        y: 916
+        width: 188
+        height: 64
       alignment: 5
       pivot: {x: 1, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -170,10 +172,10 @@ TextureImporter:
       name: Inventory_PerksBtn
       rect:
         serializedVersion: 2
-        x: 1619
-        y: 280
-        width: 331
-        height: 61
+        x: 1618
+        y: 550
+        width: 333
+        height: 63
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -183,10 +185,10 @@ TextureImporter:
       name: Inventory_PerksBtn_Hover
       rect:
         serializedVersion: 2
-        x: 1619
-        y: 368
-        width: 331
-        height: 61
+        x: 1618
+        y: 459
+        width: 333
+        height: 63
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -197,9 +199,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1619
-        y: 460
-        width: 331
-        height: 61
+        y: 367
+        width: 332
+        height: 63
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -210,9 +212,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1619
-        y: 551
-        width: 331
-        height: 61
+        y: 279
+        width: 332
+        height: 63
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -223,9 +225,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1619
-        y: 637
-        width: 331
-        height: 61
+        y: 194
+        width: 332
+        height: 64
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -236,9 +238,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1619
-        y: 728
-        width: 331
-        height: 61
+        y: 110
+        width: 332
+        height: 63
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -287,9 +289,9 @@ TextureImporter:
       name: Inventory_UpBtn_Hover
       rect:
         serializedVersion: 2
-        x: 1736
+        x: 1715
         y: 960
-        width: 40
+        width: 39
         height: 38
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -300,9 +302,9 @@ TextureImporter:
       name: Inventory_DownBtn_Hover
       rect:
         serializedVersion: 2
-        x: 1736
+        x: 1715
         y: 889
-        width: 40
+        width: 39
         height: 38
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -313,9 +315,9 @@ TextureImporter:
       name: Inventory_SortBtn_Hover
       rect:
         serializedVersion: 2
-        x: 1736
+        x: 1715
         y: 807
-        width: 40
+        width: 39
         height: 58
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -512,6 +514,32 @@ TextureImporter:
         y: 1906
         width: 91
         height: 91
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_CabinBtn
+      rect:
+        serializedVersion: 2
+        x: 1618
+        y: 727
+        width: 333
+        height: 63
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_CabinBtn_Hover
+      rect:
+        serializedVersion: 2
+        x: 1618
+        y: 636
+        width: 333
+        height: 63
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
