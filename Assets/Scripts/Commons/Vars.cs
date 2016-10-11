@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 public static class Vars {
 
-	public static bool EROTIC = true;
+	public static bool EROTIC = false;
 
 	public static StarSystemType starSystemType = StarSystemType.ALURIA;
 
-	public static PlanetType planetType = PlanetType.CORAS;
+	public static PlanetType planetType = PlanetType.PARPARIS;
 
 	public static HullType shipHullType = HullType.Corvette;
 
@@ -19,7 +19,8 @@ public static class Vars {
 	public static int cash = 90000;
 
 	public static Dictionary<int, ItemData> inventory = new Dictionary<int, ItemData>(),
-											marketCORAS = new Dictionary<int, ItemData> ();
+											market_parparis = new Dictionary<int, ItemData> (),
+											market_terana = new Dictionary<int, ItemData>();
 
 	public static Dictionary<Slot.Type, ItemData> equipmentMap = new Dictionary<Slot.Type, ItemData>();
 

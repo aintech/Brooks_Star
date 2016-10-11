@@ -27,7 +27,10 @@ public abstract class Weapon : MonoBehaviour {
 	
 	protected static int enemyLayer = -1, playerLayer = -1;
 
-	private void Awake () {
+	private Ship ship;
+
+	public void init (Ship ship) {
+		this.ship = ship;
 		if (anim == null) {
 			anim = GetComponent<Animator>();
 			mainCamera = Camera.main;
@@ -42,6 +45,7 @@ public abstract class Weapon : MonoBehaviour {
 
 	private void Update () {
 		if (StarSystem.gamePaused) { return; }
+		if (!ship.alive) { return; }
 
 		if (isAPlayerWeapon) {
 			if (Input.GetMouseButton(0) && canShoot()) {
@@ -66,6 +70,7 @@ public abstract class Weapon : MonoBehaviour {
 
 	private void FixedUpdate () {
 		if (StarSystem.gamePaused) { return; }
+		if (!ship.alive) { return; }
 
 		weaponLookAtTarget(isAPlayerWeapon? mainCamera.ScreenToWorldPoint(Input.mousePosition): playerTrans.position);
 	}

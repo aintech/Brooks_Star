@@ -9,35 +9,33 @@ public class EnemyShip : Ship {
 
 	private Transform barTrans, shieldBar, healthBar;
 
-	private static List<Vector2> shipLevels = new List<Vector2>();
+	private static List<Vector2> shipClasses = new List<Vector2>();
 
 	private Transform playerShip;
 
 	private Vector3 shieldValue = Vector3.one, healthValue = Vector3.one;
 	
 	private int sortingOrder = -1;
-	
-	private bool alive = true;
 
-	public void initRandomShip (int shipLevel, Transform playerShip) {
+	public void initRandomShip (int shipClass, Transform playerShip) {
 		initInner();
 
 		if (sortingOrder == -1) {
 			sortingOrder = Vars.freeSortingOrder;
 		}
 
-		if (shipLevels.Count == 0) {
-			shipLevels.Add(new Vector2(0, 2));
-			shipLevels.Add(new Vector2(3, 5));
-			shipLevels.Add(new Vector2(6, 9));
-			shipLevels.Add(new Vector2(10, 13));
-			shipLevels.Add(new Vector2(14, 15));
-			shipLevels.Add(new Vector2(16, 16));
+		if (shipClasses.Count == 0) {
+			shipClasses.Add(new Vector2(0, 2));
+			shipClasses.Add(new Vector2(3, 5));
+			shipClasses.Add(new Vector2(6, 9));
+			shipClasses.Add(new Vector2(10, 13));
+			shipClasses.Add(new Vector2(14, 15));
+			shipClasses.Add(new Vector2(16, 16));
 		}
 
 		this.playerShip = playerShip;
 
-		int rand = (int) UnityEngine.Random.Range (shipLevels[shipLevel].x, shipLevels[shipLevel].y+1);
+		int rand = (int) UnityEngine.Random.Range (shipClasses[shipClass].x, shipClasses[shipClass].y + 1);
 
 		setHullType (rand == 0? HullType.Little: rand == 1? HullType.Needle: rand == 2? HullType.Gnome:
 		             rand == 3? HullType.Cricket: rand == 4? HullType.Argo: rand == 5? HullType.Falcon:
@@ -48,8 +46,8 @@ public class EnemyShip : Ship {
 
 		health = fullHealth = getHullType().getMaxHealth();
 		shield = fullShield = 300;
-		initArmor(shipLevel);
-		initRadarRange(shipLevel);
+		initArmor(shipClass);
+		initRadarRange(shipClass);
 		initEngine ();
 		initWeapons ();
 		initHealthBar ();
@@ -58,11 +56,11 @@ public class EnemyShip : Ship {
 		getHullRender().sortingOrder = sortingOrder + 1;
 		shieldRenderOrder = sortingOrder + 3;
 		Vars.freeSortingOrder += getHullType().getWeaponSlots() > 0? 4: 3;
-		alive = true;
 		controller.init(this);
 		((EnemyShipController)controller).setStuff(playerShip, barTrans, radarRange, new Weapon[]{weapon_1, weapon_2, weapon_3, weapon_4, weapon_5});
 		health = 10;
 		shield = 10;
+		updateHealthAndShieldInfo();
 	}
 
 	private void initArmor (int shipLevel) {
@@ -123,6 +121,7 @@ public class EnemyShip : Ship {
 			case WeaponType.Suppressor: weapon = Instantiate<Transform>(suppressorPrefab).GetComponent<Suppressor>(); break;
 		}
 
+		weapon.init(this);
 		weapon.setWeaponType(type);
 		weapon.setDamage(type.getDamage() - 3, type.getDamage() + 3);
 		weapon.setReloadTime(type.getReloadTime());
@@ -159,13 +158,9 @@ public class EnemyShip : Ship {
 	}
 
 	override protected void disableShip () {
-		alive = false;
-		ExplosionsManager.playExplosion(this);
+		base.disableShip();
 		barTrans.gameObject.SetActive(false);
-	}
-
-	public bool isAlive () {
-		return alive;
+		Vars.userInterface.minimap.removeEnemy(transform);
 	}
 
 	public override bool isPlayerShip () {

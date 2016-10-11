@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 194532118fb8d0d4c9ae8e42cf73b3ff
-timeCreated: 1474628436
+timeCreated: 1476179444
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
@@ -8,6 +8,8 @@ MonoImporter:
   - equipmentBG: {fileID: 21300000, guid: 1056e969b7409cd45a614aee66976e67, type: 3}
   - shipBG: {fileID: 21300002, guid: 1056e969b7409cd45a614aee66976e67, type: 3}
   - perksBG: {fileID: 21300000, guid: 38ea4f6e69a2ec84880ae6fa10e81521, type: 3}
+  - cabinBG: {fileID: 21300000, guid: 14114acdefbc87849ac2d765f751bcd8, type: 3}
+  - cameraController: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

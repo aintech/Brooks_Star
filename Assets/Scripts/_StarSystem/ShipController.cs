@@ -16,7 +16,10 @@ public class ShipController : MonoBehaviour {
 
 	protected Vector3 pos = Vector3.zero, rotateAxis = Vector3.forward;
 
+	protected Ship ship { get; private set; }
+
 	public void init (Ship ship) {
+		this.ship = ship;
 		trans = transform;
 		exhaust = trans.Find("Main Exhaust").GetComponent<ParticleSystem>();
 		leftExhaust = trans.Find("Left Exhaust").GetComponent<SpriteRenderer>();
@@ -55,13 +58,13 @@ public class ShipController : MonoBehaviour {
 		if (StarSystem.gamePaused) { return; }
 
 		decideNextMove();
-		forwardMoveControl ();
-		turnControl ();
+		forwardMove ();
+		rotationMove ();
 	}
 
 	virtual protected void decideNextMove () {}
 
-	private void forwardMoveControl () {
+	private void forwardMove () {
 		if (accelarate) {
 			if (mainPower < maxMainPower) {
 				mainPower += mainAcceleration;
@@ -97,7 +100,7 @@ public class ShipController : MonoBehaviour {
 		}
 	}
 
-	private void turnControl () {
+	private void rotationMove () {
 		if (turnLeft && !turnRight) {
 			if (rotationPower < maxRotationPower) {
 				rotationPower += rotationAcceleration;

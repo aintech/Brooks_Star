@@ -25,6 +25,8 @@ public class UserInterface : MonoBehaviour {
 
 	private Color32 textColor;
 
+	public Minimap minimap { get; private set; }
+
 	private Rect statusBtnRect = new Rect (Screen.width - 44, Screen.height - 56, 48, 48),
 				 shieldBarRect = new Rect(13, Screen.height - 65, 10, 50),
 				 healthBarRect = new Rect(13, Screen.height - 45, 10, 50),
@@ -41,11 +43,12 @@ public class UserInterface : MonoBehaviour {
 		textColor = messengerStyle.normal.textColor;
 
 		GetComponent<Messenger>().init(this);
+		minimap = GetComponent<Minimap>();
 		if (starSystem != null) {
-			GetComponent<Minimap>().init(starSystem, ship.transform);
+			minimap.init(starSystem, ship.transform, ship.radarRange);
 			planetDescriptor = GetComponent<StarSystemPlanetDescriptor>().init(starSystem);
 		} else {
-			GetComponent<Minimap>().enabled = false;
+			minimap.enabled = false;
 			GetComponent<StarSystemPlanetDescriptor>().enabled = false;
 		}
 		setEnabled(true);

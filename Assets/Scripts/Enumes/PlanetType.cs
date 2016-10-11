@@ -6,7 +6,10 @@ public enum PlanetType {
 	CORAS,
 	PALETTE,
 	VADERPAN,
-	PARPARIS
+	PARPARIS,
+	TERANA,
+	VOLARIA,
+	POSTERA
 }
 
 public static class PlanetDescriptor {
@@ -19,20 +22,32 @@ public static class PlanetDescriptor {
 			case PlanetType.PALETTE: return "Палетта";
 			case PlanetType.VADERPAN: return "Вадерпан";
 			case PlanetType.PARPARIS: return "Парпарис";
+			case PlanetType.TERANA: return "Терана";
+			case PlanetType.VOLARIA: return "Волария";
+			case PlanetType.POSTERA: return "Постера";
 			default: return "Неизвестное наименование планеты";
 		}
 	}
 
+	public static StarSystemType getStarSystemType (this PlanetType type) {
+		return StarSystemType.ALURIA;
+	}
+
 	public static bool isColonized (this PlanetType type) {
 		switch (type) {
-			case PlanetType.CORAS: return true;
+			case PlanetType.PARPARIS:
+			case PlanetType.TERANA:
+				return true;
 		}
 		return false;
 	}
 
 	public static bool isPopulated (this PlanetType type) {
 		switch (type) {
-			case PlanetType.PALETTE: return true;
+			case PlanetType.PALETTE:
+			case PlanetType.VOLARIA:
+			case PlanetType.POSTERA:
+				return true;
 		}
 		return false;
 	}
@@ -48,9 +63,14 @@ public static class PlanetDescriptor {
 	}
 
     public static float getDistanceToStar (this PlanetType type) {
-        switch (type) {
-            case PlanetType.CORAS: return 15;
-            case PlanetType.PALETTE: return 45;
+		switch (type) {
+			case PlanetType.CORAS: return 25;
+			case PlanetType.PALETTE: return 45;
+			case PlanetType.VADERPAN: return 70;
+			case PlanetType.PARPARIS: return 120;
+			case PlanetType.TERANA: return 160;
+			case PlanetType.VOLARIA: return 210;
+			case PlanetType.POSTERA: return 300;
             default: Debug.Log("Unknown planet type: " + type); return 0;
         }
     }
@@ -62,5 +82,7 @@ public static class PlanetDescriptor {
 
 	private static void initEnemiesOnPlanets () {
 		enemyTypesOnPlanet.Add(PlanetType.PALETTE, new EnemyType[]{EnemyType.DRUID, EnemyType.BEE, EnemyType.GUNNER});
+		enemyTypesOnPlanet.Add(PlanetType.VOLARIA, new EnemyType[]{EnemyType.DRUID, EnemyType.BEE, EnemyType.GUNNER});
+		enemyTypesOnPlanet.Add(PlanetType.POSTERA, new EnemyType[]{EnemyType.DRUID, EnemyType.BEE, EnemyType.GUNNER});
 	}
 }

@@ -7,7 +7,7 @@ public class StarSystem : MonoBehaviour {
 
 	public Transform itemPrefab;
 
-	public Transform planetPrefab, playerShipPrefab, enemyShipPrefab;
+	public Transform planetPrefab, playerShipPrefab;
 
 	public static bool gamePaused {  get; private set;}
     
@@ -26,6 +26,8 @@ public class StarSystem : MonoBehaviour {
 	private ShieldsPool shieldsPool;
 
 	private StarField starField;
+
+	private EnemySpawner spawner;
 
 	//Выведеное опытным путем расстояние от центра до края сектора
 	//при условии что разрешение картинки сектора 4096х4096, pixelsToUnit = 50, sectorMoveSpeed = 0.1
@@ -69,6 +71,9 @@ public class StarSystem : MonoBehaviour {
 
 		GameObject.Find("Explosions Manager").GetComponent<ExplosionsManager>().init();
 
+		spawner = GetComponent<EnemySpawner>().init(Vars.userInterface.minimap, playerShip.transform);
+
+
         loadStarSystem();
 
 		gamePaused = false;
@@ -93,7 +98,7 @@ public class StarSystem : MonoBehaviour {
 
 		statusScreen.getShipData().setShieldToMax();
 
-		spawnAnEnemy();
+		spawner.spawnAnEnemy(2);
     }
 
 	private void initPlayerShip () {
@@ -103,24 +108,6 @@ public class StarSystem : MonoBehaviour {
 		cameraController.init(playerShip.transform, starField);
 	}
 
-	private void spawnAnEnemy () {
-		bool found = false;
-		EnemyShip enemy = null;
-		foreach (EnemyShip ship in Vars.enemyShipsPool) {
-			if (ship.destroed) {
-				enemy = ship;
-				found = true;
-				break;
-			}
-		}
-		if (!found) {
-			enemy = Instantiate<Transform>(enemyShipPrefab).GetComponent<EnemyShip>();
-			Vars.enemyShipsPool.Add(enemy);
-		}
-		enemy.initRandomShip(Random.Range(0, 1), playerShip.transform);
-		enemy.transform.position = new Vector3(Random.Range(-1f, 1f) * 2, Random.Range(-1f, 1f) * 2);
-	}
-
 	public void landOnPlanet (PlanetType planetType) {
 		gamePaused = true;
 		shieldsPool.clearPool();
@@ -128,6 +115,7 @@ public class StarSystem : MonoBehaviour {
 		Vars.userInterface.setEnabled(false);
 		statusScreen.sendToVars();
 		Vars.planetType = planetType;
+		ExplosionsManager.clear();
 		SceneManager.LoadScene("PlanetSurface");
 	}
 

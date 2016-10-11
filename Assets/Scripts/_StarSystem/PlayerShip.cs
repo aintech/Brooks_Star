@@ -60,7 +60,8 @@ public class PlayerShip : Ship {
 			case WeaponType.Launcher: weapon = Instantiate<Transform>(launcherPrefab).GetComponent<Launcher>(); break;
 			case WeaponType.Suppressor: weapon = Instantiate<Transform>(suppressorPrefab).GetComponent<Suppressor>(); break;
 		}
-		
+
+		weapon.init(this);
 		weapon.setWeaponType(data.type);
 		weapon.setDamage(data.minDamage, data.maxDamage);
 		weapon.setReloadTime(data.reloadTime);

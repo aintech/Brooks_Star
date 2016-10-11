@@ -7,25 +7,22 @@ public class Explosion : MonoBehaviour {
 
 	public bool onScreen { get; private set; }
 
-	private Animator anim;
-
 	private ExplosionsPack pack;
 
 	public Explosion init (ExplosionsPack pack) {
 		this.pack = pack;
-		anim = GetComponent<Animator>();
 		return this;
 	}
 
-	public void play () {
+	public void play (Vector2 pos) {
 		onScreen = true;
-		transform.localPosition = new Vector3(Random.Range (-1f, 1f), Random.Range (-1f, 1f), transform.position.z);
+		transform.position = pos;
 		gameObject.SetActive(true);
 	}
 
 	public void stop () {
 		onScreen = false;
-		pack.downCount ();
+		if (isFinal) { pack.finishPack(); }
 		gameObject.SetActive(false);
 	}
 }

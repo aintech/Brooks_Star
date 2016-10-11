@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: e41c542207c04234eab36dc9f6b1fd0e
-timeCreated: 1475665082
+timeCreated: 1476184106
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
@@ -9,8 +9,9 @@ MonoImporter:
   - planetOrbit: {fileID: 2800000, guid: 315c656f5ccde424985f123234b85a1e, type: 3}
   - planet: {fileID: 2800000, guid: 2e2912097a567504aafc267978ba5c76, type: 3}
   - player: {fileID: 2800000, guid: ccbea035c199a1f4ebf06091c6146bdb, type: 3}
+  - enemy: {fileID: 2800000, guid: 0fad783f484b0444d90c5cba1afdac82, type: 3}
   - footer: {fileID: 2800000, guid: 5b8dfdd9e512f6e459fbaf7ec3cf471c, type: 3}
-  - radarBorder: {fileID: 2800000, guid: 315c656f5ccde424985f123234b85a1e, type: 3}
+  - radarBorder: {fileID: 2800000, guid: bd27f14df29e923458fdea5f3d1f4355, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

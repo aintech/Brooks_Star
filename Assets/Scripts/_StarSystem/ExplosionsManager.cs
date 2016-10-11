@@ -10,14 +10,14 @@ public class ExplosionsManager : MonoBehaviour {
 
 	private static List<ExplosionsPack> explosionsPacks = new List<ExplosionsPack>();
 
-	public void init () {
+	public ExplosionsManager init () {
 		trans = transform;
 		explosionsPack = explosionsPackPrefab;
+		return this;
 	}
 
 	public static void playExplosion (Ship ship) {
 		ExplosionsPack pack = getPack();
-		pack.transform.position = ship.transform.position;
 		pack.play(ship);
 	}
 
@@ -30,5 +30,9 @@ public class ExplosionsManager : MonoBehaviour {
 		pack.init();
 		explosionsPacks.Add(pack);
 		return pack;
+	}
+
+	public static void clear () {
+		explosionsPacks.Clear();
 	}
 }

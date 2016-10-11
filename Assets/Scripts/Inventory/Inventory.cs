@@ -447,7 +447,8 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 			case InventoryType.INVENTORY: inventoryToSend = Vars.inventory; break;
 			case InventoryType.MARKET:
 				switch (Vars.planetType) {
-					case PlanetType.CORAS: inventoryToSend = Vars.marketCORAS; break;
+					case PlanetType.PARPARIS: inventoryToSend = Vars.market_parparis; break;
+					case PlanetType.TERANA: inventoryToSend = Vars.market_terana; break;
 				}
 				break;
 		}
@@ -467,7 +468,8 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 			case InventoryType.INVENTORY: loadItems(Vars.inventory); break;
 			case InventoryType.MARKET:
 				switch (Vars.planetType) {
-					case PlanetType.CORAS: loadItems(Vars.marketCORAS); break;
+					case PlanetType.PARPARIS: loadItems(Vars.market_parparis); break;
+					case PlanetType.TERANA: loadItems(Vars.market_terana); break;
 					default: Debug.Log("Unknown planet market: " + Vars.planetType); break;
 				}
 				break;

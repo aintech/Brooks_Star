@@ -34,6 +34,13 @@ public class EnemyShipController : ShipController {
 	}
 
 	protected override void decideNextMove () {
+		if (!ship.alive) {
+			if (accelarate) { accelarate = false; }
+			if (turnRight) { turnRight = false; }
+			if (turnLeft) { turnLeft = false; }
+			return;
+		}
+
 		distanceToPlayer = Vector2.Distance(trans.position, playerShip.position);
 
 		if (distanceToPlayer <= radarRange) {

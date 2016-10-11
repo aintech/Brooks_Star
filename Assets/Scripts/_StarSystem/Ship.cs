@@ -16,8 +16,10 @@ public abstract class Ship : MonoBehaviour {
 
 	private SpriteRenderer hullRender, engineRender;
 
-	protected int armor, health, shield, fullShield, fullHealth, radarRange;
-	
+	protected int armor, health, shield, fullShield, fullHealth;
+
+	public float radarRange { get; protected set; }
+
 	public Engine engine { get; private set; }
 	
 	protected Weapon weapon_1, weapon_2, weapon_3, weapon_4, weapon_5;
@@ -42,6 +44,8 @@ public abstract class Ship : MonoBehaviour {
 
 	public ShipController controller { get; private set; }
 
+	public bool alive { get; private set; }
+
 	public bool destroed { get; private set; }
 
 	protected void initInner () {
@@ -65,6 +69,8 @@ public abstract class Ship : MonoBehaviour {
 		controller = transform.GetComponent<ShipController>();
 
 		destroed = false;
+		alive = true;
+		shipCollider.enabled = true;
 	}
 
 	protected void setHullType (HullType hullType) {
@@ -150,10 +156,6 @@ public abstract class Ship : MonoBehaviour {
 		return armor;
 	}
 
-	public int getRadarRange () {
-		return radarRange;
-	}
-
 	public int getShield () {
 		return shield;
 	}
@@ -162,19 +164,10 @@ public abstract class Ship : MonoBehaviour {
 		return fullShield;
 	}
 
-	//для теста - потом убрать
-	public void damageShip (int damage) {
-		if (getShield() >= damage) {
-			shield = getShield() - damage;
-		} else {
-			int diff = damage - shield;
-			shield = 0;
-			health -= diff;
-		}
-		updateHealthAndShieldInfo();
-	}
-
 	public void damageShip (WeaponType type, Vector3 weaponPosition, int minDamage, int maxDamage) {
+		//FOR TEST
+		if (isPlayerShip()) { return; }
+
 		if (type == WeaponType.Blaster) {
 			int damage = Random.Range(minDamage, maxDamage + 1);
 			if (getShield() >= damage) {
@@ -194,7 +187,13 @@ public abstract class Ship : MonoBehaviour {
 	}
 
 	virtual protected void updateHealthAndShieldInfo () {}
-	virtual protected void disableShip () {}
+
+	virtual protected void disableShip () {
+		alive = false;
+		shipCollider.enabled = false;
+		ExplosionsManager.playExplosion(this);
+	}
+
 	virtual public void destroyShip () {
 		gameObject.SetActive(false);
 		destroed = true;

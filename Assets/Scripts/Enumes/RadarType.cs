@@ -25,12 +25,12 @@ public static class RadarDescriptor {
 	
 	public static int getRange (this RadarType type) {
 		switch(type) {
-		case RadarType.Sequester: return 100;
-		case RadarType.Planar: return 150;
-		case RadarType.Matrix: return 200;
-		case RadarType.PatanCorsac: return 300;
-		case RadarType.Snake: return 400;
-		case RadarType.Astral: return 600;
+		case RadarType.Sequester: return 5;
+		case RadarType.Planar: return 8;
+		case RadarType.Matrix: return 12;
+		case RadarType.PatanCorsac: return 20;
+		case RadarType.Snake: return 30;
+		case RadarType.Astral: return 50;
 		default: return 0;
 		}
 	}
