@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 1e54c3ae9abb4be42a9a775f202bdddb
-timeCreated: 1474451417
+timeCreated: 1476446573
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -50,6 +50,11 @@ TextureImporter:
     21300086: HandWeapon_Minigun
     21300088: HandWeapon_Gausse
     21300090: HandWeapon_Railgun
+    21300092: Goods_Jewelry
+    21300094: Goods_PreciousMetal
+    21300096: Goods_Booze
+    21300098: Goods_Electronics
+    21300100: Goods_Meal
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -689,6 +694,71 @@ TextureImporter:
         serializedVersion: 2
         x: 256
         y: 384
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Goods_Jewelry
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 320
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Goods_PreciousMetal
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 320
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Goods_Booze
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 320
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Goods_Electronics
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 320
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Goods_Meal
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 320
         width: 64
         height: 64
       alignment: 0

@@ -38,6 +38,8 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 		Imager.initialize();
 		Player.init();
 
+		GameObject.Find("Images Provider").GetComponent<ImagesProvider>().init();
+
 		background = transform.Find("Background").GetComponent<Background>().init();
 
 		marketBtn = transform.Find("Market Button").GetComponent<Button>().init();

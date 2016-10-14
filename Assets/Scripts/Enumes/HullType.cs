@@ -16,7 +16,7 @@ public enum HullType {
 	Warship,
 	Asterix,
 	Prime,
-	Titan,
+	TITAN,
 	Dreadnaut,
 	Armageddon
 }
@@ -39,7 +39,7 @@ public static class HullDescriptor {
 			case HullType.Warship: return "Воршип";
 			case HullType.Asterix: return "Астерикс";
 			case HullType.Prime: return "Прайм";
-			case HullType.Titan: return "Титан";
+			case HullType.TITAN: return "Титан";
 			case HullType.Dreadnaut: return "Дреднаут";
 			case HullType.Armageddon: return "Армагеддон";
 			default: return "Неизвестный тип корпуса";
@@ -62,7 +62,7 @@ public static class HullDescriptor {
 			case HullType.Warship: 		return 1200;
 			case HullType.Asterix: 		return 1400;
 			case HullType.Prime: 		return 2000;
-			case HullType.Titan: 		return 2500;
+			case HullType.TITAN: 		return 2500;
 			case HullType.Dreadnaut: 	return 3200;
 			case HullType.Armageddon: 	return 3800;
 			default: return 0;
@@ -85,7 +85,7 @@ public static class HullDescriptor {
 			case HullType.Warship:
 			case HullType.Asterix:
 			case HullType.Prime:
-			case HullType.Titan: return 2;
+			case HullType.TITAN: return 2;
 			case HullType.Dreadnaut:
 			case HullType.Armageddon: return 3;
 			default: return 0;
@@ -108,7 +108,7 @@ public static class HullDescriptor {
 			case HullType.Warship:
 			case HullType.Asterix:
 			case HullType.Prime:
-			case HullType.Titan:
+			case HullType.TITAN:
 			case HullType.Dreadnaut:
 			case HullType.Armageddon: return 2;
 			default: return 0;
@@ -131,7 +131,7 @@ public static class HullDescriptor {
 			case HullType.Warship:
 			case HullType.Asterix:
 			case HullType.Prime: return 3;
-			case HullType.Titan:
+			case HullType.TITAN:
 			case HullType.Dreadnaut:
 			case HullType.Armageddon: return 4;
 			default: return 0;
@@ -154,7 +154,7 @@ public static class HullDescriptor {
 			case HullType.Warship:
 			case HullType.Asterix:
 			case HullType.Prime:
-			case HullType.Titan:
+			case HullType.TITAN:
 			case HullType.Dreadnaut: return 2;
 			case HullType.Armageddon: return 3;
 			default: return 0;
@@ -177,7 +177,7 @@ public static class HullDescriptor {
 			case HullType.Warship:
 			case HullType.Asterix:
 			case HullType.Prime: return 4;
-			case HullType.Titan:
+			case HullType.TITAN:
 			case HullType.Dreadnaut:
 			case HullType.Armageddon: return 5;
 			default: return 0;
@@ -200,7 +200,7 @@ public static class HullDescriptor {
 			case HullType.Warship:
 			case HullType.Asterix:
 			case HullType.Prime: 		return 3;
-			case HullType.Titan:
+			case HullType.TITAN:
 			case HullType.Dreadnaut:	return 4;
 			case HullType.Armageddon: 	return 5;
 			default: return 0;
@@ -223,7 +223,7 @@ public static class HullDescriptor {
 			case HullType.Warship: 		return 2400;
 			case HullType.Asterix: 		return 2800;
 			case HullType.Prime: 		return 4000;
-			case HullType.Titan: 		return 5000;
+			case HullType.TITAN: 		return 5000;
 			case HullType.Dreadnaut: 	return 6400;
 			case HullType.Armageddon: 	return 7600;
 			default: return 0;
@@ -246,7 +246,7 @@ public static class HullDescriptor {
 			case HullType.Warship: 		return 86;
 			case HullType.Asterix: 		return 100;
 			case HullType.Prime: 		return 120;
-			case HullType.Titan: 		return 140;
+			case HullType.TITAN: 		return 140;
 			case HullType.Dreadnaut: 	return 170;
 			case HullType.Armageddon: 	return 200;
 			default: return 0;
@@ -269,7 +269,7 @@ public static class HullDescriptor {
 			case HullType.Warship:
 			case HullType.Asterix:
 			case HullType.Prime: 		return 3;
-			case HullType.Titan:
+			case HullType.TITAN:
 			case HullType.Dreadnaut:	return 4;
 			case HullType.Armageddon: 	return 5;
 			default: return 0;

@@ -41,7 +41,7 @@ public class EnemyShip : Ship {
 		             rand == 3? HullType.Cricket: rand == 4? HullType.Argo: rand == 5? HullType.Falcon:
 		             rand == 6? HullType.Adventurer: rand == 7? HullType.Corvette: rand == 8? HullType.Buffalo:
 		             rand == 9? HullType.Legionnaire: rand == 10? HullType.StarWalker: rand == 11? HullType.Warship:
-		             rand == 12? HullType.Asterix: rand == 13? HullType.Prime: rand == 14? HullType.Titan:
+		             rand == 12? HullType.Asterix: rand == 13? HullType.Prime: rand == 14? HullType.TITAN:
 		             rand == 15? HullType.Dreadnaut: HullType.Armageddon);
 
 		health = fullHealth = getHullType().getMaxHealth();
@@ -69,22 +69,22 @@ public class EnemyShip : Ship {
 
 	private void initRadarRange (int shipLevel) {
 		switch (shipLevel) {
-			case 0: radarRange = RadarType.Sequester.getRange(); break;
-			case 1: radarRange = RadarType.Planar.getRange(); break;
-			case 2: radarRange = RadarType.Matrix.getRange(); break;
-			case 3: radarRange = RadarType.PatanCorsac.getRange(); break;
-			case 4: radarRange = RadarType.Snake.getRange(); break;
-			case 5: radarRange = RadarType.Astral.getRange(); break;
+			case 0: radarRange = RadarType.SEQUESTER.getRange(); break;
+			case 1: radarRange = RadarType.PLANAR.getRange(); break;
+			case 2: radarRange = RadarType.MATRIX.getRange(); break;
+			case 3: radarRange = RadarType.PATAN_CORSAC.getRange(); break;
+			case 4: radarRange = RadarType.SNAKE.getRange(); break;
+			case 5: radarRange = RadarType.ASTRAL.getRange(); break;
 			default: Debug.Log("Неизвестный уровень корабля"); break;
 		}
 	}
 
 	private void initEngine () {
 		int rand = UnityEngine.Random.Range(0, Enum.GetNames(typeof(EngineType)).Length);
-		EngineType eType = 	rand == 0? EngineType.Force:
-						   	rand == 1? EngineType.Gradual:
-						   	rand == 2? EngineType.Proton:
-							rand == 3? EngineType.Allur: EngineType.Quazar;
+		EngineType eType = 	rand == 0? EngineType.FORCE:
+						   	rand == 1? EngineType.GRADUAL:
+						   	rand == 2? EngineType.PROTON:
+							rand == 3? EngineType.ALLUR: EngineType.QUAZAR;
 		engine.setEngine(eType, eType.getMainPower(), eType.getRotatePower());
 		setEngineSprite ();
 	}
@@ -103,22 +103,22 @@ public class EnemyShip : Ship {
 
 //		int rand = UnityEngine.Random.Range(0, Enum.GetNames(typeof(WeaponType)).Length);
 
-		WeaponType type = WeaponType.Blaster;//rand == 0? WeaponType.Blaster:
-						  //rand == 1? WeaponType.Plasmer:
-						  //rand == 2? WeaponType.Charger:
-						  //rand == 3? WeaponType.Emitter:
-						  //rand == 4? WeaponType.Waver:
-					  	  //rand == 5? WeaponType.Launcher:
-						  //WeaponType.Suppressor;
+		WeaponType type = WeaponType.BLASTER;//rand == 0? WeaponType.BLASTER:
+						  //rand == 1? WeaponType.PLASMER:
+						  //rand == 2? WeaponType.CHARGER:
+						  //rand == 3? WeaponType.EMITTER:
+						  //rand == 4? WeaponType.WAVER:
+					  	  //rand == 5? WeaponType.LAUNCHER:
+						  //WeaponType.SUPPRESSOR;
 
 		switch (type) {
-			case WeaponType.Blaster: weapon = Instantiate<Transform>(blasterPrefab).GetComponent<Blaster>(); break;
-			case WeaponType.Plasmer: weapon = Instantiate<Transform>(plasmerPrefab).GetComponent<Plasmer>(); break;
-			case WeaponType.Charger: weapon = Instantiate<Transform>(chargerPrefab).GetComponent<Charger>(); break;
-			case WeaponType.Emitter: weapon = Instantiate<Transform>(emitterPrefab).GetComponent<Emitter>(); break;
-			case WeaponType.Waver: weapon = Instantiate<Transform>(waverPrefab).GetComponent<Waver>(); break;
-			case WeaponType.Launcher: weapon = Instantiate<Transform>(launcherPrefab).GetComponent<Launcher>(); break;
-			case WeaponType.Suppressor: weapon = Instantiate<Transform>(suppressorPrefab).GetComponent<Suppressor>(); break;
+			case WeaponType.BLASTER: weapon = Instantiate<Transform>(blasterPrefab).GetComponent<Blaster>(); break;
+			case WeaponType.PLASMER: weapon = Instantiate<Transform>(plasmerPrefab).GetComponent<Plasmer>(); break;
+			case WeaponType.CHARGER: weapon = Instantiate<Transform>(chargerPrefab).GetComponent<Charger>(); break;
+			case WeaponType.EMITTER: weapon = Instantiate<Transform>(emitterPrefab).GetComponent<Emitter>(); break;
+			case WeaponType.WAVER: weapon = Instantiate<Transform>(waverPrefab).GetComponent<Waver>(); break;
+			case WeaponType.LAUNCHER: weapon = Instantiate<Transform>(launcherPrefab).GetComponent<Launcher>(); break;
+			case WeaponType.SUPPRESSOR: weapon = Instantiate<Transform>(suppressorPrefab).GetComponent<Suppressor>(); break;
 		}
 
 		weapon.init(this);

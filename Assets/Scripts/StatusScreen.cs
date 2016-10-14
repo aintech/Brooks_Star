@@ -242,7 +242,7 @@ public class StatusScreen : InventoryContainedScreen {
 			if (draggedItem.cell == null) {
 				switch (draggedItem.getItemType().getKind()) {
 					case ItemKind.SHIP_EQUIPMENT: shipData.updateHullInfo(); break;
-					case ItemKind.EQUIPMENTS: playerData.updatePlayerInfo(); break;
+					case ItemKind.EQUIPMENT: playerData.updatePlayerInfo(); break;
 				}
 			}
 			targetInv.addItemToCell(draggedItem, cell);
@@ -302,7 +302,7 @@ public class StatusScreen : InventoryContainedScreen {
 			}
 			switch (draggedItem.getItemType().getKind()) {
 				case ItemKind.SHIP_EQUIPMENT: shipData.updateHullInfo(); break;
-				case ItemKind.EQUIPMENTS: playerData.updatePlayerInfo(); break;
+				case ItemKind.EQUIPMENT: playerData.updatePlayerInfo(); break;
 			}
 		} else {
 			draggedItem.returnToParent();
@@ -316,7 +316,7 @@ public class StatusScreen : InventoryContainedScreen {
 		slot.setItem (draggedItem);
 		if (slot.kind == ItemKind.SHIP_EQUIPMENT) {
 			shipData.updateHullInfo ();
-		} else if (slot.kind == ItemKind.EQUIPMENTS) {
+		} else if (slot.kind == ItemKind.EQUIPMENT) {
 			playerData.updatePlayerInfo();
 		}
 	}
@@ -345,7 +345,7 @@ public class StatusScreen : InventoryContainedScreen {
 
 	override protected void afterItemDrop () {
 		if (draggedItem == null) {
-			highlightSlot (false, ItemType.MINERAL);
+			highlightSlot (false, ItemType.GOODS);//Goods здесь вместо null, т.к. enum неможет в null
 		}
 	}
 
@@ -361,7 +361,7 @@ public class StatusScreen : InventoryContainedScreen {
 		if (!hightlight) {
 			if (itemType.getKind() == ItemKind.SHIP_EQUIPMENT) {
 				foreach (Slot slot in shipData.getSlots()) { slot.setActive(false); }
-			} else if (itemType.getKind() == ItemKind.EQUIPMENTS) {
+			} else if (itemType.getKind() == ItemKind.EQUIPMENT) {
 				foreach (Slot slot in playerData.getSlots()) { slot.setActive(false); }
 			} else {
 				foreach (Slot slot in shipData.getSlots()) { slot.setActive(false); }

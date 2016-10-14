@@ -435,7 +435,7 @@ public class HullSlot : Slot {
             vectors.Add(new Vector3(-2.2f, 1.6f));//armor 4
             vectors.Add(Vector3.zero);//armor 5
             break;
-            case HullType.Titan:
+            case HullType.TITAN:
             vectors.Add(new Vector3(0, -2.3f));//radar
             vectors.Add(new Vector3(0, 2.4f));//engine
             vectors.Add(new Vector3(0, -1.1f));//generator 1

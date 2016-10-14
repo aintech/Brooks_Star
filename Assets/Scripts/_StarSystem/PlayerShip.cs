@@ -52,13 +52,13 @@ public class PlayerShip : Ship {
 		Weapon weapon = null;
 		
 		switch (data.type) {
-			case WeaponType.Blaster: weapon = Instantiate<Transform>(blasterPrefab).GetComponent<Blaster>(); break;
-			case WeaponType.Plasmer: weapon = Instantiate<Transform>(plasmerPrefab).GetComponent<Plasmer>(); break;
-			case WeaponType.Charger: weapon = Instantiate<Transform>(chargerPrefab).GetComponent<Charger>(); break;
-			case WeaponType.Emitter: weapon = Instantiate<Transform>(emitterPrefab).GetComponent<Emitter>(); break;
-			case WeaponType.Waver: weapon = Instantiate<Transform>(waverPrefab).GetComponent<Waver>(); break;
-			case WeaponType.Launcher: weapon = Instantiate<Transform>(launcherPrefab).GetComponent<Launcher>(); break;
-			case WeaponType.Suppressor: weapon = Instantiate<Transform>(suppressorPrefab).GetComponent<Suppressor>(); break;
+			case WeaponType.BLASTER: weapon = Instantiate<Transform>(blasterPrefab).GetComponent<Blaster>(); break;
+			case WeaponType.PLASMER: weapon = Instantiate<Transform>(plasmerPrefab).GetComponent<Plasmer>(); break;
+			case WeaponType.CHARGER: weapon = Instantiate<Transform>(chargerPrefab).GetComponent<Charger>(); break;
+			case WeaponType.EMITTER: weapon = Instantiate<Transform>(emitterPrefab).GetComponent<Emitter>(); break;
+			case WeaponType.WAVER: weapon = Instantiate<Transform>(waverPrefab).GetComponent<Waver>(); break;
+			case WeaponType.LAUNCHER: weapon = Instantiate<Transform>(launcherPrefab).GetComponent<Launcher>(); break;
+			case WeaponType.SUPPRESSOR: weapon = Instantiate<Transform>(suppressorPrefab).GetComponent<Suppressor>(); break;
 		}
 
 		weapon.init(this);

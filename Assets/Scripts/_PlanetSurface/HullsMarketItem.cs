@@ -31,7 +31,7 @@ public class HullsMarketItem : MonoBehaviour {
 			case HullType.Warship: render.sprite = hullIcons[11]; break;
 			case HullType.Asterix: render.sprite = hullIcons[12]; break;
 			case HullType.Prime: render.sprite = hullIcons[13]; break;
-			case HullType.Titan: render.sprite = hullIcons[14]; break;
+			case HullType.TITAN: render.sprite = hullIcons[14]; break;
 			case HullType.Dreadnaut: render.sprite = hullIcons[15]; break;
 			case HullType.Armageddon: render.sprite = hullIcons[16]; break;
 		}

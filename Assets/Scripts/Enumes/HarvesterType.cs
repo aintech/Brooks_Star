@@ -2,53 +2,53 @@
 using System.Collections;
 
 public enum HarvesterType {
-	Mechanical,
-	Plasmatic,
-	Generative
+	MECHANICAL,
+	PLASMATIC,
+	GENERATIVE
 }
 
 public static class HarvesterDescriptor {
 	public static string getName (this HarvesterType type) {
 		switch(type) {
-		case HarvesterType.Mechanical: return "Механический сборщик";
-		case HarvesterType.Plasmatic: return "Плазматический сборщик";
-		case HarvesterType.Generative: return "Генеративный сборщик";
+		case HarvesterType.MECHANICAL: return "Механический сборщик";
+		case HarvesterType.PLASMATIC: return "Плазматический сборщик";
+		case HarvesterType.GENERATIVE: return "Генеративный сборщик";
 		default: return "Неизвестный тип сборщика";
 		}
 	}
 
 	public static int getHarvestTime (this HarvesterType type) {
 		switch(type) {
-		case HarvesterType.Mechanical: return 300;
-		case HarvesterType.Plasmatic: return 200;
-		case HarvesterType.Generative: return 100;
+		case HarvesterType.MECHANICAL: return 300;
+		case HarvesterType.PLASMATIC: return 200;
+		case HarvesterType.GENERATIVE: return 100;
 		default: return 0;
 		}
 	}
 
 	public static float getVolume (this HarvesterType type) {
 		switch(type) {
-		case HarvesterType.Mechanical: return 1;
-		case HarvesterType.Plasmatic: return 1;
-		case HarvesterType.Generative: return 1;
+		case HarvesterType.MECHANICAL: return 1;
+		case HarvesterType.PLASMATIC: return 1;
+		case HarvesterType.GENERATIVE: return 1;
 		default: return 0;
 		}
 	}
 
 	public static int getCost (this HarvesterType type) {
 		switch(type) {
-		case HarvesterType.Mechanical: return 100;
-		case HarvesterType.Plasmatic: return 200;
-		case HarvesterType.Generative: return 300;
+		case HarvesterType.MECHANICAL: return 100;
+		case HarvesterType.PLASMATIC: return 200;
+		case HarvesterType.GENERATIVE: return 300;
 		default: return 0;
 		}
 	}
 
 	public static string getDescription (this HarvesterType type) {
 		switch(type) {
-		case HarvesterType.Mechanical: return "Дроид-Харвестер на\nмеханической основе";
-		case HarvesterType.Plasmatic: return "Дроид-Харвестер на\nплазматической основе";
-		case HarvesterType.Generative: return "Дроид-Харвестре на\nгенеративной основе";
+		case HarvesterType.MECHANICAL: return "Дроид-Харвестер на\nмеханической основе";
+		case HarvesterType.PLASMATIC: return "Дроид-Харвестер на\nплазматической основе";
+		case HarvesterType.GENERATIVE: return "Дроид-Харвестре на\nгенеративной основе";
 		default: return "Неизвестный тип сборщика";
 		}
 	}

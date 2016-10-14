@@ -100,7 +100,7 @@ public abstract class Ship : MonoBehaviour {
 			case HullType.Warship: hullRender.sprite = hullSprites[11]; break;
 			case HullType.Asterix: hullRender.sprite = hullSprites[12]; break;
 			case HullType.Prime: hullRender.sprite = hullSprites[13]; break;
-			case HullType.Titan: hullRender.sprite = hullSprites[14]; break;
+			case HullType.TITAN: hullRender.sprite = hullSprites[14]; break;
 			case HullType.Dreadnaut: hullRender.sprite = hullSprites[15]; break;
 			case HullType.Armageddon: hullRender.sprite = hullSprites[16]; break;
 			default: Debug.Log("Неизвестный тип корпуса"); break;
@@ -117,11 +117,11 @@ public abstract class Ship : MonoBehaviour {
 	protected void setEngineSprite () {
 		if (engineRender == null) getEngineRender();
 		switch (engine.getEngineType()) {
-			case EngineType.Force: engineRender.sprite = engineSprites[0]; break;
-			case EngineType.Gradual: engineRender.sprite = engineSprites[1]; break;
-			case EngineType.Proton: engineRender.sprite = engineSprites[2]; break;
-			case EngineType.Allur: engineRender.sprite = engineSprites[3]; break;
-			case EngineType.Quazar: engineRender.sprite = engineSprites[4]; break;
+			case EngineType.FORCE: engineRender.sprite = engineSprites[0]; break;
+			case EngineType.GRADUAL: engineRender.sprite = engineSprites[1]; break;
+			case EngineType.PROTON: engineRender.sprite = engineSprites[2]; break;
+			case EngineType.ALLUR: engineRender.sprite = engineSprites[3]; break;
+			case EngineType.QUAZAR: engineRender.sprite = engineSprites[4]; break;
 			default: Debug.Log("Неизвестный тип двигателя"); break;
 		}
 		engine.transform.position = transform.position + engineMap[hullType];
@@ -168,7 +168,7 @@ public abstract class Ship : MonoBehaviour {
 		//FOR TEST
 		if (isPlayerShip()) { return; }
 
-		if (type == WeaponType.Blaster) {
+		if (type == WeaponType.BLASTER) {
 			int damage = Random.Range(minDamage, maxDamage + 1);
 			if (getShield() >= damage) {
 				shield = getShield() - damage;
@@ -280,7 +280,7 @@ public abstract class Ship : MonoBehaviour {
 		list.Add(new Vector3(0.705f, 0.24f, zOffset));
 		list.Add(new Vector3(-0.62f, -0.92f, zOffset));
 		list.Add(new Vector3(0.62f, -0.92f, zOffset));
-		weaponSlotsMap.Add(HullType.Titan, list);
+		weaponSlotsMap.Add(HullType.TITAN, list);
 		
 		list = new List<Vector3>();
 		list.Add(new Vector3(-0.575f, 0.165f, zOffset));
@@ -305,7 +305,7 @@ public abstract class Ship : MonoBehaviour {
 		engineMap.Add(HullType.Warship, new Vector3(0, -1.135f, 0));
 		engineMap.Add(HullType.Asterix, new Vector3(0, -1.15f, 0));
 		engineMap.Add(HullType.Prime, new Vector3(0, -1.11f, 0));
-		engineMap.Add(HullType.Titan, new Vector3(0, -1.11f, 0));
+		engineMap.Add(HullType.TITAN, new Vector3(0, -1.11f, 0));
 		engineMap.Add(HullType.Dreadnaut, new Vector3(0, -1.18f, 0));
 		engineMap.Add(HullType.Armageddon, new Vector3(0, -1.33f, 0));
 	}
@@ -326,7 +326,7 @@ public abstract class Ship : MonoBehaviour {
 		colliderMap.Add(HullType.Warship, new Vector3(-0.07f, 0.9f, 2.42f));
 		colliderMap.Add(HullType.Asterix, new Vector3(-0.07f, 1, 2.46f));
 		colliderMap.Add(HullType.Prime, new Vector3(-0.06f, 1.2f, 2.4f));
-		colliderMap.Add(HullType.Titan, new Vector3(-0.06f, 1.4f, 2.4f));
+		colliderMap.Add(HullType.TITAN, new Vector3(-0.06f, 1.4f, 2.4f));
 		colliderMap.Add(HullType.Dreadnaut, new Vector3(-0.04f, 1.8f, 2.58f));
 		colliderMap.Add(HullType.Armageddon, new Vector3(-0.07f, 1.8f, 2.8f));
 	}
@@ -347,7 +347,7 @@ public abstract class Ship : MonoBehaviour {
 		exhaustMap.Add(HullType.Warship, new Vector3(-.58f, .54f));
 		exhaustMap.Add(HullType.Asterix, new Vector3(-.45f, .6f));
 		exhaustMap.Add(HullType.Prime, new Vector3(-.57f, .8f));
-		exhaustMap.Add(HullType.Titan, new Vector3(-.78f, .72f));
+		exhaustMap.Add(HullType.TITAN, new Vector3(-.78f, .72f));
 		exhaustMap.Add(HullType.Dreadnaut, new Vector3(-.92f, .6f));
 		exhaustMap.Add(HullType.Armageddon, new Vector3(-1.06f, .83f));
 	}

@@ -18,6 +18,7 @@ public static class ItemFactory {
 			case ItemType.HARVESTER: return createHarvesterData ();
 			case ItemType.HAND_WEAPON: return createHandWeaponData ();
 			case ItemType.BODY_ARMOR: return createBodyArmorData ();
+			case ItemType.GOODS: return createGoodsData (UnityEngine.Random.Range(1, 21));
 			default: Debug.Log("Unknown type: " + type); return null;
 		}
 	}
@@ -64,6 +65,26 @@ public static class ItemFactory {
 			case ItemType.REPAIR_DROID: return Mathf.RoundToInt(data.level * ((RepairDroidData)data).type.getEnergyNeeded());
 			default: return 0;
 		}
+	}
+
+	public static GoodsData createGoodsData (int quantity) {
+		GoodsType type = GoodsType.JEWELRY;
+		switch (UnityEngine.Random.Range(0, Enum.GetNames(typeof(GoodsType)).Length)) {
+			case 0: type = GoodsType.JEWELRY; break;
+			case 1: type = GoodsType.PRECIOUS_METALS; break;
+			case 2: type = GoodsType.BOOZE; break;
+			case 3: type = GoodsType.ELECTRONICS; break;
+			case 4: type = GoodsType.MEAL; break;
+			default: Debug.Log("Unmapped value for goods"); break;
+		}
+		return createGoodsData (type, quantity);
+	}
+
+	public static GoodsData createGoodsData (GoodsType type, int quantity) {
+		GoodsData data = new GoodsData(type, quantity);
+		data.initCommons(type.cost(), 0);
+
+		return data;
 	}
 
 	public static HandWeaponData createHandWeaponData () {
@@ -117,15 +138,15 @@ public static class ItemFactory {
 	}
 
 	public static WeaponData createWeaponData () {
-		WeaponType type = WeaponType.Blaster;
+		WeaponType type = WeaponType.BLASTER;
 //		switch (UnityEngine.Random.Range(0, Enum.GetNames(typeof(WeaponType)).Length)) {
-//			case 0: type = WeaponType.Blaster; break;
-//			case 1: type = WeaponType.Plasmer; break;
-//			case 2: type = WeaponType.Charger; break;
-//			case 3: type = WeaponType.Emitter; break;
-//			case 4: type = WeaponType.Waver; break;
-//			case 5: type = WeaponType.Launcher; break;
-//			case 6: type = WeaponType.Suppressor; break;
+//			case 0: type = WeaponType.BLASTER; break;
+//			case 1: type = WeaponType.PLASMER; break;
+//			case 2: type = WeaponType.CHARGER; break;
+//			case 3: type = WeaponType.EMITTER; break;
+//			case 4: type = WeaponType.WAVER; break;
+//			case 5: type = WeaponType.LAUNCHER; break;
+//			case 6: type = WeaponType.SUPPRESSOR; break;
 //			default: Debug.Log("Unmapped value for weapon"); break;
 //		}
 		return createWeaponData(type);
@@ -145,13 +166,13 @@ public static class ItemFactory {
 	}
 
 	public static EngineData createEngineData () {
-		EngineType type = EngineType.Force;
+		EngineType type = EngineType.FORCE;
 		switch (UnityEngine.Random.Range(0, Enum.GetNames(typeof(EngineType)).Length)) {
-			case 0: type = EngineType.Force; break;
-			case 1: type = EngineType.Gradual; break;
-			case 2: type = EngineType.Proton; break;
-			case 3: type = EngineType.Allur; break;
-			case 4: type = EngineType.Quazar; break;
+			case 0: type = EngineType.FORCE; break;
+			case 1: type = EngineType.GRADUAL; break;
+			case 2: type = EngineType.PROTON; break;
+			case 3: type = EngineType.ALLUR; break;
+			case 4: type = EngineType.QUAZAR; break;
 			default: Debug.Log("Unmapped value for engine"); break;
 		}
 		return createEngineData(type);
@@ -170,13 +191,13 @@ public static class ItemFactory {
 	}
 
 	public static ArmorData createArmorData () {
-		ArmorType type = ArmorType.Steel;
+		ArmorType type = ArmorType.STEEL;
 		switch (UnityEngine.Random.Range(0, Enum.GetNames(typeof(ArmorType)).Length)) {
-			case 0: type = ArmorType.Steel; break;
-			case 1: type = ArmorType.HardenedSteel; break;
-			case 2: type = ArmorType.Titan; break;
-			case 3: type = ArmorType.Astron; break;
-			case 4: type = ArmorType.Adamant; break;
+			case 0: type = ArmorType.STEEL; break;
+			case 1: type = ArmorType.HARDENED_STEEL; break;
+			case 2: type = ArmorType.TITANIUM; break;
+			case 3: type = ArmorType.ASTRON; break;
+			case 4: type = ArmorType.ADAMANT; break;
 			default: Debug.Log("Unmapped value for armor"); break;
 		}
 		return createArmorData(type);
@@ -189,12 +210,12 @@ public static class ItemFactory {
 	}
 
 	public static GeneratorData createGeneratorData () {
-		GeneratorType type = GeneratorType.Atomic;
+		GeneratorType type = GeneratorType.ATOMIC;
 		switch (UnityEngine.Random.Range(0, Enum.GetNames(typeof(GeneratorType)).Length)) {
-			case 0: type = GeneratorType.Atomic; break;
-			case 1: type = GeneratorType.Plasma; break;	
-			case 2: type = GeneratorType.Multyphase; break;	
-			case 3: type = GeneratorType.Tunnel; break;	
+			case 0: type = GeneratorType.ATOMIC; break;
+			case 1: type = GeneratorType.PLASMA; break;	
+			case 2: type = GeneratorType.MULTYPHASE; break;	
+			case 3: type = GeneratorType.TUNNEL; break;	
 			default: Debug.Log("Unmapped value for generator"); break;
 		}
 		return createGeneratorData(type);
@@ -213,14 +234,14 @@ public static class ItemFactory {
 	}
 	
 	public static RadarData createRadarData () {
-		RadarType type = RadarType.Sequester;
+		RadarType type = RadarType.SEQUESTER;
 		switch (UnityEngine.Random.Range(0, Enum.GetNames(typeof(RadarType)).Length)) {
-			case 0: type = RadarType.Sequester; break;
-			case 1: type = RadarType.Planar; break;
-			case 2: type = RadarType.Matrix; break;
-			case 3: type = RadarType.PatanCorsac; break;
-			case 4: type = RadarType.Snake; break;
-			case 5: type = RadarType.Astral; break;	
+			case 0: type = RadarType.SEQUESTER; break;
+			case 1: type = RadarType.PLANAR; break;
+			case 2: type = RadarType.MATRIX; break;
+			case 3: type = RadarType.PATAN_CORSAC; break;
+			case 4: type = RadarType.SNAKE; break;
+			case 5: type = RadarType.ASTRAL; break;	
 			default: Debug.Log("Unmapped value for radar"); break;
 		}
 		return createRadarData(type);
@@ -239,12 +260,12 @@ public static class ItemFactory {
 	}
 
 	public static ShieldData createShieldData () {
-		ShieldType type = ShieldType.Block;
+		ShieldType type = ShieldType.BLOCK;
 		switch (UnityEngine.Random.Range(0, Enum.GetNames(typeof(ShieldType)).Length)) {
-			case 0: type = ShieldType.Block; break;
-			case 1: type = ShieldType.Quadratic; break;
-			case 2: type = ShieldType.Cell; break;
-			case 3: type = ShieldType.Phase; break;
+			case 0: type = ShieldType.BLOCK; break;
+			case 1: type = ShieldType.QUADRATIC; break;
+			case 2: type = ShieldType.CELL; break;
+			case 3: type = ShieldType.PHASE; break;
 			default: Debug.Log("Unmapped value for shield"); break;
 		}
 		return createShieldData(type);
@@ -264,12 +285,12 @@ public static class ItemFactory {
 	}
 
 	public static RepairDroidData createRepairDroidData () {
-		RepairDroidType type = RepairDroidType.Rail;
+		RepairDroidType type = RepairDroidType.RAIL;
 		switch (UnityEngine.Random.Range(0, Enum.GetNames(typeof(RepairDroidType)).Length)) {
-			case 0: type = RepairDroidType.Rail; break;
-			case 1: type = RepairDroidType.Channel; break;
-			case 2: type = RepairDroidType.Biphasic; break;
-			case 3: type = RepairDroidType.Thread; break;
+			case 0: type = RepairDroidType.RAIL; break;
+			case 1: type = RepairDroidType.CHANNEL; break;
+			case 2: type = RepairDroidType.BIPHASIC; break;
+			case 3: type = RepairDroidType.THREAD; break;
 			default: Debug.Log("Unmapped value for repair droid"); break;
 		}
 		return createRepairDroidData(type);
@@ -288,11 +309,11 @@ public static class ItemFactory {
 	}
 
 	public static HarvesterData createHarvesterData () {
-		HarvesterType type = HarvesterType.Mechanical;
+		HarvesterType type = HarvesterType.MECHANICAL;
 		switch (UnityEngine.Random.Range(0, Enum.GetNames(typeof(HarvesterType)).Length)) {
-			case 0: type = HarvesterType.Mechanical; break;
-			case 1: type = HarvesterType.Plasmatic; break;
-			case 2: type = HarvesterType.Generative; break;
+			case 0: type = HarvesterType.MECHANICAL; break;
+			case 1: type = HarvesterType.PLASMATIC; break;
+			case 2: type = HarvesterType.GENERATIVE; break;
 			default: Debug.Log("Unmapped value for harvester"); break;
 		}
 		return createHarvesterData(type);

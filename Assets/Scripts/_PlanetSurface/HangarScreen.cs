@@ -69,7 +69,7 @@ public class HangarScreen : MonoBehaviour, ButtonHolder {
 			case HullType.Warship: return hullImages[11];
 			case HullType.Asterix: return hullImages[12];
 			case HullType.Prime: return hullImages[13];
-			case HullType.Titan: return hullImages[14];
+			case HullType.TITAN: return hullImages[14];
 			case HullType.Dreadnaut: return hullImages[15];
 			case HullType.Armageddon: return hullImages[16];
 			default: Debug.Log("Unknown hull type: " + type); return null;

@@ -6,6 +6,7 @@ public abstract class ItemData {
 	public string name { get; protected set; }
 	public string description { get; protected set; }
 	public float volume { get; protected set; }
+	public int quantity = 1;
 
 	public ItemQuality quality { get; private set; }
 	public float level { get; private set; }
@@ -21,6 +22,18 @@ public abstract class ItemData {
 	public void initCommons (int cost, int energyNeeded) {
 		this.cost = cost;
 		this.energyNeeded = energyNeeded;
+	}
+}
+
+public class GoodsData : ItemData {
+	public GoodsType type { get; private set; }
+	public GoodsData (GoodsType type, int quantity) : base(ItemQuality.COMMON, 1) {
+		this.type = type;
+		this.quantity = quantity;
+		this.name = type.name();
+		this.description = type.description();
+		this.volume = type.volume();
+		this.itemType = ItemType.GOODS;
 	}
 }
 

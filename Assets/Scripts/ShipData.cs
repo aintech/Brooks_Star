@@ -143,7 +143,7 @@ public class ShipData : MonoBehaviour {
 			case HullType.Warship: render.sprite = hullSprites[11]; break;
 			case HullType.Asterix: render.sprite = hullSprites[12]; break;
 			case HullType.Prime: render.sprite = hullSprites[13]; break;
-			case HullType.Titan: render.sprite = hullSprites[14]; break;
+			case HullType.TITAN: render.sprite = hullSprites[14]; break;
 			case HullType.Dreadnaut: render.sprite = hullSprites[15]; break;
 			case HullType.Armageddon: render.sprite = hullSprites[16]; break;
 			default: Debug.Log("Неизвестный тип корпуса"); break;
@@ -175,7 +175,7 @@ public class ShipData : MonoBehaviour {
 			if (slot.item != null) {
 				slot.item.transform.position = slot.transform.position;
 				slot.item.transform.SetParent (slot.transform);
-				slot.item.GetComponent<SpriteRenderer>().sortingOrder = 3;
+				slot.item.changeSortOrder(3);//.GetComponent<SpriteRenderer>().sortingOrder = 3;
 			}
 		}
 	}
@@ -301,7 +301,7 @@ public class ShipData : MonoBehaviour {
 		setHullType (Vars.shipHullType, Vars.shipCurrentHealth);
 		foreach (KeyValuePair<KeyValuePair<HullSlot.Type, int>, ItemData> pair in Vars.shipHullSlotsMap) {
 			Item item = Instantiate<Transform>(ItemFactory.itemPrefab).GetComponent<Item>().init(pair.Value);
-			item.GetComponent<SpriteRenderer>().sortingOrder = 3;
+			item.changeSortOrder(3);//.GetComponent<SpriteRenderer>().sortingOrder = 3;
 			getSlot(pair.Key.Key, pair.Key.Value).setItem(item);
 		}
 		Vars.shipHullSlotsMap.Clear();

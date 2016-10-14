@@ -47,6 +47,8 @@ public class StarSystem : MonoBehaviour {
 		Imager.initialize();
 		Player.init();
 
+		GameObject.Find("Images Provider").GetComponent<ImagesProvider>().init();
+
 		starField = GameObject.Find("StarField").GetComponent<StarField>().init();
         star = transform.Find("Star").GetComponent<SpriteRenderer>();
         star.gameObject.SetActive(true);
@@ -72,7 +74,6 @@ public class StarSystem : MonoBehaviour {
 		GameObject.Find("Explosions Manager").GetComponent<ExplosionsManager>().init();
 
 		spawner = GetComponent<EnemySpawner>().init(Vars.userInterface.minimap, playerShip.transform);
-
 
         loadStarSystem();
 

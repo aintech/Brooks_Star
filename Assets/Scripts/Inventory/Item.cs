@@ -2,12 +2,12 @@
 using System.Collections;
 
 public class Item : MonoBehaviour {
-
-	//TODO: перенести спрайты в Imager
-	public Sprite[] weaponSprites, engineSprites, armorSprites, generatorSprites, radarSprites, shieldSprites, repairDroidSprites, harvesterSprites,
-					handWeaponSprites, bodyArmorSprites;
-
+	
 	private SpriteRenderer render;
+
+	public TextMesh quantityText { get; private set; }
+
+	private MeshRenderer quantityRender;
 
 	public int index;
 
@@ -26,104 +26,37 @@ public class Item : MonoBehaviour {
 
 	public Item init (ItemData itemData) {
 		this.itemData = itemData;
-		if (render == null) render = transform.GetComponent<SpriteRenderer>();
+
+		render = GetComponent<SpriteRenderer>();
+
+		quantityText = transform.Find("Quantity").GetComponent<TextMesh>();
+		quantityRender = quantityText.GetComponent<MeshRenderer>();
+		quantityRender.sortingLayerName = "Inventory";
+		quantityRender.sortingOrder = 3;
+
+		quantityText.gameObject.SetActive(itemData.itemType == ItemType.GOODS);
+		quantityText.text = itemData.quantity.ToString();
+
 		switch (itemData.itemType) {
-			case ItemType.WEAPON:
-				WeaponType weaponType = ((WeaponData)itemData).type;
-				switch (weaponType) {
-					case WeaponType.Blaster: render.sprite = weaponSprites[0]; break;
-					case WeaponType.Plasmer: render.sprite = weaponSprites[1]; break;
-					case WeaponType.Charger: render.sprite = weaponSprites[2]; break;
-					case WeaponType.Emitter: render.sprite = weaponSprites[3]; break;
-					case WeaponType.Waver: render.sprite = weaponSprites[4]; break;
-					case WeaponType.Launcher: render.sprite = weaponSprites[5]; break;
-					case WeaponType.Suppressor: render.sprite = weaponSprites[6]; break;
-					default: Debug.Log("Неизвестный тип оружия"); break;
-				} break;
-			case ItemType.ENGINE:
-				EngineType engineType = ((EngineData)itemData).type;
-				switch (engineType) {
-					case EngineType.Force: render.sprite = engineSprites[0]; break;
-					case EngineType.Gradual: render.sprite = engineSprites[1]; break;
-					case EngineType.Proton: render.sprite = engineSprites[2]; break;
-					case EngineType.Allur: render.sprite = engineSprites[3]; break;
-					case EngineType.Quazar: render.sprite = engineSprites[4]; break;
-					default: Debug.Log("Неизвестный тип двигателя"); break;
-				} break;
-			case ItemType.ARMOR:
-				ArmorType armorType = ((ArmorData)itemData).type;
-				switch (armorType) {
-					case ArmorType.Steel: render.sprite = armorSprites[0]; break;
-					case ArmorType.HardenedSteel: render.sprite = armorSprites[1]; break;
-					case ArmorType.Titan: render.sprite = armorSprites[2]; break;
-					case ArmorType.Astron: render.sprite = armorSprites[3]; break;
-					case ArmorType.Adamant: render.sprite = armorSprites[4]; break;
-					default: Debug.Log("Неизвестный тип брони"); break;
-				} break;
-			case ItemType.GENERATOR:
-				GeneratorType generatorType = ((GeneratorData)itemData).type;
-				switch (generatorType) {
-					case GeneratorType.Atomic: render.sprite = generatorSprites[0]; break;
-					case GeneratorType.Plasma: render.sprite = generatorSprites[1]; break;
-					case GeneratorType.Multyphase: render.sprite = generatorSprites[2]; break;
-					case GeneratorType.Tunnel: render.sprite = generatorSprites[3]; break;
-					default: Debug.Log("Неизвестный тип генератора"); break;
-				} break;
-			case ItemType.RADAR:
-				RadarType radarType = ((RadarData)itemData).type;
-				switch (radarType) {
-					case RadarType.Sequester: render.sprite = radarSprites[0]; break;
-					case RadarType.Planar: render.sprite = radarSprites[1]; break;
-					case RadarType.Matrix: render.sprite = radarSprites[2]; break;
-					case RadarType.PatanCorsac: render.sprite = radarSprites[3]; break;
-					case RadarType.Snake: render.sprite = radarSprites[4]; break;
-					case RadarType.Astral: render.sprite = radarSprites[5]; break;
-					default: Debug.Log("Неизвестный тип радара"); break;
-				} break;
-			case ItemType.SHIELD:
-				ShieldType shieldType = ((ShieldData)itemData).type;
-				switch (shieldType) {
-					case ShieldType.Block: render.sprite = shieldSprites[0]; break;
-					case ShieldType.Quadratic: render.sprite = shieldSprites[1]; break;
-					case ShieldType.Cell: render.sprite = shieldSprites[2]; break;
-					case ShieldType.Phase: render.sprite = shieldSprites[3]; break;
-					default: Debug.Log("Неизвестный тип щита"); break;
-				} break;
-			case ItemType.REPAIR_DROID:
-				RepairDroidType droidType = ((RepairDroidData)itemData).type;
-				switch (droidType) {
-					case RepairDroidType.Rail: render.sprite = repairDroidSprites[0]; break;
-					case RepairDroidType.Channel: render.sprite = repairDroidSprites[1]; break;
-					case RepairDroidType.Biphasic: render.sprite = repairDroidSprites[2]; break;
-					case RepairDroidType.Thread: render.sprite = repairDroidSprites[3]; break;
-					default: Debug.Log("Неизвестный тип ремонтного робота"); break;
-				} break;
-			case ItemType.HARVESTER:
-				HarvesterType harvesterType = ((HarvesterData)itemData).type;
-				switch (harvesterType) {
-					case HarvesterType.Mechanical: render.sprite = harvesterSprites[0]; break;
-					case HarvesterType.Plasmatic: render.sprite = harvesterSprites[1]; break;
-					case HarvesterType.Generative: render.sprite = harvesterSprites[2]; break;
-					default: Debug.Log("Неизвестный тип сборщика"); break;
-				} break;
-			case ItemType.HAND_WEAPON:
-				HandWeaponType handWeaponType = ((HandWeaponData)itemData).type;
-				switch (handWeaponType) {
-					case HandWeaponType.GUN: render.sprite = handWeaponSprites[0]; break;
-					case HandWeaponType.REVOLVER: render.sprite = handWeaponSprites[1]; break;
-					case HandWeaponType.MINIGUN: render.sprite = handWeaponSprites[2]; break;
-					case HandWeaponType.GAUSSE: render.sprite = handWeaponSprites[3]; break;
-					case HandWeaponType.RAILGUN: render.sprite = handWeaponSprites[4]; break;
-				} break;
-			case ItemType.BODY_ARMOR:
-				BodyArmorType bodyArmorType = ((BodyArmorData)itemData).type;
-				switch (bodyArmorType) {
-					case BodyArmorType.SUIT: render.sprite = bodyArmorSprites[0]; break;
-					case BodyArmorType.METAL: render.sprite = bodyArmorSprites[1]; break;
-					case BodyArmorType.HEAVY: render.sprite = bodyArmorSprites[2]; break;
-				} break;
+			case ItemType.WEAPON: render.sprite = ImagesProvider.getWeaponSprite(((WeaponData)itemData).type); break;
+			case ItemType.ENGINE: render.sprite = ImagesProvider.getEngineSprite(((EngineData)itemData).type); break;
+			case ItemType.ARMOR: render.sprite = ImagesProvider.getArmorSprite(((ArmorData)itemData).type); break;
+			case ItemType.GENERATOR: render.sprite = ImagesProvider.getGeneratorSprite(((GeneratorData)itemData).type); break;
+			case ItemType.RADAR: render.sprite = ImagesProvider.getRadarSprite(((RadarData)itemData).type); break;
+			case ItemType.SHIELD: render.sprite = ImagesProvider.getShieldSprite(((ShieldData)itemData).type); break;
+			case ItemType.REPAIR_DROID: render.sprite = ImagesProvider.getRepairDroidSprite(((RepairDroidData)itemData).type); break;
+			case ItemType.HARVESTER: render.sprite = ImagesProvider.getHarvesterSprite(((HarvesterData)itemData).type); break;
+			case ItemType.HAND_WEAPON: render.sprite = ImagesProvider.getHandWeaponSprite(((HandWeaponData)itemData).type); break;
+			case ItemType.BODY_ARMOR: render.sprite = ImagesProvider.getBodyArmorSprite(((BodyArmorData)itemData).type); break;
+			case ItemType.GOODS: render.sprite = ImagesProvider.getGoodsSprite(((GoodsData)itemData).type); break;
+			default: Debug.Log("Unknown item type: " + itemData.itemType); break;
 		}
 		return this;
+	}
+
+	public void changeSortOrder (int newOrder) {
+		render.sortingOrder = newOrder;
+		quantityRender.sortingOrder = newOrder + 1;
 	}
 
 	public ItemKind getItemKind () {

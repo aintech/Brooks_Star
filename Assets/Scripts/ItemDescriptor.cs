@@ -232,9 +232,10 @@ public class ItemDescriptor : MonoBehaviour {
 		Destroy(item.cell.takeItem().gameObject);
 	}
 
-	private float setCost(int index, int cost) {
-		string text = (inventoryType == Type.MARKET_BUY? "Купить за": inventoryType == Type.MARKET_SELL? "Продать за": "Стоимость:")  + " <color=yellow>" + cost + "$</color>";
-		scale.x = text.Length - 22.5f;
+	private float setCost(int index, ItemData data) {
+		string text = (inventoryType == Type.MARKET_BUY? "Купить за": inventoryType == Type.MARKET_SELL? "Продать за": "Стоимость:")  + " <color=yellow>" + data.cost +
+			(data.quantity == 1? "$</color>": (" (" + (data.quantity * data.cost) + ")$</color>"));
+		scale.x = text.Length - (data.quantity == 1? 22.5f: 24f);
 		minY = - 4.7f + (.4f * index);// + transform.localPosition.y;
 		switch (index) {
 			case 1: value1.text = text; bg1.localScale = scale; return value1Render.bounds.size.x;
@@ -275,6 +276,14 @@ public class ItemDescriptor : MonoBehaviour {
 		maxLenght = Mathf.Max(maxLenght, nameRender.bounds.size.x);
 
 		switch (data.itemType) {
+			case ItemType.GOODS:
+				pre1.gameObject.SetActive (true);
+				bg1.gameObject.SetActive (true);
+				value1.gameObject.SetActive (true);
+
+				maxLenght = Mathf.Max(maxLenght, setCost(1, data));
+				break;
+
 			case ItemType.HAND_WEAPON:
 				pre1.gameObject.SetActive (true);
 				bg1.gameObject.SetActive (true);
@@ -289,7 +298,7 @@ public class ItemDescriptor : MonoBehaviour {
 				bg1.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value1Render.bounds.size.x);
 
-				maxLenght = Mathf.Max(maxLenght, setCost(2, data.cost));
+				maxLenght = Mathf.Max(maxLenght, setCost(2, data));
 				break;
 
 			case ItemType.BODY_ARMOR:
@@ -306,7 +315,7 @@ public class ItemDescriptor : MonoBehaviour {
 				bg1.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value1Render.bounds.size.x);
 
-				maxLenght = Mathf.Max(maxLenght, setCost(2, data.cost));
+				maxLenght = Mathf.Max(maxLenght, setCost(2, data));
 				break;
 
 			case ItemType.WEAPON:
@@ -347,7 +356,7 @@ public class ItemDescriptor : MonoBehaviour {
 				bg4.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value4Render.bounds.size.x);
 
-				maxLenght = Mathf.Max(maxLenght, setCost(5, data.cost));
+				maxLenght = Mathf.Max(maxLenght, setCost(5, data));
 				break;
 
 			case ItemType.ENGINE:
@@ -380,7 +389,7 @@ public class ItemDescriptor : MonoBehaviour {
 				bg3.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value3Render.bounds.size.x);
 
-				maxLenght = Mathf.Max(maxLenght, setCost(4, data.cost));
+				maxLenght = Mathf.Max(maxLenght, setCost(4, data));
 				break;
 
 			case ItemType.ARMOR:
@@ -405,7 +414,7 @@ public class ItemDescriptor : MonoBehaviour {
 				bg2.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value2Render.bounds.size.x);
 
-				maxLenght = Mathf.Max(maxLenght, setCost(3, data.cost));
+				maxLenght = Mathf.Max(maxLenght, setCost(3, data));
 				break;
 
 			case ItemType.GENERATOR:
@@ -430,7 +439,7 @@ public class ItemDescriptor : MonoBehaviour {
 				bg2.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value2Render.bounds.size.x);
 
-				maxLenght = Mathf.Max(maxLenght, setCost(3, data.cost));
+				maxLenght = Mathf.Max(maxLenght, setCost(3, data));
 				break;
 
 			case ItemType.RADAR:
@@ -463,7 +472,7 @@ public class ItemDescriptor : MonoBehaviour {
 				bg3.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value3Render.bounds.size.x);
 
-				maxLenght = Mathf.Max(maxLenght, setCost(4, data.cost));
+				maxLenght = Mathf.Max(maxLenght, setCost(4, data));
 				break;
 
 			case ItemType.SHIELD:
@@ -504,7 +513,7 @@ public class ItemDescriptor : MonoBehaviour {
 				bg4.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value4Render.bounds.size.x);
 
-				maxLenght = Mathf.Max(maxLenght, setCost(5, data.cost));
+				maxLenght = Mathf.Max(maxLenght, setCost(5, data));
 				break;
 
 			case ItemType.REPAIR_DROID:
@@ -537,7 +546,7 @@ public class ItemDescriptor : MonoBehaviour {
 				bg3.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value3Render.bounds.size.x);
 
-				maxLenght = Mathf.Max(maxLenght, setCost(4, data.cost));
+				maxLenght = Mathf.Max(maxLenght, setCost(4, data));
 				break;
 
 			case ItemType.HARVESTER:
@@ -562,7 +571,7 @@ public class ItemDescriptor : MonoBehaviour {
 				bg2.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value2Render.bounds.size.x);
 
-				maxLenght = Mathf.Max(maxLenght, setCost(3, data.cost));
+				maxLenght = Mathf.Max(maxLenght, setCost(3, data));
 				break;
 		}
 

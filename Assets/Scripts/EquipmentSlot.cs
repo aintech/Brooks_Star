@@ -5,7 +5,7 @@ public class EquipmentSlot : Slot {
 	
 	override public void init () {
 		base.init();
-		kind = ItemKind.EQUIPMENTS;
+		kind = ItemKind.EQUIPMENT;
 	}
 
 	public override void setItem (Item item) {

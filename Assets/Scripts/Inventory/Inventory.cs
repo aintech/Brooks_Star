@@ -228,7 +228,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		clearInventory();
 		for (int i = 0; i < count; i++) {
 			ItemData data = null;
-			switch (Mathf.FloorToInt (Random.value * 12)) {
+			switch (Mathf.FloorToInt (Random.value * 15)) {
 				case 0: case 1: data = ItemFactory.createItemData(ItemType.HAND_WEAPON); break;
 				case 2: case 3: data = ItemFactory.createItemData(ItemType.BODY_ARMOR); break;
 				case 4: data = ItemFactory.createItemData(ItemType.WEAPON); break;
@@ -239,13 +239,12 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 				case 9: data = ItemFactory.createItemData(ItemType.SHIELD); break;
 				case 10: data = ItemFactory.createItemData(ItemType.REPAIR_DROID); break;
 				case 11: data = ItemFactory.createItemData (ItemType.HARVESTER); break;
+				case 12: case 13: case 14: data = ItemFactory.createItemData(ItemType.GOODS); break;
 			}
-			if (data != null) {
-				Item item = Instantiate<Transform>(ItemFactory.itemPrefab).GetComponent<Item>().init(data);
-				item.transform.SetParent(itemsContainer);
-				if (label != null) { item.name = label; }
-				addItemToFirstFreePosition(item, false);
-			}
+			Item item = Instantiate<Transform>(ItemFactory.itemPrefab).GetComponent<Item>().init(data);
+			item.transform.SetParent(itemsContainer);
+			if (label != null) { item.name = label; }
+			addItemToFirstFreePosition(item, false);
 		}
 
 		refreshInventory ();
@@ -291,6 +290,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 	}
 
 	public void sortInventory () {
+		List<Item> goods = new List<Item>();
 		List<Item> handWeapons = new List<Item>();
 		List<Item> bodyArmors = new List<Item>();
 		List<Item> weapons = new List<Item>();
@@ -304,6 +304,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 
 		foreach(KeyValuePair<int, Item> pair in items) {
 			switch (pair.Value.getItemType()) {
+				case ItemType.GOODS: goods.Add(pair.Value); break;
 				case ItemType.HAND_WEAPON: handWeapons.Add(pair.Value); break;
 				case ItemType.BODY_ARMOR: bodyArmors.Add(pair.Value); break;
 				case ItemType.WEAPON: weapons.Add(pair.Value); break;
@@ -314,11 +315,13 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 				case ItemType.SHIELD: shields.Add(pair.Value); break;
 				case ItemType.REPAIR_DROID: repairDroids.Add(pair.Value); break;
 				case ItemType.HARVESTER: harvesters.Add(pair.Value); break;
+				default: Debug.Log("Unknown item type: " + pair.Value.getItemType()); break;
 			}
 		}
 
 		items.Clear();
 
+		goods = sortList(goods, ItemType.GOODS);
 		handWeapons = sortList(handWeapons, ItemType.HAND_WEAPON);
 		bodyArmors = sortList(bodyArmors, ItemType.BODY_ARMOR);
 		weapons = sortList(weapons, ItemType.WEAPON);
@@ -331,6 +334,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		harvesters = sortList(harvesters, ItemType.HARVESTER);
 
 		int counter = 0;
+		counter = addSortToItems(goods, counter);
 		counter = addSortToItems(handWeapons, counter);
 		counter = addSortToItems(bodyArmors, counter);
 		counter = addSortToItems(weapons, counter);
@@ -352,13 +356,13 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 			if (type == ItemType.WEAPON) {
 				WeaponData data = (WeaponData) item.itemData;
 				switch (data.type) {
-					case WeaponType.Blaster: weight = 1000000; break;
-					case WeaponType.Plasmer: weight = 2000000; break;
-					case WeaponType.Charger: weight = 3000000; break;
-					case WeaponType.Emitter: weight = 4000000; break;
-					case WeaponType.Waver: weight = 5000000; break;
-					case WeaponType.Launcher: weight = 6000000; break;
-					case WeaponType.Suppressor: weight = 7000000; break;
+					case WeaponType.BLASTER: weight = 1000000; break;
+					case WeaponType.PLASMER: weight = 2000000; break;
+					case WeaponType.CHARGER: weight = 3000000; break;
+					case WeaponType.EMITTER: weight = 4000000; break;
+					case WeaponType.WAVER: weight = 5000000; break;
+					case WeaponType.LAUNCHER: weight = 6000000; break;
+					case WeaponType.SUPPRESSOR: weight = 7000000; break;
 					default: Debug.Log("Неизвестный тип оружия"); break;
 				}
 				weight += item.getCost();
@@ -389,6 +393,10 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 			} else if (type == ItemType.HARVESTER) {
 				HarvesterData data = (HarvesterData) item.itemData;
 				weight = 1000000 - data.harvestTime;
+			} else if (type == ItemType.GOODS) {
+				weight = item.itemData.cost;
+			} else {
+				Debug.Log("Unknown item: " + item.name);
 			}
 			while(weights.ContainsKey(weight)) {
 				weight++;
