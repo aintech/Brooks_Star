@@ -72,8 +72,7 @@ public class StatusScreen : InventoryContainedScreen {
 		if (gameObject.activeInHierarchy) { return; }
 
 		UserInterface.showInterface = false;
-		itemDescriptor.setEnabled(inventory);
-		itemDescriptor.setInventoryType(ItemDescriptor.Type.INVENTORY);
+		itemDescriptor.setEnabled(inventory, ItemDescriptor.Type.INVENTORY, this);
 
 		inventory.setContainerScreen(this, 6);
 		inventory.setInventoryToBegin ();
@@ -88,6 +87,7 @@ public class StatusScreen : InventoryContainedScreen {
 		if (onPlanetSurface) {
 			transform.position = Vector3.zero;
 			PlanetSurface.topHideable.setVisible(false);
+			repairBtn.setText(shipData.repairCost.ToString() + "$");
 		} else {
 			transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, transform.position.z);
 			cameraController.setCameraSizeToDefault();
@@ -97,14 +97,6 @@ public class StatusScreen : InventoryContainedScreen {
 			}
 			StarSystem.setGamePause(true);
 			itemDescriptor.setSpaceOffset(transform.localPosition);
-//			itemDescriptor.transform.localPosition = transform.localPosition;
-		}
-
-		if (shipData.repairCost > 0) {
-			repairBtn.setText(shipData.repairCost.ToString() + "$");
-			repairBtn.setVisible(true);
-		} else {
-			repairBtn.setVisible(false);
 		}
 
 		show (lastOpened);
@@ -129,7 +121,7 @@ public class StatusScreen : InventoryContainedScreen {
 		else { StarSystem.setGamePause(false); }
 
 		UserInterface.showInterface = true;
-		itemDescriptor.setEnabled(null);
+		itemDescriptor.setDisabled();
 		itemDescriptor.setAsPerkDescriptor(false);
 	}
 
@@ -138,7 +130,7 @@ public class StatusScreen : InventoryContainedScreen {
 
 		setCashTxtActive (type == ScreenType.SHIP || type == ScreenType.EQUIPMENT);
 
-		repairBtn.gameObject.SetActive(onPlanetSurface && type == ScreenType.SHIP);
+		repairBtn.setVisible(onPlanetSurface && type == ScreenType.SHIP && shipData.repairCost > 0);
 
 		itemDescriptor.setAsPerkDescriptor(type == ScreenType.PERKS);
 
@@ -240,7 +232,7 @@ public class StatusScreen : InventoryContainedScreen {
 			InventoryCell cell = Utils.hit.transform.GetComponent<InventoryCell>();
 			Inventory targetInv = cell.inventory;
 			if (draggedItem.cell == null) {
-				switch (draggedItem.getItemType().getKind()) {
+				switch (draggedItem.type().getKind()) {
 					case ItemKind.SHIP_EQUIPMENT: shipData.updateHullInfo(); break;
 					case ItemKind.EQUIPMENT: playerData.updatePlayerInfo(); break;
 				}
@@ -248,7 +240,7 @@ public class StatusScreen : InventoryContainedScreen {
 			targetInv.addItemToCell(draggedItem, cell);
 		} else if (Utils.hit != null && Utils.hit.name.StartsWith("HullSlot")) {
 			HullSlot slot = Utils.hit.transform.GetComponent<HullSlot> ();
-			if (slot.slotType != getItemToHullSlotType (draggedItem.getItemType ())) {
+			if (slot.slotType != getItemToHullSlotType (draggedItem.type ())) {
 				if (draggedItem.cell == null && draggedItem.slot == null) {
 					if (inventory.gameObject.activeInHierarchy) {
 						inventory.addItemToCell (draggedItem, draggedItem.cell);
@@ -273,7 +265,7 @@ public class StatusScreen : InventoryContainedScreen {
 			}
 		} else if (Utils.hit != null && Utils.hit.name.StartsWith("EquipmentSlot")) {
 			EquipmentSlot slot = Utils.hit.transform.GetComponent<EquipmentSlot> ();
-			if (slot.slotType != getItemToEquipmentSlotType (draggedItem.getItemType ())) {
+			if (slot.slotType != getItemToEquipmentSlotType (draggedItem.type ())) {
 				if (draggedItem.cell == null && draggedItem.slot == null) {
 					if (inventory.gameObject.activeInHierarchy) {
 						inventory.addItemToCell (draggedItem, draggedItem.cell);
@@ -300,7 +292,7 @@ public class StatusScreen : InventoryContainedScreen {
 			if (inventory.gameObject.activeInHierarchy) {
 				inventory.addItemToCell (draggedItem, null);
 			}
-			switch (draggedItem.getItemType().getKind()) {
+			switch (draggedItem.type().getKind()) {
 				case ItemKind.SHIP_EQUIPMENT: shipData.updateHullInfo(); break;
 				case ItemKind.EQUIPMENT: playerData.updatePlayerInfo(); break;
 			}
@@ -352,7 +344,7 @@ public class StatusScreen : InventoryContainedScreen {
 	override protected void choseItem (Item item) {
 		base.choseItem(item);
 		if (draggedItem != null) {
-			highlightSlot (true, item.getItemType ());
+			highlightSlot (true, item.type ());
 		}
 //		perksView.hideInfo();
 	}
@@ -375,7 +367,7 @@ public class StatusScreen : InventoryContainedScreen {
 						slot.setActive (true);
 					}
 				}
-			} else {
+			} else if (itemType.getKind() == ItemKind.EQUIPMENT) {
 				EquipmentSlot.Type slotType = getItemToEquipmentSlotType (itemType);
 				foreach (EquipmentSlot slot in playerData.getSlots()) {
 					if (slot.slotType == slotType) {

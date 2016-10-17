@@ -24,7 +24,7 @@ public class PlayerShip : Ship {
 	private void initEngine () {
 		Item engineItem = shipData.getSlot (HullSlot.Type.ENGINE, 0).item;
 		EngineData data = (EngineData)engineItem.itemData;
-		engine.setEngine (data.type, data.power, data.type.getRotatePower());
+		engine.setEngine (data.type, data.power, data.type.rotatePower());
 		setEngineSprite();
 	}
 

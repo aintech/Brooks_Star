@@ -56,6 +56,8 @@ public class ItemDescriptor : MonoBehaviour {
 
 	private Type inventoryType;
 
+	private EquipmentsMarket market;
+
 	public ItemDescriptor init () {
 		trans = transform.Find ("Descriptor");
 		qualityPre = trans.Find ("Quality Pre");
@@ -129,19 +131,22 @@ public class ItemDescriptor : MonoBehaviour {
 		minY = -10;
 	}
 
-	public void setEnabled (Inventory inventory) {
-		enabled = inventory != null;
-		if (inventory == null) { hide(); }
+	public void setDisabled () {
+		enabled = false;
+		hide();
 	}
 
-	public void setInventoryType (Type type) {
+	public void setEnabled (Inventory inventory, Type type, InventoryContainedScreen container) {
+		enabled = true;
 		this.inventoryType = type;
+		if (type == Type.MARKET_BUY || type == Type.MARKET_SELL) {
+			market = (EquipmentsMarket)container;
+		}
 	}
 
 	void Update () {
 		if (Input.GetMouseButtonDown(1) && !perkDescriptor) {
-			if (inventoryType == Type.MARKET_BUY) { buyItem(); }
-			else if (inventoryType == Type.MARKET_SELL) { sellItem(); }
+			passRightClick();
 		}
 		if (onScreen) {
 			if (Utils.hit == null) {
@@ -215,21 +220,9 @@ public class ItemDescriptor : MonoBehaviour {
 		trans.gameObject.SetActive(true);
 	}
 
-	private void buyItem () {
-		if (item == null) { return; }
-		if (inventoryType != Type.MARKET_BUY) { return; }
-		if (Vars.cash < item.getCost()) { Messenger.showMessage("Не достаточно кредитов на " + item.getItemName()); return; }
-		if (item.getVolume() > .001f && (playerInventory.getFreeVolume() - item.getVolume()) < 0) { Messenger.showMessage("Недостаточно места в инвентаре."); return; }
-		Vars.cash -= item.getCost ();
-		item.cell.inventory.containerScreen.updateCashTxt();
-		playerInventory.addItemToCell(item.cell.takeItem(), null);
-	}
-
-	private void sellItem () {
-		if (item == null) { return; }
-		Vars.cash += item.getCost();
-		item.cell.inventory.containerScreen.updateCashTxt();
-		Destroy(item.cell.takeItem().gameObject);
+	private void passRightClick () {
+		if (inventoryType == Type.MARKET_BUY) { market.askToBuy(item); }
+		else if (inventoryType == Type.MARKET_SELL) { market.askToSell(item); }
 	}
 
 	private float setCost(int index, ItemData data) {
@@ -255,7 +248,7 @@ public class ItemDescriptor : MonoBehaviour {
 			qualityBG.gameObject.SetActive (true);
 			qualityValue.gameObject.SetActive (true);
 
-			qualityValue.text = item.getItemQuality().getName();
+			qualityValue.text = item.quality().getName();
 			scale.x = qualityValue.text.Length + 1;
 			qualityBG.localScale = scale;
 			qualityValue.color = (data.quality == ItemQuality.ARTEFACT? artefactColor:

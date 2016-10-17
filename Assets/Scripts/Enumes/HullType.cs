@@ -207,7 +207,7 @@ public static class HullDescriptor {
 		}
 	}
 	
-	public static int getCost (this HullType type) {
+	public static int cost (this HullType type) {
 		switch(type) {
 			case HullType.Little:		return 100;
 			case HullType.Needle: 		return 200;

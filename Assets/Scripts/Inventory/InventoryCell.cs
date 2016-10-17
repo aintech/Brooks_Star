@@ -25,6 +25,8 @@ public class InventoryCell : ItemHolder {
 	}
 
 	public Item takeItem () {
+		if (item == null) { return null; }
+
 		inventory.getItems ().Remove (index + inventory.getOffset ());
 		Item returnItem = item;
 		item = null;

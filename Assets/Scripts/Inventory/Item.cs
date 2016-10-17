@@ -34,8 +34,7 @@ public class Item : MonoBehaviour {
 		quantityRender.sortingLayerName = "Inventory";
 		quantityRender.sortingOrder = 3;
 
-		quantityText.gameObject.SetActive(itemData.itemType == ItemType.GOODS);
-		quantityText.text = itemData.quantity.ToString();
+		updateQuantityText();
 
 		switch (itemData.itemType) {
 			case ItemType.WEAPON: render.sprite = ImagesProvider.getWeaponSprite(((WeaponData)itemData).type); break;
@@ -59,8 +58,13 @@ public class Item : MonoBehaviour {
 		quantityRender.sortingOrder = newOrder + 1;
 	}
 
-	public ItemKind getItemKind () {
-		return  itemData.itemType.getKind();
+	public void updateQuantityText () {
+		quantityText.text = itemData.quantity.ToString();
+		quantityText.gameObject.SetActive(itemData.itemType == ItemType.GOODS && itemData.quantity > 1);
+	}
+
+	public ItemKind kind () {
+		return  itemData.kind;
 	}
 
 	public void returnToParent () {
@@ -69,39 +73,43 @@ public class Item : MonoBehaviour {
 		} else if (slot != null) {
 			slot.setItem(this);
 		} else {
-			Debug.Log("Dont know where return item: " + getItemName());
+			Debug.Log("Dont know where return item: " + itemName());
 		}
 	}
 
-	public float getVolume () {
+	public float volume () {
 		return itemData.volume;
 	}
 
-	public int getCost () {
+	public int cost () {
 		return itemData.cost;
 	}
 
-	public int getEnergyNeeded () {
+	public int energyNeeded () {
 		return itemData.energyNeeded;
 	}
 
-	public ItemType getItemType () {
+	public ItemType type () {
 		return itemData.itemType;
 	}
 
-	public ItemQuality getItemQuality () {
+	public ItemQuality quality () {
 		return itemData.quality;
 	}
 
-	public float getItemLevel () {
+	public float level () {
 		return itemData.level;
 	}
 
-	public string getItemName () {
+	public string itemName () {
 		return itemData.name;
 	}
 
-	public string getItemDescription () {
+	public string description () {
 		return itemData.description;
+	}
+
+	public void destroy () {
+		Destroy(gameObject);
 	}
 }

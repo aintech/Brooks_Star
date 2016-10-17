@@ -165,9 +165,6 @@ public abstract class Ship : MonoBehaviour {
 	}
 
 	public void damageShip (WeaponType type, Vector3 weaponPosition, int minDamage, int maxDamage) {
-		//FOR TEST
-		if (isPlayerShip()) { return; }
-
 		if (type == WeaponType.BLASTER) {
 			int damage = Random.Range(minDamage, maxDamage + 1);
 			if (getShield() >= damage) {

@@ -69,23 +69,23 @@ public class StarSystemPlanetDescriptor : MonoBehaviour {
 	}
 
 	private void addDroneToPlanet () {
-		if (Vars.probesCount > 0) {
-			Vars.planetProbes[planetType]++;
-			Vars.probesCount--;
-			probesCount++;
-		}
+//		if (Vars.probesCount > 0) {
+//			Vars.planetProbes[planetType]++;
+//			Vars.probesCount--;
+//			probesCount++;
+//		}
 	}
 
 	private void removeDroneFromPlanet () {
-		Vars.planetProbes[planetType]--;
-		Vars.probesCount++;
-		probesCount--;
+//		Vars.planetProbes[planetType]--;
+//		Vars.probesCount++;
+//		probesCount--;
 	}
 
 	private void explorePlanet () {
-		Vars.exploredPlanets.Add(planetType);
-		explored = true;
-		planetStatus = colonized? "Колонизирована": populated? "Обитаема": "Необитаема";
+//		Vars.exploredPlanets.Add(planetType);
+//		explored = true;
+//		planetStatus = colonized? "Колонизирована": populated? "Обитаема": "Необитаема";
 	}
 
 	public void showPlanetInfo (PlanetType planetType) {
@@ -96,11 +96,11 @@ public class StarSystemPlanetDescriptor : MonoBehaviour {
 		explored = true;//Vars.exploredPlanets.Contains(planetType);
 		colonized = planetType.isColonized();
 		populated = planetType.isPopulated();
-		if (!explored && !Vars.planetProbes.ContainsKey(planetType)) {
-			Vars.planetProbes.Add(planetType, 0);
-			Vars.planetExploredPercent.Add(planetType, 0);
-			probesCount = 0;
-		}
+//		if (!explored && !Vars.planetProbes.ContainsKey(planetType)) {
+//			Vars.planetProbes.Add(planetType, 0);
+//			Vars.planetExploredPercent.Add(planetType, 0);
+//			probesCount = 0;
+//		}
 		planetStatus = !explored? "Не исследована": colonized? "Колонизирована": populated? "Обитаема": "Необитаема";
 	}
 

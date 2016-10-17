@@ -139,7 +139,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 
 		if (source != this) {
 			if (inventoryType == InventoryType.INVENTORY && item.slot == null) {
-				if (getFreeVolume() < item.getVolume()) {
+				if (getFreeVolume() < (item.volume() * item.itemData.quantity)) {
 					item.returnToParent ();
 					Messenger.showMessage("Объёма инвентаря не достаточно для добавления предмета");
 					return;
@@ -151,15 +151,30 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 
 		InventoryCell prevCell = item.cell;
 		Item prevItem = null;
+		bool multyItem = false;
 
-		if (cell.item != null) prevItem = cell.takeItem ();
+		if (cell.item != null) {
+			if (cell.item.type() == ItemType.GOODS) {
+				if (((GoodsData)cell.item.itemData).type == ((GoodsData)item.itemData).type) {
+					cell.item.itemData.quantity += item.itemData.quantity;
+					cell.item.updateQuantityText();
+					containerScreen.updateChosenItemBorder(cell.item);
+					item.destroy();
+					multyItem = true;
+				}
+			}
+		}
 
-		item.index = cell.index + offset;
-		items.Add (item.index, item);
+		if (!multyItem) {
+			prevItem = cell.takeItem ();
 
-		if (prevItem != null) {
-			if (source == this) addItemToCell (prevItem, prevCell);
-			else addItemToFirstFreePosition (prevItem, false);
+			item.index = cell.index + offset;
+			items.Add (item.index, item);
+
+			if (prevItem != null) {
+				if (source == this) { addItemToCell (prevItem, prevCell); }
+				else { addItemToFirstFreePosition (prevItem, false); }
+			}
 		}
 
 		refreshInventory();
@@ -202,7 +217,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		if (inventoryType != InventoryType.INVENTORY) { return; }
 		freeVolume = getCapacity ();
 		foreach (KeyValuePair<int, Item> pair in items) {
-			freeVolume -= pair.Value.getVolume();	
+			freeVolume -= pair.Value.volume();	
 		}
 		updateVolumeTxt();
 	}
@@ -303,7 +318,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		List<Item> harvesters = new List<Item>();
 
 		foreach(KeyValuePair<int, Item> pair in items) {
-			switch (pair.Value.getItemType()) {
+			switch (pair.Value.type()) {
 				case ItemType.GOODS: goods.Add(pair.Value); break;
 				case ItemType.HAND_WEAPON: handWeapons.Add(pair.Value); break;
 				case ItemType.BODY_ARMOR: bodyArmors.Add(pair.Value); break;
@@ -315,7 +330,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 				case ItemType.SHIELD: shields.Add(pair.Value); break;
 				case ItemType.REPAIR_DROID: repairDroids.Add(pair.Value); break;
 				case ItemType.HARVESTER: harvesters.Add(pair.Value); break;
-				default: Debug.Log("Unknown item type: " + pair.Value.getItemType()); break;
+				default: Debug.Log("Unknown item type: " + pair.Value.type()); break;
 			}
 		}
 
@@ -365,7 +380,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 					case WeaponType.SUPPRESSOR: weight = 7000000; break;
 					default: Debug.Log("Неизвестный тип оружия"); break;
 				}
-				weight += item.getCost();
+				weight += item.cost();
 			} else if (type == ItemType.HAND_WEAPON) {
 				HandWeaponData data = (HandWeaponData) item.itemData;
 				weight = data.maxDamage * 1000000 + data.cost;

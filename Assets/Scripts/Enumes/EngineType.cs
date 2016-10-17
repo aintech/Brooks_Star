@@ -10,7 +10,7 @@ public enum EngineType {
 }
 
 public static class EngineDescriptor {
-	public static string getName (this EngineType type) {
+	public static string name (this EngineType type) {
 		switch(type) {
 		case EngineType.FORCE: return "Силовой двигатель";
 		case EngineType.GRADUAL: return "Поступательный двигатель";
@@ -21,7 +21,7 @@ public static class EngineDescriptor {
 		}
 	}
 
-	public static float getMainPower (this EngineType type) {
+	public static float mainPower (this EngineType type) {
 		switch(type) {
 			case EngineType.FORCE: return 0.04f;
 			case EngineType.GRADUAL: return 0.044f;
@@ -32,7 +32,7 @@ public static class EngineDescriptor {
 		}
 	}
 
-	public static float getRotatePower (this EngineType type) {
+	public static float rotatePower (this EngineType type) {
 		switch(type) {
 		case EngineType.FORCE: return 3;
 		case EngineType.GRADUAL: return 3.5f;
@@ -43,7 +43,7 @@ public static class EngineDescriptor {
 		}
 	}
 
-	public static float getVolume (this EngineType type) {
+	public static float volume (this EngineType type) {
 		switch(type) {
 		case EngineType.FORCE: return 2;
 		case EngineType.GRADUAL: return 2;
@@ -54,7 +54,7 @@ public static class EngineDescriptor {
 		}
 	}
 
-	public static int getCost (this EngineType type) {
+	public static int cost (this EngineType type) {
 		switch(type) {
 		case EngineType.FORCE: return 100;
 		case EngineType.GRADUAL: return 200;
@@ -65,7 +65,7 @@ public static class EngineDescriptor {
 		}
 	}
 
-	public static string getDescription (this EngineType type) {
+	public static string description (this EngineType type) {
 		switch(type) {
 		case EngineType.FORCE: return "Двигатель на силовой\nтяге";
 		case EngineType.GRADUAL: return "Двигатель на поступа-\nтельной тяге";
@@ -76,7 +76,7 @@ public static class EngineDescriptor {
 		}
 	}
 
-	public static int getEnergyNeeded (this EngineType type) {
+	public static int energyNeeded (this EngineType type) {
 		switch(type) {
 		case EngineType.FORCE: return 10;
 		case EngineType.GRADUAL: return 20;

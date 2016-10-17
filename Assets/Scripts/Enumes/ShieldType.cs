@@ -9,7 +9,7 @@ public enum ShieldType {
 }
 
 public static class ShieldDescriptor {
-	public static string getName (this ShieldType type) {
+	public static string name (this ShieldType type) {
 		switch(type) {
 		case ShieldType.BLOCK: return "Блочный щит";
 		case ShieldType.QUADRATIC: return "Квадратичный щит";
@@ -19,7 +19,7 @@ public static class ShieldDescriptor {
 		}
 	}
 	
-	public static int getShieldProtection (this ShieldType type) {
+	public static int shieldProtection (this ShieldType type) {
 		switch(type) {
 		case ShieldType.BLOCK: return 100;
 		case ShieldType.QUADRATIC: return 150;
@@ -29,7 +29,7 @@ public static class ShieldDescriptor {
 		}
 	}
 	
-	public static int getRechargeSpeed (this ShieldType type) {
+	public static int rechargeSpeed (this ShieldType type) {
 		switch(type) {
 		case ShieldType.BLOCK: return 10;
 		case ShieldType.QUADRATIC: return 15;
@@ -39,7 +39,7 @@ public static class ShieldDescriptor {
 		}
 	}
 
-	public static float getVolume (this ShieldType type) {
+	public static float volume (this ShieldType type) {
 		switch(type) {
 		case ShieldType.BLOCK: return 1;
 		case ShieldType.QUADRATIC: return 1;
@@ -49,7 +49,7 @@ public static class ShieldDescriptor {
 		}
 	}
 
-	public static int getCost (this ShieldType type) {
+	public static int cost (this ShieldType type) {
 		switch(type) {
 			case ShieldType.BLOCK: return 100;
 			case ShieldType.QUADRATIC: return 200;
@@ -59,7 +59,7 @@ public static class ShieldDescriptor {
 		}
 	}
 	
-	public static int getEnergyNeeded (this ShieldType type) {
+	public static int energyNeeded (this ShieldType type) {
 		switch(type) {
 		case ShieldType.BLOCK: return 10;
 		case ShieldType.QUADRATIC: return 20;
@@ -69,7 +69,7 @@ public static class ShieldDescriptor {
 		}
 	}
 
-	public static string getDescription (this ShieldType type) {
+	public static string description (this ShieldType type) {
 		switch(type) {
 		case ShieldType.BLOCK: return "Щит блочного типа";
 		case ShieldType.QUADRATIC: return "Щит квадратичного типа";

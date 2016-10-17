@@ -58,8 +58,6 @@ public class EnemyShip : Ship {
 		Vars.freeSortingOrder += getHullType().getWeaponSlots() > 0? 4: 3;
 		controller.init(this);
 		((EnemyShipController)controller).setStuff(playerShip, barTrans, radarRange, new Weapon[]{weapon_1, weapon_2, weapon_3, weapon_4, weapon_5});
-		health = 10;
-		shield = 10;
 		updateHealthAndShieldInfo();
 	}
 
@@ -69,12 +67,12 @@ public class EnemyShip : Ship {
 
 	private void initRadarRange (int shipLevel) {
 		switch (shipLevel) {
-			case 0: radarRange = RadarType.SEQUESTER.getRange(); break;
-			case 1: radarRange = RadarType.PLANAR.getRange(); break;
-			case 2: radarRange = RadarType.MATRIX.getRange(); break;
-			case 3: radarRange = RadarType.PATAN_CORSAC.getRange(); break;
-			case 4: radarRange = RadarType.SNAKE.getRange(); break;
-			case 5: radarRange = RadarType.ASTRAL.getRange(); break;
+			case 0: radarRange = RadarType.SEQUESTER.range(); break;
+			case 1: radarRange = RadarType.PLANAR.range(); break;
+			case 2: radarRange = RadarType.MATRIX.range(); break;
+			case 3: radarRange = RadarType.PATAN_CORSAC.range(); break;
+			case 4: radarRange = RadarType.SNAKE.range(); break;
+			case 5: radarRange = RadarType.ASTRAL.range(); break;
 			default: Debug.Log("Неизвестный уровень корабля"); break;
 		}
 	}
@@ -85,7 +83,7 @@ public class EnemyShip : Ship {
 						   	rand == 1? EngineType.GRADUAL:
 						   	rand == 2? EngineType.PROTON:
 							rand == 3? EngineType.ALLUR: EngineType.QUAZAR;
-		engine.setEngine(eType, eType.getMainPower(), eType.getRotatePower());
+		engine.setEngine(eType, eType.mainPower(), eType.rotatePower());
 		setEngineSprite ();
 	}
 
@@ -123,8 +121,8 @@ public class EnemyShip : Ship {
 
 		weapon.init(this);
 		weapon.setWeaponType(type);
-		weapon.setDamage(type.getDamage() - 3, type.getDamage() + 3);
-		weapon.setReloadTime(type.getReloadTime());
+		weapon.setDamage(type.damage() - 3, type.damage() + 3);
+		weapon.setReloadTime(type.reloadTime());
 		weapon.setPlayerTransform(playerShip);
 
 		weapon.transform.SetParent(transform);

@@ -315,7 +315,7 @@ public class ShipData : MonoBehaviour {
 	}
 
 	private void calculateRepairCost () {
-		repairCost = Mathf.RoundToInt(hullType.getCost() * .1f * (1 - ((float)currentHealth / (float)hullType.getMaxHealth())));
+		repairCost = Mathf.RoundToInt(hullType.cost() * .1f * (1 - ((float)currentHealth / (float)hullType.getMaxHealth())));
 	}
 
     public HullSlot getSlot (HullSlot.Type type, int slotIndex) {
@@ -421,7 +421,7 @@ public class ShipData : MonoBehaviour {
 	}
 
 	public void updateEnergyValue () {
-		int energy = getEnergyNeeded();
+		int energy = energyNeeded();
 		energyValue.text = energy.ToString ();
 		energyValue.color = energy < 0? badColor: okColor;
 	}
@@ -445,7 +445,7 @@ public class ShipData : MonoBehaviour {
 	public int getShield () {
 		int shield = 0;
 		foreach (HullSlot slot in slots) {
-			if (slot.item != null && slot.item.getItemType() == ItemType.SHIELD) {
+			if (slot.item != null && slot.item.type() == ItemType.SHIELD) {
 				shield += ((ShieldData) slot.item.itemData).shieldLevel;
 			}	
 		}
@@ -455,7 +455,7 @@ public class ShipData : MonoBehaviour {
 	public int getArmor () {
 		int armor = 0;
 		foreach (HullSlot slot in slots) {
-			if (slot.item != null && slot.item.getItemType() == ItemType.ARMOR) {
+			if (slot.item != null && slot.item.type() == ItemType.ARMOR) {
 				armor += ((ArmorData)slot.item.itemData).armorClass;
 			}
 		}
@@ -467,14 +467,14 @@ public class ShipData : MonoBehaviour {
 		return ((RadarData)radarSlot.item.itemData).range;
 	}
 
-	public int getEnergyNeeded () {
+	public int energyNeeded () {
 		int energy = 0;
 		foreach (HullSlot slot in slots) {
 			if (slot.item != null) {
-				if (slot.item.getItemType() == ItemType.GENERATOR) {
+				if (slot.item.type() == ItemType.GENERATOR) {
 					energy += ((GeneratorData)slot.item.itemData).maxEnergy;
 				}
-				energy -= slot.item.getEnergyNeeded();
+				energy -= slot.item.energyNeeded();
 			}
 		}
 		return energy;

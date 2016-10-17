@@ -30,13 +30,13 @@ public static class Vars {
 
 	public static UserInterface userInterface;
 
-	public static List<PlanetType> exploredPlanets = new List<PlanetType>();
-
-	public static Dictionary<PlanetType, int> planetProbes = new Dictionary<PlanetType, int>();
-
-	public static Dictionary<PlanetType, float> planetExploredPercent = new Dictionary<PlanetType, float>();
-
-	public static int probesCount = 100;
+//	public static List<PlanetType> exploredPlanets = new List<PlanetType>();
+//
+//	public static Dictionary<PlanetType, int> planetProbes = new Dictionary<PlanetType, int>();
+//
+//	public static Dictionary<PlanetType, float> planetExploredPercent = new Dictionary<PlanetType, float>();
+//
+//	public static int probesCount = 100;
 }
 /* FIX:
 	- переделать зум в космосе, чтобы колёсиком мыши не увеличивалось и не уменьшалось звёздное поле, а только корабли и планеты

@@ -39,18 +39,18 @@ public static class ItemFactory {
 	private static int calculateCost (ItemData data) {
 		int cost = 0;
 		switch (data.itemType) {
-			case ItemType.WEAPON: cost = Mathf.RoundToInt(data.level * ((WeaponData)data).type.getCost()); break;
-			case ItemType.ENGINE: cost = Mathf.RoundToInt(data.level * ((EngineData)data).type.getCost()); break;
-			case ItemType.ARMOR: return ((ArmorData)data).type.getCost();
-			case ItemType.GENERATOR: cost = Mathf.RoundToInt(data.level * ((GeneratorData)data).type.getCost()); break;
-			case ItemType.RADAR: cost = Mathf.RoundToInt(data.level * ((RadarData)data).type.getCost()); break;
-			case ItemType.SHIELD: cost = Mathf.RoundToInt(data.level * ((ShieldData)data).type.getCost()); break;
-			case ItemType.REPAIR_DROID: cost = Mathf.RoundToInt(data.level * ((RepairDroidData)data).type.getCost()); break;
-			case ItemType.HARVESTER: cost = Mathf.RoundToInt(data.level * ((HarvesterData)data).type.getCost()); break;
-			case ItemType.HAND_WEAPON: cost = Mathf.RoundToInt(data.level * ((HandWeaponData)data).type.getCost()); break;
+			case ItemType.WEAPON: cost = Mathf.RoundToInt(data.level * ((WeaponData)data).type.cost()); break;
+			case ItemType.ENGINE: cost = Mathf.RoundToInt(data.level * ((EngineData)data).type.cost()); break;
+			case ItemType.ARMOR: return ((ArmorData)data).type.cost();
+			case ItemType.GENERATOR: cost = Mathf.RoundToInt(data.level * ((GeneratorData)data).type.cost()); break;
+			case ItemType.RADAR: cost = Mathf.RoundToInt(data.level * ((RadarData)data).type.cost()); break;
+			case ItemType.SHIELD: cost = Mathf.RoundToInt(data.level * ((ShieldData)data).type.cost()); break;
+			case ItemType.REPAIR_DROID: cost = Mathf.RoundToInt(data.level * ((RepairDroidData)data).type.cost()); break;
+			case ItemType.HARVESTER: cost = Mathf.RoundToInt(data.level * ((HarvesterData)data).type.cost()); break;
+			case ItemType.HAND_WEAPON: cost = Mathf.RoundToInt(data.level * ((HandWeaponData)data).type.cost()); break;
 			case ItemType.BODY_ARMOR:
 				BodyArmorData bad = (BodyArmorData)data;
-				return Mathf.RoundToInt(bad.type.getCost() + (bad.armorClass * 10));
+				return Mathf.RoundToInt(bad.type.cost() + (bad.armorClass * 10));
 			default: Debug.Log("Unknown type: " + data.itemType); break;
 		}
 		return Mathf.RoundToInt (cost * qualityMultiplier (data.quality));
@@ -58,11 +58,11 @@ public static class ItemFactory {
 
 	private static int calculateEnergy (ItemData data) {
 		switch (data.itemType) {
-			case ItemType.WEAPON: return Mathf.RoundToInt(data.level * ((WeaponData)data).type.getEnergyNeeded());
-			case ItemType.ENGINE: return Mathf.RoundToInt(data.level * ((EngineData)data).type.getEnergyNeeded());
-			case ItemType.RADAR: return Mathf.RoundToInt(data.level * ((RadarData)data).type.getEnergyNeeded());
-			case ItemType.SHIELD: return Mathf.RoundToInt(data.level * ((ShieldData)data).type.getEnergyNeeded());
-			case ItemType.REPAIR_DROID: return Mathf.RoundToInt(data.level * ((RepairDroidData)data).type.getEnergyNeeded());
+			case ItemType.WEAPON: return Mathf.RoundToInt(data.level * ((WeaponData)data).type.energyNeeded());
+			case ItemType.ENGINE: return Mathf.RoundToInt(data.level * ((EngineData)data).type.energyNeeded());
+			case ItemType.RADAR: return Mathf.RoundToInt(data.level * ((RadarData)data).type.energyNeeded());
+			case ItemType.SHIELD: return Mathf.RoundToInt(data.level * ((ShieldData)data).type.energyNeeded());
+			case ItemType.REPAIR_DROID: return Mathf.RoundToInt(data.level * ((RepairDroidData)data).type.energyNeeded());
 			default: return 0;
 		}
 	}
@@ -104,7 +104,7 @@ public static class ItemFactory {
 		ItemQuality quality = randQuality();
 		float level = randLevel();
 
-		int damage = Mathf.RoundToInt(type.getDamage() * level * qualityMultiplier(quality));
+		int damage = Mathf.RoundToInt(type.damage() * level * qualityMultiplier(quality));
 		int minDamage = damage - Mathf.RoundToInt((float)damage * .25f);
 		int maxDamage = damage + Mathf.RoundToInt((float)damage * .25f);
 
@@ -115,11 +115,12 @@ public static class ItemFactory {
 	}
 
 	public static BodyArmorData createBodyArmorData () {
-		BodyArmorType type = BodyArmorType.SUIT;
+		BodyArmorType type = BodyArmorType.SPACESUIT;
 		switch (UnityEngine.Random.Range(0, Enum.GetNames(typeof(BodyArmorType)).Length)) {
-			case 0: type = BodyArmorType.SUIT; break;
-			case 1: type = BodyArmorType.METAL; break;
-			case 2: type = BodyArmorType.HEAVY; break;
+			case 0: type = BodyArmorType.SPACESUIT; break;
+			case 1: type = BodyArmorType.HARDENED_SPACESUIT; break;
+			case 2: type = BodyArmorType.ARMORED_SPACESUIT; break;
+			case 3: type = BodyArmorType.COMBAT_ARMOR; break;
 			default: Debug.Log("Unmapped value for body armor"); break;
 		}
 		return createBodyArmorData (type);
@@ -129,7 +130,7 @@ public static class ItemFactory {
 		ItemQuality quality = randQuality();
 		float level = randLevel();
 
-		int armorClass = Mathf.RoundToInt(type.getArmorClass() * level * qualityMultiplier(quality));
+		int armorClass = Mathf.RoundToInt(type.armorClass() * level * qualityMultiplier(quality));
 
 		BodyArmorData data = new BodyArmorData(quality, level, type, armorClass);
 		data.initCommons(calculateCost(data), 0);
@@ -156,10 +157,10 @@ public static class ItemFactory {
 		ItemQuality quality = randQuality();
 		float level = randLevel();
 
-		int damage = Mathf.RoundToInt(type.getDamage() * level * qualityMultiplier(quality));
-		float reloadTime = (type.getReloadTime() / level) * (quality == ItemQuality.UNIQUE? 0.6f: quality == ItemQuality.SUPERIOR? 0.8f: 1);
+		int damage = Mathf.RoundToInt(type.damage() * level * qualityMultiplier(quality));
+		float reloadTime = (type.reloadTime() / level) * (quality == ItemQuality.UNIQUE? 0.6f: quality == ItemQuality.SUPERIOR? 0.8f: 1);
 
-		WeaponData data = new WeaponData(quality, level, type, damage - type.getDamageRange(), damage + type.getDamageRange(), reloadTime);
+		WeaponData data = new WeaponData(quality, level, type, damage - type.damageRange(), damage + type.damageRange(), reloadTime);
 		data.initCommons(calculateCost(data), calculateEnergy(data));
 
 		return data;
@@ -182,7 +183,7 @@ public static class ItemFactory {
 		ItemQuality quality = randQuality();
 		float level = randLevel();
 
-		float power = type.getMainPower() * level * qualityMultiplier(quality);
+		float power = type.mainPower() * level * qualityMultiplier(quality);
 
 		EngineData data = new EngineData(quality, level, type, power);
 		data.initCommons(calculateCost(data), calculateEnergy(data));
@@ -204,8 +205,8 @@ public static class ItemFactory {
 	}
 
 	public static ArmorData createArmorData (ArmorType type) {
-		ArmorData data = new ArmorData(ItemQuality.COMMON, 1, type, type.getArmorClass());
-		data.initCommons(type.getCost(), 0);
+		ArmorData data = new ArmorData(ItemQuality.COMMON, 1, type, type.armorClass());
+		data.initCommons(type.cost(), 0);
 		return data;
 	}
 
@@ -225,7 +226,7 @@ public static class ItemFactory {
 		ItemQuality quality = randQuality();
 		float level = randLevel();
 
-		int maxEnergy = Mathf.RoundToInt(type.getMaxEnergy() * level * qualityMultiplier(quality));
+		int maxEnergy = Mathf.RoundToInt(type.maxEnergy() * level * qualityMultiplier(quality));
 
 		GeneratorData data = new GeneratorData(quality, level, type, maxEnergy);
 		data.initCommons(calculateCost(data), calculateEnergy(data));
@@ -251,7 +252,7 @@ public static class ItemFactory {
 		ItemQuality quality = randQuality();
 		float level = randLevel();
 
-		int range = Mathf.RoundToInt(type.getRange() * level * qualityMultiplier(quality));
+		int range = Mathf.RoundToInt(type.range() * level * qualityMultiplier(quality));
 
 		RadarData data = new RadarData(quality, level, type, range);
 		data.initCommons(calculateCost(data), calculateEnergy(data));
@@ -275,8 +276,8 @@ public static class ItemFactory {
 		ItemQuality quality = randQuality();
 		float level = randLevel();
 
-		int shieldLevel = Mathf.RoundToInt(type.getShieldProtection() * level * qualityMultiplier(quality));
-		int rechargeSpeed = Mathf.RoundToInt(type.getRechargeSpeed() * level * qualityMultiplier(quality));
+		int shieldLevel = Mathf.RoundToInt(type.shieldProtection() * level * qualityMultiplier(quality));
+		int rechargeSpeed = Mathf.RoundToInt(type.rechargeSpeed() * level * qualityMultiplier(quality));
 
 		ShieldData data = new ShieldData(quality, level, type, shieldLevel, rechargeSpeed);
 		data.initCommons(calculateCost(data), calculateEnergy(data));
@@ -300,7 +301,7 @@ public static class ItemFactory {
 		ItemQuality quality = randQuality();
 		float level = randLevel();
 
-		int repairSpeed = Mathf.RoundToInt(type.getRepairSpeed() * level * qualityMultiplier(quality));
+		int repairSpeed = Mathf.RoundToInt(type.repairSpeed() * level * qualityMultiplier(quality));
 
 		RepairDroidData data = new RepairDroidData(quality, level, type, repairSpeed);
 		data.initCommons(calculateCost(data), calculateEnergy(data));
@@ -324,7 +325,7 @@ public static class ItemFactory {
 		float level = randLevel();
 
 		float harvestMulty = quality == ItemQuality.UNIQUE? 0.6f: quality == ItemQuality.SUPERIOR? 0.8f: 1;
-		int harvestTime = Mathf.RoundToInt((type.getHarvestTime() / level) * harvestMulty);
+		int harvestTime = Mathf.RoundToInt((type.harvestTime() / level) * harvestMulty);
 
 		HarvesterData data = new HarvesterData(quality, level, type, harvestTime);
 		data.initCommons(calculateCost(data), calculateEnergy(data));

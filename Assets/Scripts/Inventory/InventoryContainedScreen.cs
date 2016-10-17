@@ -99,6 +99,11 @@ public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 		return chosenItem;
 	}
 
+	public void updateChosenItemBorder (Item newItem) {
+		choseItem(newItem);
+		updateChosenItemBorder();
+	}
+
 	public void updateChosenItemBorder () {
 		if (chosenItem != null) {
 			if (chosenItem.cell == null && chosenItem.slot == null) {

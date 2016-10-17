@@ -7,8 +7,6 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 
 	public Transform itemPrefab;
 
-	public static bool newGame = true;
-
 	public static Hideable topHideable;
 
 	private Background background;
@@ -72,9 +70,8 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 		messageBox.init(this);
 		story.init();
 
-		if (newGame) {
+		if (Vars.shipCurrentHealth == -1) {
 			startNewGame();
-			newGame = false;
 		}
 
 		landPlanet();
@@ -104,7 +101,7 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 	}
 
 	public void leavePlanet () {
-		if (statusScreen.getShipData().getEnergyNeeded() < 0) {
+		if (statusScreen.getShipData().energyNeeded() < 0) {
 			Messenger.showMessage("Кораблю не хватает энергии!");
 		} else if (statusScreen.getShipData().getSlot(HullSlot.Type.ENGINE, 0).item == null) {
 			Messenger.showMessage("У корабля отсутствует двигатель!");

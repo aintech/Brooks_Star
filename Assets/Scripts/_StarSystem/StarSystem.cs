@@ -99,7 +99,7 @@ public class StarSystem : MonoBehaviour {
 
 		statusScreen.getShipData().setShieldToMax();
 
-		spawner.spawnAnEnemy(2);
+		spawner.spawnAnEnemy(20);
     }
 
 	private void initPlayerShip () {

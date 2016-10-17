@@ -61,7 +61,7 @@ public class HullDisplay : MonoBehaviour, ButtonHolder {
 	}
 
 	public void updateCost () {
-		cost = -hullType.getCost() + (shipData.hullType.getCost() - shipData.repairCost);
+		cost = -hullType.cost() + (shipData.hullType.cost() - shipData.repairCost);
 		buyBtn.setText((cost > 0? "+": "") + cost + "$");
 	}
 }

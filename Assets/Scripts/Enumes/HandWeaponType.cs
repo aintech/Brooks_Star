@@ -6,7 +6,7 @@ public enum HandWeaponType {
 }
 
 public static class HandWeaponDescriptor {
-	public static string getName (this HandWeaponType type) {
+	public static string name (this HandWeaponType type) {
 		switch (type) {
 			case HandWeaponType.GAUSSE: return "Ружьё Гаусса";
 			case HandWeaponType.GUN: return "Пистолет";
@@ -17,7 +17,7 @@ public static class HandWeaponDescriptor {
 		}
 	}
 
-	public static int getDamage (this HandWeaponType type) {
+	public static int damage (this HandWeaponType type) {
 		switch (type) {
 			case HandWeaponType.GAUSSE: return 60;
 			case HandWeaponType.GUN: return 20;
@@ -28,7 +28,7 @@ public static class HandWeaponDescriptor {
 		}
 	}
 
-	public static string getDescription (this HandWeaponType type) {
+	public static string description (this HandWeaponType type) {
 		switch (type) {
 			case HandWeaponType.GAUSSE: return "Ружьё Гаусса";
 			case HandWeaponType.GUN: return "Пистолет";
@@ -39,11 +39,11 @@ public static class HandWeaponDescriptor {
 		}
 	}
 
-	public static float getVolume (this HandWeaponType type) {
+	public static float volume (this HandWeaponType type) {
 		return 0;
 	}
 
-	public static int getCost (this HandWeaponType type) {
+	public static int cost (this HandWeaponType type) {
 		switch(type) {
 			case HandWeaponType.GUN: return 100;
 			case HandWeaponType.REVOLVER: return 150;

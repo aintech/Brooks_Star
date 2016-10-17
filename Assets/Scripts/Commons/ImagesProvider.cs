@@ -120,9 +120,10 @@ public class ImagesProvider : MonoBehaviour {
 
 	public static Sprite getBodyArmorSprite (BodyArmorType type) {
 		switch (type) {
-			case BodyArmorType.SUIT: return bodyArmors[0];
-			case BodyArmorType.METAL: return bodyArmors[1];
-			case BodyArmorType.HEAVY: return bodyArmors[2];
+			case BodyArmorType.SPACESUIT: return bodyArmors[0];
+			case BodyArmorType.HARDENED_SPACESUIT: return bodyArmors[1];
+			case BodyArmorType.ARMORED_SPACESUIT: return bodyArmors[2];
+			case BodyArmorType.COMBAT_ARMOR: return bodyArmors[3];
 			default: Debug.Log("Unknown body armor type: " + type); return null;
 		}
 	}

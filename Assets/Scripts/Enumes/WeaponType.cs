@@ -12,7 +12,7 @@ public enum WeaponType {
 }
 
 public static class WeaponDescriptor {
-	public static string getName (this WeaponType type) {
+	public static string name (this WeaponType type) {
 		switch(type) {
 			case WeaponType.BLASTER: return "Бластер";
 			case WeaponType.PLASMER: return "Плазмер";
@@ -25,7 +25,7 @@ public static class WeaponDescriptor {
 		}
 	}
 
-	public static int getDamage (this WeaponType type) {
+	public static int damage (this WeaponType type) {
 		switch(type) {
 			case WeaponType.BLASTER: return 10;
 			case WeaponType.PLASMER: return 10;
@@ -38,7 +38,7 @@ public static class WeaponDescriptor {
 		}
 	}
 	
-	public static int getDamageRange (this WeaponType type) {
+	public static int damageRange (this WeaponType type) {
 		switch(type) {
 			case WeaponType.BLASTER: return 3;
 			case WeaponType.PLASMER: return 3;
@@ -51,7 +51,7 @@ public static class WeaponDescriptor {
 		}
 	}
 
-	public static float getReloadTime (this WeaponType type) {
+	public static float reloadTime (this WeaponType type) {
 		switch(type) {
 			case WeaponType.BLASTER: return 1;
 			case WeaponType.PLASMER: return 2;
@@ -64,7 +64,7 @@ public static class WeaponDescriptor {
 		}
 	}
 	
-	public static int getRange (this WeaponType type) {
+	public static int range (this WeaponType type) {
 		switch(type) {
 			case WeaponType.BLASTER: return 15;
 			case WeaponType.PLASMER: return 15;
@@ -77,7 +77,7 @@ public static class WeaponDescriptor {
 		}
 	}
 
-	public static float getVolume (this WeaponType type) {
+	public static float volume (this WeaponType type) {
 		switch(type) {
 			case WeaponType.BLASTER: return 2;
 			case WeaponType.PLASMER: return 2;
@@ -90,7 +90,7 @@ public static class WeaponDescriptor {
 		}
 	}
 
-	public static int getCost (this WeaponType type) {
+	public static int cost (this WeaponType type) {
 		switch(type) {
 			case WeaponType.BLASTER: return 100;
 			case WeaponType.PLASMER: return 200;
@@ -103,7 +103,7 @@ public static class WeaponDescriptor {
 		}
 	}
 
-	public static string getDescription (this WeaponType type) {
+	public static string description (this WeaponType type) {
 		switch(type) {
 		case WeaponType.BLASTER:
 			return "Стреляет заряжен-\nными частицами";
@@ -123,7 +123,7 @@ public static class WeaponDescriptor {
 		}
 	}
 
-	public static string getFullDescription (this WeaponType type) {
+	public static string fullDescription (this WeaponType type) {
 		switch(type) {
 		case WeaponType.BLASTER:
 			return "Стреляет заряженными частицами.\n" +
@@ -146,7 +146,7 @@ public static class WeaponDescriptor {
 		}
 	}
 
-	public static int getEnergyNeeded (this WeaponType type) {
+	public static int energyNeeded (this WeaponType type) {
 		switch(type) {
 		case WeaponType.BLASTER: return 10;
 		case WeaponType.PLASMER: return 20;

@@ -11,7 +11,7 @@ public enum RadarType {
 }
 
 public static class RadarDescriptor {
-	public static string getName (this RadarType type) {
+	public static string name (this RadarType type) {
 		switch(type) {
 		case RadarType.SEQUESTER: return "Секвесторный радар";
 		case RadarType.PLANAR: return "Планарный радар";
@@ -23,7 +23,7 @@ public static class RadarDescriptor {
 		}
 	}
 	
-	public static int getRange (this RadarType type) {
+	public static int range (this RadarType type) {
 		switch(type) {
 		case RadarType.SEQUESTER: return 5;
 		case RadarType.PLANAR: return 8;
@@ -35,7 +35,7 @@ public static class RadarDescriptor {
 		}
 	}
 
-	public static float getVolume (this RadarType type) {
+	public static float volume (this RadarType type) {
 		switch(type) {
 			case RadarType.SEQUESTER: return .5f;
 			case RadarType.PLANAR: return .5f;
@@ -47,7 +47,7 @@ public static class RadarDescriptor {
 		}
 	}
 
-	public static int getCost (this RadarType type) {
+	public static int cost (this RadarType type) {
 		switch(type) {
 		case RadarType.SEQUESTER: return 100;
 		case RadarType.PLANAR: return 200;
@@ -59,7 +59,7 @@ public static class RadarDescriptor {
 		}
 	}
 	
-	public static int getEnergyNeeded (this RadarType type) {
+	public static int energyNeeded (this RadarType type) {
 		switch(type) {
 		case RadarType.SEQUESTER: return 10;
 		case RadarType.PLANAR: return 20;
@@ -71,7 +71,7 @@ public static class RadarDescriptor {
 		}
 	}
 
-	public static string getDescription (this RadarType type) {
+	public static string description (this RadarType type) {
 		switch(type) {
 		case RadarType.SEQUESTER: return "Радар секвесторного\nтипа";
 		case RadarType.PLANAR: return "Радар планарного\nтипа";

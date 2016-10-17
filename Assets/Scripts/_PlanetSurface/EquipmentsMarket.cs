@@ -18,6 +18,8 @@ public class EquipmentsMarket : InventoryContainedScreen {
 
 	private TextMesh actionMsg;
 
+	private BuySellPopup popup;
+
 	public EquipmentsMarket init (PlanetSurface planetSurface, Inventory playerInventory, ItemDescriptor itemDescriptor) {
 		this.planetSurface = planetSurface;
 		this.playerInventory = playerInventory;
@@ -40,11 +42,60 @@ public class EquipmentsMarket : InventoryContainedScreen {
 			transform.GetChild(i).gameObject.SetActive(true);
 		}
 
+		popup = transform.Find("Popup").GetComponent<BuySellPopup>().init(this);
+
 		gameObject.SetActive(false);
 
 		return this;
 	}
-	
+
+	public void askToBuy (Item item) {
+		if (item == null) { return; }
+		if (buyMarket.gameObject == null) { return; }
+
+		if (item.itemData.quantity == 1) { buyItem(item, 1); }
+		else { popup.show(item, true); }
+	}
+
+	public void askToSell (Item item) {
+		if (item == null) { return; }
+		if (sellMarket.gameObject == null) { return; }
+
+		if (item.itemData.quantity == 1) { sellItem(item, 1); }
+		else { popup.show(item, false); }
+	}
+
+	public void buyItem (Item item, int quantity) {
+		if (Vars.cash < (item.cost() * quantity)) { Messenger.showMessage("Не достаточно кредитов на " + item.itemName()); return; }
+		if (item.volume() > .001f && (playerInventory.getFreeVolume() - (item.volume() * quantity)) < 0) { Messenger.showMessage("Недостаточно места в инвентаре."); return; }
+		Vars.cash -= (item.cost() * quantity);
+		item.cell.inventory.containerScreen.updateCashTxt();
+
+		if (item.itemData.quantity == quantity) {
+			playerInventory.addItemToCell(item.cell.takeItem(), null);
+		} else {
+			Item buyed = Instantiate<Transform>(ItemFactory.itemPrefab).GetComponent<Item>();
+			buyed.init(DataCopier.copy(item.itemData));
+			buyed.itemData.quantity = quantity;
+			buyed.updateQuantityText();
+			playerInventory.addItemToCell(buyed, null);
+			item.itemData.quantity -= quantity;
+			item.updateQuantityText();
+		}
+	}
+
+	public void sellItem (Item item, int quantity) {
+		Vars.cash += (item.cost() * quantity);
+		item.cell.inventory.containerScreen.updateCashTxt();
+
+		if (item.itemData.quantity == quantity) {
+			item.cell.takeItem().destroy();
+		} else {
+			item.itemData.quantity -= quantity;
+			item.updateQuantityText();
+		}
+	}
+
 	public void showScreen () {
 		UserInterface.showInterface = false;
 
@@ -92,8 +143,7 @@ public class EquipmentsMarket : InventoryContainedScreen {
 		bgRender.sprite = buyBG;
 		innerInit(buyMarket, "default");
 		actionMsg.text = "<color=orange>Покупка</color> - правая кнопка мыши.";
-		itemDescriptor.setEnabled(buyMarket);
-		itemDescriptor.setInventoryType(ItemDescriptor.Type.MARKET_BUY);
+		itemDescriptor.setEnabled(buyMarket, ItemDescriptor.Type.MARKET_BUY, this);
 		buyBtn.setActive(false);
 		sellBtn.setActive(true);
 		buyMarket.refreshInventory();
@@ -105,8 +155,7 @@ public class EquipmentsMarket : InventoryContainedScreen {
 		bgRender.sprite = sellBG;
 		innerInit(sellMarket, "default");
 		actionMsg.text = "<color=orange>Продажа</color> - правая кнопка мыши.";
-		itemDescriptor.setEnabled(sellMarket);
-		itemDescriptor.setInventoryType(ItemDescriptor.Type.MARKET_SELL);
+		itemDescriptor.setEnabled(sellMarket, ItemDescriptor.Type.MARKET_SELL, this);
 		buyBtn.setActive(true);
 		sellBtn.setActive(false);
 		sellMarket.refreshInventory();
@@ -142,7 +191,7 @@ public class EquipmentsMarket : InventoryContainedScreen {
 		gameObject.SetActive(false);
 		playerInventory.setItemsFromOtherInventory(sellMarket);
 		UserInterface.showInterface = true;
-		itemDescriptor.setEnabled(null);
+		itemDescriptor.setDisabled();
 		planetSurface.setVisible(true);
 //		if (inventory != null) {
 //			if (draggedItem != null) {

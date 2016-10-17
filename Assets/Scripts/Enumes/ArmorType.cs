@@ -10,7 +10,7 @@ public enum ArmorType {
 }
 
 public static class ArmorDescriptor {
-	public static string getName (this ArmorType type) {
+	public static string name (this ArmorType type) {
 		switch(type) {
 		case ArmorType.STEEL: return "Стальная броня";
 		case ArmorType.HARDENED_STEEL: return "Усиленная броня";
@@ -21,7 +21,7 @@ public static class ArmorDescriptor {
 		}
 	}
 
-	public static int getArmorClass (this ArmorType type) {
+	public static int armorClass (this ArmorType type) {
 		switch(type) {
 		case ArmorType.STEEL: return 1;
 		case ArmorType.HARDENED_STEEL: return 2;
@@ -32,7 +32,7 @@ public static class ArmorDescriptor {
 		}
 	}
 
-	public static float getVolume (this ArmorType type) {
+	public static float volume (this ArmorType type) {
 		switch(type) {
 		case ArmorType.STEEL: return 1;
 		case ArmorType.HARDENED_STEEL: return 1;
@@ -43,7 +43,7 @@ public static class ArmorDescriptor {
 		}
 	}
 
-	public static int getCost (this ArmorType type) {
+	public static int cost (this ArmorType type) {
 		switch(type) {
 		case ArmorType.STEEL: return 100;
 		case ArmorType.HARDENED_STEEL: return 200;
@@ -54,7 +54,7 @@ public static class ArmorDescriptor {
 		}
 	}
 
-	public static string getDescription (this ArmorType type) {
+	public static string description (this ArmorType type) {
 		switch(type) {
 		case ArmorType.STEEL: return "Броня из обычной\nстали";
 		case ArmorType.HARDENED_STEEL: return "Броня из усиленной\nстали";

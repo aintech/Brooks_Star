@@ -65,7 +65,7 @@ public abstract class Weapon : MonoBehaviour {
 	}
 
 	private bool distanceInRange () {
-		return Vector2.Distance(playerTrans.position, trans.position) < getWeaponType().getRange();
+		return Vector2.Distance(playerTrans.position, trans.position) < getWeaponType().range();
 	}
 
 	private void FixedUpdate () {

@@ -44,8 +44,8 @@ public abstract class Slot : ItemHolder {
 		return itemRef;
 	}
 
-//	public override ItemQuality getQuality () { return item.getItemQuality(); }
-//	public override string getName () { return item.getItemName(); }
+//	public override ItemQuality getQuality () { return item.quality(); }
+//	public override string getName () { return item.itemName(); }
 //	public override bool haveDescribableObject () { return item != null; }
 
 	public enum Type {
