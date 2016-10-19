@@ -7,16 +7,17 @@ public class Minimap : MonoBehaviour {
 
 	public GUIStyle radarBtnStyle, systemBtnStyle, showHideBtnStyle;
 
-	public Texture bg, planetOrbit, planet, player, enemy, footer, radarBorder;
+	public Texture bg, planetOrbit, planet, planetColonized, planetPopulated, player, enemy, footer, radarBorder;
 
 	private const float mapSize = 200;
 
-	private const float imgSize = 16, halfSize = 8, mapOffset = 20;
+	private const float imgSize = 16, halfSize = 8, mapOffset = 20, planetSize = 8, planetHalf = 4;
 
 	private float toSystemDiff, radarDiff;
 
-	private Vector2 center = new Vector2(Screen.width - (mapSize / 2 + mapOffset), mapSize / 2 + mapOffset),
-					tempVec;
+	private Vector2 center = new Vector2(Screen.width - (mapSize / 2 + mapOffset), mapSize / 2 + mapOffset);
+
+	private Vector2 tempVec;
 
 	private Rect[] orbits;
 
@@ -25,12 +26,12 @@ public class Minimap : MonoBehaviour {
 	private float[] distances;
 
 	private Rect 	playerRect = new Rect(0, 0, imgSize, imgSize),
+					planetRect = new Rect(0, 0, planetSize, planetSize),
 				 	footerRect = new Rect(Screen.width - 230, 30, 230, 200),
 					showBtnRect = new Rect(Screen.width - 32, 2, 32, 32),
 					hideBtnRect = new Rect(Screen.width - 32, 231, 32, 32),
 					systemRadarBtnRect = new Rect(Screen.width - 32 - 132, 231, 131, 32),
-					radarBorderRect = new Rect(Screen.width - mapSize - mapOffset, mapOffset, mapSize, mapSize),
-				 	tempRect;
+					radarBorderRect = new Rect(Screen.width - mapSize - mapOffset, mapOffset, mapSize, mapSize);
 
 	private List<Rect> enemyPositions = new List<Rect>();
 
@@ -47,6 +48,12 @@ public class Minimap : MonoBehaviour {
 	private float radarRange;
 
 	private float tempDist;
+
+	private Rect currPlanetPosition;
+
+	private Planet currPlanet;
+
+	private Texture currPlanetText;
 
 	public void init (StarSystem starSystem, Transform playerShip, float radarRange) {
 		this.starSystem = starSystem;
@@ -73,7 +80,7 @@ public class Minimap : MonoBehaviour {
 		for (int i = 0; i < orbits.Length; i++) {
 			diff = mapSize * (types[i].getDistanceToStar() / planetDistanceMax);
 			orbits[i] = new Rect(center.x - diff/2, center.y - diff/2, diff, diff);//new Rect(Screen.width - diff + diff/2 - mapSize/2 - 20, (mapSize - diff/2 - mapSize/2) + 20, diff, diff);
-			planetPositions[i] = new Rect(playerRect);
+			planetPositions[i] = new Rect(planetRect);
 		}
 
 		radarDiff = mapSize / 2 / radarRange;
@@ -87,7 +94,8 @@ public class Minimap : MonoBehaviour {
 			if (mapType == MapType.SYSTEM) {
 				for (int i = 0; i < orbits.Length; i++) {
 					GUI.DrawTexture(orbits[i], planetOrbit);
-					GUI.DrawTexture(calcPlanetPos(i), planet);
+					calcPlanetPos(i);
+					GUI.DrawTexture(currPlanetPosition, currPlanetText);
 				}
 				playerRect.x = center.x - halfSize + (playerShip.position.x * toSystemDiff);
 				playerRect.y = center.y - halfSize - (playerShip.position.y * toSystemDiff);
@@ -144,12 +152,13 @@ public class Minimap : MonoBehaviour {
 		}
 	}
 
-	private Rect calcPlanetPos (int index) {
-		tempRect = planetPositions[index];
-		Vector3 temp = starSystem.getPlanets()[index].getPosition();
-		tempRect.x = center.x - halfSize + (temp.x * toSystemDiff);
-		tempRect.y = center.y - halfSize - (temp.y * toSystemDiff);
-		return tempRect;
+	private void calcPlanetPos (int index) {
+		currPlanetPosition = planetPositions[index];
+		currPlanet = starSystem.getPlanets()[index];
+		currPlanetText = currPlanet.isColonized? planetColonized: currPlanet.isPopulated? planetPopulated: planet;
+		tempVec = starSystem.getPlanets()[index].getPosition();
+		currPlanetPosition.x = center.x - planetHalf + (tempVec.x * toSystemDiff);
+		currPlanetPosition.y = center.y - planetHalf - (tempVec.y * toSystemDiff);
 	}
 
 	public void addEnemy (Transform enemy) {

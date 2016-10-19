@@ -6,8 +6,6 @@ public abstract class Ship : MonoBehaviour {
 	
 	public Transform blasterPrefab, plasmerPrefab, chargerPrefab, emitterPrefab, waverPrefab, launcherPrefab, suppressorPrefab;
 
-	public Sprite[] hullSprites;
-
 	public Sprite[] engineSprites;
 
 	private Transform mainExhaust, leftExhaust, rightExhaust;
@@ -16,7 +14,11 @@ public abstract class Ship : MonoBehaviour {
 
 	private SpriteRenderer hullRender, engineRender;
 
-	protected int armor, health, shield, fullShield, fullHealth;
+	public int armor { get; protected set; }
+	public int health { get; protected set; }
+	public int shield { get; protected set; }
+	public int fullShield { get; protected set; }
+	public int fullHealth { get; protected set; }
 
 	public float radarRange { get; protected set; }
 
@@ -48,6 +50,16 @@ public abstract class Ship : MonoBehaviour {
 
 	public bool destroed { get; private set; }
 
+	protected int shieldRechargeValue;
+
+	protected float repairValue;
+
+	private float afterDamageInterval = 5, recoverTime, repairAccumulation;
+
+	private bool rechargeShield, repairHull;
+
+//	private int repairCounter, toNextRepair = 100;
+
 	protected void initInner () {
 		if (weaponSlotsMap == null) {
 			initializeWeaponSlotsMap();
@@ -73,6 +85,31 @@ public abstract class Ship : MonoBehaviour {
 		shipCollider.enabled = true;
 	}
 
+	void Update () {
+		if (StarSystem.gamePaused) { return; }
+
+		if (repairHull && recoverTime <= Time.time) {
+			repairAccumulation += repairValue;
+			if (repairAccumulation >= 5) {
+				repairAccumulation -= 5;
+				health += 5;
+				if (health >= fullHealth) {
+					health = fullHealth;
+					repairHull = false;
+				}
+				updateHealthAndShieldInfo();
+			}
+		}
+		if (rechargeShield && recoverTime <= Time.time) {
+			shield += shieldRechargeValue;
+			if (shield >= fullShield) {
+				shield = fullShield;
+				rechargeShield = false;
+			}
+			updateHealthAndShieldInfo();
+		}
+	}
+
 	protected void setHullType (HullType hullType) {
 		this.hullType = hullType;
 		setHullSprite();
@@ -85,26 +122,7 @@ public abstract class Ship : MonoBehaviour {
 
 	private void setHullSprite () {
 		if (hullRender == null) getHullRender();
-		switch (hullType) {
-			case HullType.Little: hullRender.sprite = hullSprites[0]; break;
-			case HullType.Needle: hullRender.sprite = hullSprites[1]; break;
-			case HullType.Gnome: hullRender.sprite = hullSprites[2]; break;
-			case HullType.Cricket: hullRender.sprite = hullSprites[3]; break;
-			case HullType.Argo: hullRender.sprite = hullSprites[4]; break;
-			case HullType.Falcon: hullRender.sprite = hullSprites[5]; break;
-			case HullType.Adventurer: hullRender.sprite = hullSprites[6]; break;
-			case HullType.Corvette: hullRender.sprite = hullSprites[7]; break;
-			case HullType.Buffalo: hullRender.sprite = hullSprites[8]; break;
-			case HullType.Legionnaire: hullRender.sprite = hullSprites[9]; break;
-			case HullType.StarWalker: hullRender.sprite = hullSprites[10]; break;
-			case HullType.Warship: hullRender.sprite = hullSprites[11]; break;
-			case HullType.Asterix: hullRender.sprite = hullSprites[12]; break;
-			case HullType.Prime: hullRender.sprite = hullSprites[13]; break;
-			case HullType.TITAN: hullRender.sprite = hullSprites[14]; break;
-			case HullType.Dreadnaut: hullRender.sprite = hullSprites[15]; break;
-			case HullType.Armageddon: hullRender.sprite = hullSprites[16]; break;
-			default: Debug.Log("Неизвестный тип корпуса"); break;
-		}
+		hullRender.sprite = ImagesProvider.getHullSprite(hullType);
 	}
 
 	private void resizeCollider () {
@@ -144,39 +162,24 @@ public abstract class Ship : MonoBehaviour {
 		return engineRender;
 	}
 
-	public int getHealth () {
-		return health;
-	}
-	
-	public int getFullHealth () {
-		return fullHealth;
-	}
-
-	public int getArmor () {
-		return armor;
-	}
-
-	public int getShield () {
-		return shield;
-	}
-
-	public int getFullShield () {
-		return fullShield;
-	}
-
 	public void damageShip (WeaponType type, Vector3 weaponPosition, int minDamage, int maxDamage) {
 		if (type == WeaponType.BLASTER) {
 			int damage = Random.Range(minDamage, maxDamage + 1);
-			if (getShield() >= damage) {
-				shield = getShield() - damage;
+			if (shield >= damage) {
+				shield -= damage;
 				shieldsPool.renderShieldReflection(this, weaponPosition);
 			} else {
 				int diff = damage - shield;
 				shield = 0;
 				health -= diff;
+				repairHull = health < fullHealth;
 			}
 		}
-		if (getHealth() > 0) {
+		if (shield < fullShield) {
+			rechargeShield = true;
+			recoverTime = Time.time + afterDamageInterval;
+		}
+		if (health > 0) {
 			updateHealthAndShieldInfo();
 		} else {
 			disableShip();
@@ -186,14 +189,19 @@ public abstract class Ship : MonoBehaviour {
 	virtual protected void updateHealthAndShieldInfo () {}
 
 	virtual protected void disableShip () {
+		health = 0;
 		alive = false;
 		shipCollider.enabled = false;
+		rechargeShield = false;
+		repairHull = false;
+		updateHealthAndShieldInfo();
 		ExplosionsManager.playExplosion(this);
 	}
 
 	virtual public void destroyShip () {
 		gameObject.SetActive(false);
 		destroed = true;
+		LootDropper.drop(this);
 	}
 
 	public int getShieldRenderOrder () {
@@ -210,11 +218,11 @@ public abstract class Ship : MonoBehaviour {
 		List<Vector3> list = new List<Vector3>();
 		list.Add(new Vector3(-0.54f, -0.43f, zOffset));
 		list.Add(new Vector3(0.54f, -0.43f, zOffset));
-		weaponSlotsMap.Add(HullType.Adventurer, list);
+		weaponSlotsMap.Add(HullType.ADVENTURER, list);
 		
 		list = new List<Vector3>();
 		list.Add(new Vector3(0, -0.48f, zOffset));
-		weaponSlotsMap.Add(HullType.Argo, list);
+		weaponSlotsMap.Add(HullType.ARGO, list);
 		
 		list = new List<Vector3>();
 		list.Add(new Vector3(-0.785f, 0.54f, zOffset));
@@ -222,55 +230,55 @@ public abstract class Ship : MonoBehaviour {
 		list.Add(new Vector3(0, -0.11f, zOffset));
 		list.Add(new Vector3(-0.69f, -0.89f, zOffset));
 		list.Add(new Vector3(0.69f, -0.89f, zOffset));
-		weaponSlotsMap.Add(HullType.Armageddon, list);
+		weaponSlotsMap.Add(HullType.ARMAGEDDON, list);
 		
 		list = new List<Vector3>();
 		list.Add(new Vector3(-0.61f, 0.225f, zOffset));
 		list.Add(new Vector3(0.61f, 0.225f, zOffset));
 		list.Add(new Vector3(0, -0.69f, zOffset));
-		weaponSlotsMap.Add(HullType.Asterix, list);
+		weaponSlotsMap.Add(HullType.ASTERIX, list);
 		
 		list = new List<Vector3>();
 		list.Add(new Vector3(-0.57f, -0.37f, zOffset));
 		list.Add(new Vector3(0.57f, -0.37f, zOffset));
-		weaponSlotsMap.Add(HullType.Buffalo, list);
+		weaponSlotsMap.Add(HullType.BUFFALO, list);
 		
 		list = new List<Vector3>();
 		list.Add(new Vector3(-0.59f, -0.3f, zOffset));
 		list.Add(new Vector3(0.59f, -0.3f, zOffset));
-		weaponSlotsMap.Add(HullType.Corvette, list);
+		weaponSlotsMap.Add(HullType.CORVETTE, list);
 		
 		list = new List<Vector3>();
 		list.Add(new Vector3(0, -0.39f, zOffset));
-		weaponSlotsMap.Add(HullType.Cricket, list);
+		weaponSlotsMap.Add(HullType.CRICKET, list);
 		
 		list = new List<Vector3>();
 		list.Add(new Vector3(-0.775f, 0.24f, zOffset));
 		list.Add(new Vector3(0.775f, 0.24f, zOffset));
 		list.Add(new Vector3(-0.765f, -0.9f, zOffset));
 		list.Add(new Vector3(0.765f, -0.9f, zOffset));
-		weaponSlotsMap.Add(HullType.Dreadnaut, list);
+		weaponSlotsMap.Add(HullType.DREADNAUT, list);
 		
 		list = new List<Vector3>();
 		list.Add(new Vector3(0, -0.545f, zOffset));
-		weaponSlotsMap.Add(HullType.Falcon, list);
+		weaponSlotsMap.Add(HullType.FALCON, list);
 		
 		list = new List<Vector3>();
 		list.Add(new Vector3(-0.575f, -0.425f, zOffset));
 		list.Add(new Vector3(0.575f, -0.425f, zOffset));
-		weaponSlotsMap.Add(HullType.Legionnaire, list);
+		weaponSlotsMap.Add(HullType.LEGIONNAIRE, list);
 		
 		list = new List<Vector3>();
 		list.Add(new Vector3(-0.64f, 0.26f, zOffset));
 		list.Add(new Vector3(0.64f, 0.26f, zOffset));
 		list.Add(new Vector3(0, -0.64f, zOffset));
-		weaponSlotsMap.Add(HullType.Prime, list);
+		weaponSlotsMap.Add(HullType.PRIME, list);
 		
 		list = new List<Vector3>();
 		list.Add(new Vector3(-0.575f, 0.14f, zOffset));
 		list.Add(new Vector3(0.575f, 0.14f, zOffset));
 		list.Add(new Vector3(0, -0.8f, zOffset));
-		weaponSlotsMap.Add(HullType.StarWalker, list);
+		weaponSlotsMap.Add(HullType.STARWALKER, list);
 		
 		list = new List<Vector3>();
 		list.Add(new Vector3(-0.705f, 0.24f, zOffset));
@@ -283,70 +291,70 @@ public abstract class Ship : MonoBehaviour {
 		list.Add(new Vector3(-0.575f, 0.165f, zOffset));
 		list.Add(new Vector3(0.575f, 0.165f, zOffset));
 		list.Add(new Vector3(0, -0.735f, zOffset));
-		weaponSlotsMap.Add(HullType.Warship, list);
+		weaponSlotsMap.Add(HullType.WARSHIP, list);
 	}
 
 	private void initializeEngineMap () {
 		engineMap = new Dictionary<HullType, Vector3>();
-		engineMap.Add(HullType.Little, new Vector3(0, -0.42f, 0));
-		engineMap.Add(HullType.Needle, new Vector3(0, -0.57f, 0));
-		engineMap.Add(HullType.Gnome, new Vector3(0, -0.61f, 0));
-		engineMap.Add(HullType.Cricket, new Vector3(0, -0.725f, 0));
-		engineMap.Add(HullType.Argo, new Vector3(0, -0.805f, 0));
-		engineMap.Add(HullType.Falcon, new Vector3(0, -0.99f, 0));
-		engineMap.Add(HullType.Adventurer, new Vector3(0, -0.975f, 0));
-		engineMap.Add(HullType.Corvette, new Vector3(0, -0.985f, 0));
-		engineMap.Add(HullType.Buffalo, new Vector3(0, -1.035f, 0));
-		engineMap.Add(HullType.Legionnaire, new Vector3(0, -1.08f, 0));
-		engineMap.Add(HullType.StarWalker, new Vector3(0, -1.1f, 0));
-		engineMap.Add(HullType.Warship, new Vector3(0, -1.135f, 0));
-		engineMap.Add(HullType.Asterix, new Vector3(0, -1.15f, 0));
-		engineMap.Add(HullType.Prime, new Vector3(0, -1.11f, 0));
+		engineMap.Add(HullType.LITTLE, new Vector3(0, -0.42f, 0));
+		engineMap.Add(HullType.NEEDLE, new Vector3(0, -0.57f, 0));
+		engineMap.Add(HullType.GNOME, new Vector3(0, -0.61f, 0));
+		engineMap.Add(HullType.CRICKET, new Vector3(0, -0.725f, 0));
+		engineMap.Add(HullType.ARGO, new Vector3(0, -0.805f, 0));
+		engineMap.Add(HullType.FALCON, new Vector3(0, -0.99f, 0));
+		engineMap.Add(HullType.ADVENTURER, new Vector3(0, -0.975f, 0));
+		engineMap.Add(HullType.CORVETTE, new Vector3(0, -0.985f, 0));
+		engineMap.Add(HullType.BUFFALO, new Vector3(0, -1.035f, 0));
+		engineMap.Add(HullType.LEGIONNAIRE, new Vector3(0, -1.08f, 0));
+		engineMap.Add(HullType.STARWALKER, new Vector3(0, -1.1f, 0));
+		engineMap.Add(HullType.WARSHIP, new Vector3(0, -1.135f, 0));
+		engineMap.Add(HullType.ASTERIX, new Vector3(0, -1.15f, 0));
+		engineMap.Add(HullType.PRIME, new Vector3(0, -1.11f, 0));
 		engineMap.Add(HullType.TITAN, new Vector3(0, -1.11f, 0));
-		engineMap.Add(HullType.Dreadnaut, new Vector3(0, -1.18f, 0));
-		engineMap.Add(HullType.Armageddon, new Vector3(0, -1.33f, 0));
+		engineMap.Add(HullType.DREADNAUT, new Vector3(0, -1.18f, 0));
+		engineMap.Add(HullType.ARMAGEDDON, new Vector3(0, -1.33f, 0));
 	}
 
 	private void initializeColliderMap () {
 		colliderMap = new Dictionary<HullType, Vector3>();
-		colliderMap.Add(HullType.Little, new Vector3(-0.07f, 0.6f, 1));
-		colliderMap.Add(HullType.Needle, new Vector3(-0.06f, 0.5f, 1.3f));
-		colliderMap.Add(HullType.Gnome, new Vector3(-0.065f, 0.55f, 1.37f));
-		colliderMap.Add(HullType.Cricket, new Vector3(-0.07f, 0.7f, 1.6f));
-		colliderMap.Add(HullType.Argo, new Vector3(-0.03f, 0.7f, 1.8f));
-		colliderMap.Add(HullType.Falcon, new Vector3(-0.06f, 0.8f, 2.15f));
-		colliderMap.Add(HullType.Adventurer, new Vector3(-0.06f, 0.9f, 2.15f));
-		colliderMap.Add(HullType.Corvette, new Vector3(-0.06f, 1, 2.15f));
-		colliderMap.Add(HullType.Buffalo, new Vector3(-0.067f, 0.9f, 2.23f));
-		colliderMap.Add(HullType.Legionnaire, new Vector3(-0.07f, 0.9f, 2.32f));
-		colliderMap.Add(HullType.StarWalker, new Vector3(-0.07f, 0.95f, 2.32f));
-		colliderMap.Add(HullType.Warship, new Vector3(-0.07f, 0.9f, 2.42f));
-		colliderMap.Add(HullType.Asterix, new Vector3(-0.07f, 1, 2.46f));
-		colliderMap.Add(HullType.Prime, new Vector3(-0.06f, 1.2f, 2.4f));
+		colliderMap.Add(HullType.LITTLE, new Vector3(-0.07f, 0.6f, 1));
+		colliderMap.Add(HullType.NEEDLE, new Vector3(-0.06f, 0.5f, 1.3f));
+		colliderMap.Add(HullType.GNOME, new Vector3(-0.065f, 0.55f, 1.37f));
+		colliderMap.Add(HullType.CRICKET, new Vector3(-0.07f, 0.7f, 1.6f));
+		colliderMap.Add(HullType.ARGO, new Vector3(-0.03f, 0.7f, 1.8f));
+		colliderMap.Add(HullType.FALCON, new Vector3(-0.06f, 0.8f, 2.15f));
+		colliderMap.Add(HullType.ADVENTURER, new Vector3(-0.06f, 0.9f, 2.15f));
+		colliderMap.Add(HullType.CORVETTE, new Vector3(-0.06f, 1, 2.15f));
+		colliderMap.Add(HullType.BUFFALO, new Vector3(-0.067f, 0.9f, 2.23f));
+		colliderMap.Add(HullType.LEGIONNAIRE, new Vector3(-0.07f, 0.9f, 2.32f));
+		colliderMap.Add(HullType.STARWALKER, new Vector3(-0.07f, 0.95f, 2.32f));
+		colliderMap.Add(HullType.WARSHIP, new Vector3(-0.07f, 0.9f, 2.42f));
+		colliderMap.Add(HullType.ASTERIX, new Vector3(-0.07f, 1, 2.46f));
+		colliderMap.Add(HullType.PRIME, new Vector3(-0.06f, 1.2f, 2.4f));
 		colliderMap.Add(HullType.TITAN, new Vector3(-0.06f, 1.4f, 2.4f));
-		colliderMap.Add(HullType.Dreadnaut, new Vector3(-0.04f, 1.8f, 2.58f));
-		colliderMap.Add(HullType.Armageddon, new Vector3(-0.07f, 1.8f, 2.8f));
+		colliderMap.Add(HullType.DREADNAUT, new Vector3(-0.04f, 1.8f, 2.58f));
+		colliderMap.Add(HullType.ARMAGEDDON, new Vector3(-0.07f, 1.8f, 2.8f));
 	}
 
 	private void initializeExhaustMap () {
 		exhaustMap = new Dictionary<HullType, Vector3>();
-		exhaustMap.Add(HullType.Little, new Vector3(-.41f, .17f));
-		exhaustMap.Add(HullType.Needle, new Vector3(-.41f, -.06f));
-		exhaustMap.Add(HullType.Gnome, new Vector3(-.4f, .24f));
-		exhaustMap.Add(HullType.Cricket, new Vector3(-.43f, .22f));
-		exhaustMap.Add(HullType.Argo, new Vector3(-.45f, .34f));
-		exhaustMap.Add(HullType.Falcon, new Vector3(-.62f, .22f));
-		exhaustMap.Add(HullType.Adventurer, new Vector3(-.6f, .42f));
-		exhaustMap.Add(HullType.Corvette, new Vector3(-.47f, .57f));
-		exhaustMap.Add(HullType.Buffalo, new Vector3(-.57f, .6f));
-		exhaustMap.Add(HullType.Legionnaire, new Vector3(-.52f, .58f));
-		exhaustMap.Add(HullType.StarWalker, new Vector3(-.51f, .61f));
-		exhaustMap.Add(HullType.Warship, new Vector3(-.58f, .54f));
-		exhaustMap.Add(HullType.Asterix, new Vector3(-.45f, .6f));
-		exhaustMap.Add(HullType.Prime, new Vector3(-.57f, .8f));
+		exhaustMap.Add(HullType.LITTLE, new Vector3(-.41f, .17f));
+		exhaustMap.Add(HullType.NEEDLE, new Vector3(-.41f, -.06f));
+		exhaustMap.Add(HullType.GNOME, new Vector3(-.4f, .24f));
+		exhaustMap.Add(HullType.CRICKET, new Vector3(-.43f, .22f));
+		exhaustMap.Add(HullType.ARGO, new Vector3(-.45f, .34f));
+		exhaustMap.Add(HullType.FALCON, new Vector3(-.62f, .22f));
+		exhaustMap.Add(HullType.ADVENTURER, new Vector3(-.6f, .42f));
+		exhaustMap.Add(HullType.CORVETTE, new Vector3(-.47f, .57f));
+		exhaustMap.Add(HullType.BUFFALO, new Vector3(-.57f, .6f));
+		exhaustMap.Add(HullType.LEGIONNAIRE, new Vector3(-.52f, .58f));
+		exhaustMap.Add(HullType.STARWALKER, new Vector3(-.51f, .61f));
+		exhaustMap.Add(HullType.WARSHIP, new Vector3(-.58f, .54f));
+		exhaustMap.Add(HullType.ASTERIX, new Vector3(-.45f, .6f));
+		exhaustMap.Add(HullType.PRIME, new Vector3(-.57f, .8f));
 		exhaustMap.Add(HullType.TITAN, new Vector3(-.78f, .72f));
-		exhaustMap.Add(HullType.Dreadnaut, new Vector3(-.92f, .6f));
-		exhaustMap.Add(HullType.Armageddon, new Vector3(-1.06f, .83f));
+		exhaustMap.Add(HullType.DREADNAUT, new Vector3(-.92f, .6f));
+		exhaustMap.Add(HullType.ARMAGEDDON, new Vector3(-1.06f, .83f));
 	}
 
 	public abstract bool isPlayerShip ();

@@ -10,7 +10,7 @@ public static class Vars {
 
 	public static PlanetType planetType = PlanetType.PARPARIS;
 
-	public static HullType shipHullType = HullType.Corvette;
+	public static HullType shipHullType = HullType.CORVETTE;
 
 	public static Dictionary<KeyValuePair<Slot.Type, int>, ItemData> shipHullSlotsMap = new Dictionary<KeyValuePair<HullSlot.Type, int>, ItemData> ();
 

@@ -71,7 +71,7 @@ public class HullSlot : Slot {
 
     private static void fillPositions(HullType hullType, List<Vector3> vectors) {
         switch (hullType) {
-            case HullType.Little:
+            case HullType.LITTLE:
             vectors.Add(new Vector3(0.6f, -1.15f));//radar
             vectors.Add(new Vector3(0, 2.2f));//engine
             vectors.Add(new Vector3(-0.6f, -1.15f));//generator 1
@@ -97,7 +97,7 @@ public class HullSlot : Slot {
             vectors.Add(Vector3.zero);//armor 4
             vectors.Add(Vector3.zero);//armor 5
             break;
-            case HullType.Needle:
+            case HullType.NEEDLE:
             vectors.Add(new Vector3(0.6f, -1.15f));//radar
             vectors.Add(new Vector3(0, 2.2f));//engine
             vectors.Add(new Vector3(-0.6f, -1.15f));//generator 1
@@ -123,7 +123,7 @@ public class HullSlot : Slot {
             vectors.Add(Vector3.zero);//armor 4
             vectors.Add(Vector3.zero);//armor 5
             break;
-            case HullType.Gnome:
+            case HullType.GNOME:
             vectors.Add(new Vector3(0.6f, -1.15f));//radar
             vectors.Add(new Vector3(0, 2.2f));//engine
             vectors.Add(new Vector3(-0.6f, -1.15f));//generator 1
@@ -149,7 +149,7 @@ public class HullSlot : Slot {
             vectors.Add(Vector3.zero);//armor 4
             vectors.Add(Vector3.zero);//armor 5
             break;
-            case HullType.Cricket:
+            case HullType.CRICKET:
             vectors.Add(new Vector3(0, -2.2f));//radar
             vectors.Add(new Vector3(0, 2.2f));//engine
             vectors.Add(new Vector3(0, -1.1f));//generator 1
@@ -175,7 +175,7 @@ public class HullSlot : Slot {
             vectors.Add(Vector3.zero);//armor 4
             vectors.Add(Vector3.zero);//armor 5
             break;
-            case HullType.Argo:
+            case HullType.ARGO:
             vectors.Add(new Vector3(0, -2.1f));//radar
             vectors.Add(new Vector3(0, 2.4f));//engine
             vectors.Add(new Vector3(0, -0.95f));//generator 1
@@ -201,7 +201,7 @@ public class HullSlot : Slot {
             vectors.Add(Vector3.zero);//armor 4
             vectors.Add(Vector3.zero);//armor 5
             break;
-            case HullType.Falcon:
+            case HullType.FALCON:
             vectors.Add(new Vector3(0, -2.1f));//radar
             vectors.Add(new Vector3(0, 2.4f));//engine
             vectors.Add(new Vector3(0, -0.95f));//generator 1
@@ -227,7 +227,7 @@ public class HullSlot : Slot {
             vectors.Add(Vector3.zero);//armor 4
             vectors.Add(Vector3.zero);//armor 5
             break;
-            case HullType.Adventurer:
+            case HullType.ADVENTURER:
             vectors.Add(new Vector3(0, -2.2f));//radar
             vectors.Add(new Vector3(0, 2.2f));//engine
             vectors.Add(new Vector3(0, 0));//generator 1
@@ -253,7 +253,7 @@ public class HullSlot : Slot {
             vectors.Add(Vector3.zero);//armor 4
             vectors.Add(Vector3.zero);//armor 5
             break;
-            case HullType.Corvette:
+            case HullType.CORVETTE:
             vectors.Add(new Vector3(0, -2.2f));//radar
             vectors.Add(new Vector3(0, 2.2f));//engine
             vectors.Add(new Vector3(0, 0));//generator 1
@@ -279,7 +279,7 @@ public class HullSlot : Slot {
             vectors.Add(Vector3.zero);//armor 4
             vectors.Add(Vector3.zero);//armor 5
             break;
-            case HullType.Buffalo:
+            case HullType.BUFFALO:
             vectors.Add(new Vector3(0, -2.2f));//radar
             vectors.Add(new Vector3(0, 2.2f));//engine
             vectors.Add(new Vector3(0, 0));//generator 1
@@ -305,7 +305,7 @@ public class HullSlot : Slot {
             vectors.Add(Vector3.zero);//armor 4
             vectors.Add(Vector3.zero);//armor 5
             break;
-            case HullType.Legionnaire:
+            case HullType.LEGIONNAIRE:
             vectors.Add(new Vector3(0, -2.2f));//radar
             vectors.Add(new Vector3(0, 2.5f));//engine
             vectors.Add(new Vector3(0, 0.3f));//generator 1
@@ -331,7 +331,7 @@ public class HullSlot : Slot {
             vectors.Add(Vector3.zero);//armor 4
             vectors.Add(Vector3.zero);//armor 5
             break;
-            case HullType.StarWalker:
+            case HullType.STARWALKER:
             vectors.Add(new Vector3(0, -2.2f));//radar
             vectors.Add(new Vector3(0, 2.75f));//engine
             vectors.Add(new Vector3(1.15f, 0.35f));//generator 1
@@ -357,7 +357,7 @@ public class HullSlot : Slot {
             vectors.Add(new Vector3(-2.2f, 1.85f));//armor 4
             vectors.Add(Vector3.zero);//armor 5
             break;
-            case HullType.Warship:
+            case HullType.WARSHIP:
             vectors.Add(new Vector3(0, -2.2f));//radar
             vectors.Add(new Vector3(0, 2.75f));//engine
             vectors.Add(new Vector3(1.15f, 0.35f));//generator 1
@@ -383,7 +383,7 @@ public class HullSlot : Slot {
             vectors.Add(new Vector3(-2.2f, 1.85f));//armor 4
             vectors.Add(Vector3.zero);//armor 5
             break;
-            case HullType.Asterix:
+            case HullType.ASTERIX:
             vectors.Add(new Vector3(0, -2.2f));//radar
             vectors.Add(new Vector3(0, 2.75f));//engine
             vectors.Add(new Vector3(1.15f, 0.35f));//generator 1
@@ -409,7 +409,7 @@ public class HullSlot : Slot {
             vectors.Add(new Vector3(-2.2f, 1.85f));//armor 4
             vectors.Add(Vector3.zero);//armor 5
             break;
-            case HullType.Prime:
+            case HullType.PRIME:
             vectors.Add(new Vector3(0, -2.3f));//radar
             vectors.Add(new Vector3(0, 2.5f));//engine
             vectors.Add(new Vector3(1.15f, 0.1f));//generator 1
@@ -461,7 +461,7 @@ public class HullSlot : Slot {
             vectors.Add(new Vector3(-2.3f, 0.8f));//armor 4
             vectors.Add(new Vector3(0, 1.2f));//armor 5
             break;
-            case HullType.Dreadnaut:
+            case HullType.DREADNAUT:
             vectors.Add(new Vector3(0, -2.9f));//radar
             vectors.Add(new Vector3(0, 2.8f));//engine
             vectors.Add(new Vector3(0.7f, -1.7f));//generator 1
@@ -487,7 +487,7 @@ public class HullSlot : Slot {
             vectors.Add(new Vector3(-2.3f, 0.9f));//armor 4
             vectors.Add(new Vector3(0, 1));//armor 5
             break;
-            case HullType.Armageddon:
+            case HullType.ARMAGEDDON:
             vectors.Add(new Vector3(0, -2.9f));//radar
             vectors.Add(new Vector3(0, 2.8f));//engine
             vectors.Add(new Vector3(1.15f, -1.7f));//generator 1

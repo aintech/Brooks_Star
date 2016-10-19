@@ -53,7 +53,6 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 
 		statusScreen = GameObject.Find("Status Screen").GetComponent<StatusScreen>().init(null, descriptor);
 		inventory = statusScreen.getInventory();
-		descriptor.initPlayerInventory(inventory);
 
 		Vars.userInterface = GameObject.FindGameObjectWithTag("UserInterface").GetComponent<UserInterface>().init(statusScreen, null, null);
 
@@ -78,7 +77,7 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 	}
 
 	private void startNewGame () {
-		statusScreen.getShipData().initializeRandomShip(HullType.Corvette);
+		statusScreen.getShipData().initializeRandomShip(HullType.CORVETTE);
 
 		buyMarket.fillWithRandomItems(50, "Market Item");
 

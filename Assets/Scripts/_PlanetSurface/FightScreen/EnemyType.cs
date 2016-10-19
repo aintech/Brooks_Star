@@ -15,19 +15,19 @@ public static class EnemyDescriptor {
 		}
 	}
 
-	public static int getHealth (this EnemyType type) {
+	public static int health (this EnemyType type) {
 		return 100;
 	}
 
-	public static int getDamage (this EnemyType type) {
+	public static int damage (this EnemyType type) {
 		return 10;
 	}
 
-	public static int getDexterity (this EnemyType type) {
+	public static int dexterity (this EnemyType type) {
 		return 10;
 	}
 
-	public static int getArmor (this EnemyType type) {
+	public static int armor (this EnemyType type) {
 		return 0;
 	}
 }

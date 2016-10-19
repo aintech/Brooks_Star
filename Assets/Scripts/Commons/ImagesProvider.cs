@@ -3,9 +3,10 @@ using System.Collections;
 
 public class ImagesProvider : MonoBehaviour {
 
-	public Sprite[] weaponSprites, engineSprites, armorSprites, generatorSprites, radarSprites, shieldSprites, repairDroidSprites, harvesterSprites, handWeaponSprites, bodyArmorSprites, goodsSprites;
+	public Sprite[] weaponSprites, engineSprites, armorSprites, generatorSprites, radarSprites, shieldSprites, repairDroidSprites, harvesterSprites, handWeaponSprites, bodyArmorSprites, goodsSprites,
+					hullSprites;
 
-	public static Sprite[] weapons, engines, armors, generators, radars, shields, repairDroids, harvesters, handWeapons, bodyArmors, goods;
+	public static Sprite[] weapons, engines, armors, generators, radars, shields, repairDroids, harvesters, handWeapons, bodyArmors, goods, hulls;
 
 	public void init () {
 		weapons = weaponSprites;
@@ -19,6 +20,47 @@ public class ImagesProvider : MonoBehaviour {
 		handWeapons = handWeaponSprites;
 		bodyArmors = bodyArmorSprites;
 		goods = goodsSprites;
+		hulls = hullSprites;
+	}
+
+	public static Sprite getHullSprite (HullType type) {
+		switch (type) {
+			case HullType.LITTLE: return hulls[0];
+			case HullType.NEEDLE: return hulls[1];
+			case HullType.GNOME: return hulls[2];
+			case HullType.CRICKET: return hulls[3];
+			case HullType.ARGO: return hulls[4];
+			case HullType.FALCON: return hulls[5];
+			case HullType.ADVENTURER: return hulls[6];
+			case HullType.CORVETTE: return hulls[7];
+			case HullType.BUFFALO: return hulls[8];
+			case HullType.LEGIONNAIRE: return hulls[9];
+			case HullType.STARWALKER: return hulls[10];
+			case HullType.WARSHIP: return hulls[11];
+			case HullType.ASTERIX: return hulls[12];
+			case HullType.PRIME: return hulls[13];
+			case HullType.TITAN: return hulls[14];
+			case HullType.DREADNAUT: return hulls[15];
+			case HullType.ARMAGEDDON: return hulls[16];
+			default: Debug.Log("Unknown hull type: " + type); return null;
+		}
+	}
+
+	public static Sprite getItemSprite (ItemData data) {
+		switch (data.itemType) {
+			case ItemType.ARMOR: return getArmorSprite(((ArmorData)data).type);
+			case ItemType.BODY_ARMOR: return getBodyArmorSprite(((BodyArmorData)data).type);
+			case ItemType.ENGINE: return getEngineSprite(((EngineData)data).type);
+			case ItemType.GENERATOR: return getGeneratorSprite(((GeneratorData)data).type);
+			case ItemType.GOODS: return getGoodsSprite(((GoodsData)data).type);
+			case ItemType.HAND_WEAPON: return getHandWeaponSprite(((HandWeaponData)data).type);
+			case ItemType.HARVESTER: return getHarvesterSprite(((HarvesterData)data).type);
+			case ItemType.RADAR: return getRadarSprite(((RadarData)data).type);
+			case ItemType.REPAIR_DROID: return getRepairDroidSprite(((RepairDroidData)data).type);
+			case ItemType.SHIELD: return getShieldSprite(((ShieldData)data).type);
+			case ItemType.WEAPON: return getWeaponSprite(((WeaponData)data).type);
+			default: Debug.Log("Unknown item type: " + data.itemType); return null;
+		}
 	}
 
 	public static Sprite getWeaponSprite (WeaponType type) {

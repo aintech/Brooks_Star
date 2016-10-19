@@ -13,8 +13,6 @@ public class UserInterface : MonoBehaviour {
 
 	public GUIStyle statusBtnStyle, messengerStyle;
 
-	private StarSystem starSystem;
-
 	private StatusScreen statusScreen;
 
 	private PlayerShip ship;
@@ -33,9 +31,10 @@ public class UserInterface : MonoBehaviour {
 				 barsHolderRect = new Rect(0, Screen.height - 128, 256, 128),
 				 messengerRect = new Rect(10, Screen.height - 50, Screen.width, 50);
 
+	private bool showBars = true;
+
 	public UserInterface init (StatusScreen statusScreen, StarSystem starSystem, PlayerShip ship) {
 		this.statusScreen = statusScreen;
-		this.starSystem = starSystem;
 		this.ship = ship;
 
 		if (ship != null) { updateShip(); }
@@ -51,6 +50,9 @@ public class UserInterface : MonoBehaviour {
 			minimap.enabled = false;
 			GetComponent<StarSystemPlanetDescriptor>().enabled = false;
 		}
+
+		showBars = starSystem != null;
+
 		setEnabled(true);
 
 		return this;
@@ -64,6 +66,10 @@ public class UserInterface : MonoBehaviour {
 			} else if (showInterface) {
 				statusScreen.showScreen();
 			}
+		} else if (Input.GetKeyDown(KeyCode.Escape)) {
+			if (statusScreen.gameObject.activeInHierarchy) {
+				statusScreen.closeScreen();
+			}
 		}
 	}
 
@@ -72,7 +78,7 @@ public class UserInterface : MonoBehaviour {
 			if (GUI.Button(statusBtnRect, "", statusBtnStyle)) {
 				statusScreen.showScreen();
 			}
-			if (starSystem != null) {
+			if (showBars) {
 				GUI.DrawTexture(healthBarRect, health);
 				GUI.DrawTexture(shieldBarRect, shield);
 				GUI.DrawTexture(barsHolderRect, barsHolder);
@@ -96,11 +102,14 @@ public class UserInterface : MonoBehaviour {
 	}
 
 	public void updateShip () {
-		shieldBarRect.width = maxWidth * ((float)ship.getShield() / ship.getFullShield());
-//		shieldBarRect.x = startX - shieldBarRect.width;
-
-		healthBarRect.width = maxWidth * ((float)ship.getHealth() / ship.getFullHealth());
-//		healthBarRect.x = startX - healthBarRect.width;
+		if (ship.health <= 0) {
+			showBars = false;
+		} else {
+			shieldBarRect.width = maxWidth * ((float)ship.shield / ship.fullShield);
+			healthBarRect.width = maxWidth * ((float)ship.health / ship.fullHealth);
+	//		shieldBarRect.x = startX - shieldBarRect.width;
+	//		healthBarRect.x = startX - healthBarRect.width;
+		}
 	}
 
 	public void setMessageText (string text) {

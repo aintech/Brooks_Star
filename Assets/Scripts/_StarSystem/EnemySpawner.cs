@@ -15,7 +15,7 @@ public class EnemySpawner : MonoBehaviour {
 		return this;
 	}
 
-	public void spawnAnEnemy (int quantity) {
+	public void spawnAnEnemy (int minLevel, int maxLevel, int quantity) {
 		bool found = false;
 		EnemyShip enemy = null;
 		float bound = Vars.planetType.getDistanceToStar();
@@ -33,7 +33,8 @@ public class EnemySpawner : MonoBehaviour {
 				enemy = Instantiate<Transform>(enemyShipPrefab).GetComponent<EnemyShip>();
 				Vars.enemyShipsPool.Add(enemy);
 			}
-			enemy.initRandomShip(Random.Range(0, HullType.Armageddon.getHullClass() + 1), playerShip.transform);
+			enemy.initRandomShip(Random.Range(minLevel, maxLevel + 1), playerShip.transform);
+//			enemy.initRandomShip(Random.Range(0, HullType.ARMAGEDDON.getHullClass() + 1), playerShip.transform);
 			enemy.transform.position = new Vector3(Random.Range(-bound, bound), Random.Range(-bound, bound));
 			minimap.addEnemy(enemy.transform);
 		}

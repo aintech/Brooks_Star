@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: b766e2d2abdb41949aa508a4703889d9
+timeCreated: 1476871068
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - dropContainerPrefab: {fileID: 4000011277606192, guid: f8f413f5025a9fb42aa235e0fc674c69,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

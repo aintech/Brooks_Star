@@ -22,7 +22,7 @@ public static class ShieldDescriptor {
 	public static int shieldProtection (this ShieldType type) {
 		switch(type) {
 		case ShieldType.BLOCK: return 100;
-		case ShieldType.QUADRATIC: return 150;
+		case ShieldType.QUADRATIC: return 140;
 		case ShieldType.CELL: return 200;
 		case ShieldType.PHASE: return 300;
 		default: return 0;
@@ -31,11 +31,11 @@ public static class ShieldDescriptor {
 	
 	public static int rechargeSpeed (this ShieldType type) {
 		switch(type) {
-		case ShieldType.BLOCK: return 10;
-		case ShieldType.QUADRATIC: return 15;
-		case ShieldType.CELL: return 25;
-		case ShieldType.PHASE: return 40;
-		default: return 0;
+			case ShieldType.BLOCK: return 1;
+			case ShieldType.QUADRATIC: return 2;
+			case ShieldType.CELL: return 3;
+			case ShieldType.PHASE: return 4;
+			default: return 0;
 		}
 	}
 

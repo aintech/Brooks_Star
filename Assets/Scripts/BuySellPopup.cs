@@ -35,7 +35,7 @@ public class BuySellPopup : MonoBehaviour, ButtonHolder {
 		barLeft = bar.localPosition.x;
 		fullTrack = -barLeft * 2;
 
-		barCollider = bar.GetComponent<BoxCollider2D>();
+		barCollider = transform.Find("Bar Holder").GetComponent<BoxCollider2D>();
 		increaseBtn = transform.Find("Increase Button").GetComponent<Button>().init();
 		decreaseBtn = transform.Find("Decrease Button").GetComponent<Button>().init();
 		applyBtn = transform.Find("Apply Button").GetComponent<Button>().init();

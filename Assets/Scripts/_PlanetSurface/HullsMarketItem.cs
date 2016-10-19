@@ -17,23 +17,23 @@ public class HullsMarketItem : MonoBehaviour {
 
 	private void setSprite () {
 		switch (hullType) {
-			case HullType.Little: render.sprite = hullIcons[0]; break;
-			case HullType.Needle: render.sprite = hullIcons[1]; break;
-			case HullType.Gnome: render.sprite = hullIcons[2]; break;
-			case HullType.Cricket: render.sprite = hullIcons[3]; break;
-			case HullType.Argo: render.sprite = hullIcons[4]; break;
-			case HullType.Falcon: render.sprite = hullIcons[5]; break;
-			case HullType.Adventurer: render.sprite = hullIcons[6]; break;
-			case HullType.Corvette: render.sprite = hullIcons[7]; break;
-			case HullType.Buffalo: render.sprite = hullIcons[8]; break;
-			case HullType.Legionnaire: render.sprite = hullIcons[9]; break;
-			case HullType.StarWalker: render.sprite = hullIcons[10]; break;
-			case HullType.Warship: render.sprite = hullIcons[11]; break;
-			case HullType.Asterix: render.sprite = hullIcons[12]; break;
-			case HullType.Prime: render.sprite = hullIcons[13]; break;
+			case HullType.LITTLE: render.sprite = hullIcons[0]; break;
+			case HullType.NEEDLE: render.sprite = hullIcons[1]; break;
+			case HullType.GNOME: render.sprite = hullIcons[2]; break;
+			case HullType.CRICKET: render.sprite = hullIcons[3]; break;
+			case HullType.ARGO: render.sprite = hullIcons[4]; break;
+			case HullType.FALCON: render.sprite = hullIcons[5]; break;
+			case HullType.ADVENTURER: render.sprite = hullIcons[6]; break;
+			case HullType.CORVETTE: render.sprite = hullIcons[7]; break;
+			case HullType.BUFFALO: render.sprite = hullIcons[8]; break;
+			case HullType.LEGIONNAIRE: render.sprite = hullIcons[9]; break;
+			case HullType.STARWALKER: render.sprite = hullIcons[10]; break;
+			case HullType.WARSHIP: render.sprite = hullIcons[11]; break;
+			case HullType.ASTERIX: render.sprite = hullIcons[12]; break;
+			case HullType.PRIME: render.sprite = hullIcons[13]; break;
 			case HullType.TITAN: render.sprite = hullIcons[14]; break;
-			case HullType.Dreadnaut: render.sprite = hullIcons[15]; break;
-			case HullType.Armageddon: render.sprite = hullIcons[16]; break;
+			case HullType.DREADNAUT: render.sprite = hullIcons[15]; break;
+			case HullType.ARMAGEDDON: render.sprite = hullIcons[16]; break;
 		}
 	}
 

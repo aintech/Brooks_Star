@@ -129,23 +129,23 @@ public class ShipData : MonoBehaviour {
 	private void setHullSprite () {
 		if (render == null) getRender();
 		switch (hullType) {
-			case HullType.Little: render.sprite = hullSprites[0]; break;
-			case HullType.Needle: render.sprite = hullSprites[1]; break;
-			case HullType.Gnome: render.sprite = hullSprites[2]; break;
-			case HullType.Cricket: render.sprite = hullSprites[3]; break;
-			case HullType.Argo: render.sprite = hullSprites[4]; break;
-			case HullType.Falcon: render.sprite = hullSprites[5]; break;
-			case HullType.Adventurer: render.sprite = hullSprites[6]; break;
-			case HullType.Corvette: render.sprite = hullSprites[7]; break;
-			case HullType.Buffalo: render.sprite = hullSprites[8]; break;
-			case HullType.Legionnaire: render.sprite = hullSprites[9]; break;
-			case HullType.StarWalker: render.sprite = hullSprites[10]; break;
-			case HullType.Warship: render.sprite = hullSprites[11]; break;
-			case HullType.Asterix: render.sprite = hullSprites[12]; break;
-			case HullType.Prime: render.sprite = hullSprites[13]; break;
+			case HullType.LITTLE: render.sprite = hullSprites[0]; break;
+			case HullType.NEEDLE: render.sprite = hullSprites[1]; break;
+			case HullType.GNOME: render.sprite = hullSprites[2]; break;
+			case HullType.CRICKET: render.sprite = hullSprites[3]; break;
+			case HullType.ARGO: render.sprite = hullSprites[4]; break;
+			case HullType.FALCON: render.sprite = hullSprites[5]; break;
+			case HullType.ADVENTURER: render.sprite = hullSprites[6]; break;
+			case HullType.CORVETTE: render.sprite = hullSprites[7]; break;
+			case HullType.BUFFALO: render.sprite = hullSprites[8]; break;
+			case HullType.LEGIONNAIRE: render.sprite = hullSprites[9]; break;
+			case HullType.STARWALKER: render.sprite = hullSprites[10]; break;
+			case HullType.WARSHIP: render.sprite = hullSprites[11]; break;
+			case HullType.ASTERIX: render.sprite = hullSprites[12]; break;
+			case HullType.PRIME: render.sprite = hullSprites[13]; break;
 			case HullType.TITAN: render.sprite = hullSprites[14]; break;
-			case HullType.Dreadnaut: render.sprite = hullSprites[15]; break;
-			case HullType.Armageddon: render.sprite = hullSprites[16]; break;
+			case HullType.DREADNAUT: render.sprite = hullSprites[15]; break;
+			case HullType.ARMAGEDDON: render.sprite = hullSprites[16]; break;
 			default: Debug.Log("Неизвестный тип корпуса"); break;
 		}
 	}
@@ -318,74 +318,22 @@ public class ShipData : MonoBehaviour {
 		repairCost = Mathf.RoundToInt(hullType.cost() * .1f * (1 - ((float)currentHealth / (float)hullType.getMaxHealth())));
 	}
 
-    public HullSlot getSlot (HullSlot.Type type, int slotIndex) {
-		if (type == HullSlot.Type.RADAR) { return radarSlot; }
-		if (type == HullSlot.Type.ENGINE) { return engineSlot; }
-		if (type == HullSlot.Type.GENERATOR) {
-			switch (slotIndex) {
-				case 0: return generatorSlot_1;
-				case 1: return generatorSlot_2;
-				case 2: return generatorSlot_3;
-				default: Debug.Log("Unknown generator slot: " + slotIndex); return null;
-			}
+	public HullSlot[] getSlots (HullSlot.Type type) {
+		switch (type) {
+			case Slot.Type.RADAR: return new HullSlot[] {radarSlot};
+			case Slot.Type.ENGINE: return new HullSlot[] {engineSlot};
+			case Slot.Type.GENERATOR: return new HullSlot[] {generatorSlot_1, generatorSlot_2, generatorSlot_3};
+			case Slot.Type.HARVESTER: return new HullSlot[] {harvesterSlot_1, harvesterSlot_2};
+			case Slot.Type.REPAIR_DROID: return new HullSlot[] {repairDroidSlot_1, repairDroidSlot_2, repairDroidSlot_3, repairDroidSlot_4};
+			case Slot.Type.SHIELD: return new HullSlot[] {shieldSlot_1, shieldSlot_2, shieldSlot_3};
+			case Slot.Type.WEAPON: return new HullSlot[] {weaponSlot_1, weaponSlot_2, weaponSlot_3, weaponSlot_4, weaponSlot_5};
+			case Slot.Type.ARMOR: return new HullSlot[] {armorSlot_1, armorSlot_2, armorSlot_3, armorSlot_4, armorSlot_5};
+			default: Debug.Log("Unknown slot type: " + type); return new HullSlot[0];
 		}
-		if (type == HullSlot.Type.HARVESTER) {
-			switch (slotIndex) {
-				case 0: return harvesterSlot_1;
-				case 1: return harvesterSlot_2;
-				default: Debug.Log("Unknown harvester slot: " + slotIndex); return null;
-			}
-		}
-		if (type == HullSlot.Type.REPAIR_DROID) {
-			switch (slotIndex) {
-				case 0: return repairDroidSlot_1;
-				case 1: return repairDroidSlot_2;
-				case 2: return repairDroidSlot_3;
-				case 3: return repairDroidSlot_4;
-				default: Debug.Log("Unknown repair droid slot: " + slotIndex); return null;
-			}
-		}
-		if (type == HullSlot.Type.SHIELD) {
-			switch (slotIndex) {
-				case 0: return shieldSlot_1;
-				case 1: return shieldSlot_2;
-				case 2: return shieldSlot_3;
-				default: Debug.Log("Unknown shield slot: " + slotIndex); return null;
-			}
-		}
-		if (type == HullSlot.Type.WEAPON) {
-			switch (slotIndex) {
-				case 0: return weaponSlot_1;
-				case 1: return weaponSlot_2;
-				case 2: return weaponSlot_3;
-				case 3: return weaponSlot_4;
-				case 4: return weaponSlot_5;
-				default: Debug.Log("Unknown weapon slot: " + slotIndex); return null;
-			}
-		}
-		if (type == HullSlot.Type.WEAPON) {
-			switch (slotIndex) {
-				case 0: return weaponSlot_1;
-				case 1: return weaponSlot_2;
-				case 2: return weaponSlot_3;
-				case 3: return weaponSlot_4;
-				case 4: return weaponSlot_5;
-				default: Debug.Log("Unknown weapon slot: " + slotIndex); return null;
-			}
-		}
-		if (type == HullSlot.Type.ARMOR) {
-			switch (slotIndex) {
-				case 0: return armorSlot_1;
-				case 1: return armorSlot_2;
-				case 2: return armorSlot_3;
-				case 3: return armorSlot_4;
-				case 4: return armorSlot_5;
-				default: Debug.Log("Unknown armor slot: " + slotIndex); return null;
-			}
-		}
+	}
 
-		Debug.Log("Slot type not found");
-		return null;
+    public HullSlot getSlot (HullSlot.Type type, int slotIndex) {
+		return getSlots(type)[slotIndex];
 	}
 
 	public void repairShip (bool forceRepair) {

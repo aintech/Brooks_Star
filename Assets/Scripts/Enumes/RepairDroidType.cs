@@ -21,10 +21,10 @@ public static class RepairDroidDescriptor {
 	
 	public static int repairSpeed (this RepairDroidType type) {
 		switch(type) {
-			case RepairDroidType.RAIL: return 2;
-			case RepairDroidType.CHANNEL: return 5;
-			case RepairDroidType.BIPHASIC: return 10;
-			case RepairDroidType.THREAD: return 25;
+			case RepairDroidType.RAIL: return 5;
+			case RepairDroidType.CHANNEL: return 10;
+			case RepairDroidType.BIPHASIC: return 17;
+			case RepairDroidType.THREAD: return 30;
 			default: return 0;
 		}
 	}

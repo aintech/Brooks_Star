@@ -55,23 +55,23 @@ public class HangarScreen : MonoBehaviour, ButtonHolder {
 
 	private Sprite getHullSprite (HullType type) {
 		switch (type) {
-			case HullType.Little: return hullImages[0];
-			case HullType.Needle: return hullImages[1];
-			case HullType.Gnome: return hullImages[2];
-			case HullType.Cricket: return hullImages[3];
-			case HullType.Argo: return hullImages[4];
-			case HullType.Falcon: return hullImages[5];
-			case HullType.Adventurer: return hullImages[6];
-			case HullType.Corvette: return hullImages[7];
-			case HullType.Buffalo: return hullImages[8];
-			case HullType.Legionnaire: return hullImages[9];
-			case HullType.StarWalker: return hullImages[10];
-			case HullType.Warship: return hullImages[11];
-			case HullType.Asterix: return hullImages[12];
-			case HullType.Prime: return hullImages[13];
+			case HullType.LITTLE: return hullImages[0];
+			case HullType.NEEDLE: return hullImages[1];
+			case HullType.GNOME: return hullImages[2];
+			case HullType.CRICKET: return hullImages[3];
+			case HullType.ARGO: return hullImages[4];
+			case HullType.FALCON: return hullImages[5];
+			case HullType.ADVENTURER: return hullImages[6];
+			case HullType.CORVETTE: return hullImages[7];
+			case HullType.BUFFALO: return hullImages[8];
+			case HullType.LEGIONNAIRE: return hullImages[9];
+			case HullType.STARWALKER: return hullImages[10];
+			case HullType.WARSHIP: return hullImages[11];
+			case HullType.ASTERIX: return hullImages[12];
+			case HullType.PRIME: return hullImages[13];
 			case HullType.TITAN: return hullImages[14];
-			case HullType.Dreadnaut: return hullImages[15];
-			case HullType.Armageddon: return hullImages[16];
+			case HullType.DREADNAUT: return hullImages[15];
+			case HullType.ARMAGEDDON: return hullImages[16];
 			default: Debug.Log("Unknown hull type: " + type); return null;
 		}
 	}

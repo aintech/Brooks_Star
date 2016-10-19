@@ -18,6 +18,8 @@ public class PlayerShip : Ship {
 		radarRange = shipData.getRadarRange();
 		initEngine ();
 		initWeapons ();
+		initShield ();
+		initRepair ();
 		controller.init(this);
 	}
 	
@@ -81,9 +83,28 @@ public class PlayerShip : Ship {
 		}
 	}
 
+	private void initShield () {
+		shieldRechargeValue = 0;
+		foreach (HullSlot slot in shipData.getSlots(Slot.Type.SHIELD)) {
+			if (slot.item != null) {
+				shieldRechargeValue += ((ShieldData)slot.item.itemData).rechargeSpeed;
+			}
+		}
+	}
+
+	private void initRepair () {
+		repairValue = 0;
+		foreach (HullSlot slot in shipData.getSlots(Slot.Type.REPAIR_DROID)) {
+			if (slot.item != null) {
+				repairValue += ((RepairDroidData)slot.item.itemData).repairSpeed;
+			}
+		}
+		repairValue *= .01f;
+	}
+
 	protected override void updateHealthAndShieldInfo () {
-		shipData.setCurrentShield(getShield());
-		shipData.setCurrentHealth(getHealth());
+		shipData.setCurrentShield(shield);
+		shipData.setCurrentHealth(health);
 		Vars.userInterface.updateShip();
 	}
 

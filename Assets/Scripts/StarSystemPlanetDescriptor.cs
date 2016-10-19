@@ -18,11 +18,12 @@ public class StarSystemPlanetDescriptor : MonoBehaviour {
 	private StarSystem starSystem;
 
 	private Rect  planetDescriptRect = new Rect(20, 20, 210, 340), planetSurfaceRect, planetNameRect,
-				  planetLandExploreRect, planetStatusRect, planetExploreRect, planetProbesRect, addDroneRect, removeDroneRect;
+				  planetLandExploreRect, planetStatusRect;
+//				 planetStatusRect, planetExploreRect, planetProbesRect, addDroneRect, removeDroneRect;
 
 	private bool explored, colonized, populated;
 
-	private int probesCount;
+//	private int probesCount;
 
 	public StarSystemPlanetDescriptor init (StarSystem starSystem) {
 		this.starSystem = starSystem;
@@ -31,10 +32,10 @@ public class StarSystemPlanetDescriptor : MonoBehaviour {
 		planetNameRect = new Rect(planetDescriptRect.x + planetDescriptRect.width / 2, planetDescriptRect.y + planetSurfaceRect.height + 30, 0, 0);
 		planetLandExploreRect = new Rect(planetDescriptRect.x + 5, planetDescriptRect.y + planetDescriptRect.height - 40, 200, 35);
 		planetStatusRect = new Rect(planetDescriptRect.x + planetDescriptRect.width / 2, planetNameRect.y + 30, 0, 0);
-		planetExploreRect = new Rect(planetDescriptRect.x + planetDescriptRect.width / 2, planetStatusRect.y + 40, 0, 0);
-		planetProbesRect = new Rect(planetDescriptRect.x + planetDescriptRect.width / 2, planetExploreRect.y + 40, 0, 0);
-		addDroneRect = new Rect(planetDescriptRect.x + 4, planetDescriptRect.y + planetDescriptRect.height - 40, 100, 32);
-		removeDroneRect = new Rect(addDroneRect.x + 102, addDroneRect.y, addDroneRect.width, addDroneRect.height);
+//		planetExploreRect = new Rect(planetDescriptRect.x + planetDescriptRect.width / 2, planetStatusRect.y + 40, 0, 0);
+//		planetProbesRect = new Rect(planetDescriptRect.x + planetDescriptRect.width / 2, planetExploreRect.y + 40, 0, 0);
+//		addDroneRect = new Rect(planetDescriptRect.x + 4, planetDescriptRect.y + planetDescriptRect.height - 40, 100, 32);
+//		removeDroneRect = new Rect(addDroneRect.x + 102, addDroneRect.y, addDroneRect.width, addDroneRect.height);
 
 		hidePlanetInfo();
 
@@ -50,16 +51,16 @@ public class StarSystemPlanetDescriptor : MonoBehaviour {
 			GUI.Label(planetNameRect, planetName, planetNameStyle);
 			GUI.Label(planetStatusRect, planetStatus, planetStatusStyle);
 			if (!explored) {
-				GUI.Label(planetExploreRect, "0% изучено", planetExploredValueStyle);
-				if (probesCount > 0) {
-					GUI.Label(planetProbesRect, (probesCount + "/5 зондов"), planetProbesStyle);
-				}
-				if (probesCount < 5 && GUI.Button(addDroneRect, "", addDroneStyle)) {
-					addDroneToPlanet();
-				}
-				if (probesCount > 0 && GUI.Button(removeDroneRect, "", removeDroneStyle)) {
-					removeDroneFromPlanet();
-				}
+//				GUI.Label(planetExploreRect, "0% изучено", planetExploredValueStyle);
+//				if (probesCount > 0) {
+//					GUI.Label(planetProbesRect, (probesCount + "/5 зондов"), planetProbesStyle);
+//				}
+//				if (probesCount < 5 && GUI.Button(addDroneRect, "", addDroneStyle)) {
+//					addDroneToPlanet();
+//				}
+//				if (probesCount > 0 && GUI.Button(removeDroneRect, "", removeDroneStyle)) {
+//					removeDroneFromPlanet();
+//				}
 			} else if (colonized || populated) {
 				if (GUI.Button(planetLandExploreRect, "", planetLandStyle)) {
 					starSystem.landOnPlanet(planetType);

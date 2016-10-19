@@ -277,9 +277,9 @@ public static class ItemFactory {
 		float level = randLevel();
 
 		int shieldLevel = Mathf.RoundToInt(type.shieldProtection() * level * qualityMultiplier(quality));
-		int rechargeSpeed = Mathf.RoundToInt(type.rechargeSpeed() * level * qualityMultiplier(quality));
+//		int rechargeSpeed = Mathf.RoundToInt(type.rechargeSpeed() * level * qualityMultiplier(quality));
 
-		ShieldData data = new ShieldData(quality, level, type, shieldLevel, rechargeSpeed);
+		ShieldData data = new ShieldData(quality, level, type, shieldLevel, type.rechargeSpeed());
 		data.initCommons(calculateCost(data), calculateEnergy(data));
 
 		return data;

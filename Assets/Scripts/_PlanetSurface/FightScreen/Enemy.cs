@@ -26,11 +26,11 @@ public class Enemy : MonoBehaviour {
 
 	public void initEnemy (EnemyType enemyType) {
 		this.enemyType = enemyType;
-		damage = enemyType.getDamage();
-		health = enemyType.getHealth();
+		damage = enemyType.damage();
+		health = enemyType.health();
 		maxHealth = health;
-		armor = enemyType.getArmor();
-		dexterity = enemyType.getDexterity();
+		armor = enemyType.armor();
+		dexterity = enemyType.dexterity();
 		setSprite();
 		gameObject.SetActive(true);
 	}

@@ -27,7 +27,7 @@ public static class WeaponDescriptor {
 
 	public static int damage (this WeaponType type) {
 		switch(type) {
-			case WeaponType.BLASTER: return 10;
+			case WeaponType.BLASTER: return 50;
 			case WeaponType.PLASMER: return 10;
 			case WeaponType.CHARGER: return 10;
 			case WeaponType.EMITTER: return 10;
@@ -40,14 +40,14 @@ public static class WeaponDescriptor {
 	
 	public static int damageRange (this WeaponType type) {
 		switch(type) {
-			case WeaponType.BLASTER: return 3;
+			case WeaponType.BLASTER: return 20;
 			case WeaponType.PLASMER: return 3;
 			case WeaponType.CHARGER: return 3;
 			case WeaponType.EMITTER: return 3;
 			case WeaponType.WAVER: return 3;
 			case WeaponType.LAUNCHER: return 3;
 			case WeaponType.SUPPRESSOR: return 0;
-		default: return 0;
+			default: return 0;
 		}
 	}
 
@@ -73,7 +73,7 @@ public static class WeaponDescriptor {
 			case WeaponType.WAVER: return 15;
 			case WeaponType.LAUNCHER: return 15;
 			case WeaponType.SUPPRESSOR: return 15;
-		default: return 0;
+			default: return 0;
 		}
 	}
 

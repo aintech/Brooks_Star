@@ -39,8 +39,6 @@ public class ItemDescriptor : MonoBehaviour {
 
 	private Vector3 scale = Vector3.one;
 
-	private Inventory playerInventory;
-
 	private float minY = -10, maxX = 10, screenWidth;
 
 //	private Vector2[] positions = new Vector2[] { new Vector2(.5f, -.57f), new Vector2(.5f, -.95f), new Vector2(0, -1.33f), new Vector2(0, -1.71f), new Vector2(0, -2.09f) };
@@ -108,10 +106,6 @@ public class ItemDescriptor : MonoBehaviour {
 
 	public void setSpaceOffset (Vector3 spaceOffset) {
 		this.spaceOffset = spaceOffset;
-	}
-
-	public void initPlayerInventory (Inventory playerInventory) {
-		this.playerInventory = playerInventory;
 	}
 
 	public void setAsPerkDescriptor (bool perkDescriptor) {

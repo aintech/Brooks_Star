@@ -17,6 +17,10 @@ public class Planet : MonoBehaviour {
 
     private bool shipIsNear;
 
+	public bool isColonized { get; private set; }
+
+	public bool isPopulated { get; private set; }
+
     public Planet init (PlanetType planetType, Transform ship) {
         this.planetType = planetType;
         this.ship = ship;
@@ -28,6 +32,21 @@ public class Planet : MonoBehaviour {
         float angle = Random.Range(0, 359);
         transform.localPosition = new Vector2(planetType.getDistanceToStar() * Mathf.Sin(angle), planetType.getDistanceToStar() * Mathf.Cos(angle));
         orbitingSpeed = 2f / planetType.getDistanceToStar();
+
+		switch (planetType) {
+			case PlanetType.PALETTE: shadow.localScale = new Vector3(1, 1, 1); break;
+			case PlanetType.CORAS: shadow.localScale = new Vector3(1.04f, 1.04f, 1); break;
+			case PlanetType.PARPARIS: shadow.localScale = new Vector3(1.04f, 1.04f, 1); break;
+			case PlanetType.POSTERA: shadow.localScale = new Vector3(1.02f, 1.02f, 1); break;
+			case PlanetType.TERANA: shadow.localScale = new Vector3(1.04f, 1.04f, 1); break;
+			case PlanetType.VADERPAN: shadow.localScale = new Vector3(1.05f, 1.05f, 1); break;
+			case PlanetType.VOLARIA: shadow.localScale = new Vector3(1.04f, 1.04f, 1); break;
+			default: Debug.Log("Unknown planet type: " + planetType); break;
+		}
+
+		isColonized = planetType.isColonized();
+		isPopulated = planetType.isPopulated();
+
         return this;
     }
 

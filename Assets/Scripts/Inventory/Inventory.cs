@@ -151,7 +151,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 
 		InventoryCell prevCell = item.cell;
 		Item prevItem = null;
-		bool multyItem = false;
+		bool stackableItem = false;
 
 		if (cell.item != null) {
 			if (cell.item.type() == ItemType.GOODS) {
@@ -160,12 +160,12 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 					cell.item.updateQuantityText();
 					containerScreen.updateChosenItemBorder(cell.item);
 					item.destroy();
-					multyItem = true;
+					stackableItem = true;
 				}
 			}
 		}
 
-		if (!multyItem) {
+		if (!stackableItem) {
 			prevItem = cell.takeItem ();
 
 			item.index = cell.index + offset;
@@ -181,10 +181,26 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 	}
 
 	private void addItemToFirstFreePosition (Item item, bool refresh) {
+		if (item.type() == ItemType.GOODS) {
+			if (addStackableItem(item)) { return; }
+		}
 		int newIndex = getMinFreeItemIndex ();
 		item.index = newIndex;
 		items.Add (newIndex, item);
 		if (refresh) refreshInventory ();
+	}
+
+	private bool addStackableItem (Item item) {
+		GoodsType type = ((GoodsData)item.itemData).type;
+		foreach (KeyValuePair<int, Item> pair in items) {
+			if (pair.Value.type() == ItemType.GOODS && type == ((GoodsData)pair.Value.itemData).type) {
+				pair.Value.itemData.quantity += item.itemData.quantity;
+				pair.Value.updateQuantityText();
+				item.destroy();
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private int getMinFreeItemIndex () {

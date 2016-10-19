@@ -37,20 +37,21 @@ public class EnemyShip : Ship {
 
 		int rand = (int) UnityEngine.Random.Range (shipClasses[shipClass].x, shipClasses[shipClass].y + 1);
 
-		setHullType (rand == 0? HullType.Little: rand == 1? HullType.Needle: rand == 2? HullType.Gnome:
-		             rand == 3? HullType.Cricket: rand == 4? HullType.Argo: rand == 5? HullType.Falcon:
-		             rand == 6? HullType.Adventurer: rand == 7? HullType.Corvette: rand == 8? HullType.Buffalo:
-		             rand == 9? HullType.Legionnaire: rand == 10? HullType.StarWalker: rand == 11? HullType.Warship:
-		             rand == 12? HullType.Asterix: rand == 13? HullType.Prime: rand == 14? HullType.TITAN:
-		             rand == 15? HullType.Dreadnaut: HullType.Armageddon);
+		setHullType (rand == 0? HullType.LITTLE: rand == 1? HullType.NEEDLE: rand == 2? HullType.GNOME:
+		             rand == 3? HullType.CRICKET: rand == 4? HullType.ARGO: rand == 5? HullType.FALCON:
+		             rand == 6? HullType.ADVENTURER: rand == 7? HullType.CORVETTE: rand == 8? HullType.BUFFALO:
+		             rand == 9? HullType.LEGIONNAIRE: rand == 10? HullType.STARWALKER: rand == 11? HullType.WARSHIP:
+		             rand == 12? HullType.ASTERIX: rand == 13? HullType.PRIME: rand == 14? HullType.TITAN:
+		             rand == 15? HullType.DREADNAUT: HullType.ARMAGEDDON);
 
 		health = fullHealth = getHullType().getMaxHealth();
-		shield = fullShield = 300;
 		initArmor(shipClass);
 		initRadarRange(shipClass);
 		initEngine ();
 		initWeapons ();
 		initHealthBar ();
+		initShield (shipClass);
+		initRepair (shipClass);
 
 		getEngineRender().sortingOrder = sortingOrder;
 		getHullRender().sortingOrder = sortingOrder + 1;
@@ -58,11 +59,14 @@ public class EnemyShip : Ship {
 		Vars.freeSortingOrder += getHullType().getWeaponSlots() > 0? 4: 3;
 		controller.init(this);
 		((EnemyShipController)controller).setStuff(playerShip, barTrans, radarRange, new Weapon[]{weapon_1, weapon_2, weapon_3, weapon_4, weapon_5});
+		barTrans.gameObject.SetActive(true);
+		healthBar.gameObject.SetActive(true);
+		shieldBar.gameObject.SetActive(true);
 		updateHealthAndShieldInfo();
 	}
 
 	private void initArmor (int shipLevel) {
-		armor = shipLevel * 3;
+		armor = shipLevel * 2;
 	}
 
 	private void initRadarRange (int shipLevel) {
@@ -73,7 +77,7 @@ public class EnemyShip : Ship {
 			case 3: radarRange = RadarType.PATAN_CORSAC.range(); break;
 			case 4: radarRange = RadarType.SNAKE.range(); break;
 			case 5: radarRange = RadarType.ASTRAL.range(); break;
-			default: Debug.Log("Неизвестный уровень корабля"); break;
+			default: Debug.Log("Неизвестный уровень корабля: " + shipLevel); break;
 		}
 	}
 
@@ -141,6 +145,29 @@ public class EnemyShip : Ship {
 		}
 	}
 
+	private void initShield (int shipLevel) {
+		switch (shipLevel) {
+			case 0: shield = fullShield = ShieldType.BLOCK.shieldProtection(); shieldRechargeValue = ShieldType.BLOCK.rechargeSpeed(); break;
+			case 1: shield = fullShield = ShieldType.QUADRATIC.shieldProtection(); shieldRechargeValue = ShieldType.QUADRATIC.rechargeSpeed(); break;
+			case 2: case 3: shield = fullShield = ShieldType.CELL.shieldProtection(); shieldRechargeValue = ShieldType.CELL.rechargeSpeed(); break;
+			case 4: case 5: shield = fullShield = ShieldType.PHASE.shieldProtection(); shieldRechargeValue = ShieldType.PHASE.rechargeSpeed(); break;
+			default: Debug.Log("Неизвестный уровень корабля: " + shipLevel); break;
+		}
+	}
+
+	private void initRepair (int shipLevel) {
+		switch (shipLevel) {
+			case 0: repairValue = 0; break;
+			case 1: repairValue = RepairDroidType.RAIL.repairSpeed(); break;
+			case 2: repairValue = RepairDroidType.CHANNEL.repairSpeed(); break;
+			case 3: repairValue = RepairDroidType.BIPHASIC.repairSpeed(); break;
+			case 4: repairValue = RepairDroidType.THREAD.repairSpeed(); break;
+			case 5: repairValue = RepairDroidType.THREAD.repairSpeed() + RepairDroidType.BIPHASIC.repairSpeed(); break;
+			default: Debug.Log("Неизвестный уровень корабля: " + shipLevel); break;
+		}
+		repairValue *= .01f;
+	}
+
 	private void initHealthBar () {
 		barTrans = Instantiate<Transform>(healthBarPrefab);
 		shieldBar = barTrans.FindChild("Shield");
@@ -148,11 +175,17 @@ public class EnemyShip : Ship {
 	}
 
 	override protected void updateHealthAndShieldInfo () {
-		shieldValue.x = (float)getShield() / getFullShield();
-		healthValue.x = (float)getHealth() / getFullHealth();
+		if (health <= 0) {
+			shieldBar.gameObject.SetActive(false);
+			healthBar.gameObject.SetActive(false);
+			barTrans.gameObject.SetActive(false);
+		} else {
+			shieldValue.x = (float)shield / fullShield;
+			healthValue.x = (float)health / fullHealth;
 
-		shieldBar.transform.localScale = shieldValue;
-		healthBar.transform.localScale = healthValue;
+			shieldBar.transform.localScale = shieldValue;
+			healthBar.transform.localScale = healthValue;
+		}
 	}
 
 	override protected void disableShip () {

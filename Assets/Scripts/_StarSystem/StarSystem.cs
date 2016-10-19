@@ -58,7 +58,7 @@ public class StarSystem : MonoBehaviour {
 		statusScreen = GameObject.Find("Status Screen").GetComponent<StatusScreen>().init(this, descriptor);
 
 		if (Vars.shipCurrentHealth == -1) {
-			statusScreen.getShipData().initializeRandomShip (HullType.Corvette);
+			statusScreen.getShipData().initializeRandomShip (HullType.ARMAGEDDON);
 		} else {
 			statusScreen.initFromVars();
 		}
@@ -72,6 +72,8 @@ public class StarSystem : MonoBehaviour {
 		shieldsPool = GameObject.Find("ShieldsPool").GetComponent<ShieldsPool>();
 
 		GameObject.Find("Explosions Manager").GetComponent<ExplosionsManager>().init();
+
+		GameObject.Find("Loot Dropper").GetComponent<LootDropper>().init(statusScreen.getInventory());
 
 		spawner = GetComponent<EnemySpawner>().init(Vars.userInterface.minimap, playerShip.transform);
 
@@ -99,7 +101,7 @@ public class StarSystem : MonoBehaviour {
 
 		statusScreen.getShipData().setShieldToMax();
 
-		spawner.spawnAnEnemy(20);
+		spawner.spawnAnEnemy(1, 2, 20);
     }
 
 	private void initPlayerShip () {
