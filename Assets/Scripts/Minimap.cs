@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class Minimap : MonoBehaviour {
 
-	public GUIStyle radarBtnStyle, systemBtnStyle, showHideBtnStyle;
+	public GUIStyle radarBtnStyle, systemBtnStyle, showBtnStyle, hideBtnStyle, galaxyBtnStyle;
 
 	public Texture bg, planetOrbit, planet, planetColonized, planetPopulated, player, enemy, footer, radarBorder;
 
@@ -30,7 +30,9 @@ public class Minimap : MonoBehaviour {
 				 	footerRect = new Rect(Screen.width - 230, 30, 230, 200),
 					showBtnRect = new Rect(Screen.width - 32, 2, 32, 32),
 					hideBtnRect = new Rect(Screen.width - 32, 231, 32, 32),
-					systemRadarBtnRect = new Rect(Screen.width - 32 - 132, 231, 131, 32),
+					galaxyMapBtnRectUp = new Rect(Screen.width - 32 - 78, 2, 77, 32),
+					galaxyMapBtnRectDown = new Rect(Screen.width - 32 - 78, 231, 77, 32),
+					systemRadarBtnRect = new Rect(Screen.width - 32 - 78 - 102, 231, 101, 32),
 					radarBorderRect = new Rect(Screen.width - mapSize - mapOffset, mapOffset, mapSize, mapSize);
 
 	private List<Rect> enemyPositions = new List<Rect>();
@@ -55,8 +57,11 @@ public class Minimap : MonoBehaviour {
 
 	private Texture currPlanetText;
 
-	public void init (StarSystem starSystem, Transform playerShip, float radarRange) {
+	private GalaxyMap galaxyMap;
+
+	public void init (StarSystem starSystem, GalaxyMap galaxyMap, Transform playerShip, float radarRange) {
 		this.starSystem = starSystem;
+		this.galaxyMap = galaxyMap;
 		this.playerShip = playerShip;
 		this.radarRange = radarRange;
 		float planetDistanceMax = 0;
@@ -114,14 +119,24 @@ public class Minimap : MonoBehaviour {
 					changeMapType(MapType.SYSTEM);
 				}
 			}
-			if (GUI.Button(hideBtnRect, "", showHideBtnStyle)) {
+			if (GUI.Button(hideBtnRect, "", hideBtnStyle)) {
 				showMap(false);
 			}
+			if (GUI.Button(galaxyMapBtnRectDown, "", galaxyBtnStyle)) {
+				showGalaxyMap();
+			}
 		} else {
-			if (GUI.Button(showBtnRect, "", showHideBtnStyle)) {
+			if (GUI.Button(showBtnRect, "", showBtnStyle)) {
 				showMap(true);
 			}
+			if (GUI.Button(galaxyMapBtnRectUp, "", galaxyBtnStyle)) {
+				showGalaxyMap();
+			}
 		}
+	}
+
+	private void showGalaxyMap () {
+		galaxyMap.show();
 	}
 
 	private void changeMapType (MapType mapType) {

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class LootContainer : MonoBehaviour {
 
@@ -19,14 +20,14 @@ public class LootContainer : MonoBehaviour {
 
 	private LootDisplay lootDisplay;
 
-	public ItemData[] loot { get; private set; }
+	public List<Item> loot { get; private set; }
 
 	public LootContainer init (LootDisplay lootDisplay) {
 		this.lootDisplay = lootDisplay;
 		trans = transform;
 		render = GetComponent<SpriteRenderer>();
 		coll = GetComponent<BoxCollider2D>();
-		loot = new ItemData[6];
+		loot = new List<Item>();
 		return this;
 	}
 
@@ -60,19 +61,31 @@ public class LootContainer : MonoBehaviour {
 	}
 
 	public void initDrop (Ship ship) {
-		color.a = 0;
-		render.color = color;
-		onScene = true;
-		appear = true;
-		disappear = false;
-		trans.position = ship.transform.position;
-		calculateDrop(ship);
-		gameObject.SetActive(true);
+		if (calculateDrop(ship)) {
+			color.a = 0;
+			render.color = color;
+			onScene = true;
+			appear = true;
+			disappear = false;
+			trans.position = ship.transform.position;
+			gameObject.SetActive(true);
+		} else {
+			hideDrop();
+		}
 	}
 
-	private void calculateDrop (Ship ship)  {
-		loot[0] = ItemFactory.createWeaponData(WeaponType.BLASTER);
-		loot[1] = ItemFactory.createGoodsData(Random.Range(5, 20));
+	private bool calculateDrop (Ship ship)  {
+		if (Random.value <= .5f) {
+			ItemType dropType = ItemTypeDescriptor.dropables()[Random.Range(0, ItemTypeDescriptor.dropables().Length)];
+			loot.Add(Instantiate<Transform>(ItemFactory.itemPrefab).GetComponent<Item>().init(ItemFactory.createItemData(dropType)));
+		}
+		if (Random.value <= .75f) {
+			loot.Add(Instantiate<Transform>(ItemFactory.itemPrefab).GetComponent<Item>().init(ItemFactory.createGoodsData(Random.Range(5, 20))));
+		}
+		if (Random.value <= .25f) {
+			loot.Add(Instantiate<Transform>(ItemFactory.itemPrefab).GetComponent<Item>().init(ItemFactory.createGoodsData(Random.Range(5, 20))));
+		}
+		return loot.Count > 0;
 	}
 
 	public void updateDisapear () {
@@ -83,9 +96,7 @@ public class LootContainer : MonoBehaviour {
 
 	public void hideDrop () {
 		onScene = false;
-		for (int i = 0; i < loot.Length; i++) {
-			loot[i] = null;
-		}
+		loot.Clear();
 		gameObject.SetActive(false);
 	}
 }

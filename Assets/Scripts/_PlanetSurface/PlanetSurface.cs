@@ -90,7 +90,7 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 		if (Vars.planetType.isColonized() && buyMarket.getItems().Count == 0) { buyMarket.fillWithRandomItems(); }
 		statusScreen.getShipData().setShieldToMax();
 		inventory.calculateFreeVolume();
-		Vars.userInterface.setEnabled(true);
+		UserInterface.showInterface = true;
 		background.setBackground();
 		if (Vars.planetType.isColonized()) {
 			setVisible(true);

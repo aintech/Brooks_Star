@@ -216,13 +216,13 @@ public class StatusScreen : InventoryContainedScreen {
 		if (getChosenItem() == null) { return; }
 		if (btn == null) { hideItemInfo(); }
 
-		if (btn == perksBtn && getChosenItem().cell != null && getChosenItem().cell.inventory.getInventoryType() == Inventory.InventoryType.INVENTORY) {
+		if (btn == perksBtn && getChosenItem().cell != null && getChosenItem().cell.inventory.inventoryType == Inventory.InventoryType.INVENTORY) {
 			hideItemInfo();
 		}
-		else if (btn == shipBtn && getChosenItem().cell != null && getChosenItem().cell.inventory.getInventoryType() != Inventory.InventoryType.INVENTORY) {
+		else if (btn == shipBtn && getChosenItem().cell != null && getChosenItem().cell.inventory.inventoryType != Inventory.InventoryType.INVENTORY) {
 			hideItemInfo();
 		}
-		else if (btn ==playerBtn && (getChosenItem().slot != null || (getChosenItem().cell != null && getChosenItem().cell.inventory.getInventoryType() != Inventory.InventoryType.INVENTORY))) {
+		else if (btn ==playerBtn && (getChosenItem().slot != null || (getChosenItem().cell != null && getChosenItem().cell.inventory.inventoryType != Inventory.InventoryType.INVENTORY))) {
 			hideItemInfo();
 		}
 	}
@@ -232,7 +232,7 @@ public class StatusScreen : InventoryContainedScreen {
 			InventoryCell cell = Utils.hit.transform.GetComponent<InventoryCell>();
 			Inventory targetInv = cell.inventory;
 			if (draggedItem.cell == null) {
-				switch (draggedItem.type().getKind()) {
+				switch (draggedItem.type.getKind()) {
 					case ItemKind.SHIP_EQUIPMENT: shipData.updateHullInfo(); break;
 					case ItemKind.EQUIPMENT: playerData.updatePlayerInfo(); break;
 				}
@@ -240,7 +240,7 @@ public class StatusScreen : InventoryContainedScreen {
 			targetInv.addItemToCell(draggedItem, cell);
 		} else if (Utils.hit != null && Utils.hit.name.StartsWith("HullSlot")) {
 			HullSlot slot = Utils.hit.transform.GetComponent<HullSlot> ();
-			if (slot.slotType != getItemToHullSlotType (draggedItem.type ())) {
+			if (slot.slotType != getItemToHullSlotType (draggedItem.type)) {
 				if (draggedItem.cell == null && draggedItem.slot == null) {
 					if (inventory.gameObject.activeInHierarchy) {
 						inventory.addItemToCell (draggedItem, draggedItem.cell);
@@ -265,7 +265,7 @@ public class StatusScreen : InventoryContainedScreen {
 			}
 		} else if (Utils.hit != null && Utils.hit.name.StartsWith("EquipmentSlot")) {
 			EquipmentSlot slot = Utils.hit.transform.GetComponent<EquipmentSlot> ();
-			if (slot.slotType != getItemToEquipmentSlotType (draggedItem.type ())) {
+			if (slot.slotType != getItemToEquipmentSlotType (draggedItem.type)) {
 				if (draggedItem.cell == null && draggedItem.slot == null) {
 					if (inventory.gameObject.activeInHierarchy) {
 						inventory.addItemToCell (draggedItem, draggedItem.cell);
@@ -292,7 +292,7 @@ public class StatusScreen : InventoryContainedScreen {
 			if (inventory.gameObject.activeInHierarchy) {
 				inventory.addItemToCell (draggedItem, null);
 			}
-			switch (draggedItem.type().getKind()) {
+			switch (draggedItem.type.getKind()) {
 				case ItemKind.SHIP_EQUIPMENT: shipData.updateHullInfo(); break;
 				case ItemKind.EQUIPMENT: playerData.updatePlayerInfo(); break;
 			}
@@ -344,7 +344,7 @@ public class StatusScreen : InventoryContainedScreen {
 	override protected void choseItem (Item item) {
 		base.choseItem(item);
 		if (draggedItem != null) {
-			highlightSlot (true, item.type ());
+			highlightSlot (true, item.type);
 		}
 //		perksView.hideInfo();
 	}
@@ -388,6 +388,7 @@ public class StatusScreen : InventoryContainedScreen {
 		shipData.initializeFromVars();
 		playerData.initFromVars();
 		inventory.initFromVars();
+		inventory.setCapacity(shipData.hullType.getStorageCapacity());
 	}
 
 	private enum ScreenType {

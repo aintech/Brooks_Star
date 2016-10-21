@@ -33,6 +33,8 @@ public class UserInterface : MonoBehaviour {
 
 	private bool showBars = true;
 
+	private GalaxyMap galaxyMap;
+
 	public UserInterface init (StatusScreen statusScreen, StarSystem starSystem, PlayerShip ship) {
 		this.statusScreen = statusScreen;
 		this.ship = ship;
@@ -44,7 +46,8 @@ public class UserInterface : MonoBehaviour {
 		GetComponent<Messenger>().init(this);
 		minimap = GetComponent<Minimap>();
 		if (starSystem != null) {
-			minimap.init(starSystem, ship.transform, ship.radarRange);
+			galaxyMap = GameObject.Find("Galaxy Map").GetComponent<GalaxyMap>().init();
+			minimap.init(starSystem, galaxyMap, ship.transform, ship.radarRange);
 			planetDescriptor = GetComponent<StarSystemPlanetDescriptor>().init(starSystem);
 		} else {
 			minimap.enabled = false;
@@ -53,7 +56,8 @@ public class UserInterface : MonoBehaviour {
 
 		showBars = starSystem != null;
 
-		setEnabled(true);
+		gameObject.SetActive(true);
+		showInterface = true;
 
 		return this;
 	}
@@ -95,10 +99,6 @@ public class UserInterface : MonoBehaviour {
 				}
 			}
 		}
-	}
-
-	public void setEnabled (bool enabled) {
-		gameObject.SetActive(enabled);
 	}
 
 	public void updateShip () {

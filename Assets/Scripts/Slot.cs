@@ -11,8 +11,6 @@ public abstract class Slot : ItemHolder {
 
 	public ItemKind kind { get; protected set; }
 
-//	public Item item;// { get; private set; }
-
 	virtual public void init () {
 		bgRender = GetComponent<SpriteRenderer>();
 		iconRender = transform.Find("Icon Image").GetComponent<SpriteRenderer>();

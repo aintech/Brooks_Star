@@ -19,6 +19,26 @@ public class Item : MonoBehaviour {
     
 	public ItemData itemData { get; private set; }
 
+	public int quantity { get { return itemData.quantity; } set {itemData.quantity = value; updateQuantityText(); } }
+
+	public float volume { get { return itemData.volume; } private set {;} }
+
+	public ItemKind kind { get { return itemData.kind; } private set {;} }
+
+	public int cost { get { return itemData.cost; } private set {;} }
+
+	public int energyNeeded { get { return itemData.energyNeeded; } private set {;} }
+
+	public ItemType type { get { return itemData.itemType; } private set {;} }
+
+	public ItemQuality quality { get { return itemData.quality; } private set {;} }
+
+	public float level { get { return itemData.level; } private set {;} }
+
+	public string itemName { get { return itemData.name; } private set {;} }
+
+	public string description { get { return itemData.description; } private set {;} }
+
 	public Item init (ItemData itemData, int index) {
 		this.index = index;
 		return init(itemData);
@@ -58,13 +78,9 @@ public class Item : MonoBehaviour {
 		quantityRender.sortingOrder = newOrder + 1;
 	}
 
-	public void updateQuantityText () {
+	private void updateQuantityText () {
 		quantityText.text = itemData.quantity.ToString();
 		quantityText.gameObject.SetActive(itemData.itemType == ItemType.GOODS && itemData.quantity > 1);
-	}
-
-	public ItemKind kind () {
-		return  itemData.kind;
 	}
 
 	public void returnToParent () {
@@ -73,40 +89,8 @@ public class Item : MonoBehaviour {
 		} else if (slot != null) {
 			slot.setItem(this);
 		} else {
-			Debug.Log("Dont know where return item: " + itemName());
+			Debug.Log("Dont know where return item: " + itemName);
 		}
-	}
-
-	public float volume () {
-		return itemData.volume;
-	}
-
-	public int cost () {
-		return itemData.cost;
-	}
-
-	public int energyNeeded () {
-		return itemData.energyNeeded;
-	}
-
-	public ItemType type () {
-		return itemData.itemType;
-	}
-
-	public ItemQuality quality () {
-		return itemData.quality;
-	}
-
-	public float level () {
-		return itemData.level;
-	}
-
-	public string itemName () {
-		return itemData.name;
-	}
-
-	public string description () {
-		return itemData.description;
 	}
 
 	public void destroy () {

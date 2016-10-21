@@ -12,7 +12,7 @@ public class EquipmentSlot : Slot {
 		switch (slotType) {
 			case Type.HAND_WEAPON: Player.equipWeapon((HandWeaponData)item.itemData); break;
 			case Type.BODY_ARMOR: Player.equipArmor((BodyArmorData)item.itemData); break;
-			default: Debug.Log("Unknown item type: " + item.type()); break;
+			default: Debug.Log("Unknown item type: " + item.type); break;
 		}
 		base.setItem (item);
 	}
@@ -21,7 +21,7 @@ public class EquipmentSlot : Slot {
 		switch (slotType) {
 			case Type.HAND_WEAPON: Player.equipWeapon(null); break;
 			case Type.BODY_ARMOR: Player.equipArmor(null); break;
-			default: Debug.Log("Unknown item type: " + item.type()); break;
+			default: Debug.Log("Unknown item type: " + item.type); break;
 		}
 		return base.takeItem ();
 	}

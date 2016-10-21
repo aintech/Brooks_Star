@@ -22,7 +22,7 @@ public class StarField : MonoBehaviour {
 	}
 
 	public void adjustStarField (Vector3 pos) {
-		this.pos.Set(pos.x * .95f, pos.y * .95f, zOffset);
+		this.pos.Set(pos.x * .95f, pos.y * .95f, 0);
 		trans.localPosition = this.pos;
 	}
 }

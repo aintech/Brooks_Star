@@ -8,8 +8,6 @@ public abstract class Ship : MonoBehaviour {
 
 	public Sprite[] engineSprites;
 
-	private Transform mainExhaust, leftExhaust, rightExhaust;
-
 	private BoxCollider2D shipCollider;
 
 	private SpriteRenderer hullRender, engineRender;
@@ -134,7 +132,7 @@ public abstract class Ship : MonoBehaviour {
 
 	protected void setEngineSprite () {
 		if (engineRender == null) getEngineRender();
-		switch (engine.getEngineType()) {
+		switch (engine.engineType) {
 			case EngineType.FORCE: engineRender.sprite = engineSprites[0]; break;
 			case EngineType.GRADUAL: engineRender.sprite = engineSprites[1]; break;
 			case EngineType.PROTON: engineRender.sprite = engineSprites[2]; break;
@@ -144,8 +142,9 @@ public abstract class Ship : MonoBehaviour {
 		}
 		engine.transform.position = transform.position + engineMap[hullType];
 		transform.Find("Main Exhaust").localPosition = engineMap[hullType] - mainExhaustOffset;
-		transform.Find("Left Exhaust").localPosition = exhaustMap[hullType];
-		transform.Find("Right Exhaust").localPosition = new Vector3(exhaustMap[hullType].x * -1, exhaustMap[hullType].y);
+		transform.Find("Left Exhaust").localPosition = new Vector3(exhaustMap[hullType].x, exhaustMap[hullType].y);
+		transform.Find("Right Exhaust").localPosition = new Vector3(-exhaustMap[hullType].x, exhaustMap[hullType].y);
+		transform.Find("Front Exhaust").localPosition = new Vector3(0, exhaustMap[hullType].z);
 	}
 
 	protected SpriteRenderer getHullRender () {
@@ -214,7 +213,7 @@ public abstract class Ship : MonoBehaviour {
 
 	private static void initializeWeaponSlotsMap () {
 		weaponSlotsMap = new Dictionary<HullType, List<Vector3>>();
-		int zOffset = StarField.zOffset;
+		int zOffset = 0;//StarField.zOffset
 		List<Vector3> list = new List<Vector3>();
 		list.Add(new Vector3(-0.54f, -0.43f, zOffset));
 		list.Add(new Vector3(0.54f, -0.43f, zOffset));
@@ -338,23 +337,23 @@ public abstract class Ship : MonoBehaviour {
 
 	private void initializeExhaustMap () {
 		exhaustMap = new Dictionary<HullType, Vector3>();
-		exhaustMap.Add(HullType.LITTLE, new Vector3(-.41f, .17f));
-		exhaustMap.Add(HullType.NEEDLE, new Vector3(-.41f, -.06f));
-		exhaustMap.Add(HullType.GNOME, new Vector3(-.4f, .24f));
-		exhaustMap.Add(HullType.CRICKET, new Vector3(-.43f, .22f));
-		exhaustMap.Add(HullType.ARGO, new Vector3(-.45f, .34f));
-		exhaustMap.Add(HullType.FALCON, new Vector3(-.62f, .22f));
-		exhaustMap.Add(HullType.ADVENTURER, new Vector3(-.6f, .42f));
-		exhaustMap.Add(HullType.CORVETTE, new Vector3(-.47f, .57f));
-		exhaustMap.Add(HullType.BUFFALO, new Vector3(-.57f, .6f));
-		exhaustMap.Add(HullType.LEGIONNAIRE, new Vector3(-.52f, .58f));
-		exhaustMap.Add(HullType.STARWALKER, new Vector3(-.51f, .61f));
-		exhaustMap.Add(HullType.WARSHIP, new Vector3(-.58f, .54f));
-		exhaustMap.Add(HullType.ASTERIX, new Vector3(-.45f, .6f));
-		exhaustMap.Add(HullType.PRIME, new Vector3(-.57f, .8f));
-		exhaustMap.Add(HullType.TITAN, new Vector3(-.78f, .72f));
-		exhaustMap.Add(HullType.DREADNAUT, new Vector3(-.92f, .6f));
-		exhaustMap.Add(HullType.ARMAGEDDON, new Vector3(-1.06f, .83f));
+		exhaustMap.Add(HullType.LITTLE, new Vector3(-.41f, .17f, .6f));
+		exhaustMap.Add(HullType.NEEDLE, new Vector3(-.41f, -.06f, .74f));
+		exhaustMap.Add(HullType.GNOME, new Vector3(-.4f, .24f, .78f));
+		exhaustMap.Add(HullType.CRICKET, new Vector3(-.43f, .22f, .9f));
+		exhaustMap.Add(HullType.ARGO, new Vector3(-.45f, .34f, 1.02f));
+		exhaustMap.Add(HullType.FALCON, new Vector3(-.62f, .22f, .7f));
+		exhaustMap.Add(HullType.ADVENTURER, new Vector3(-.6f, .42f, 1.16f));
+		exhaustMap.Add(HullType.CORVETTE, new Vector3(-.47f, .57f, 1.17f));
+		exhaustMap.Add(HullType.BUFFALO, new Vector3(-.57f, .6f, 1.02f));
+		exhaustMap.Add(HullType.LEGIONNAIRE, new Vector3(-.52f, .58f, 1.25f));
+		exhaustMap.Add(HullType.STARWALKER, new Vector3(-.51f, .61f, 1.25f));
+		exhaustMap.Add(HullType.WARSHIP, new Vector3(-.58f, .54f, 1.3f));
+		exhaustMap.Add(HullType.ASTERIX, new Vector3(-.45f, .6f, 1.31f));
+		exhaustMap.Add(HullType.PRIME, new Vector3(-.57f, .8f, 1.3f));
+		exhaustMap.Add(HullType.TITAN, new Vector3(-.78f, .72f, 1.3f));
+		exhaustMap.Add(HullType.DREADNAUT, new Vector3(-.92f, .6f, 1.41f));
+		exhaustMap.Add(HullType.ARMAGEDDON, new Vector3(-1.06f, .83f, 1.47f));
 	}
 
 	public abstract bool isPlayerShip ();

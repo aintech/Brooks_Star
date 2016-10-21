@@ -221,7 +221,7 @@ public class ItemDescriptor : MonoBehaviour {
 
 	private float setCost(int index, ItemData data) {
 		string text = (inventoryType == Type.MARKET_BUY? "Купить за": inventoryType == Type.MARKET_SELL? "Продать за": "Стоимость:")  + " <color=yellow>" + data.cost +
-			(data.quantity == 1? "$</color>": (" (" + (data.quantity * data.cost) + ")$</color>"));
+					  (data.quantity == 1? "$</color>": (" (" + (data.quantity * data.cost) + ")$</color>"));
 		scale.x = text.Length - (data.quantity == 1? 22.5f: 24f);
 		minY = - 4.7f + (.4f * index);// + transform.localPosition.y;
 		switch (index) {
@@ -242,7 +242,7 @@ public class ItemDescriptor : MonoBehaviour {
 			qualityBG.gameObject.SetActive (true);
 			qualityValue.gameObject.SetActive (true);
 
-			qualityValue.text = item.quality().getName();
+			qualityValue.text = item.quality.getName();
 			scale.x = qualityValue.text.Length + 1;
 			qualityBG.localScale = scale;
 			qualityValue.color = (data.quality == ItemQuality.ARTEFACT? artefactColor:
@@ -572,6 +572,6 @@ public class ItemDescriptor : MonoBehaviour {
 	}
 
 	public enum Type {
-		NONE, INVENTORY, MARKET_BUY, MARKET_SELL
+		NONE, INVENTORY, MARKET_BUY, MARKET_SELL, LOOT
 	}
 }

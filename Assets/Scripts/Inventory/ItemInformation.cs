@@ -48,15 +48,15 @@ public class ItemInformation : MonoBehaviour {
 	}
 
 	public void showItemInfo (Item item) {
-		itemName.text = item.itemName ();
+		itemName.text = item.itemName;
 
-		switch (item.quality()) {
+		switch (item.quality) {
 			case ItemQuality.COMMON: itemName.color = new Color(Color.white.r, Color.white.g, Color.white.b, 1); break;
 			case ItemQuality.SUPERIOR: itemName.color = new Color(Color.yellow.r, Color.yellow.g, Color.yellow.b, 1); break;
 			case ItemQuality.UNIQUE: itemName.color = new Color(Color.blue.r, Color.blue.g, Color.blue.b, 1); break;
 		}
 
-		switch (item.type()) {
+		switch (item.type) {
 			case ItemType.HAND_WEAPON:
 				itemLabel_1.text = "Урон";
 				itemValue_1.text = ((HandWeaponData)item.itemData).minDamage.ToString() + "-" +
@@ -127,12 +127,12 @@ public class ItemInformation : MonoBehaviour {
 				break;
 		}
 
-		itemEnergyLabel.text = item.energyNeeded() > 0? "Питание": "";
-		itemEnergyValue.text = item.energyNeeded() > 0? item.energyNeeded().ToString() + "E": "";
+		itemEnergyLabel.text = item.energyNeeded > 0? "Питание": "";
+		itemEnergyValue.text = item.energyNeeded > 0? item.energyNeeded.ToString() + "E": "";
 		itemVolumeLabel.text = "Объем";
-		itemVolumeValue.text = item.volume().ToString("F1") + "V";
+		itemVolumeValue.text = item.volume.ToString("F1") + "V";
 		itemCostLabel.text = "Стоимость";
-		itemCostValue.text = "$ " + item.cost();
+		itemCostValue.text = "$ " + item.cost;
 	}
 
 	public void clearInfo () {

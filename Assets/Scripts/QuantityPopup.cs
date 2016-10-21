@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BuySellPopup : MonoBehaviour, ButtonHolder {
+public class QuantityPopup : MonoBehaviour, ButtonHolder {
 
 	private Transform bar;
 
 	private Vector3 barScale = Vector3.one, barPos;
 
-	private float barLeft = -2.78f, fullTrack, barRatio, mouseX;
+	private float barLeft = -2.78f, fullTrack, barRatio, mouseX, offsetX;
 
 	private BoxCollider2D barCollider;
 
@@ -17,9 +17,11 @@ public class BuySellPopup : MonoBehaviour, ButtonHolder {
 
 	private TextMesh text;
 
-	private bool toBuy;
+	private bool toBuy, asLoot;
 
 	private EquipmentsMarket market;
+
+	private LootDisplay display;
 
 	private int count;
 
@@ -27,9 +29,9 @@ public class BuySellPopup : MonoBehaviour, ButtonHolder {
 
 	private bool drag;
 
-	public BuySellPopup init (EquipmentsMarket market) {
-		this.market = market;
+	public bool onScreen { get; private set; }
 
+	private void init () {
 		bar = transform.Find("Bar");
 		barPos = bar.transform.localPosition;
 		barLeft = bar.localPosition.x;
@@ -44,12 +46,29 @@ public class BuySellPopup : MonoBehaviour, ButtonHolder {
 
 		text = transform.Find("Text").GetComponent<TextMesh>();
 		MeshRenderer mesh = text.GetComponent<MeshRenderer>();
-		mesh.sortingLayerName = GetComponent<SpriteRenderer>().sortingLayerName;
+		mesh.sortingLayerName = transform.Find("Background").GetComponent<SpriteRenderer>().sortingLayerName;
 		mesh.sortingOrder = 1;
 
-		close();
+		gameObject.SetActive(false);
+	}
 
+	public QuantityPopup init (LootDisplay display) {
+		this.display = display;
+		asLoot = true;
+		init();
 		return this;
+	}
+
+	public QuantityPopup init (EquipmentsMarket market) {
+		this.market = market;
+		asLoot = false;
+		init();
+		return this;
+	}
+
+	public void adjustPosition (Vector3 center) {
+		offsetX = center.x;
+		transform.position = center;
 	}
 
 	public void fireClickButton (Button btn) {
@@ -60,9 +79,13 @@ public class BuySellPopup : MonoBehaviour, ButtonHolder {
 	}
 
 	public void show (Item item, bool toBuy) {
-		this.item = item;
 		this.toBuy = toBuy;
-		count = item.itemData.quantity;
+		show(item);
+	}
+
+	public void show (Item item) {
+		this.item = item;
+		count = item.quantity;
 		barScale.x = 1f / (float)count;
 		bar.localScale = barScale;
 		barRatio = fullTrack / (float)count;
@@ -72,9 +95,15 @@ public class BuySellPopup : MonoBehaviour, ButtonHolder {
 		}
 		updateValues();
 		gameObject.SetActive(true);
+		onScreen = true;
 	}
 
 	void Update () {
+		if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)) {
+			apply();
+		} else if (Input.GetKeyDown(KeyCode.Escape)) {
+			close();
+		}
 		if (!drag && Input.GetMouseButtonDown(0) && Utils.hit != null && Utils.hit == barCollider) { drag = true; }
 		if (drag) {
 			if (Input.GetMouseButtonUp(0)) {
@@ -86,13 +115,13 @@ public class BuySellPopup : MonoBehaviour, ButtonHolder {
 	}
 
 	private void adjustBarToMouse () {
-		mouseX = Utils.mousePos.x;
+		mouseX = Utils.mousePos.x - offsetX;
 		if (mouseX < zones[1]) {
 			count = 1;
 		} else if (mouseX > zones[zones.Length-1] + barRatio) {
-			count = item.itemData.quantity;
+			count = item.quantity;
 		} else {
-			for (int i = 1; i < item.itemData.quantity; i++) {
+			for (int i = 1; i < item.quantity; i++) {
 				if (mouseX > zones[i] && mouseX < zones[i] + barRatio) {
 					count = i + 1;
 				}
@@ -112,24 +141,34 @@ public class BuySellPopup : MonoBehaviour, ButtonHolder {
 	}
 
 	private void updateValues () {
-		text.text = (toBuy? "Купить <color=blue>": "Продать <color=blue>") + count + "</color> " + item.itemName() + " за <color=yellow>" + (count * item.cost()) + "$</color>";
+		if (asLoot) {
+			text.text = "Забрать <color=blue>" + count + "</color> " + item.itemName;
+		} else {
+			text.text = (toBuy? "Купить <color=blue>": "Продать <color=blue>") + count + "</color> " + item.itemName + " за <color=yellow>" + (count * item.cost) + "$</color>";
+		}
 		barPos.x = zones[count-1];
 		bar.transform.localPosition = barPos;
 		decreaseBtn.setActive(count > 1);
-		increaseBtn.setActive(count < item.itemData.quantity);
+		increaseBtn.setActive(count < item.quantity);
 	}
 
 	private void apply () {
-		if (toBuy) {
-			market.buyItem(item, count);
+		if (asLoot) {
+			display.applyItemTake(count);
 		} else {
-			market.sellItem(item, count);
+			if (toBuy) {
+				market.buyItem(item, count);
+			} else {
+				market.sellItem(item, count);
+			}
 		}
 		close();
 	}
 
 	private void close () {
 		item = null;
+		onScreen = false;
+		if (asLoot) { display.applyItemTake(0); }
 		gameObject.SetActive(false);
 	}
 }

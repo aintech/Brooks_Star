@@ -59,6 +59,8 @@ public class StarSystem : MonoBehaviour {
 
 		if (Vars.shipCurrentHealth == -1) {
 			statusScreen.getShipData().initializeRandomShip (HullType.ARMAGEDDON);
+			statusScreen.getInventory().setCapacity(statusScreen.getShipData().hullType.getStorageCapacity());
+
 		} else {
 			statusScreen.initFromVars();
 		}
@@ -73,7 +75,7 @@ public class StarSystem : MonoBehaviour {
 
 		GameObject.Find("Explosions Manager").GetComponent<ExplosionsManager>().init();
 
-		GameObject.Find("Loot Dropper").GetComponent<LootDropper>().init(statusScreen.getInventory());
+		GameObject.Find("Loot Dropper").GetComponent<LootDropper>().init(statusScreen.getInventory(), descriptor);
 
 		spawner = GetComponent<EnemySpawner>().init(Vars.userInterface.minimap, playerShip.transform);
 
@@ -92,7 +94,7 @@ public class StarSystem : MonoBehaviour {
         star.sprite = Imager.getStar(Vars.starSystemType);
 		foreach (Planet planet in planets) {
 			if (planet.getPlanetType() == Vars.planetType) {
-				Vector3 shipPos = new Vector3(planet.transform.position.x, planet.transform.position.y, StarField.zOffset);
+				Vector3 shipPos = new Vector3(planet.transform.position.x, planet.transform.position.y, 0);//StarField.zOffset);
 				playerShip.transform.position =  shipPos;
 				cameraController.setDirectlyToShip();
 				break;
@@ -101,7 +103,7 @@ public class StarSystem : MonoBehaviour {
 
 		statusScreen.getShipData().setShieldToMax();
 
-		spawner.spawnAnEnemy(1, 2, 20);
+		spawner.spawnAnEnemy(1, 2, 1);
     }
 
 	private void initPlayerShip () {
@@ -115,7 +117,7 @@ public class StarSystem : MonoBehaviour {
 		gamePaused = true;
 		shieldsPool.clearPool();
 		Vars.enemyShipsPool.Clear();
-		Vars.userInterface.setEnabled(false);
+		UserInterface.showInterface = false;
 		statusScreen.sendToVars();
 		Vars.planetType = planetType;
 		ExplosionsManager.clear();

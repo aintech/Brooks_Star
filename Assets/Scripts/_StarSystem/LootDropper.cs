@@ -12,9 +12,9 @@ public class LootDropper : MonoBehaviour {
 
 	private static LootDisplay lootDisplay;
 
-	public void init (Inventory inventory) {
+	public void init (Inventory inventory, ItemDescriptor itemDescriptor) {
 		dropContainer = dropContainerPrefab;
-		lootDisplay = GameObject.Find("Loot Display").GetComponent<LootDisplay>().init(inventory);
+		lootDisplay = GameObject.Find("Loot Display").GetComponent<LootDisplay>().init(inventory, itemDescriptor);
 	}
 
 	public static void drop (Ship ship) {

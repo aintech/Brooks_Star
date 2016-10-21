@@ -1,14 +1,11 @@
 fileFormatVersion: 2
-guid: 02f77e2f0b55ac8489f881ec1c6ad20b
-timeCreated: 1476962792
+guid: b18e106c8ad941d40b362052c0286761
+timeCreated: 1476978304
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: LootDisplay_BG
-    21300002: LootDisplay_TakeAll
-    21300004: LootDisplay_TakeAll_Hover
-    21300006: LootDisplay_Close
-    21300008: LootDisplay_Close_Hover
+    21300000: GalaxyMapButton
+    21300002: GalaxyMapButton_Hover
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -58,65 +55,26 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: LootDisplay_BG
+      name: GalaxyMapButton
       rect:
         serializedVersion: 2
-        x: 24
-        y: 28
-        width: 504
-        height: 404
+        x: 32
+        y: 23
+        width: 98
+        height: 84
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: LootDisplay_TakeAll
+      name: GalaxyMapButton_Hover
       rect:
         serializedVersion: 2
-        x: 570
-        y: 347
-        width: 334
-        height: 63
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: LootDisplay_TakeAll_Hover
-      rect:
-        serializedVersion: 2
-        x: 568
-        y: 244
-        width: 336
-        height: 65
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: LootDisplay_Close
-      rect:
-        serializedVersion: 2
-        x: 570
-        y: 147
-        width: 334
-        height: 63
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: LootDisplay_Close_Hover
-      rect:
-        serializedVersion: 2
-        x: 570
-        y: 47
-        width: 334
-        height: 63
+        x: 190
+        y: 23
+        width: 98
+        height: 84
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

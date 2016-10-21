@@ -3,14 +3,14 @@ using System.Collections;
 
 public class ShipController : MonoBehaviour {
 
-	protected float mainPower, mainAcceleration, maxMainPower,//	private float maxBackwardPower;
+	protected float mainPower, mainAcceleration, backwardAcceleration, maxMainPower, maxBackwardPower,
 					rotationPower, rotationAcceleration, maxRotationPower, maxRotationPowerNeg;
 
-	protected bool accelarate, turnLeft, turnRight;
+	protected bool accelarate, decelerate, turnLeft, turnRight;
 
 	protected Transform trans;
 
-	protected SpriteRenderer leftExhaust, rightExhaust;
+	protected SpriteRenderer leftExhaust, rightExhaust, frontExhaust;
 
 	protected ParticleSystem exhaust;
 
@@ -24,16 +24,18 @@ public class ShipController : MonoBehaviour {
 		exhaust = trans.Find("Main Exhaust").GetComponent<ParticleSystem>();
 		leftExhaust = trans.Find("Left Exhaust").GetComponent<SpriteRenderer>();
 		rightExhaust = trans.Find("Right Exhaust").GetComponent<SpriteRenderer>();
+		frontExhaust = trans.Find("Front Exhaust").GetComponent<SpriteRenderer>();
 
 		Engine engine = ship.engine;
-		mainAcceleration = engine.getMainAcceleration();
-		maxMainPower = engine.getMaxMainPower();
-		//		maxBackwardPower = engine.getMaxBackwardPower();
-		rotationAcceleration = engine.getRotationAcceleration();
-		maxRotationPower = engine.getMaxRotationPower();
+		mainAcceleration = engine.mainAcceleration;
+		backwardAcceleration = engine.backwardAcceleration;
+		maxMainPower = engine.maxMainPower;
+		maxBackwardPower = engine.maxBackwardPower;
+		rotationAcceleration = engine.rotationAcceleration;
+		maxRotationPower = engine.maxRotationPower;
 		maxRotationPowerNeg = maxRotationPower * -1;
 
-		pos.Set(trans.position.x, trans.position.y, StarField.zOffset);
+		pos.Set(trans.position.x, trans.position.y, 0);// StarField.zOffset);
 		trans.position = pos;
 	}
 
@@ -44,6 +46,9 @@ public class ShipController : MonoBehaviour {
 
 		if (accelarate && exhaust.isStopped) { exhaust.Play(); }
 		else if (!accelarate && exhaust.isPlaying) { exhaust.Stop(); }
+
+		if (decelerate && !frontExhaust.enabled) { frontExhaust.enabled = true; }
+		else if (!decelerate && frontExhaust.enabled) { frontExhaust.enabled = false; }
 
 		if (turnLeft && !rightExhaust.enabled) { rightExhaust.enabled = true; }
 		else if (!turnLeft && rightExhaust.enabled) { rightExhaust.enabled = false; }
@@ -68,13 +73,13 @@ public class ShipController : MonoBehaviour {
 		if (accelarate) {
 			if (mainPower < maxMainPower) {
 				mainPower += mainAcceleration;
-				if (mainPower > maxMainPower) mainPower = maxMainPower;
+				if (mainPower > maxMainPower) { mainPower = maxMainPower; }
 			}
-			//		} else if (sPressed) {
-			//			if (mainPower > maxBackwardPower) {
-			//				mainPower -= mainAcceleration;
-			//				if (mainPower < maxBackwardPower) mainPower = maxBackwardPower;
-			//			}
+		} else if (decelerate) {
+			if (mainPower > maxBackwardPower) {
+				mainPower -= backwardAcceleration;
+				if (mainPower < maxBackwardPower) { mainPower = maxBackwardPower; }
+			}
 		} else {
 			if (mainPower != 0.0) {
 				if (mainPower > 0.0) mainPower -= mainAcceleration * 0.5f;
@@ -83,19 +88,11 @@ public class ShipController : MonoBehaviour {
 				if (mainPower < mainAcceleration && mainPower > (mainAcceleration * -1)) mainPower = 0.0f;
 			}
 		}
-		//		if (!wPressed && !sPressed) {
-		//			if (mainPower != 0.0) {
-		//				if (mainPower > 0.0) mainPower -= mainAcceleration * 0.5f;
-		//				if (mainPower < 0.0) mainPower += mainAcceleration * 0.5f;
-		//
-		//				if (mainPower < mainAcceleration && mainPower > (mainAcceleration * -1)) mainPower = 0.0f;
-		//			}
-		//		}
 		if (mainPower != 0.0) {
 			float zValue = transform.rotation.eulerAngles.z + 90;
 			float velX = mainPower * Mathf.Cos(Mathf.Deg2Rad * zValue);
 			float velY = mainPower * Mathf.Sin(Mathf.Deg2Rad * zValue);
-			pos.Set(trans.position.x + velX, trans.position.y + velY, StarField.zOffset);
+			pos.Set(trans.position.x + velX, trans.position.y + velY, 0);//StarField.zOffset);
 			trans.position = pos;
 		}
 	}

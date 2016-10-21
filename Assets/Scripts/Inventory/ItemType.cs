@@ -11,7 +11,10 @@ public enum ItemKind {
 	EQUIPMENT, SHIP_EQUIPMENT, GOODS
 }
 
-public static class TypeDescriptor {
+public static class ItemTypeDescriptor {
+
+	private static ItemType[] drops = new ItemType[] { ItemType.WEAPON, ItemType.WEAPON, ItemType.WEAPON, ItemType.ENGINE, ItemType.GENERATOR, ItemType.RADAR, ItemType.SHIELD, ItemType.REPAIR_DROID, ItemType.HARVESTER };
+
 	public static ItemKind getKind (this ItemType type) {
 		switch (type) {
 			case ItemType.HAND_WEAPON:
@@ -33,5 +36,9 @@ public static class TypeDescriptor {
 				
 			default: Debug.Log("Unknown type: " + type); return ItemKind.GOODS;
 		}
+	}
+
+	public static ItemType[] dropables () {
+		return drops;
 	}
 }

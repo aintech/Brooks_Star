@@ -18,7 +18,7 @@ public class EquipmentsMarket : InventoryContainedScreen {
 
 	private TextMesh actionMsg;
 
-	private BuySellPopup popup;
+	private QuantityPopup popup;
 
 	public EquipmentsMarket init (PlanetSurface planetSurface, Inventory playerInventory, ItemDescriptor itemDescriptor) {
 		this.planetSurface = planetSurface;
@@ -42,18 +42,24 @@ public class EquipmentsMarket : InventoryContainedScreen {
 			transform.GetChild(i).gameObject.SetActive(true);
 		}
 
-		popup = transform.Find("Popup").GetComponent<BuySellPopup>().init(this);
+		popup = transform.Find("Popup").GetComponent<QuantityPopup>().init(this);
+		popup.adjustPosition(Vector3.zero);
 
 		gameObject.SetActive(false);
 
 		return this;
 	}
 
+	void Update () {
+		if (popup.onScreen) { return; }
+		if (Input.GetKeyDown(KeyCode.Escape)) { closeScreen(); }
+	}
+
 	public void askToBuy (Item item) {
 		if (item == null) { return; }
 		if (buyMarket.gameObject == null) { return; }
 
-		if (item.itemData.quantity == 1) { buyItem(item, 1); }
+		if (item.quantity == 1) { buyItem(item, 1); }
 		else { popup.show(item, true); }
 	}
 
@@ -61,38 +67,35 @@ public class EquipmentsMarket : InventoryContainedScreen {
 		if (item == null) { return; }
 		if (sellMarket.gameObject == null) { return; }
 
-		if (item.itemData.quantity == 1) { sellItem(item, 1); }
+		if (item.quantity == 1) { sellItem(item, 1); }
 		else { popup.show(item, false); }
 	}
 
 	public void buyItem (Item item, int quantity) {
-		if (Vars.cash < (item.cost() * quantity)) { Messenger.showMessage("Не достаточно кредитов на " + item.itemName()); return; }
-		if (item.volume() > .001f && (playerInventory.getFreeVolume() - (item.volume() * quantity)) < 0) { Messenger.showMessage("Недостаточно места в инвентаре."); return; }
-		Vars.cash -= (item.cost() * quantity);
+		if (Vars.cash < (item.cost * quantity)) { Messenger.notEnoughtCash(item.itemName, quantity); return; }
+		if (item.volume > .001f && (playerInventory.getFreeVolume() - (item.volume * quantity)) < 0) { Messenger.showMessage("Недостаточно места в инвентаре."); return; }
+		Vars.cash -= (item.cost * quantity);
 		item.cell.inventory.containerScreen.updateCashTxt();
 
-		if (item.itemData.quantity == quantity) {
+		if (item.quantity == quantity) {
 			playerInventory.addItemToCell(item.cell.takeItem(), null);
 		} else {
 			Item buyed = Instantiate<Transform>(ItemFactory.itemPrefab).GetComponent<Item>();
 			buyed.init(DataCopier.copy(item.itemData));
-			buyed.itemData.quantity = quantity;
-			buyed.updateQuantityText();
+			buyed.quantity = quantity;
 			playerInventory.addItemToCell(buyed, null);
-			item.itemData.quantity -= quantity;
-			item.updateQuantityText();
+			item.quantity -= quantity;
 		}
 	}
 
 	public void sellItem (Item item, int quantity) {
-		Vars.cash += (item.cost() * quantity);
+		Vars.cash += (item.cost * quantity);
 		item.cell.inventory.containerScreen.updateCashTxt();
 
-		if (item.itemData.quantity == quantity) {
+		if (item.quantity == quantity) {
 			item.cell.takeItem().destroy();
 		} else {
-			item.itemData.quantity -= quantity;
-			item.updateQuantityText();
+			item.quantity -= quantity;
 		}
 	}
 

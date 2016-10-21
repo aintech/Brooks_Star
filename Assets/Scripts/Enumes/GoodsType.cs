@@ -12,7 +12,7 @@ public static class GoodsDescriptor {
 			case GoodsType.PRECIOUS_METALS: return "Драгметаллы";
 			case GoodsType.BOOZE: return "Выпивка";
 			case GoodsType.ELECTRONICS: return "Микросхемы";
-			case GoodsType.MEAL: return "Сухие пайки";
+			case GoodsType.MEAL: return "Пища";
 			default: Debug.Log("Unknown goods type: " + type); return "";
 		}
 	}

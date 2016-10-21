@@ -6,7 +6,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 
 	private Transform itemsContainer;
 
-    private InventoryType inventoryType;
+	public InventoryType inventoryType { get; private set; }
 
 	public InventoryContainedScreen containerScreen { get; private set; }
 
@@ -139,9 +139,9 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 
 		if (source != this) {
 			if (inventoryType == InventoryType.INVENTORY && item.slot == null) {
-				if (getFreeVolume() < (item.volume() * item.itemData.quantity)) {
+				if (getFreeVolume() < (item.volume * item.quantity)) {
 					item.returnToParent ();
-					Messenger.showMessage("Объёма инвентаря не достаточно для добавления предмета");
+					Messenger.inventoryCapacityLow(item.name, item.quantity);
 					return;
 				}
 			}
@@ -154,10 +154,9 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		bool stackableItem = false;
 
 		if (cell.item != null) {
-			if (cell.item.type() == ItemType.GOODS) {
+			if (cell.item.type == ItemType.GOODS) {
 				if (((GoodsData)cell.item.itemData).type == ((GoodsData)item.itemData).type) {
-					cell.item.itemData.quantity += item.itemData.quantity;
-					cell.item.updateQuantityText();
+					cell.item.quantity += item.quantity;
 					containerScreen.updateChosenItemBorder(cell.item);
 					item.destroy();
 					stackableItem = true;
@@ -181,7 +180,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 	}
 
 	private void addItemToFirstFreePosition (Item item, bool refresh) {
-		if (item.type() == ItemType.GOODS) {
+		if (item.type == ItemType.GOODS) {
 			if (addStackableItem(item)) { return; }
 		}
 		int newIndex = getMinFreeItemIndex ();
@@ -193,9 +192,8 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 	private bool addStackableItem (Item item) {
 		GoodsType type = ((GoodsData)item.itemData).type;
 		foreach (KeyValuePair<int, Item> pair in items) {
-			if (pair.Value.type() == ItemType.GOODS && type == ((GoodsData)pair.Value.itemData).type) {
-				pair.Value.itemData.quantity += item.itemData.quantity;
-				pair.Value.updateQuantityText();
+			if (pair.Value.type == ItemType.GOODS && type == ((GoodsData)pair.Value.itemData).type) {
+				pair.Value.quantity += item.quantity;
 				item.destroy();
 				return true;
 			}
@@ -233,7 +231,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		if (inventoryType != InventoryType.INVENTORY) { return; }
 		freeVolume = getCapacity ();
 		foreach (KeyValuePair<int, Item> pair in items) {
-			freeVolume -= pair.Value.volume();	
+			freeVolume -= pair.Value.volume;	
 		}
 		updateVolumeTxt();
 	}
@@ -334,7 +332,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		List<Item> harvesters = new List<Item>();
 
 		foreach(KeyValuePair<int, Item> pair in items) {
-			switch (pair.Value.type()) {
+			switch (pair.Value.type) {
 				case ItemType.GOODS: goods.Add(pair.Value); break;
 				case ItemType.HAND_WEAPON: handWeapons.Add(pair.Value); break;
 				case ItemType.BODY_ARMOR: bodyArmors.Add(pair.Value); break;
@@ -346,7 +344,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 				case ItemType.SHIELD: shields.Add(pair.Value); break;
 				case ItemType.REPAIR_DROID: repairDroids.Add(pair.Value); break;
 				case ItemType.HARVESTER: harvesters.Add(pair.Value); break;
-				default: Debug.Log("Unknown item type: " + pair.Value.type()); break;
+				default: Debug.Log("Unknown item type: " + pair.Value.type); break;
 			}
 		}
 
@@ -396,7 +394,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 					case WeaponType.SUPPRESSOR: weight = 7000000; break;
 					default: Debug.Log("Неизвестный тип оружия"); break;
 				}
-				weight += item.cost();
+				weight += item.cost;
 			} else if (type == ItemType.HAND_WEAPON) {
 				HandWeaponData data = (HandWeaponData) item.itemData;
 				weight = data.maxDamage * 1000000 + data.cost;
@@ -452,12 +450,9 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		return count + list.Count;
 	}
 
-	public InventoryCell[] getCells () {
-		return cells;
-	}
-
 	public void setCapacity (float capacity) {
 		this.capacity = capacity;
+		calculateFreeVolume();
 	}
 	
 	public float getCapacity () {
@@ -515,10 +510,6 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 			default: Debug.Log("Unknown inventory type: " + inventoryType); break;
 		}
 	}
-
-    public InventoryType getInventoryType () {
-        return inventoryType;
-    }
 
     public enum InventoryType {
         INVENTORY,MARKET

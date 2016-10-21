@@ -26,7 +26,7 @@ public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 	}
 
 	void Update () {
-		if (inventory.getInventoryType() == Inventory.InventoryType.MARKET) { return; }
+		if (inventory.inventoryType == Inventory.InventoryType.MARKET) { return; }
 		if (Input.GetMouseButtonDown(0) && Utils.hit != null) {
 			if (Utils.hit.name.Equals("Cell")) {
 				Item item = Utils.hit.transform.GetComponent<InventoryCell>().item;

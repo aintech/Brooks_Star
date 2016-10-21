@@ -14,6 +14,6 @@ public class PlayerShipController : ShipController {
 		accelarate = Input.GetKey(KeyCode.W);
 		turnLeft = Input.GetKey(KeyCode.A);
 		turnRight = Input.GetKey(KeyCode.D);
-//		sPressed = Input.GetKey(KeyCode.S);
+		decelerate = Input.GetKey(KeyCode.S);
 	}
 }
