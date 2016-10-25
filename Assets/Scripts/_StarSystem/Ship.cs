@@ -94,6 +94,9 @@ public abstract class Ship : MonoBehaviour {
 				if (health >= fullHealth) {
 					health = fullHealth;
 					repairHull = false;
+					if (!isPlayerShip() && !repairHull && !rechargeShield) {
+						((EnemyShipController)controller).setBarVisible(false);
+					}
 				}
 				updateHealthAndShieldInfo();
 			}
@@ -103,6 +106,9 @@ public abstract class Ship : MonoBehaviour {
 			if (shield >= fullShield) {
 				shield = fullShield;
 				rechargeShield = false;
+				if (!isPlayerShip() && !repairHull && !rechargeShield) {
+					((EnemyShipController)controller).setBarVisible(false);
+				}
 			}
 			updateHealthAndShieldInfo();
 		}
@@ -167,11 +173,13 @@ public abstract class Ship : MonoBehaviour {
 			if (shield >= damage) {
 				shield -= damage;
 				shieldsPool.renderShieldReflection(this, weaponPosition);
+				if (!isPlayerShip()) { ((EnemyShipController)controller).setBarVisible(true); }
 			} else {
 				int diff = damage - shield;
 				shield = 0;
 				health -= diff;
 				repairHull = health < fullHealth;
+				if (!isPlayerShip()) { ((EnemyShipController)controller).setBarVisible(true); }
 			}
 		}
 		if (shield < fullShield) {

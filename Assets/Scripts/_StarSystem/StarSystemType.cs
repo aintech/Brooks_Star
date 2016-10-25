@@ -4,17 +4,18 @@ using System.Collections;
 using System.Collections.Generic;
 
 public enum StarSystemType {
-	ALURIA
+	ALURIA, CRITA
 }
 public static class StarSystemDescriptor {
-	public static string getName (this StarSystemType type) {
+	public static string name (this StarSystemType type) {
 		switch (type) {
 			case StarSystemType.ALURIA: return "Алурия";
+			case StarSystemType.CRITA: return "Крита";
 			default: Debug.Log("Unknown starsystem type: " + type); return "";
 		}
 	}
 
-	public static PlanetType[] getPlanetTypes (this StarSystemType type) {
+	public static PlanetType[] planetTypes (this StarSystemType type) {
 		if (planetToSystemMap == null) { initPlanetToSystemMap(); }
 		return planetToSystemMap[type];
 	}

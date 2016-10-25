@@ -69,7 +69,9 @@ public class StarSystem : MonoBehaviour {
 
 		statusScreen.cameraController = cameraController;
 
-		Vars.userInterface = GameObject.FindGameObjectWithTag("UserInterface").GetComponent<UserInterface>().init(statusScreen, this, playerShip);
+		GalaxyJumper jumper = GetComponent<GalaxyJumper>().init(playerShip);
+
+		Vars.userInterface = GameObject.FindGameObjectWithTag("UserInterface").GetComponent<UserInterface>().init(statusScreen, this, playerShip, jumper);
 
 		shieldsPool = GameObject.Find("ShieldsPool").GetComponent<ShieldsPool>();
 
@@ -85,7 +87,7 @@ public class StarSystem : MonoBehaviour {
 	}
 
     private void loadStarSystem () {
-        PlanetType[] types = Vars.starSystemType.getPlanetTypes();
+		PlanetType[] types = Vars.starSystemType.planetTypes();
         planets = new List<Planet>(types.Length);
         foreach (PlanetType type in types) {
             planets.Add(Instantiate<Transform>(planetPrefab).GetComponent<Planet>().init(type, playerShip.transform));

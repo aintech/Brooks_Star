@@ -69,6 +69,7 @@ public class LootDisplay : MonoBehaviour, ButtonHolder {
 		this.container = container;
 		for (int i = 0; i < container.loot.Count; i++) {
 			slots[i].setItem(container.loot[i]);
+			container.loot[i].gameObject.SetActive(true);
 		}
 		StarSystem.setGamePause(true);
 		UserInterface.showInterface = false;
@@ -83,6 +84,7 @@ public class LootDisplay : MonoBehaviour, ButtonHolder {
 	private void closeDisplay (bool disposeContainer) {
 		gameObject.SetActive(false);
 		foreach (LootSlot slot in slots) {
+			if (slot.item != null) { slot.item.gameObject.SetActive(false); }
 			slot.takeItem();
 		}
 		if (disposeContainer) {

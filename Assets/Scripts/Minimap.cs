@@ -65,7 +65,7 @@ public class Minimap : MonoBehaviour {
 		this.playerShip = playerShip;
 		this.radarRange = radarRange;
 		float planetDistanceMax = 0;
-		PlanetType[] types = Vars.starSystemType.getPlanetTypes();
+		PlanetType[] types = Vars.starSystemType.planetTypes();
 		distances = new float[types.Length];
 
 		foreach (PlanetType type in types) {

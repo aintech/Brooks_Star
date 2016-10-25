@@ -31,6 +31,7 @@ public class EnemyShipController : ShipController {
 //		weapon_4 = weapons[3];
 //		weapon_5 = weapons[4];
 		arrangeBarToShip();
+		setBarVisible(false);
 	}
 
 	protected override void decideNextMove () {
@@ -67,6 +68,10 @@ public class EnemyShipController : ShipController {
 	private void moveShip () {
 		accelarate = true;
 		turnControl();
+	}
+
+	public void setBarVisible (bool visible) {
+		barTrans.gameObject.SetActive(visible);
 	}
 
 	private void turnControl () {

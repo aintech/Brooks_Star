@@ -35,7 +35,11 @@ public class UserInterface : MonoBehaviour {
 
 	private GalaxyMap galaxyMap;
 
-	public UserInterface init (StatusScreen statusScreen, StarSystem starSystem, PlayerShip ship) {
+	public UserInterface init (StatusScreen statusScreen) {
+		return init(statusScreen, null, null, null);
+	}
+
+	public UserInterface init (StatusScreen statusScreen, StarSystem starSystem, PlayerShip ship, GalaxyJumper jumper) {
 		this.statusScreen = statusScreen;
 		this.ship = ship;
 
@@ -46,7 +50,7 @@ public class UserInterface : MonoBehaviour {
 		GetComponent<Messenger>().init(this);
 		minimap = GetComponent<Minimap>();
 		if (starSystem != null) {
-			galaxyMap = GameObject.Find("Galaxy Map").GetComponent<GalaxyMap>().init();
+			galaxyMap = GameObject.Find("Galaxy Map").GetComponent<GalaxyMap>().init(jumper);
 			minimap.init(starSystem, galaxyMap, ship.transform, ship.radarRange);
 			planetDescriptor = GetComponent<StarSystemPlanetDescriptor>().init(starSystem);
 		} else {

@@ -29,10 +29,6 @@ public static class PlanetDescriptor {
 		}
 	}
 
-	public static StarSystemType getStarSystemType (this PlanetType type) {
-		return StarSystemType.ALURIA;
-	}
-
 	public static bool isColonized (this PlanetType type) {
 		switch (type) {
 			case PlanetType.PARPARIS:
@@ -64,16 +60,32 @@ public static class PlanetDescriptor {
 
     public static float getDistanceToStar (this PlanetType type) {
 		switch (type) {
-			case PlanetType.CORAS: return 25;
-			case PlanetType.PALETTE: return 45;
-			case PlanetType.VADERPAN: return 70;
-			case PlanetType.PARPARIS: return 120;
-			case PlanetType.TERANA: return 160;
-			case PlanetType.VOLARIA: return 210;
-			case PlanetType.POSTERA: return 300;
+			//ALURIA
+			case PlanetType.CORAS: return 45;
+			case PlanetType.PARPARIS: return 70;
+			case PlanetType.VOLARIA: return 120;
+			case PlanetType.POSTERA: return 200;
+
+			//CRITA
+			case PlanetType.TERANA: return 100;
+			case PlanetType.VADERPAN: return 180;
+			case PlanetType.PALETTE: return 230;
             default: Debug.Log("Unknown planet type: " + type); return 0;
         }
     }
+
+	public static StarSystemType getStarSystemType (this PlanetType type) {
+		switch (type) {
+			case PlanetType.CORAS:
+			case PlanetType.PARPARIS:
+			case PlanetType.VOLARIA:
+			case PlanetType.POSTERA: return StarSystemType.ALURIA;
+			case PlanetType.TERANA:
+			case PlanetType.VADERPAN:
+			case PlanetType.PALETTE: return StarSystemType.CRITA;
+			default: Debug.Log("Unknown planet type: " + type); return StarSystemType.ALURIA;
+		}
+	}
 
 	public static EnemyType[] getEnemyTypes (this PlanetType type) {
 		if (enemyTypesOnPlanet.Count == 0) { initEnemiesOnPlanets(); }

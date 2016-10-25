@@ -25,15 +25,10 @@ public class Button : MonoBehaviour {
 
 	private bool hideableText;
 
-	public Button init (bool hideableText) {
-		this.hideableText = hideableText;
-		return init();
-	}
-
 	public Button init () {
 		render = GetComponent<SpriteRenderer>();
 		coll = GetComponent<Collider2D>();
-		holder = transform.parent.GetComponent<ButtonHolder>();
+		if (holder == null) { holder = transform.parent.GetComponent<ButtonHolder>(); }
 		text = transform.Find("BtnText").GetComponent<TextMesh>();
 		textRender = text.GetComponent<MeshRenderer>();
 		textRender.sortingLayerName = render.sortingLayerName;
@@ -43,7 +38,17 @@ public class Button : MonoBehaviour {
 
 		return this;
 	}
-	
+
+	public Button init (bool hideableText) {
+		this.hideableText = hideableText;
+		return init();
+	}
+
+	public Button initWithHolder (ButtonHolder holder) {
+		this.holder = holder;
+		return init();
+	}
+
 	void Update () {
 		if (!active || !visible) { return; }
 		if (Utils.hit != null && Utils.hit == coll) {

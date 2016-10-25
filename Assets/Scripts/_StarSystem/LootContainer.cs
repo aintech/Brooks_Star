@@ -85,6 +85,9 @@ public class LootContainer : MonoBehaviour {
 		if (Random.value <= .25f) {
 			loot.Add(Instantiate<Transform>(ItemFactory.itemPrefab).GetComponent<Item>().init(ItemFactory.createGoodsData(Random.Range(5, 20))));
 		}
+		foreach (Item item in loot) {
+			item.gameObject.SetActive(false);
+		}
 		return loot.Count > 0;
 	}
 

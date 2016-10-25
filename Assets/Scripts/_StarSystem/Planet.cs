@@ -11,7 +11,7 @@ public class Planet : MonoBehaviour {
 
     private Quaternion noRotation = new Quaternion();
 
-    private float orbitingSpeed, contactDistance = 3, toShipDistance;
+    private float orbitingSpeed, contactDistance = 6, toShipDistance;
 
 	private Transform trans, ship, shadow;//, atmosphere;
 

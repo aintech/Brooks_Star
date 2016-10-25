@@ -59,9 +59,6 @@ public class EnemyShip : Ship {
 		Vars.freeSortingOrder += getHullType().getWeaponSlots() > 0? 4: 3;
 		controller.init(this);
 		((EnemyShipController)controller).setStuff(playerShip, barTrans, radarRange, new Weapon[]{weapon_1, weapon_2, weapon_3, weapon_4, weapon_5});
-		barTrans.gameObject.SetActive(true);
-		healthBar.gameObject.SetActive(true);
-		shieldBar.gameObject.SetActive(true);
 		updateHealthAndShieldInfo();
 	}
 
