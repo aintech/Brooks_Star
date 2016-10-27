@@ -35,4 +35,10 @@ public class ExplosionsManager : MonoBehaviour {
 	public static void clear () {
 		explosionsPacks.Clear();
 	}
+
+	public static void endAllExplosions () {
+		foreach(ExplosionsPack pack in explosionsPacks) {
+			pack.finishPack();
+		}
+	}
 }

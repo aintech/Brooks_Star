@@ -29,6 +29,16 @@ public abstract class Weapon : MonoBehaviour {
 
 	private Ship ship;
 
+	private bool active = true;
+
+	private Quaternion idle = new Quaternion();
+
+	private Vector3 idleVec = new Vector3(0, 0, 180);
+
+	private Vector3 rotVec = Vector3.zero;
+
+	private int normalZ;
+
 	public void init (Ship ship) {
 		this.ship = ship;
 		if (anim == null) {
@@ -41,11 +51,11 @@ public abstract class Weapon : MonoBehaviour {
 			enemyLayer = LayerMask.NameToLayer("EnemyLayer");
 			playerLayer = LayerMask.NameToLayer("PlayerLayer");
 		}
+		idle.eulerAngles = idleVec;
 	}
 
 	private void Update () {
-		if (StarSystem.gamePaused) { return; }
-		if (!ship.alive) { return; }
+		if (StarSystem.gamePaused || !ship.alive || !active) { return; }
 
 		if (isAPlayerWeapon) {
 			if (Input.GetMouseButton(0) && canShoot()) {
@@ -69,10 +79,16 @@ public abstract class Weapon : MonoBehaviour {
 	}
 
 	private void FixedUpdate () {
-		if (StarSystem.gamePaused) { return; }
-		if (!ship.alive) { return; }
+		if (StarSystem.gamePaused || !ship.alive) { return; }
 
-		weaponLookAtTarget(isAPlayerWeapon? mainCamera.ScreenToWorldPoint(Input.mousePosition): playerTrans.position);
+		if (active) {
+			weaponLookAtTarget(isAPlayerWeapon? mainCamera.ScreenToWorldPoint(Input.mousePosition): playerTrans.position);
+		} else if (normalZ != 180) {
+			rotVec = Vector3.Lerp(trans.localRotation.eulerAngles, idleVec, .1f);
+			normalZ = (int) rotVec.z;
+			idle.eulerAngles = rotVec;
+			trans.localRotation = idle;
+		}
 	}
 
 	private void weaponLookAtTarget (Vector3 target) {
@@ -105,6 +121,16 @@ public abstract class Weapon : MonoBehaviour {
 	public float getReloadTime () { return reloadTime; }
 
 	public void setPlayerTransform (Transform playerTrans) { this.playerTrans = playerTrans; }
+
+	public void prepareToJump () {
+		active = false;
+		rotVec = Vector3.zero;
+		normalZ = 0;
+	}
+
+	public void activateWeapon () {
+		active = true;
+	}
 
 	public SpriteRenderer getRender () {
 		return render;

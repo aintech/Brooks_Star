@@ -30,9 +30,9 @@ public class Minimap : MonoBehaviour {
 				 	footerRect = new Rect(Screen.width - 230, 30, 230, 200),
 					showBtnRect = new Rect(Screen.width - 32, 2, 32, 32),
 					hideBtnRect = new Rect(Screen.width - 32, 231, 32, 32),
-					galaxyMapBtnRectUp = new Rect(Screen.width - 32 - 78, 2, 77, 32),
-					galaxyMapBtnRectDown = new Rect(Screen.width - 32 - 78, 231, 77, 32),
-					systemRadarBtnRect = new Rect(Screen.width - 32 - 78 - 102, 231, 101, 32),
+					galaxyMapBtnRectUp = new Rect(Screen.width - 32 - 233, 2, 232, 32),
+					galaxyMapBtnRectDown = new Rect(Screen.width - 233, 2, 232, 32),//new Rect(Screen.width - 32 - 78, 231, 204, 32),
+					systemRadarBtnRect = new Rect(Screen.width - 32 - 102, 231, 101, 32),
 					radarBorderRect = new Rect(Screen.width - mapSize - mapOffset, mapOffset, mapSize, mapSize);
 
 	private List<Rect> enemyPositions = new List<Rect>();
@@ -45,7 +45,7 @@ public class Minimap : MonoBehaviour {
 
 	private bool onScreen = true;
 
-	private MapType mapType = MapType.RADAR;
+	private MapType mapType = MapType.SYSTEM;
 
 	private float radarRange;
 
@@ -64,6 +64,10 @@ public class Minimap : MonoBehaviour {
 		this.galaxyMap = galaxyMap;
 		this.playerShip = playerShip;
 		this.radarRange = radarRange;
+//		loadSystem();
+	}
+
+	public void loadSystem () {
 		float planetDistanceMax = 0;
 		PlanetType[] types = Vars.starSystemType.planetTypes();
 		distances = new float[types.Length];
@@ -89,6 +93,9 @@ public class Minimap : MonoBehaviour {
 		}
 
 		radarDiff = mapSize / 2 / radarRange;
+
+		enemies.Clear();
+		enemyPositions.Clear();
 	}
 
 	void OnGUI () {
@@ -111,7 +118,7 @@ public class Minimap : MonoBehaviour {
 				}
 			} else {
 				GUI.DrawTexture(radarBorderRect, radarBorder);
-				calcEnemiyPositions();
+				calcEnemyPositions();
 				foreach (Rect pos in enemyPositions) {
 					GUI.DrawTexture(pos, enemy);
 				}
@@ -147,7 +154,7 @@ public class Minimap : MonoBehaviour {
 		onScreen = show;
 	}
 
-	private void calcEnemiyPositions () {
+	private void calcEnemyPositions () {
 		Rect rect = new Rect();
 		Transform trans;
 		Vector2 pos;

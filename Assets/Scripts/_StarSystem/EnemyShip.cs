@@ -57,7 +57,7 @@ public class EnemyShip : Ship {
 		getHullRender().sortingOrder = sortingOrder + 1;
 		shieldRenderOrder = sortingOrder + 3;
 		Vars.freeSortingOrder += getHullType().getWeaponSlots() > 0? 4: 3;
-		controller.init(this);
+		controller.init();
 		((EnemyShipController)controller).setStuff(playerShip, barTrans, radarRange, new Weapon[]{weapon_1, weapon_2, weapon_3, weapon_4, weapon_5});
 		updateHealthAndShieldInfo();
 	}
@@ -95,6 +95,13 @@ public class EnemyShip : Ship {
 		if (availSlots >= 3) initWeapon(2);
 		if (availSlots >= 4) initWeapon(3);
 		if (availSlots >= 5) initWeapon(4);
+
+		weapons = new Weapon[5];
+		weapons[0] = weapon_1;
+		weapons[1] = weapon_2;
+		weapons[2] = weapon_3;
+		weapons[3] = weapon_4;
+		weapons[4] = weapon_5;
 	}
 
 	private void initWeapon (int weaponIndex) {

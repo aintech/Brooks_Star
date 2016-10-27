@@ -39,7 +39,7 @@ public class ExplosionsPack : MonoBehaviour {
 			if (counter == 0) {
 				toNextTimer = -100;
 				finalExplosion.play(ship.transform.position);
-				ship.destroyShip ();
+				ship.destroyShip (true);
 			} else {
 				playNext ();
 				toNextTimer = Random.Range (minOffset, maxOffset);

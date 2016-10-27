@@ -9,8 +9,11 @@ public class Explosion : MonoBehaviour {
 
 	private ExplosionsPack pack;
 
+	private Animator anim;
+
 	public Explosion init (ExplosionsPack pack) {
 		this.pack = pack;
+		anim = GetComponent<Animator>();
 		return this;
 	}
 

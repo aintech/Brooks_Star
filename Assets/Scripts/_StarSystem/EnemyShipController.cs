@@ -21,6 +21,8 @@ public class EnemyShipController : ShipController {
 
 	private bool isPursue;
 
+	private bool onLeftSide;
+
 	public void setStuff (Transform playerShip, Transform barTrans, float radarRange, Weapon[] weapons) {
 		this.playerShip = playerShip;
 		this.barTrans = barTrans;
@@ -36,7 +38,7 @@ public class EnemyShipController : ShipController {
 
 	protected override void decideNextMove () {
 		if (!ship.alive) {
-			if (accelarate) { accelarate = false; }
+			if (accelerate) { accelerate = false; }
 			if (turnRight) { turnRight = false; }
 			if (turnLeft) { turnLeft = false; }
 			return;
@@ -51,7 +53,7 @@ public class EnemyShipController : ShipController {
 				isPursue = true;
 			}
 			if (isPursue) { moveShip(); }
-			else if (accelarate || turnLeft || turnRight) { accelarate = turnLeft = turnRight = false; }
+			else if (accelerate || turnLeft || turnRight) { accelerate = turnLeft = turnRight = false; }
 
 			arrangeBarToShip();
 //			float maxRange = 0;
@@ -62,11 +64,11 @@ public class EnemyShipController : ShipController {
 //			if (weapon_5 != null && weapon_5.getWeaponType().getRange() > maxRange) maxRange = weapon_5.getWeaponType().getRange();
 //
 //			moveShip();
-		} else if (accelarate || turnLeft || turnRight) { accelarate = turnLeft = turnRight = false; }
+		} else if (accelerate || turnLeft || turnRight) { accelerate = turnLeft = turnRight = false; }
 	}
 
 	private void moveShip () {
-		accelarate = true;
+		accelerate = true;
 		turnControl();
 	}
 
@@ -81,7 +83,7 @@ public class EnemyShipController : ShipController {
 		toPlayerDirection.x *= -1;
 		toPlayerAngle = Vector2.Angle(lookVector, toPlayerDirection);
 		if (toPlayerAngle > 50) {
-			bool onLeftSide = Vector3.Cross(lookVector, toPlayerDirection).z < 0;
+			onLeftSide = Vector3.Cross(lookVector, toPlayerDirection).z < 0;
 			turnLeft = onLeftSide;
 			turnRight = !onLeftSide;
 		} else if (toPlayerAngle < 40) {

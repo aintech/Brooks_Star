@@ -29,6 +29,10 @@ public class StarSystem : MonoBehaviour {
 
 	private EnemySpawner spawner;
 
+	private LootDropper lootDropper;
+
+	private ExplosionsManager explosionsManager;
+
 	//Выведеное опытным путем расстояние от центра до края сектора
 	//при условии что разрешение картинки сектора 4096х4096, pixelsToUnit = 50, sectorMoveSpeed = 0.1
 //	private float sectorHalfSide = 409.1f;
@@ -69,15 +73,13 @@ public class StarSystem : MonoBehaviour {
 
 		statusScreen.cameraController = cameraController;
 
-		GalaxyJumper jumper = GetComponent<GalaxyJumper>().init(playerShip);
-
-		Vars.userInterface = GameObject.FindGameObjectWithTag("UserInterface").GetComponent<UserInterface>().init(statusScreen, this, playerShip, jumper);
+		Vars.userInterface = GameObject.FindGameObjectWithTag("UserInterface").GetComponent<UserInterface>().init(statusScreen, this, playerShip);
 
 		shieldsPool = GameObject.Find("ShieldsPool").GetComponent<ShieldsPool>();
 
-		GameObject.Find("Explosions Manager").GetComponent<ExplosionsManager>().init();
+		explosionsManager = GameObject.Find("Explosions Manager").GetComponent<ExplosionsManager>().init();
 
-		GameObject.Find("Loot Dropper").GetComponent<LootDropper>().init(statusScreen.getInventory(), descriptor);
+		lootDropper = GameObject.Find("Loot Dropper").GetComponent<LootDropper>().init(statusScreen.getInventory(), descriptor);
 
 		spawner = GetComponent<EnemySpawner>().init(Vars.userInterface.minimap, playerShip.transform);
 
@@ -86,7 +88,7 @@ public class StarSystem : MonoBehaviour {
 		gamePaused = false;
 	}
 
-    private void loadStarSystem () {
+    public void loadStarSystem () {
 		PlanetType[] types = Vars.starSystemType.planetTypes();
         planets = new List<Planet>(types.Length);
         foreach (PlanetType type in types) {
@@ -103,14 +105,27 @@ public class StarSystem : MonoBehaviour {
 			}
 		}
 
+		Vars.userInterface.minimap.loadSystem();
+
 		statusScreen.getShipData().setShieldToMax();
+
+		foreach (EnemyShip enemy in Vars.enemyShipsPool) {
+			if (enemy.alive) {
+				enemy.destroyShip(false);
+			}
+		}
+
+		lootDropper.clearAllLoot();
+		ExplosionsManager.endAllExplosions();
+
+		GalaxyJumpController.systemLoaded = true;
 
 		spawner.spawnAnEnemy(1, 2, 1);
     }
 
 	private void initPlayerShip () {
 		playerShip = Instantiate<Transform> (playerShipPrefab).GetComponent<PlayerShip> ();
-		playerShip.initPlayerShip(statusScreen.getShipData());
+		playerShip.initPlayerShip(statusScreen.getShipData(), this);
 		cameraController = mainCamera.GetComponent<CameraController>();
 		cameraController.init(playerShip.transform, starField);
 	}

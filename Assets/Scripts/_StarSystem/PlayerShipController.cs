@@ -2,18 +2,30 @@
 using System.Collections;
 
 public class PlayerShipController : ShipController {
-	
-	override protected void checkInput () {
+
+	public bool inControl = true;
+
+	override public void checkInput () {
 		if (!ship.alive) {
-			if (accelarate) { accelarate = false; }
+			if (accelerate) { accelerate = false; }
 			if (turnRight) { turnRight = false; }
 			if (turnLeft) { turnLeft = false; }
 			return;
 		}
 
-		accelarate = Input.GetKey(KeyCode.W);
-		turnLeft = Input.GetKey(KeyCode.A);
-		turnRight = Input.GetKey(KeyCode.D);
-		decelerate = Input.GetKey(KeyCode.S);
+		if (inControl) {
+			accelerate = Input.GetKey(KeyCode.W);
+			turnLeft = Input.GetKey(KeyCode.A);
+			turnRight = Input.GetKey(KeyCode.D);
+			decelerate = Input.GetKey(KeyCode.S);
+		}
+	}
+
+	override protected void Update () {
+		if (inControl) { base.Update(); }
+	}
+
+	override protected void FixedUpdate () {
+		if (inControl) { base.FixedUpdate(); }
 	}
 }

@@ -56,8 +56,6 @@ public abstract class Ship : MonoBehaviour {
 
 	private bool rechargeShield, repairHull;
 
-//	private int repairCounter, toNextRepair = 100;
-
 	protected void initInner () {
 		if (weaponSlotsMap == null) {
 			initializeWeaponSlotsMap();
@@ -65,13 +63,6 @@ public abstract class Ship : MonoBehaviour {
 			initializeColliderMap();
 			initializeExhaustMap();
 		}
-
-		weapons = new Weapon[5];
-		weapons[0] = weapon_1;
-		weapons[1] = weapon_2;
-		weapons[2] = weapon_3;
-		weapons[3] = weapon_4;
-		weapons[4] = weapon_5;
 
 		engine = transform.FindChild("Engine").GetComponent<Engine>();
 		shieldsPool = GameObject.Find("ShieldsPool").GetComponent<ShieldsPool>();
@@ -111,6 +102,18 @@ public abstract class Ship : MonoBehaviour {
 				}
 			}
 			updateHealthAndShieldInfo();
+		}
+	}
+
+	public void prepareWeaponsToJump () {
+		foreach (Weapon weapon in weapons) {
+			if (weapon != null) { weapon.prepareToJump(); }
+		}
+	}
+
+	public void activateWeapons () {
+		foreach (Weapon weapon in weapons) {
+			if (weapon != null) { weapon.activateWeapon(); }
 		}
 	}
 
@@ -205,7 +208,7 @@ public abstract class Ship : MonoBehaviour {
 		ExplosionsManager.playExplosion(this);
 	}
 
-	virtual public void destroyShip () {
+	virtual public void destroyShip (bool dropLoot) {
 		gameObject.SetActive(false);
 		destroed = true;
 		LootDropper.drop(this);

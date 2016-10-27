@@ -12,9 +12,10 @@ public class LootDropper : MonoBehaviour {
 
 	private static LootDisplay lootDisplay;
 
-	public void init (Inventory inventory, ItemDescriptor itemDescriptor) {
+	public LootDropper init (Inventory inventory, ItemDescriptor itemDescriptor) {
 		dropContainer = dropContainerPrefab;
 		lootDisplay = GameObject.Find("Loot Display").GetComponent<LootDisplay>().init(inventory, itemDescriptor);
+		return this;
 	}
 
 	public static void drop (Ship ship) {
@@ -29,5 +30,11 @@ public class LootDropper : MonoBehaviour {
 			containers.Add(container);
 		}
 		container.initDrop(ship);
+	}
+
+	public void clearAllLoot () {
+		foreach (LootContainer container in containers) {
+			container.hideDrop();
+		}
 	}
 }

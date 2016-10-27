@@ -6,10 +6,13 @@ public class PlayerShip : Ship {
 
 	private ShipData shipData;
 
-	public void initPlayerShip (ShipData shipData) {
+	public GalaxyJumpController jumpController { get; private set; }
+
+	public void initPlayerShip (ShipData shipData, StarSystem starSystem) {
 		this.shipData = shipData;
 		this.name = "Player ship";
 		initInner();
+		jumpController = GetComponent<GalaxyJumpController>();
 		setHullType (shipData.hullType);
 		health = shipData.getCurrentHealth ();
 		fullHealth = shipData.hullType.getMaxHealth();
@@ -20,9 +23,10 @@ public class PlayerShip : Ship {
 		initWeapons ();
 		initShield ();
 		initRepair ();
-		controller.init(this);
+		jumpController.initJumper(starSystem);
+		controller.init();
 	}
-	
+
 	private void initEngine () {
 		Item engineItem = shipData.getSlot (HullSlot.Type.ENGINE, 0).item;
 		EngineData data = (EngineData)engineItem.itemData;
@@ -48,6 +52,13 @@ public class PlayerShip : Ship {
 		if (slot3WeaponData != null) initWeapon (slot3WeaponData, 2);
 		if (slot4WeaponData != null) initWeapon (slot4WeaponData, 3);
 		if (slot5WeaponData != null) initWeapon (slot5WeaponData, 4);
+
+		weapons = new Weapon[5];
+		weapons[0] = weapon_1;
+		weapons[1] = weapon_2;
+		weapons[2] = weapon_3;
+		weapons[3] = weapon_4;
+		weapons[4] = weapon_5;
 	}
 	
 	private void initWeapon(WeaponData data, int weaponIndex) {

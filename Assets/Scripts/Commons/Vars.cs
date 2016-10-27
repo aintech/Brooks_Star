@@ -8,7 +8,7 @@ public static class Vars {
 
 	public static StarSystemType starSystemType = StarSystemType.ALURIA;
 
-	public static PlanetType planetType = PlanetType.PARPARIS;
+	public static PlanetType planetType = PlanetType.POSTERA;
 
 	public static HullType shipHullType = HullType.CORVETTE;
 

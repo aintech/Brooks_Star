@@ -3,10 +3,10 @@ using System.Collections;
 
 public class ShipController : MonoBehaviour {
 
-	protected float mainPower, mainAcceleration, backwardAcceleration, maxMainPower, maxBackwardPower,
-					rotationPower, rotationAcceleration, maxRotationPower, maxRotationPowerNeg;
+	protected float initMaxMainPower, mainPower, mainAcceleration, backwardAcceleration, maxMainPower, maxBackwardPower,
+					initMaxRotationPower, rotationPower, rotationAcceleration, maxRotationPower, maxRotationPowerNeg;
 
-	protected bool accelarate, decelerate, turnLeft, turnRight;
+	protected bool accelerate, decelerate, turnLeft, turnRight;
 
 	protected Transform trans;
 
@@ -14,12 +14,14 @@ public class ShipController : MonoBehaviour {
 
 	protected ParticleSystem exhaust;
 
+	ParticleSystem.EmissionModule emission;
+
 	protected Vector3 pos = Vector3.zero, rotateAxis = Vector3.forward;
 
 	protected Ship ship { get; private set; }
 
-	public void init (Ship ship) {
-		this.ship = ship;
+	public void init () {
+		ship = GetComponent<Ship>();
 		trans = transform;
 		exhaust = trans.Find("Main Exhaust").GetComponent<ParticleSystem>();
 		leftExhaust = trans.Find("Left Exhaust").GetComponent<SpriteRenderer>();
@@ -29,23 +31,27 @@ public class ShipController : MonoBehaviour {
 		Engine engine = ship.engine;
 		mainAcceleration = engine.mainAcceleration;
 		backwardAcceleration = engine.backwardAcceleration;
-		maxMainPower = engine.maxMainPower;
+		initMaxMainPower = engine.maxMainPower;
+		maxMainPower = initMaxMainPower;
 		maxBackwardPower = engine.maxBackwardPower;
 		rotationAcceleration = engine.rotationAcceleration;
-		maxRotationPower = engine.maxRotationPower;
+		initMaxRotationPower = engine.maxRotationPower;
+		maxRotationPower = initMaxRotationPower;
 		maxRotationPowerNeg = maxRotationPower * -1;
+
+		emission = exhaust.emission;
 
 		pos.Set(trans.position.x, trans.position.y, 0);// StarField.zOffset);
 		trans.position = pos;
 	}
 
-	void Update () {
+	virtual protected void Update () {
 		if (StarSystem.gamePaused) { return; }
 
 		checkInput ();
 
-		if (accelarate && exhaust.isStopped) { exhaust.Play(); }
-		else if (!accelarate && exhaust.isPlaying) { exhaust.Stop(); }
+		if (accelerate && exhaust.isStopped) { exhaust.Play(); }
+		else if (!accelerate && exhaust.isPlaying) { exhaust.Stop(); }
 
 		if (decelerate && !frontExhaust.enabled) { frontExhaust.enabled = true; }
 		else if (!decelerate && frontExhaust.enabled) { frontExhaust.enabled = false; }
@@ -57,9 +63,9 @@ public class ShipController : MonoBehaviour {
 		else if (!turnRight && leftExhaust.enabled) { leftExhaust.enabled = false; }
 	}
 
-	virtual protected void checkInput () {}
+	virtual public void checkInput () {}
 
-	void FixedUpdate () {
+	virtual protected void FixedUpdate () {
 		if (StarSystem.gamePaused) { return; }
 
 		decideNextMove();
@@ -70,7 +76,7 @@ public class ShipController : MonoBehaviour {
 	virtual protected void decideNextMove () {}
 
 	private void forwardMove () {
-		if (accelarate) {
+		if (accelerate) {
 			if (mainPower < maxMainPower) {
 				mainPower += mainAcceleration;
 				if (mainPower > maxMainPower) { mainPower = maxMainPower; }
@@ -115,5 +121,17 @@ public class ShipController : MonoBehaviour {
 			if (rotationPower < rotationAcceleration && rotationPower > (rotationAcceleration * -1)) rotationPower = 0.0f;
 		}
 		if (rotationPower != 0.0) transform.Rotate(rotateAxis, rotationPower);
+	}
+
+	public void setRotationForJump (bool forJump) {
+		maxRotationPower = forJump? 2: initMaxRotationPower;
+		maxRotationPowerNeg = maxRotationPower * -1;
+	}
+
+	public void setMainEngineForJump (bool forJump) {
+		maxMainPower = forJump? .5f: initMaxMainPower;
+		exhaust.maxParticles = forJump? 200: 40;
+		emission.rate = forJump? 200: 40;
+		if (mainPower > maxMainPower) { mainPower = maxMainPower; }
 	}
 }
