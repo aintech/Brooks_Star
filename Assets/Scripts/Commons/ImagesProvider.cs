@@ -4,9 +4,9 @@ using System.Collections;
 public class ImagesProvider : MonoBehaviour {
 
 	public Sprite[] weaponSprites, engineSprites, armorSprites, generatorSprites, radarSprites, shieldSprites, repairDroidSprites, harvesterSprites, handWeaponSprites, bodyArmorSprites, goodsSprites,
-					hullSprites;
+					hullSprites, enemyMarkerSprites;
 
-	public static Sprite[] weapons, engines, armors, generators, radars, shields, repairDroids, harvesters, handWeapons, bodyArmors, goods, hulls;
+	public static Sprite[] weapons, engines, armors, generators, radars, shields, repairDroids, harvesters, handWeapons, bodyArmors, goods, hulls, enemyMarkers;
 
 	public void init () {
 		weapons = weaponSprites;
@@ -21,6 +21,16 @@ public class ImagesProvider : MonoBehaviour {
 		bodyArmors = bodyArmorSprites;
 		goods = goodsSprites;
 		hulls = hullSprites;
+		enemyMarkers = enemyMarkerSprites;
+	}
+
+	public static Sprite getMarkerSprite (EnemyType type) {
+		switch (type) {
+			case EnemyType.BEE: return enemyMarkers[0];
+			case EnemyType.DRUID: return enemyMarkers[1];
+			case EnemyType.GUNNER: return enemyMarkers[2];
+			default: Debug.Log("Unknown hull type: " + type); return null;
+		}
 	}
 
 	public static Sprite getHullSprite (HullType type) {
