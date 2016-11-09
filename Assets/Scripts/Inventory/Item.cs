@@ -68,6 +68,7 @@ public class Item : MonoBehaviour {
 			case ItemType.HAND_WEAPON: render.sprite = ImagesProvider.getHandWeaponSprite(((HandWeaponData)itemData).type); break;
 			case ItemType.BODY_ARMOR: render.sprite = ImagesProvider.getBodyArmorSprite(((BodyArmorData)itemData).type); break;
 			case ItemType.GOODS: render.sprite = ImagesProvider.getGoodsSprite(((GoodsData)itemData).type); break;
+			case ItemType.SUPPLY: render.sprite = ImagesProvider.getSupplySprite(((SupplyData)itemData).type); break;
 			default: Debug.Log("Unknown item type: " + itemData.itemType); break;
 		}
 		return this;

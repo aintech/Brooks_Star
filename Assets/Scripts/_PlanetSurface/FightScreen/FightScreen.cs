@@ -36,12 +36,14 @@ public class FightScreen : MonoBehaviour {
 
 	private FightProcessor fightProcessor;
 
-	private ExploreScreen exploreScreen;
+	private ScanningScreen scanningScreen;
 
 	private bool fightStarted, fightOver, startAnimDone, enemyDeadPlaying;
 
-	public FightScreen init (ExploreScreen exploreScreen) {
-		this.exploreScreen = exploreScreen;
+	private bool playerWin;
+
+	public FightScreen init (ScanningScreen scanningScreen) {
+		this.scanningScreen = scanningScreen;
 		elementsHolder = transform.Find("ElementsHolder").GetComponent<ElementsHolder>();
 		iconsHolderRender = elementsHolder.GetComponent<SpriteRenderer>();
 		fightEffectPlayer = transform.Find("FightEffectPlayer").GetComponent<FightEffectPlayer>().init();
@@ -70,6 +72,7 @@ public class FightScreen : MonoBehaviour {
 	}
 
 	public void startFight (EnemyType type) {
+		playerWin = false;
 		Player.updateMinMaxDamage();
 		enemy.initEnemy(type);
 //		giveSwordToHero();
@@ -108,7 +111,7 @@ public class FightScreen : MonoBehaviour {
 		}
 		if (enemyDeadPlaying) {
 			if (ENEMY_DEAD_ANIM_DONE) {
-				showFightResultScreen(true);
+				showFightResultScreen();
 			}
 		}
 	}
@@ -137,6 +140,7 @@ public class FightScreen : MonoBehaviour {
 	}
 
 	public void finishFight (bool playerWin) {
+		this.playerWin = playerWin;
 //		potionBag.setBagActive(false);
 
 		ENEMY_DEAD_ANIM_DONE = !playerWin;
@@ -147,13 +151,13 @@ public class FightScreen : MonoBehaviour {
 			enemy.destroyEnemy();
 			enemyDeadPlaying = true;
 		} else {
-			showFightResultScreen(false);
+			showFightResultScreen();
 		}
 		elementsHolder.setActive(false);
 		fightOver = true;
 	}
 
-	private void showFightResultScreen (bool playerWin) {
+	private void showFightResultScreen () {
 		enemyDeadPlaying = false;
 		resultScreen.showFightResultScreen(playerWin? enemy: null);
 	}
@@ -169,7 +173,7 @@ public class FightScreen : MonoBehaviour {
 		//		FightMessenger.clearMessages();
 		//		fightResultScreen.closeScreen();
 		gameObject.SetActive(false);
-		exploreScreen.endFight();
+		scanningScreen.endFight(playerWin);
 	}
 
 	public FightResultScreen getResultScreen () {

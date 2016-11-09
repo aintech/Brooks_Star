@@ -4,18 +4,19 @@ using System.Collections;
 public enum ItemType {
 	WEAPON, ENGINE, ARMOR, GENERATOR, RADAR, SHIELD, REPAIR_DROID, HARVESTER,
 	HAND_WEAPON, BODY_ARMOR,
-	GOODS
+	GOODS,
+	SUPPLY
 }
 
 public enum ItemKind {
-	EQUIPMENT, SHIP_EQUIPMENT, GOODS
+	EQUIPMENT, SHIP_EQUIPMENT, GOODS, SUPPLY
 }
 
 public static class ItemTypeDescriptor {
 
 	private static ItemType[] drops = new ItemType[] { ItemType.WEAPON, ItemType.WEAPON, ItemType.WEAPON, ItemType.ENGINE, ItemType.GENERATOR, ItemType.RADAR, ItemType.SHIELD, ItemType.REPAIR_DROID, ItemType.HARVESTER };
 
-	public static ItemKind getKind (this ItemType type) {
+	public static ItemKind kind (this ItemType type) {
 		switch (type) {
 			case ItemType.HAND_WEAPON:
 			case ItemType.BODY_ARMOR:
@@ -33,6 +34,9 @@ public static class ItemTypeDescriptor {
 
 			case ItemType.GOODS:
 				return ItemKind.GOODS;
+
+			case ItemType.SUPPLY:
+				return ItemKind.SUPPLY;
 				
 			default: Debug.Log("Unknown type: " + type); return ItemKind.GOODS;
 		}

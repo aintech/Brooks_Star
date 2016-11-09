@@ -79,6 +79,7 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 	private void startNewGame () {
 		statusScreen.getShipData().initializeRandomShip(HullType.CORVETTE);
 
+		inventory.fillWithRandomItems(50, "Player Item");
 		buyMarket.fillWithRandomItems(50, "Market Item");
 
 		sendToVars();

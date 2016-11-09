@@ -19,6 +19,7 @@ public static class ItemFactory {
 			case ItemType.HAND_WEAPON: return createHandWeaponData ();
 			case ItemType.BODY_ARMOR: return createBodyArmorData ();
 			case ItemType.GOODS: return createGoodsData (UnityEngine.Random.Range(1, 21));
+			case ItemType.SUPPLY: return createSupplyData ();
 			default: Debug.Log("Unknown type: " + type); return null;
 		}
 	}
@@ -48,9 +49,8 @@ public static class ItemFactory {
 			case ItemType.REPAIR_DROID: cost = Mathf.RoundToInt(data.level * ((RepairDroidData)data).type.cost()); break;
 			case ItemType.HARVESTER: cost = Mathf.RoundToInt(data.level * ((HarvesterData)data).type.cost()); break;
 			case ItemType.HAND_WEAPON: cost = Mathf.RoundToInt(data.level * ((HandWeaponData)data).type.cost()); break;
-			case ItemType.BODY_ARMOR:
-				BodyArmorData bad = (BodyArmorData)data;
-				return Mathf.RoundToInt(bad.type.cost() + (bad.armorClass * 10));
+			case ItemType.BODY_ARMOR: BodyArmorData bad = (BodyArmorData)data; return Mathf.RoundToInt(bad.type.cost() + (bad.armorClass * 10));
+			case ItemType.SUPPLY: cost = Mathf.RoundToInt(data.level * ((SupplyData)data).type.cost()); break;
 			default: Debug.Log("Unknown type: " + data.itemType); break;
 		}
 		return Mathf.RoundToInt (cost * qualityMultiplier (data.quality));
@@ -67,6 +67,38 @@ public static class ItemFactory {
 		}
 	}
 
+	public static SupplyData createSupplyData () {
+		SupplyType type = SupplyType.MEDKIT_SMALL;
+		switch(UnityEngine.Random.Range(0, Enum.GetNames(typeof(SupplyType)).Length)) {
+			case 0: type = SupplyType.GRENADE_PARALIZE; break;
+			case 1: type = SupplyType.GRENADE_SMOKE; break;
+			case 2: type = SupplyType.MEDKIT_SMALL; break;
+			case 3: type = SupplyType.MEDKIT_MEDIUM; break;
+			case 4: type = SupplyType.MEDKIT_LARGE; break;
+			case 5: type = SupplyType.MEDKIT_ULTRA; break;
+			case 6: type = SupplyType.INJECTION_SPEED; break;
+			case 7: type = SupplyType.INJECTION_ARMOR; break;
+			case 8: type = SupplyType.INJECTION_HIT_CHANCE; break;
+			default: Debug.Log("Unmapped value for supply"); break;
+		}
+		return createSupplyData (type);
+	}
+
+	public static SupplyData createSupplyData (SupplyType type) {
+		return createSupplyData(type, randQuality());
+	}
+
+	public static SupplyData createSupplyData (SupplyType type, ItemQuality quality) {
+		float level = randLevel();
+
+		float value = type.value() * level * qualityMultiplier(quality);
+
+		SupplyData data = new SupplyData(quality, level, type, value);
+		data.initCommons(calculateCost(data), 0);
+
+		return data;
+	}
+
 	public static GoodsData createGoodsData (int quantity) {
 		GoodsType type = GoodsType.JEWELRY;
 		switch (UnityEngine.Random.Range(0, Enum.GetNames(typeof(GoodsType)).Length)) {
@@ -77,10 +109,10 @@ public static class ItemFactory {
 			case 4: type = GoodsType.MEAL; break;
 			default: Debug.Log("Unmapped value for goods"); break;
 		}
-		return createGoodsData (type, quantity);
+		return createGoodsData (quantity, type);
 	}
 
-	public static GoodsData createGoodsData (GoodsType type, int quantity) {
+	public static GoodsData createGoodsData (int quantity, GoodsType type) {
 		GoodsData data = new GoodsData(type, quantity);
 		data.initCommons(type.cost(), 0);
 

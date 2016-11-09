@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class PlayerData : MonoBehaviour {
 
-	public Sprite[] playerSprites;
+	public Sprite nude, underwear, armor;
 
 	private SpriteRenderer render;
 
@@ -81,6 +81,7 @@ public class PlayerData : MonoBehaviour {
 	}
 
 	public void updateArmorValue () {
+		updatePlayerImage();
 		armorValue.text = Player.armor == null? "0": Player.armor.armorClass.ToString();
 	}
 
@@ -108,5 +109,9 @@ public class PlayerData : MonoBehaviour {
 		}
 		Debug.Log("Unknown slot type: " + type);
 		return null;
+	}
+
+	public void updatePlayerImage () {
+		render.sprite = (bodyArmorSlot.item == null? (Vars.EROTIC? nude: underwear): armor);
 	}
 }

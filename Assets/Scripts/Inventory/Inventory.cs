@@ -155,6 +155,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 
 		if (cell.item != null) {
 			if (cell.item.type == ItemType.GOODS) {
+				При переносе объекта (типа брони) в ячейку с goods вылетает ошибка
 				if (((GoodsData)cell.item.itemData).type == ((GoodsData)item.itemData).type) {
 					cell.item.quantity += item.quantity;
 					containerScreen.updateChosenItemBorder(cell.item);
@@ -257,18 +258,21 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		clearInventory();
 		for (int i = 0; i < count; i++) {
 			ItemData data = null;
-			switch (Mathf.FloorToInt (Random.value * 15)) {
-				case 0: case 1: data = ItemFactory.createItemData(ItemType.HAND_WEAPON); break;
-				case 2: case 3: data = ItemFactory.createItemData(ItemType.BODY_ARMOR); break;
-				case 4: data = ItemFactory.createItemData(ItemType.WEAPON); break;
-				case 5: data = ItemFactory.createItemData(ItemType.ENGINE); break;
-				case 6: data = ItemFactory.createItemData(ItemType.ARMOR); break;
-				case 7: data = ItemFactory.createItemData(ItemType.GENERATOR); break;
-				case 8: data = ItemFactory.createItemData(ItemType.RADAR); break;
-				case 9: data = ItemFactory.createItemData(ItemType.SHIELD); break;
-				case 10: data = ItemFactory.createItemData(ItemType.REPAIR_DROID); break;
-				case 11: data = ItemFactory.createItemData (ItemType.HARVESTER); break;
+			switch (Mathf.FloorToInt (Random.value * 20)) {
+				case 0: data = ItemFactory.createItemData(ItemType.WEAPON); break;
+				case 1: data = ItemFactory.createItemData(ItemType.ENGINE); break;
+				case 2: data = ItemFactory.createItemData(ItemType.ARMOR); break;
+				case 3: data = ItemFactory.createItemData(ItemType.GENERATOR); break;
+				case 4: data = ItemFactory.createItemData(ItemType.RADAR); break;
+				case 5: data = ItemFactory.createItemData(ItemType.SHIELD); break;
+				case 6: data = ItemFactory.createItemData(ItemType.REPAIR_DROID); break;
+				case 7: data = ItemFactory.createItemData (ItemType.HARVESTER); break;
+
+				case 8: case 9: data = ItemFactory.createItemData(ItemType.HAND_WEAPON); break;
+				case 10: case 11: data = ItemFactory.createItemData(ItemType.BODY_ARMOR); break;
+					
 				case 12: case 13: case 14: data = ItemFactory.createItemData(ItemType.GOODS); break;
+				case 15: case 16: case 17: case 18: case 19: data = ItemFactory.createItemData(ItemType.SUPPLY); break;
 			}
 			Item item = Instantiate<Transform>(ItemFactory.itemPrefab).GetComponent<Item>().init(data);
 			item.transform.SetParent(itemsContainer);
@@ -319,6 +323,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 	}
 
 	public void sortInventory () {
+		List<Item> supplies = new List<Item>();
 		List<Item> goods = new List<Item>();
 		List<Item> handWeapons = new List<Item>();
 		List<Item> bodyArmors = new List<Item>();
@@ -333,6 +338,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 
 		foreach(KeyValuePair<int, Item> pair in items) {
 			switch (pair.Value.type) {
+				case ItemType.SUPPLY: supplies.Add(pair.Value); break;
 				case ItemType.GOODS: goods.Add(pair.Value); break;
 				case ItemType.HAND_WEAPON: handWeapons.Add(pair.Value); break;
 				case ItemType.BODY_ARMOR: bodyArmors.Add(pair.Value); break;
@@ -350,6 +356,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 
 		items.Clear();
 
+		supplies = sortList(supplies, ItemType.SUPPLY);
 		goods = sortList(goods, ItemType.GOODS);
 		handWeapons = sortList(handWeapons, ItemType.HAND_WEAPON);
 		bodyArmors = sortList(bodyArmors, ItemType.BODY_ARMOR);
@@ -363,6 +370,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		harvesters = sortList(harvesters, ItemType.HARVESTER);
 
 		int counter = 0;
+		counter = addSortToItems(supplies, counter);
 		counter = addSortToItems(goods, counter);
 		counter = addSortToItems(handWeapons, counter);
 		counter = addSortToItems(bodyArmors, counter);
@@ -424,6 +432,8 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 				weight = 1000000 - data.harvestTime;
 			} else if (type == ItemType.GOODS) {
 				weight = item.itemData.cost;
+			} else if (type == ItemType.SUPPLY) {
+				weight = item.itemData.sortWeight + item.cost;
 			} else {
 				Debug.Log("Unknown item: " + item.name);
 			}

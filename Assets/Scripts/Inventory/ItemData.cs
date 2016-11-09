@@ -16,6 +16,8 @@ public abstract class ItemData {
 
 	public ItemKind kind { get; protected set; }
 
+	public int sortWeight { get; protected set; }
+
 	protected ItemData (ItemQuality quality, float level) {
 		this.quality = quality;
 		this.level = level;
@@ -24,6 +26,22 @@ public abstract class ItemData {
 	public void initCommons (int cost, int energyNeeded) {
 		this.cost = cost;
 		this.energyNeeded = energyNeeded;
+		kind = itemType.kind();
+	}
+}
+
+public class SupplyData : ItemData {
+	public SupplyType type { get; private set; }
+	public float value { get; private set; }
+	public SupplyData (ItemQuality quality, float level, SupplyType type, float value) : base (quality, level) {
+		this.type = type;
+		this.value = value;
+
+		name = type.name();
+		description = type.description();
+		volume = type.volume();
+		sortWeight = type.sortWeight();
+		itemType = ItemType.SUPPLY;
 	}
 }
 
@@ -32,11 +50,11 @@ public class GoodsData : ItemData {
 	public GoodsData (GoodsType type, int quantity) : base(ItemQuality.COMMON, 1) {
 		this.type = type;
 		this.quantity = quantity;
-		this.name = type.name();
-		this.description = type.description();
-		this.volume = type.volume();
-		this.itemType = ItemType.GOODS;
-		this.kind = ItemKind.GOODS;
+
+		name = type.name();
+		description = type.description();
+		volume = type.volume();
+		itemType = ItemType.GOODS;
 	}
 }
 
@@ -50,12 +68,10 @@ public class HandWeaponData : ItemData {
 		this.minDamage = minDamage;
 		this.maxDamage = maxDamage;
 
-		this.name = type.name();
-		this.description = type.description();
-		this.volume = type.volume();
-
-		this.itemType = ItemType.HAND_WEAPON;
-		this.kind = ItemKind.EQUIPMENT;
+		name = type.name();
+		description = type.description();
+		volume = type.volume();
+		itemType = ItemType.HAND_WEAPON;
 	}
 }
 
@@ -67,12 +83,10 @@ public class BodyArmorData : ItemData {
 		this.type = type;
 		this.armorClass = armorClass;
 
-		this.name = type.name();
-		this.description = type.description();
-		this.volume = type.volume();
-
-		this.itemType = ItemType.BODY_ARMOR;
-		this.kind = ItemKind.EQUIPMENT;
+		name = type.name();
+		description = type.description();
+		volume = type.volume();
+		itemType = ItemType.BODY_ARMOR;
 	}
 }
 
@@ -88,12 +102,10 @@ public class WeaponData : ItemData {
 		this.maxDamage = maxDamage;
 		this.reloadTime = reloadTime;
 
-		this.name = type.name();
-		this.description = type.description();
-		this.volume = type.volume();
-
-		this.itemType = ItemType.WEAPON;
-		this.kind = ItemKind.SHIP_EQUIPMENT;
+		name = type.name();
+		description = type.description();
+		volume = type.volume();
+		itemType = ItemType.WEAPON;
 	}
 }
 
@@ -105,12 +117,10 @@ public class EngineData : ItemData {
 		this.type = type;
 		this.power = power;
 
-		this.name = type.name();
-		this.description = type.description();
-		this.volume = type.volume();
-
-		this.itemType = ItemType.ENGINE;
-		this.kind = ItemKind.SHIP_EQUIPMENT;
+		name = type.name();
+		description = type.description();
+		volume = type.volume();
+		itemType = ItemType.ENGINE;
 	}
 }
 
@@ -122,12 +132,10 @@ public class ArmorData : ItemData {
 		this.type = type;
 		this.armorClass = armorClass;
 
-		this.name = type.name();
-		this.description = type.description();
-		this.volume = type.volume();
-
-		this.itemType = ItemType.ARMOR;
-		this.kind = ItemKind.SHIP_EQUIPMENT;
+		name = type.name();
+		description = type.description();
+		volume = type.volume();
+		itemType = ItemType.ARMOR;
 	}
 }
 
@@ -139,12 +147,10 @@ public class GeneratorData : ItemData {
 		this.type = type;
 		this.maxEnergy = maxEnergy;
 
-		this.name = type.name();
-		this.description = type.description();
-		this.volume = type.volume();
-
-		this.itemType = ItemType.GENERATOR;
-		this.kind = ItemKind.SHIP_EQUIPMENT;
+		name = type.name();
+		description = type.description();
+		volume = type.volume();
+		itemType = ItemType.GENERATOR;
 	}
 }
 
@@ -156,12 +162,10 @@ public class RadarData : ItemData {
 		this.type = type;
 		this.range = range;
 
-		this.name = type.name();
-		this.description = type.description();
-		this.volume = type.volume();
-
-		this.itemType = ItemType.RADAR;
-		this.kind = ItemKind.SHIP_EQUIPMENT;
+		name = type.name();
+		description = type.description();
+		volume = type.volume();
+		itemType = ItemType.RADAR;
 	}
 }
 
@@ -175,12 +179,10 @@ public class ShieldData : ItemData {
 		this.shieldLevel = shieldLevel;
 		this.rechargeSpeed = rechargeSpeed;
 
-		this.name = type.name();
-		this.description = type.description();
-		this.volume = type.volume();
-
-		this.itemType = ItemType.SHIELD;
-		this.kind = ItemKind.SHIP_EQUIPMENT;
+		name = type.name();
+		description = type.description();
+		volume = type.volume();
+		itemType = ItemType.SHIELD;
 	}
 }
 
@@ -192,12 +194,10 @@ public class RepairDroidData : ItemData {
 		this.type = type;
 		this.repairSpeed = repairSpeed;
 
-		this.name = type.name();
-		this.description = type.description();
-		this.volume = type.volume();
-
-		this.itemType = ItemType.REPAIR_DROID;
-		this.kind = ItemKind.SHIP_EQUIPMENT;
+		name = type.name();
+		description = type.description();
+		volume = type.volume();
+		itemType = ItemType.REPAIR_DROID;
 	}
 }
 
@@ -209,12 +209,10 @@ public class HarvesterData : ItemData {
 		this.type = type;
 		this.harvestTime = harvestTime;
 
-		this.name = type.name();
-		this.description = type.description();
-		this.volume = type.volume();
-
-		this.itemType = ItemType.HARVESTER;
-		this.kind = ItemKind.SHIP_EQUIPMENT;
+		name = type.name();
+		description = type.description();
+		volume = type.volume();
+		itemType = ItemType.HARVESTER;
 	}
 }
 
@@ -222,6 +220,10 @@ public class DataCopier {
 	public static ItemData copy (ItemData source) {
 		ItemData copy = null;
 		switch (source.itemType) {
+			case ItemType.SUPPLY:
+				SupplyData sud = (SupplyData)source;
+				copy = new SupplyData(sud.quality, sud.level, sud.type, sud.value);
+				break;
 			case ItemType.GOODS:
 				GoodsData gda = (GoodsData)source;
 				copy = new GoodsData(gda.type, gda.quantity);

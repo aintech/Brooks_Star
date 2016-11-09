@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 1e54c3ae9abb4be42a9a775f202bdddb
-timeCreated: 1476446573
+timeCreated: 1478704847
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -55,6 +55,15 @@ TextureImporter:
     21300096: Goods_Booze
     21300098: Goods_Electronics
     21300100: Goods_Meal
+    21300102: Supply_Medkit_Small
+    21300104: Supply_Medkit_Medium
+    21300106: Supply_Medkit_Large
+    21300108: Supply_Medkit_Ultra
+    21300110: Supply_Injection_Speed
+    21300112: Supply_Injection_Armor
+    21300114: Supply_Injection_HitChance
+    21300116: Supply_Grenade_Smoke
+    21300118: Supply_Grenade_Paralize
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -759,6 +768,123 @@ TextureImporter:
         serializedVersion: 2
         x: 256
         y: 320
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Supply_Medkit_Small
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 256
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Supply_Medkit_Medium
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 256
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Supply_Medkit_Large
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 256
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Supply_Medkit_Ultra
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 256
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Supply_Injection_Speed
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 192
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Supply_Injection_Armor
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 192
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Supply_Injection_HitChance
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 192
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Supply_Grenade_Smoke
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 128
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Supply_Grenade_Paralize
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 128
         width: 64
         height: 64
       alignment: 0

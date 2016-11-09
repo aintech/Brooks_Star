@@ -54,7 +54,6 @@ public class Player {
 			return 0;
 		} else {
 			health -= (damageAmount - (armor == null? 0: armor.armorClass));
-//			UserInterface.updateHealth();
 			return damageAmount - (armor == null? 0: armor.armorClass);
 		}
 	}
@@ -63,18 +62,15 @@ public class Player {
 		if (healAmount + health > maxHealth) {
 			int heal = maxHealth - health;
 			setHealthToMax();
-//			UserInterface.updateHealth();
 			return heal;
 		} else {
 			health += healAmount;
-//			UserInterface.updateHealth();
 			return healAmount;
 		}
 	}
 
 	public static void setHealthToMax () {
 		health = maxHealth;
-//		UserInterface.updateHealth();
 	}
 
 	public static void updatePerk (PerkType type, float value) {

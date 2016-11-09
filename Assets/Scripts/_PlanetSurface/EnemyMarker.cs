@@ -13,8 +13,6 @@ public class EnemyMarker : MonoBehaviour {
 
 	public bool isFound { get; private set; }
 
-	private const float fieldRadius = 4.5f;
-
 	private float waitTime, minWaitTime = 10, maxWaitTime = 20;
 
 	private Vector3 targetPosition = Vector3.zero;
@@ -25,15 +23,15 @@ public class EnemyMarker : MonoBehaviour {
 
 	private bool inMotion;
 
-	public EnemyMarker init (EnemyType enemyType, ScanningScreen scanningScreen) {
+	public EnemyMarker init (EnemyType enemyType, Transform holder) {
 		this.enemyType = enemyType;
 		trans = transform;
 		visual = trans.Find("Visual");
 		portrait = visual.Find("Portrait").GetComponent<SpriteRenderer>();
 		portrait.sprite = ImagesProvider.getMarkerSprite(enemyType);
-		trans.SetParent(scanningScreen.transform);
+		trans.SetParent(holder);
 		initPos();
-		hideMarker();
+		visual.gameObject.SetActive(false);
 
 		return this;
 	}
@@ -62,7 +60,7 @@ public class EnemyMarker : MonoBehaviour {
 	}
 
 	private void findNewTargetPosition () {
-		dist = Random.value * fieldRadius;
+		dist = Random.value * ScanningScreen.FIELD_RADIUS;
 		angle = Random.value * 360f;
 		targetPosition.x = dist * Mathf.Cos(angle);
 		targetPosition.y = dist * Mathf.Sin(angle);
@@ -73,7 +71,7 @@ public class EnemyMarker : MonoBehaviour {
 		visual.gameObject.SetActive(true);
 	}
 
-	private void hideMarker () {
-		visual.gameObject.SetActive(false);
+	public void closeMarker () {
+		gameObject.SetActive(false);
 	}
 }

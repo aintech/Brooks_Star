@@ -232,7 +232,7 @@ public class StatusScreen : InventoryContainedScreen {
 			InventoryCell cell = Utils.hit.transform.GetComponent<InventoryCell>();
 			Inventory targetInv = cell.inventory;
 			if (draggedItem.cell == null) {
-				switch (draggedItem.type.getKind()) {
+				switch (draggedItem.kind) {
 					case ItemKind.SHIP_EQUIPMENT: shipData.updateHullInfo(); break;
 					case ItemKind.EQUIPMENT: playerData.updatePlayerInfo(); break;
 				}
@@ -292,7 +292,7 @@ public class StatusScreen : InventoryContainedScreen {
 			if (inventory.gameObject.activeInHierarchy) {
 				inventory.addItemToCell (draggedItem, null);
 			}
-			switch (draggedItem.type.getKind()) {
+			switch (draggedItem.kind) {
 				case ItemKind.SHIP_EQUIPMENT: shipData.updateHullInfo(); break;
 				case ItemKind.EQUIPMENT: playerData.updatePlayerInfo(); break;
 			}
@@ -351,23 +351,23 @@ public class StatusScreen : InventoryContainedScreen {
 
 	private void highlightSlot (bool hightlight, ItemType itemType) {
 		if (!hightlight) {
-			if (itemType.getKind() == ItemKind.SHIP_EQUIPMENT) {
+			if (itemType.kind() == ItemKind.SHIP_EQUIPMENT) {
 				foreach (Slot slot in shipData.getSlots()) { slot.setActive(false); }
-			} else if (itemType.getKind() == ItemKind.EQUIPMENT) {
+			} else if (itemType.kind() == ItemKind.EQUIPMENT) {
 				foreach (Slot slot in playerData.getSlots()) { slot.setActive(false); }
 			} else {
 				foreach (Slot slot in shipData.getSlots()) { slot.setActive(false); }
 				foreach (Slot slot in playerData.getSlots()) { slot.setActive(false); }
 			}
 		} else {
-			if (itemType.getKind() == ItemKind.SHIP_EQUIPMENT) {
+			if (itemType.kind() == ItemKind.SHIP_EQUIPMENT) {
 				HullSlot.Type slotType = getItemToHullSlotType (itemType);
 				foreach (HullSlot slot in shipData.getSlots()) {
 					if (slot.slotType == slotType) {
 						slot.setActive (true);
 					}
 				}
-			} else if (itemType.getKind() == ItemKind.EQUIPMENT) {
+			} else if (itemType.kind() == ItemKind.EQUIPMENT) {
 				EquipmentSlot.Type slotType = getItemToEquipmentSlotType (itemType);
 				foreach (EquipmentSlot slot in playerData.getSlots()) {
 					if (slot.slotType == slotType) {

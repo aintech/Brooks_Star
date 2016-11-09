@@ -3,10 +3,15 @@ using System.Collections;
 
 public class ImagesProvider : MonoBehaviour {
 
-	public Sprite[] weaponSprites, engineSprites, armorSprites, generatorSprites, radarSprites, shieldSprites, repairDroidSprites, harvesterSprites, handWeaponSprites, bodyArmorSprites, goodsSprites,
-					hullSprites, enemyMarkerSprites;
+	public Sprite[] weaponSprites, engineSprites, armorSprites, generatorSprites, radarSprites, shieldSprites, repairDroidSprites, harvesterSprites,
+					handWeaponSprites, bodyArmorSprites, goodsSprites, supplySprites,
+					hullSprites,
+					enemyMarkerSprites;
 
-	public static Sprite[] weapons, engines, armors, generators, radars, shields, repairDroids, harvesters, handWeapons, bodyArmors, goods, hulls, enemyMarkers;
+	public static Sprite[] weapons, engines, armors, generators, radars, shields, repairDroids, harvesters,
+						   handWeapons, bodyArmors, goods, supplies,
+						   hulls,
+						   enemyMarkers;
 
 	public void init () {
 		weapons = weaponSprites;
@@ -20,8 +25,24 @@ public class ImagesProvider : MonoBehaviour {
 		handWeapons = handWeaponSprites;
 		bodyArmors = bodyArmorSprites;
 		goods = goodsSprites;
+		supplies = supplySprites;
 		hulls = hullSprites;
 		enemyMarkers = enemyMarkerSprites;
+	}
+
+	public static Sprite getSupplySprite (SupplyType type) {
+		switch (type) {
+			case SupplyType.MEDKIT_SMALL: return supplies[0];
+			case SupplyType.MEDKIT_MEDIUM: return supplies[1];
+			case SupplyType.MEDKIT_LARGE: return supplies[2];
+			case SupplyType.MEDKIT_ULTRA: return supplies[3];
+			case SupplyType.GRENADE_SMOKE: return supplies[4];
+			case SupplyType.GRENADE_PARALIZE: return supplies[5];
+			case SupplyType.INJECTION_SPEED: return supplies[6];
+			case SupplyType.INJECTION_ARMOR: return supplies[7];
+			case SupplyType.INJECTION_HIT_CHANCE: return supplies[8];
+			default: Debug.Log("Unknown supply type: " + type); return null;
+		}
 	}
 
 	public static Sprite getMarkerSprite (EnemyType type) {
