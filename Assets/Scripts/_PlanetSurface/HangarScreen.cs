@@ -127,7 +127,7 @@ public class HangarScreen : MonoBehaviour, ButtonHolder {
 	private void updateHullSlots () {
 		shipData.arrangeItemsToSlots();
 		bool addedToInv = false;//, addedToStorage = false;
-		foreach (HullSlot slot in shipData.getSlots()) {
+		foreach (HullSlot slot in shipData.slots) {
 			if (!slot.isSlotAvailable() && slot.item != null) {
 //				if (inventory.getFreeVolume() >= slot.item.volume()) {
 					inventory.addItemToCell(slot.takeItem(), null);

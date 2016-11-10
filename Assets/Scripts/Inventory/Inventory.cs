@@ -153,9 +153,8 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		Item prevItem = null;
 		bool stackableItem = false;
 
-		if (cell.item != null) {
+		if (cell.item != null && item.type == ItemType.GOODS) {
 			if (cell.item.type == ItemType.GOODS) {
-				При переносе объекта (типа брони) в ячейку с goods вылетает ошибка
 				if (((GoodsData)cell.item.itemData).type == ((GoodsData)item.itemData).type) {
 					cell.item.quantity += item.quantity;
 					containerScreen.updateChosenItemBorder(cell.item);

@@ -32,10 +32,12 @@ public abstract class ItemData {
 
 public class SupplyData : ItemData {
 	public SupplyType type { get; private set; }
-	public float value { get; private set; }
-	public SupplyData (ItemQuality quality, float level, SupplyType type, float value) : base (quality, level) {
+	public int value { get; private set; }
+	public int duration { get; private set; }
+	public SupplyData (ItemQuality quality, float level, SupplyType type, int value, int duration) : base (quality, level) {
 		this.type = type;
 		this.value = value;
+		this.duration = duration;
 
 		name = type.name();
 		description = type.description();
@@ -222,7 +224,7 @@ public class DataCopier {
 		switch (source.itemType) {
 			case ItemType.SUPPLY:
 				SupplyData sud = (SupplyData)source;
-				copy = new SupplyData(sud.quality, sud.level, sud.type, sud.value);
+				copy = new SupplyData(sud.quality, sud.level, sud.type, sud.value, sud.duration);
 				break;
 			case ItemType.GOODS:
 				GoodsData gda = (GoodsData)source;

@@ -91,9 +91,12 @@ public static class ItemFactory {
 	public static SupplyData createSupplyData (SupplyType type, ItemQuality quality) {
 		float level = randLevel();
 
-		float value = type.value() * level * qualityMultiplier(quality);
+		int value = Mathf.RoundToInt(type.value() * level * qualityMultiplier(quality));
 
-		SupplyData data = new SupplyData(quality, level, type, value);
+		int duration = quality == ItemQuality.UNIQUE? 5: quality == ItemQuality.RARE? 4: quality == ItemQuality.SUPERIOR? 3: quality == ItemQuality.GOOD? 2: 1;
+		if (type == SupplyType.GRENADE_SMOKE) { duration *= 2; }
+
+		SupplyData data = new SupplyData(quality, level, type, value, duration);
 		data.initCommons(calculateCost(data), 0);
 
 		return data;

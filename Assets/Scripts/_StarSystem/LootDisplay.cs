@@ -75,7 +75,7 @@ public class LootDisplay : MonoBehaviour, ButtonHolder {
 		UserInterface.showInterface = false;
 		pos.Set(cameraTrans.position.x, cameraTrans.position.y, transform.position.z);
 		transform.position = pos;
-		itemDescriptor.setEnabled(null, ItemDescriptor.Type.LOOT, null);
+		itemDescriptor.setEnabled(ItemDescriptor.Type.LOOT, null);
 		itemDescriptor.setSpaceOffset(transform.localPosition);
 		popup.adjustPosition(transform.position);
 		gameObject.SetActive(true);
@@ -130,7 +130,7 @@ public class LootDisplay : MonoBehaviour, ButtonHolder {
 			}
 			checkAllTaken();
 		}
-		itemDescriptor.setEnabled(null, ItemDescriptor.Type.LOOT, null);
+		itemDescriptor.setEnabled(ItemDescriptor.Type.LOOT, null);
 	}
 
 	private void checkAllTaken () {

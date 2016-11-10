@@ -28,6 +28,11 @@ public static class EnemyDescriptor {
 	}
 
 	public static int armor (this EnemyType type) {
-		return 0;
+		switch (type) {
+			case EnemyType.BEE: return 5;
+			case EnemyType.DRUID: return 0;
+			case EnemyType.GUNNER: return 10;
+			default: Debug.Log("Unknown enemy type: " + type); return 0;
+		}
 	}
 }

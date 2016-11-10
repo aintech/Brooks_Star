@@ -22,13 +22,14 @@ public class FightProcessor : MonoBehaviour {
 
 	private FightScreen fightScreen;
 
-//	private PotionBag potionBag;
+	private List<ItemData> playerEffects = new List<ItemData>();
+
+	private List<ItemData> enemyEffects = new List<ItemData>();
 
 	public void init (FightScreen fightScreen, ElementsHolder elementsHolder, Enemy enemy) {
 		this.fightScreen = fightScreen;
 		this.elementsHolder = elementsHolder;
 		this.enemy = enemy;
-//		this.potionBag = potionBag;
 	}
 
 	public void startFight () {
@@ -37,12 +38,6 @@ public class FightProcessor : MonoBehaviour {
 
 	void Update () {
 		switch (machineState) {
-//			case StateMachine.FIGHT_START:
-//				if(!animatingFightStart()) { switchMachineState(StateMachine.ICONS_DROP); }
-//				break;
-//			case StateMachine.ICONS_DROP:
-//				if (elementsHolder.isAllIconsOnCells()) { switchMachineState(StateMachine.PLAYER_TURN); }
-//				break;
 			case StateMachine.NOT_IN_FIGHT: break;
 			case StateMachine.PLAYER_TURN:
 				if (!playerChecked) {
@@ -118,9 +113,9 @@ public class FightProcessor : MonoBehaviour {
 
 	public void addToTurnResult (ElementType type, int count, Vector2 pos) {
 		foreach (TurnResult result in turnResults) {
-			if (result.getElementType() == type) {
+			if (result.elementType == type) {
 				result.addCount(count);
-				result.setPosition(getMiddlePoint(result.getPosition(), pos));
+				result.position = getMiddlePoint(result.position, pos);
 				return;
 			}
 		}
@@ -138,10 +133,10 @@ public class FightProcessor : MonoBehaviour {
 
 		foreach (TurnResult result in turnResults) {
 			int damage = Player.randomDamage;
-			if (result.getCount() > 3) {
-				damage += Mathf.RoundToInt((float)Player.randomDamage * .5f) *  (result.getCount() - 3);
+			if (result.count > 3) {
+				damage += Mathf.RoundToInt((float)Player.randomDamage * .5f) *  (result.count - 3);
 			}
-			fightScreen.getIconEffectPlayer().addEffect(result.getElementType(), damage, result.getPosition(), result.getCount());
+			fightScreen.getIconEffectPlayer().addEffect(result.elementType, damage, result.position, result.count);
 		}
 
 		turnResults.Clear();
@@ -188,6 +183,11 @@ public class FightProcessor : MonoBehaviour {
 		fightScreen.finishFight(playerWin);
 	}
 
+	public void addEffect (SupplyData data) {
+		
+		skipTurn();
+	}
+
 	private enum StateMachine {
 		NOT_IN_FIGHT,
 		ICONS_ANIMATION, ICONS_POSITIONING,
@@ -197,34 +197,18 @@ public class FightProcessor : MonoBehaviour {
 	}
 
 	public class TurnResult {
-		private ElementType elementType = ElementType.FIRE;
-		private int count = 0;
-		private Vector2 pos;
+		public ElementType elementType {get; private set; }
+		public int count { get; private set; }
+		public Vector2 position;
 
-		public TurnResult (ElementType elementType, int count, Vector2 pos) {
+		public TurnResult (ElementType elementType, int count, Vector2 position) {
 			this.elementType = elementType;
 			this.count = count;
-			this.pos = pos;
+			this.position = position;
 		}
 
 		public void addCount (int value) {
 			this.count += value;
-		}
-
-		public int getCount () {
-			return count;
-		}
-
-		public ElementType getElementType () {
-			return elementType;
-		}
-
-		public Vector2 getPosition () {
-			return pos;
-		}
-
-		public void setPosition (Vector2 pos) {
-			this.pos = pos;
 		}
 	}
 }

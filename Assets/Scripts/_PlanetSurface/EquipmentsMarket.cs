@@ -146,7 +146,7 @@ public class EquipmentsMarket : InventoryContainedScreen {
 		bgRender.sprite = buyBG;
 		innerInit(buyMarket, "default");
 		actionMsg.text = "<color=orange>Покупка</color> - правая кнопка мыши.";
-		itemDescriptor.setEnabled(buyMarket, ItemDescriptor.Type.MARKET_BUY, this);
+		itemDescriptor.setEnabled(ItemDescriptor.Type.MARKET_BUY, this);
 		buyBtn.setActive(false);
 		sellBtn.setActive(true);
 		buyMarket.refreshInventory();
@@ -158,7 +158,7 @@ public class EquipmentsMarket : InventoryContainedScreen {
 		bgRender.sprite = sellBG;
 		innerInit(sellMarket, "default");
 		actionMsg.text = "<color=orange>Продажа</color> - правая кнопка мыши.";
-		itemDescriptor.setEnabled(sellMarket, ItemDescriptor.Type.MARKET_SELL, this);
+		itemDescriptor.setEnabled(ItemDescriptor.Type.MARKET_SELL, this);
 		buyBtn.setActive(true);
 		sellBtn.setActive(false);
 		sellMarket.refreshInventory();

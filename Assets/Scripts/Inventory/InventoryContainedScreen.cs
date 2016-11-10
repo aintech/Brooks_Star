@@ -15,6 +15,8 @@ public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 
 	private TextMesh cashValue;
 
+	private int dragOrder = 5;
+
 	protected void innerInit(Inventory inventory, string layerName) {
 		this.inventory = inventory;
 		chosenItemBorder = transform.Find ("Chosen Item Border");
@@ -29,26 +31,19 @@ public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 		if (inventory.inventoryType == Inventory.InventoryType.MARKET) { return; }
 		if (Input.GetMouseButtonDown(0) && Utils.hit != null) {
 			if (Utils.hit.name.Equals("Cell")) {
-				Item item = Utils.hit.transform.GetComponent<InventoryCell>().item;
+				Item item = Utils.hit.GetComponent<InventoryCell>().item;
 				if (item != null) {
-					draggedItem = Utils.hit.transform.GetComponent<InventoryCell>().takeItem();
-					draggedItem.GetComponent<Renderer>().sortingOrder = 4;
+					draggedItem = Utils.hit.GetComponent<InventoryCell>().takeItem();
+					draggedItem.changeSortOrder(dragOrder);
 					choseItem(item);
 					chosenItemBorder.transform.position = item.transform.position;
 					chosenItemBorder.gameObject.SetActive(true);
 				}
-			} else if (Utils.hit.name.StartsWith("HullSlot")) {
-				Item item = Utils.hit.transform.GetComponent<HullSlot>().item;
-				if (item != null) {
-					chooseDraggedItemFromSlot(Utils.hit.transform.GetComponent<HullSlot>());
-					chosenItemBorder.transform.position = item.transform.position;
-					choseItem(item);
-					chosenItemBorder.gameObject.SetActive(true);
-				}
-			} else if (Utils.hit.name.StartsWith("EquipmentSlot")) {
-				Item item = Utils.hit.transform.GetComponent<EquipmentSlot>().item;
-				if (item != null) {
-					chooseDraggedItemFromSlot(Utils.hit.transform.GetComponent<EquipmentSlot>());
+			} else if (Utils.hit.GetComponent<Slot>() != null) {
+				Slot slot = Utils.hit.GetComponent<Slot>();
+				Item item = slot.item;
+				if (slot.item != null) {
+					chooseDraggedItemFromSlot(slot);
 					chosenItemBorder.transform.position = item.transform.position;
 					choseItem(item);
 					chosenItemBorder.gameObject.SetActive(true);
@@ -71,7 +66,7 @@ public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 	
 	virtual protected void chooseDraggedItemFromSlot (Slot slot) {
 		draggedItem = slot.takeItem();
-		draggedItem.GetComponent<Renderer>().sortingOrder = 4;
+		draggedItem.changeSortOrder(dragOrder);
 	}
 
 	virtual protected void choseItem (Item item) {
@@ -81,7 +76,7 @@ public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 	
 	private void dropItem () {
 		checkItemDrop ();
-		draggedItem.changeSortOrder(4);
+		draggedItem.changeSortOrder(dragOrder - 1);
 		if(chosenItem != null) chosenItemBorder.position = chosenItem.transform.position;
 		draggedItem = null;
 		afterItemDrop ();

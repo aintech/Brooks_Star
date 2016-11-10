@@ -60,10 +60,10 @@ public class EnemyMarker : MonoBehaviour {
 	}
 
 	private void findNewTargetPosition () {
-		dist = Random.value * ScanningScreen.FIELD_RADIUS;
-		angle = Random.value * 360f;
-		targetPosition.x = dist * Mathf.Cos(angle);
-		targetPosition.y = dist * Mathf.Sin(angle);
+//		dist = Random.value * ScanningScreen.FIELD_RADIUS;
+//		angle = Random.value * 360f;
+//		targetPosition.x = dist * Mathf.Cos(angle);
+//		targetPosition.y = dist * Mathf.Sin(angle);
 	}
 
 	public void revealMarker () {

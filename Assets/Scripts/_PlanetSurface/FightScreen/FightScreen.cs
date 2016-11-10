@@ -32,8 +32,6 @@ public class FightScreen : MonoBehaviour {
 
 	private Vector2 deadStoneInitPos = new Vector2(0, 2f);
 
-//	private PotionBag potionBag;
-
 	private FightProcessor fightProcessor;
 
 	private ScanningScreen scanningScreen;
@@ -42,8 +40,17 @@ public class FightScreen : MonoBehaviour {
 
 	private bool playerWin;
 
-	public FightScreen init (ScanningScreen scanningScreen) {
+	private PlayerData playerData;
+
+	private List<SupplySlot> supplySlots = new List<SupplySlot>();
+
+	private ItemDescriptor itemDescriptor;
+
+	public FightScreen init (ScanningScreen scanningScreen, PlayerData playerData, ItemDescriptor itemDescriptor) {
 		this.scanningScreen = scanningScreen;
+		this.playerData = playerData;
+		this.itemDescriptor = itemDescriptor;
+		itemDescriptor.setFightScreen(this);
 		elementsHolder = transform.Find("ElementsHolder").GetComponent<ElementsHolder>();
 		iconsHolderRender = elementsHolder.GetComponent<SpriteRenderer>();
 		fightEffectPlayer = transform.Find("FightEffectPlayer").GetComponent<FightEffectPlayer>().init();
@@ -55,10 +62,8 @@ public class FightScreen : MonoBehaviour {
 		fightProcessor = GetComponent<FightProcessor>();
 		deadStone = enemyDeadAnimator.transform.Find("DeadStone");
 		enemyPos = enemy.transform.localPosition;
-//		potionBag = Vars.gameplay.getPotionBag();
 		elementsHolder.init();
 		enemy.init();
-//		resultScreen.init(this, potionBag);
 		fightInterface.init();
 		elementEffectPlayer.init(this, enemy);
 		fightProcessor.init(this, elementsHolder, enemy);
@@ -68,14 +73,27 @@ public class FightScreen : MonoBehaviour {
 		enemyDeadAnimator.gameObject.SetActive(false);
 		gameObject.SetActive(false);
 
+		Transform supplyHolder = transform.Find("Supply Holder");
+		SupplySlot slot;
+		for (int i = 0; i < supplyHolder.childCount; i++) {
+			slot = supplyHolder.GetChild(i).GetComponent<SupplySlot>();
+			slot.init();
+			supplySlots.Add(slot);
+		}
+
 		return this;
 	}
 
 	public void startFight (EnemyType type) {
+		foreach (SupplySlot slot in playerData.supplySlots) {
+			if (slot.item != null) {
+				getSlot(slot.index).setItem(slot.takeItem());
+			}
+		}
+		itemDescriptor.setEnabled(ItemDescriptor.Type.FIGHT, null);
 		playerWin = false;
 		Player.updateMinMaxDamage();
 		enemy.initEnemy(type);
-//		giveSwordToHero();
 		holderColor = new Color(1, 1, 1, 0);
 		iconsHolderRender.color = holderColor;
 		elementsHolder.initializeElements();
@@ -86,19 +104,17 @@ public class FightScreen : MonoBehaviour {
 
 		deadStone.transform.localPosition = deadStoneInitPos;
 		enemyDeadAnimator.gameObject.SetActive(false);
-//		potionBag.setOnScreen(ScreenBagType.FIGHT);
 		gameObject.SetActive(true);
 		fightStarted = startAnimDone = fightOver = false;
 	}
 
-//	private void giveSwordToHero () {
-//		if (Vars.gameplay.getEquipmentScreen().getHolder(ItemType.WEAPON).getItem() == null) {
-//			Vars.gameplay.getEquipmentScreen().getHolder(ItemType.WEAPON).placeItem(ItemFactory.createRandomItem(ItemType.WEAPON));
-//		}
-//		if (Vars.gameplay.getEquipmentScreen().getHolder(ItemType.ARMOR).getItem() == null) {
-//			Vars.gameplay.getEquipmentScreen().getHolder(ItemType.ARMOR).placeItem(ItemFactory.createRandomItem(ItemType.ARMOR));
-//		}
-//	}
+	private SupplySlot getSlot (int index) {
+		foreach (SupplySlot slot in supplySlots) {
+			if (slot.index == index) { return slot; }
+		}
+		Debug.Log("Unknown slot index: " + index);
+		return null;
+	}
 
 	void Update () {
 		if (!fightStarted) {
@@ -141,8 +157,6 @@ public class FightScreen : MonoBehaviour {
 
 	public void finishFight (bool playerWin) {
 		this.playerWin = playerWin;
-//		potionBag.setBagActive(false);
-
 		ENEMY_DEAD_ANIM_DONE = !playerWin;
 
 		if (playerWin) {
@@ -167,12 +181,12 @@ public class FightScreen : MonoBehaviour {
 	}
 
 	public void closeFightScreen () {
-		//		Vars.player.clearAfterFight();
-		//		Vars.enemy.clearAfterFight();
-		//		enemyImage.clearImage();
-		//		FightMessenger.clearMessages();
-		//		fightResultScreen.closeScreen();
 		gameObject.SetActive(false);
+		foreach (SupplySlot slot in supplySlots) {
+			if (slot.item != null) {
+				playerData.getSupplySlot(slot.index).setItem(slot.takeItem());
+			}
+		}
 		scanningScreen.endFight(playerWin);
 	}
 
@@ -190,6 +204,13 @@ public class FightScreen : MonoBehaviour {
 
 	public FightEffectPlayer getFightEffectPlayer () {
 		return fightEffectPlayer;
+	}
+
+	public void useSupply (SupplySlot slot) {
+		if (slot.item != null) {
+			fightProcessor.addEffect((SupplyData)DataCopier.copy(slot.item.itemData));
+			slot.takeItem().destroy();
+		}
 	}
 
 //	void Update () {

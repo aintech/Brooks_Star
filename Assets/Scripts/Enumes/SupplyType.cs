@@ -35,8 +35,8 @@ public static class SupplyDescriotion {
 		return 10;
 	}
 
-	public static float value (this SupplyType type) {
-		return 1;
+	public static int value (this SupplyType type) {
+		return 100;
 	}
 
 	public static int sortWeight (this SupplyType type) {

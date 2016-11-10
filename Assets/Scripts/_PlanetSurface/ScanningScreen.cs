@@ -38,10 +38,10 @@ public class ScanningScreen : MonoBehaviour, ButtonHolder {
 
 	private FightScreen fightScreen;
 
-	public ScanningScreen init (ExploreScreen exploreScreen) {
+	public ScanningScreen init (ExploreScreen exploreScreen, PlayerData playerData, ItemDescriptor itemDescriptor) {
 		this.exploreScreen = exploreScreen;
 
-		fightScreen = GameObject.Find("Fight Screen").GetComponent<FightScreen>().init(this);
+		fightScreen = GameObject.Find("Fight Screen").GetComponent<FightScreen>().init(this, playerData, itemDescriptor);
 
 		cursor = transform.Find("Cursor").transform;
 		cursor.gameObject.SetActive(true);
@@ -88,6 +88,9 @@ public class ScanningScreen : MonoBehaviour, ButtonHolder {
 			}
 		} else if (cursor.gameObject.activeInHierarchy) {
 			cursor.gameObject.SetActive(false);
+			for (int i = 0; i < barBlocks.Length; i++) {
+				if (barBlocks[i].activeInHierarchy) { barBlocks[i].SetActive(false); }
+			}
 		}
 	}
 

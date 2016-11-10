@@ -14,7 +14,7 @@ public class StatusScreen : InventoryContainedScreen {
 
 	private ShipData shipData;
 
-	private PlayerData playerData;
+	public PlayerData playerData { get; private set; }
 
 	private StarSystem starSystem;
 
@@ -72,7 +72,7 @@ public class StatusScreen : InventoryContainedScreen {
 		if (gameObject.activeInHierarchy) { return; }
 
 		UserInterface.showInterface = false;
-		itemDescriptor.setEnabled(inventory, ItemDescriptor.Type.INVENTORY, this);
+		itemDescriptor.setEnabled(ItemDescriptor.Type.INVENTORY, this);
 
 		inventory.setContainerScreen(this, 6);
 		inventory.setInventoryToBegin ();
@@ -122,7 +122,6 @@ public class StatusScreen : InventoryContainedScreen {
 
 		UserInterface.showInterface = true;
 		itemDescriptor.setDisabled();
-		itemDescriptor.setAsPerkDescriptor(false);
 	}
 
 	private void show (ScreenType type) {
@@ -229,7 +228,7 @@ public class StatusScreen : InventoryContainedScreen {
 
 	override protected void checkItemDrop () {
 		if (Utils.hit != null && Utils.hit.name.Equals("Cell")) {
-			InventoryCell cell = Utils.hit.transform.GetComponent<InventoryCell>();
+			InventoryCell cell = Utils.hit.GetComponent<InventoryCell>();
 			Inventory targetInv = cell.inventory;
 			if (draggedItem.cell == null) {
 				switch (draggedItem.kind) {
@@ -239,7 +238,7 @@ public class StatusScreen : InventoryContainedScreen {
 			}
 			targetInv.addItemToCell(draggedItem, cell);
 		} else if (Utils.hit != null && Utils.hit.name.StartsWith("HullSlot")) {
-			HullSlot slot = Utils.hit.transform.GetComponent<HullSlot> ();
+			HullSlot slot = Utils.hit.GetComponent<HullSlot> ();
 			if (slot.slotType != getItemToHullSlotType (draggedItem.type)) {
 				if (draggedItem.cell == null && draggedItem.slot == null) {
 					if (inventory.gameObject.activeInHierarchy) {
@@ -264,7 +263,7 @@ public class StatusScreen : InventoryContainedScreen {
 				setItemToSlot (slot);
 			}
 		} else if (Utils.hit != null && Utils.hit.name.StartsWith("EquipmentSlot")) {
-			EquipmentSlot slot = Utils.hit.transform.GetComponent<EquipmentSlot> ();
+			EquipmentSlot slot = Utils.hit.GetComponent<EquipmentSlot> ();
 			if (slot.slotType != getItemToEquipmentSlotType (draggedItem.type)) {
 				if (draggedItem.cell == null && draggedItem.slot == null) {
 					if (inventory.gameObject.activeInHierarchy) {
@@ -287,6 +286,19 @@ public class StatusScreen : InventoryContainedScreen {
 				}
 				setItemToSlot (slot);
 				playerData.updatePlayerInfo ();
+			}
+		} else if (Utils.hit != null && Utils.hit.name.StartsWith("Supply")) {
+			SupplySlot slot = Utils.hit.GetComponent<SupplySlot>();
+			if (slot.item == null) {
+				setItemToSlot(slot);
+			} else {
+				Item currItem = slot.takeItem();
+				if (draggedItem.slot != null) {
+					draggedItem.slot.setItem(currItem);
+				} else if (inventory.gameObject.activeInHierarchy) {
+					inventory.addItemToCell (currItem, draggedItem.cell);
+				}
+				setItemToSlot (slot);
 			}
 		} else if (draggedItem.cell == null && draggedItem.slot == null) {
 			if (inventory.gameObject.activeInHierarchy) {
@@ -352,27 +364,31 @@ public class StatusScreen : InventoryContainedScreen {
 	private void highlightSlot (bool hightlight, ItemType itemType) {
 		if (!hightlight) {
 			if (itemType.kind() == ItemKind.SHIP_EQUIPMENT) {
-				foreach (Slot slot in shipData.getSlots()) { slot.setActive(false); }
-			} else if (itemType.kind() == ItemKind.EQUIPMENT) {
-				foreach (Slot slot in playerData.getSlots()) { slot.setActive(false); }
+				foreach (Slot slot in shipData.slots) { slot.setActive(false); }
+			} else if (itemType.kind() == ItemKind.EQUIPMENT || itemType.kind() == ItemKind.SUPPLY) {
+				foreach (Slot slot in playerData.allSlots) { slot.setActive(false); }
 			} else {
-				foreach (Slot slot in shipData.getSlots()) { slot.setActive(false); }
-				foreach (Slot slot in playerData.getSlots()) { slot.setActive(false); }
+				foreach (Slot slot in shipData.slots) { slot.setActive(false); }
+				foreach (Slot slot in playerData.allSlots) { slot.setActive(false); }
 			}
 		} else {
 			if (itemType.kind() == ItemKind.SHIP_EQUIPMENT) {
 				HullSlot.Type slotType = getItemToHullSlotType (itemType);
-				foreach (HullSlot slot in shipData.getSlots()) {
+				foreach (HullSlot slot in shipData.slots) {
 					if (slot.slotType == slotType) {
 						slot.setActive (true);
 					}
 				}
 			} else if (itemType.kind() == ItemKind.EQUIPMENT) {
 				EquipmentSlot.Type slotType = getItemToEquipmentSlotType (itemType);
-				foreach (EquipmentSlot slot in playerData.getSlots()) {
+				foreach (EquipmentSlot slot in playerData.equipmentSlots) {
 					if (slot.slotType == slotType) {
 						slot.setActive (true);
 					}
+				}
+			} else if (itemType.kind() == ItemKind.SUPPLY) {
+				foreach (Slot slot in playerData.supplySlots) {
+					slot.setActive(true);
 				}
 			}
 		}

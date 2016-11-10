@@ -13,7 +13,11 @@ public class PlayerData : MonoBehaviour {
 
 	private Transform trans;
 
-	private EquipmentSlot[] slots;
+	public List<Slot> allSlots { get; private set; }
+
+	public List<EquipmentSlot> equipmentSlots { get; private set; }
+
+	public List<SupplySlot> supplySlots { get; private set; }
 
 	private TextMesh healthValue, armorValue, damageValue;
 
@@ -22,20 +26,30 @@ public class PlayerData : MonoBehaviour {
 	public PlayerData init () {
 		trans = transform;
 
-		EquipmentSlot slot;
+		allSlots = new List<Slot>();
+		equipmentSlots = new List<EquipmentSlot>();
+		supplySlots = new List<SupplySlot>();
+
+		Slot slot;
+		EquipmentSlot eSlot;
 		for (int i = 0; i < trans.childCount; i++) {
-			slot = trans.GetChild(i).GetComponent<EquipmentSlot>();
+			slot = trans.GetChild(i).GetComponent<Slot>();
 			if (slot != null) {
 				slot.init();
-				switch (slot.slotType) {
-					case EquipmentSlot.Type.HAND_WEAPON: handWeaponSlot = slot; break;
-					case EquipmentSlot.Type.BODY_ARMOR: bodyArmorSlot = slot; break;
-					default: Debug.Log("Unknown slot type: " + slot.slotType); break;
+				if (slot.kind == ItemKind.EQUIPMENT) {
+					eSlot = (EquipmentSlot)slot;
+					switch (eSlot.slotType) {
+						case EquipmentSlot.Type.HAND_WEAPON: handWeaponSlot = eSlot; break;
+						case EquipmentSlot.Type.BODY_ARMOR: bodyArmorSlot = eSlot; break;
+						default: Debug.Log("Unknown slot type: " + eSlot.slotType); break;
+					}
+					equipmentSlots.Add(eSlot);
+				} else if (slot.kind == ItemKind.SUPPLY) {
+					supplySlots.Add((SupplySlot)slot);
 				}
+				allSlots.Add(slot);
 			}
 		}
-
-		slots = new EquipmentSlot[]{handWeaponSlot, bodyArmorSlot};
 
 		Transform playerInfo = transform.Find ("Player Information");
 		playerInfo.gameObject.SetActive(true);
@@ -62,10 +76,6 @@ public class PlayerData : MonoBehaviour {
 		return this;
 	}
 
-	public Slot[] getSlots () {
-		return slots;
-	}
-
 	public void updatePlayerInfo () {
 		updateDamageValue();
 		updateHealthValue ();
@@ -87,9 +97,15 @@ public class PlayerData : MonoBehaviour {
 
 	public void sendToVars () {
 		Vars.equipmentMap.Clear();
-		foreach (EquipmentSlot slot in slots) {
+		Vars.supplyMap.Clear();
+		foreach (EquipmentSlot slot in equipmentSlots) {
 			if (slot.item != null) {
 				Vars.equipmentMap.Add(slot.slotType, slot.item.itemData);
+			}
+		}
+		foreach(SupplySlot slot in supplySlots) {
+			if (slot.item != null) {
+				Vars.supplyMap.Add(slot.index, slot.item.itemData);
 			}
 		}
 	}
@@ -98,16 +114,30 @@ public class PlayerData : MonoBehaviour {
 		foreach (KeyValuePair<Slot.Type, ItemData> pair in Vars.equipmentMap) {
 			Item item = Instantiate<Transform>(ItemFactory.itemPrefab).GetComponent<Item>().init(pair.Value);
 			item.GetComponent<SpriteRenderer>().sortingOrder = 3;
-			getSlot(pair.Key).setItem(item);
+			getEquipmentSlot(pair.Key).setItem(item);
+		}
+		foreach (KeyValuePair<int, ItemData> pair in Vars.supplyMap) {
+			Item item = Instantiate<Transform>(ItemFactory.itemPrefab).GetComponent<Item>().init(pair.Value);
+			item.GetComponent<SpriteRenderer>().sortingOrder = 3;
+			getSupplySlot(pair.Key).setItem(item);
 		}
 		Vars.equipmentMap.Clear();
+		Vars.supplyMap.Clear();
 	}
 
-	private EquipmentSlot getSlot (Slot.Type type) {
-		foreach (EquipmentSlot slot in slots) {
+	private EquipmentSlot getEquipmentSlot (Slot.Type type) {
+		foreach (EquipmentSlot slot in equipmentSlots) {
 			if (slot.slotType == type) { return slot; }
 		}
 		Debug.Log("Unknown slot type: " + type);
+		return null;
+	}
+
+	public SupplySlot getSupplySlot (int index) {
+		foreach (SupplySlot slot in supplySlots) {
+			if (slot.index == index) { return slot; }
+		}
+		Debug.Log("Unknown slot index: " + index);
 		return null;
 	}
 

@@ -47,6 +47,6 @@ public abstract class Slot : ItemHolder {
 //	public override bool haveDescribableObject () { return item != null; }
 
 	public enum Type {
-		NONE,  WEAPON, ENGINE, ARMOR, GENERATOR, RADAR, SHIELD, REPAIR_DROID, HARVESTER, HAND_WEAPON, BODY_ARMOR
+		NONE,  WEAPON, ENGINE, ARMOR, GENERATOR, RADAR, SHIELD, REPAIR_DROID, HARVESTER, HAND_WEAPON, BODY_ARMOR, SUPPLY
 	}
 }

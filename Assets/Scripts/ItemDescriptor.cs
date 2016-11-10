@@ -56,6 +56,8 @@ public class ItemDescriptor : MonoBehaviour {
 
 	private EquipmentsMarket market;
 
+	private FightScreen fightScreen;
+
 	public ItemDescriptor init () {
 		trans = transform.Find ("Descriptor");
 		qualityPre = trans.Find ("Quality Pre");
@@ -104,6 +106,10 @@ public class ItemDescriptor : MonoBehaviour {
 		return this;
 	}
 
+	public void setFightScreen (FightScreen fightScreen) {
+		this.fightScreen = fightScreen;
+	}
+
 	public void setSpaceOffset (Vector3 spaceOffset) {
 		this.spaceOffset = spaceOffset;
 	}
@@ -127,14 +133,17 @@ public class ItemDescriptor : MonoBehaviour {
 
 	public void setDisabled () {
 		enabled = false;
+		setAsPerkDescriptor(false);
 		hide();
 	}
 
-	public void setEnabled (Inventory inventory, Type type, InventoryContainedScreen container) {
-		enabled = true;
+	public void setEnabled (Type type, InventoryContainedScreen container) {
 		this.inventoryType = type;
-		if (type == Type.MARKET_BUY || type == Type.MARKET_SELL) {
+		enabled = true;
+		if (container != null && (type == Type.MARKET_BUY || type == Type.MARKET_SELL)) {
 			market = (EquipmentsMarket)container;
+		} else {
+			market = null;
 		}
 	}
 
@@ -217,6 +226,11 @@ public class ItemDescriptor : MonoBehaviour {
 	private void passRightClick () {
 		if (inventoryType == Type.MARKET_BUY) { market.askToBuy(item); }
 		else if (inventoryType == Type.MARKET_SELL) { market.askToSell(item); }
+		else if (inventoryType == Type.FIGHT) {
+			if (holder != null && holder is SupplySlot) {
+				fightScreen.useSupply((SupplySlot)holder);
+			}
+		}
 	}
 
 	private float setCost(int index, ItemData data) {
@@ -263,6 +277,46 @@ public class ItemDescriptor : MonoBehaviour {
 		maxLenght = Mathf.Max(maxLenght, nameRender.bounds.size.x);
 
 		switch (data.itemType) {
+			case ItemType.SUPPLY:
+				pre1.gameObject.SetActive (true);
+				bg1.gameObject.SetActive (true);
+				value1.gameObject.SetActive (true);
+				pre2.gameObject.SetActive (true);
+				bg2.gameObject.SetActive (true);
+				value2.gameObject.SetActive (true);
+				pre3.gameObject.SetActive (true);
+				bg3.gameObject.SetActive (true);
+				value3.gameObject.SetActive (true);
+
+				SupplyData sud = (SupplyData)data;
+				string val = "";
+				switch (sud.type) {
+					case SupplyType.MEDKIT_SMALL:
+					case SupplyType.MEDKIT_MEDIUM:
+					case SupplyType.MEDKIT_LARGE:
+					case SupplyType.MEDKIT_ULTRA:
+						val = "+" + sud.value + " HP";
+						break;
+					case SupplyType.GRENADE_SMOKE: val = "Точность -" + sud.value + "%"; break;
+					case SupplyType.GRENADE_PARALIZE: val = "Шанс паралича " + sud.value + "%"; break;
+					case SupplyType.INJECTION_SPEED: val = "Скорость +" + sud.value + "%"; break;
+					case SupplyType.INJECTION_HIT_CHANCE: val = "Точность +" + sud.value + "%"; break;
+					case SupplyType.INJECTION_ARMOR: val = "Защита +" + sud.value + "%"; break;
+					default: Debug.Log("Unknown supply type: " + sud.type); val = ""; break;
+				}
+				value1.text = "Эффект: <color=orange>" + val + "</color>";
+				scale.x = value1.text.Length - 23;// - (количество спецсимволов)
+				bg1.localScale = scale;
+				maxLenght = Mathf.Max(maxLenght, value1Render.bounds.size.x);
+
+				value2.text = "Ходы: <color=orange>" + sud.duration + "</color>";
+				scale.x = value2.text.Length - 22;// - (количество спецсимволов)
+				bg2.localScale = scale;
+				maxLenght = Mathf.Max(maxLenght, value2Render.bounds.size.x);
+
+				maxLenght = Mathf.Max(maxLenght, setCost(3, data));
+				break;
+
 			case ItemType.GOODS:
 				pre1.gameObject.SetActive (true);
 				bg1.gameObject.SetActive (true);
@@ -572,6 +626,6 @@ public class ItemDescriptor : MonoBehaviour {
 	}
 
 	public enum Type {
-		NONE, INVENTORY, MARKET_BUY, MARKET_SELL, LOOT
+		NONE, INVENTORY, MARKET_BUY, MARKET_SELL, LOOT, FIGHT
 	}
 }

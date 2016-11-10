@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: e7be655b3b23b104d92a6dde128b2e54
-timeCreated: 1474290634
+timeCreated: 1478789090
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -8,6 +8,7 @@ TextureImporter:
     21300002: HealthBar_Holders
     21300004: HealthBar_Bar
     21300006: HealthBar_BG
+    21300008: FightInterface_Armor
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -103,6 +104,19 @@ TextureImporter:
         y: 270
         width: 56
         height: 492
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: FightInterface_Armor
+      rect:
+        serializedVersion: 2
+        x: 395
+        y: 159
+        width: 105
+        height: 121
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

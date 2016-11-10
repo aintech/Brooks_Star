@@ -23,7 +23,7 @@ public class ShipData : MonoBehaviour {
 
 	private Transform trans;
 
-	private HullSlot[] slots;
+	public HullSlot[] slots { get; private set; }
 
 	private int currentHealth, currentShield;
 
@@ -166,12 +166,8 @@ public class ShipData : MonoBehaviour {
         }
 	}
 
-	public HullSlot[] getSlots () {
-		return slots;
-	}
-
 	public void arrangeItemsToSlots () {
-		foreach (HullSlot slot in getSlots()) {
+		foreach (HullSlot slot in slots) {
 			if (slot.item != null) {
 				slot.item.transform.position = slot.transform.position;
 				slot.item.transform.SetParent (slot.transform);
@@ -287,7 +283,7 @@ public class ShipData : MonoBehaviour {
 		Vars.shipCurrentHealth = currentHealth;
 		Vars.shipHullType =hullType;
 		Vars.shipHullSlotsMap.Clear ();
-		foreach (HullSlot slot in getSlots()) {
+		foreach (HullSlot slot in slots) {
 			if (slot.item != null) {
 				Vars.shipHullSlotsMap.Add(new KeyValuePair<HullSlot.Type, int>(slot.slotType, slot.index), slot.item.itemData);
 			}

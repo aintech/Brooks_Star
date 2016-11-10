@@ -24,6 +24,8 @@ public static class Vars {
 
 	public static Dictionary<Slot.Type, ItemData> equipmentMap = new Dictionary<Slot.Type, ItemData>();
 
+	public static Dictionary<int, ItemData> supplyMap = new Dictionary<int, ItemData>();
+
 	public static int freeSortingOrder = 0;
 
 	public static List<EnemyShip> enemyShipsPool = new List<EnemyShip>();
