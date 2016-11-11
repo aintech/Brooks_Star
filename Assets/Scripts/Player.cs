@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class Player {
 	
-	private const int initHealth = 900;//, healthPerEndurance = 10;
+	private const int initHealth = 200;//, healthPerEndurance = 10;
 
 	private const int noWeaponDamage = 10;
 
@@ -23,6 +23,8 @@ public class Player {
 	public static int randomDamage { get { return weapon == null? noWeaponDamage: UnityEngine.Random.Range(minDamage, maxDamage+1); } private set {;} }
 
 	public static Dictionary<PerkType, float> perks { get; private set; }
+
+	public static FightInterface fightInterface;
 
 	public static void init () {
 		if (perks == null || perks.Count == 0) {
@@ -54,6 +56,7 @@ public class Player {
 			return 0;
 		} else {
 			health -= (damageAmount - (armor == null? 0: armor.armorClass));
+			if (fightInterface.gameObject.activeInHierarchy) { fightInterface.updatePlayerBar(); }
 			return damageAmount - (armor == null? 0: armor.armorClass);
 		}
 	}
@@ -62,9 +65,11 @@ public class Player {
 		if (healAmount + health > maxHealth) {
 			int heal = maxHealth - health;
 			setHealthToMax();
+			if (fightInterface.gameObject.activeInHierarchy) { fightInterface.updatePlayerBar(); }
 			return heal;
 		} else {
 			health += healAmount;
+			if (fightInterface.gameObject.activeInHierarchy) { fightInterface.updatePlayerBar(); }
 			return healAmount;
 		}
 	}

@@ -3,9 +3,7 @@ using System.Collections;
 
 public class FightEffectPlayer : MonoBehaviour {
 
-	public Sprite //armorLightSprite, armorModerateSprite, armorHeavySprite, armorUltraSprite,
-				  //medkitSmallSprite, medkitMediumSprite, medkitLargeSprite, medkitSuperiorSprite,
-				  damageSprite;
+	public Sprite damageSprite, healSprite, poisonSprite, blindSprite, paralizeSprite, armorSprite;
 
 	private Transform bg, effectImage;
 
@@ -21,7 +19,7 @@ public class FightEffectPlayer : MonoBehaviour {
 
 	private bool effectIsPlaying;
 
-	private Color red = new Color(1, 0, 0, 1), alfa = new Color(1, 1, 1, 1);//, green = new Color(0, 1, 0, 1), blue = new Color(0, 0, 1, 1)
+	private Color red = new Color(1, 0, 0, 1), alfa = new Color(1, 1, 1, 1), green = new Color(0, 1, 0, 1), blue = new Color(0, 0, 1, 1);
 
     private Quaternion idleRot = new Quaternion();
 
@@ -125,32 +123,61 @@ public class FightEffectPlayer : MonoBehaviour {
 //		effectSetup();
 //	}
 
-	private void effectSetup () {
-		if (!damageEffect) {
-			scaling = true;
-			
-			scale.x = .1f;
-			scale.y = .1f;
-			
-			effectImage.localScale = scale;
+	public void playEffect (FightEffectType type, int value) {
+		damageEffect = type == FightEffectType.DAMAGE;
+		switch (type) {
+			case FightEffectType.HEAL:
+				effectRender.sprite = healSprite;
+				effectTxt.color = green;
+				effectTxt.text = "Здоровье +" + value;
+				break;
+			case FightEffectType.ARMORED:
+				effectRender.sprite = armorSprite;
+				effectTxt.color = blue;
+				effectTxt.text = "Защита +" + value;
+				break;
+			case FightEffectType.BLIND:
+				effectRender.sprite = blindSprite;
+				effectTxt.color = red;
+				effectTxt.text = "Ослепление";
+				break;
+			case FightEffectType.DAMAGE:
+				effectRender.sprite = damageSprite;
+				effectTxt.color = red;
+				effectTxt.text = "-" + value;
+				break;
+			case FightEffectType.PARALIZED:
+				effectRender.sprite = paralizeSprite;
+				effectTxt.color = red;
+				effectTxt.text = "Паралич";
+				break;
+			case FightEffectType.POISON:
+				effectRender.sprite = poisonSprite;
+				effectTxt.color = red;
+				effectTxt.text = "Отравление";
+				break;
+			default: Debug.Log("Unknown effect type: " + type); break;
 		}
+
+		effectSetup();
+	}
+
+	private void effectSetup () {
+//		if (!damageEffect) {
+//			scaling = true;
+//			
+//			scale.x = .1f;
+//			scale.y = .1f;
+//			
+//			effectImage.localScale = scale;
+//		}
 		effectIsPlaying = true;
 		effectTxtBG.text = effectTxt.text;
 
-		bg.gameObject.SetActive(!damageEffect);
+//		bg.gameObject.SetActive(!damageEffect);
 		effectImage.gameObject.SetActive(true);
 		effectTxt.gameObject.SetActive(true);
 		effectTxtBG.gameObject.SetActive(true);
-	}
-
-	public void playEffect (FightEffectType type, int value) {
-		if (type == FightEffectType.DAMAGE) {
-			damageEffect = true;
-			effectRender.sprite = damageSprite;
-			effectTxt.color = red;
-			effectTxt.text = "-" + value;
-		}
-		effectSetup();
 	}
 
 	private void endPlay () {

@@ -36,11 +36,11 @@ public class ImagesProvider : MonoBehaviour {
 			case SupplyType.MEDKIT_MEDIUM: return supplies[1];
 			case SupplyType.MEDKIT_LARGE: return supplies[2];
 			case SupplyType.MEDKIT_ULTRA: return supplies[3];
-			case SupplyType.GRENADE_SMOKE: return supplies[4];
+			case SupplyType.GRENADE_FLASH: return supplies[4];
 			case SupplyType.GRENADE_PARALIZE: return supplies[5];
 			case SupplyType.INJECTION_SPEED: return supplies[6];
 			case SupplyType.INJECTION_ARMOR: return supplies[7];
-			case SupplyType.INJECTION_HIT_CHANCE: return supplies[8];
+			case SupplyType.INJECTION_REGENERATION: return supplies[8];
 			default: Debug.Log("Unknown supply type: " + type); return null;
 		}
 	}

@@ -71,14 +71,14 @@ public static class ItemFactory {
 		SupplyType type = SupplyType.MEDKIT_SMALL;
 		switch(UnityEngine.Random.Range(0, Enum.GetNames(typeof(SupplyType)).Length)) {
 			case 0: type = SupplyType.GRENADE_PARALIZE; break;
-			case 1: type = SupplyType.GRENADE_SMOKE; break;
+			case 1: type = SupplyType.GRENADE_FLASH; break;
 			case 2: type = SupplyType.MEDKIT_SMALL; break;
 			case 3: type = SupplyType.MEDKIT_MEDIUM; break;
 			case 4: type = SupplyType.MEDKIT_LARGE; break;
 			case 5: type = SupplyType.MEDKIT_ULTRA; break;
 			case 6: type = SupplyType.INJECTION_SPEED; break;
 			case 7: type = SupplyType.INJECTION_ARMOR; break;
-			case 8: type = SupplyType.INJECTION_HIT_CHANCE; break;
+			case 8: type = SupplyType.INJECTION_REGENERATION; break;
 			default: Debug.Log("Unmapped value for supply"); break;
 		}
 		return createSupplyData (type);
@@ -90,11 +90,35 @@ public static class ItemFactory {
 
 	public static SupplyData createSupplyData (SupplyType type, ItemQuality quality) {
 		float level = randLevel();
+		int value = 0;
+		int duration = 0;
 
-		int value = Mathf.RoundToInt(type.value() * level * qualityMultiplier(quality));
-
-		int duration = quality == ItemQuality.UNIQUE? 5: quality == ItemQuality.RARE? 4: quality == ItemQuality.SUPERIOR? 3: quality == ItemQuality.GOOD? 2: 1;
-		if (type == SupplyType.GRENADE_SMOKE) { duration *= 2; }
+		switch (type) {
+			case SupplyType.MEDKIT_SMALL:
+			case SupplyType.MEDKIT_MEDIUM:
+			case SupplyType.MEDKIT_LARGE:
+			case SupplyType.MEDKIT_ULTRA:
+				value = Mathf.RoundToInt(type.value() * level * qualityMultiplier(quality));
+				break;
+			case SupplyType.GRENADE_FLASH:
+				duration = quality == ItemQuality.UNIQUE? 12: quality == ItemQuality.RARE? 10: quality == ItemQuality.SUPERIOR? 8: quality == ItemQuality.GOOD? 6: 4;
+				break;
+			case SupplyType.GRENADE_PARALIZE:
+				duration = quality == ItemQuality.UNIQUE? 7: quality == ItemQuality.RARE? 6: quality == ItemQuality.SUPERIOR? 5: quality == ItemQuality.GOOD? 4: 3;
+				break;
+			case SupplyType.INJECTION_ARMOR:
+				value = Mathf.RoundToInt(type.value() * level * qualityMultiplier(quality)) * 2;
+				duration = quality == ItemQuality.UNIQUE? 20: quality == ItemQuality.RARE? 14: quality == ItemQuality.SUPERIOR? 10: quality == ItemQuality.GOOD? 7: 5;
+				break;
+			case SupplyType.INJECTION_REGENERATION:
+				value = Mathf.RoundToInt(type.value() * level * qualityMultiplier(quality));
+				duration = quality == ItemQuality.UNIQUE? 7: quality == ItemQuality.RARE? 6: quality == ItemQuality.SUPERIOR? 5: quality == ItemQuality.GOOD? 4: 3;
+				break;
+			case SupplyType.INJECTION_SPEED:
+				value = quality == ItemQuality.UNIQUE? 5: quality == ItemQuality.RARE? 4: quality == ItemQuality.SUPERIOR? 3: quality == ItemQuality.GOOD? 2: 1;
+				duration = 5;
+				break;
+		}
 
 		SupplyData data = new SupplyData(quality, level, type, value, duration);
 		data.initCommons(calculateCost(data), 0);

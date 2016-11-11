@@ -284,9 +284,6 @@ public class ItemDescriptor : MonoBehaviour {
 				pre2.gameObject.SetActive (true);
 				bg2.gameObject.SetActive (true);
 				value2.gameObject.SetActive (true);
-				pre3.gameObject.SetActive (true);
-				bg3.gameObject.SetActive (true);
-				value3.gameObject.SetActive (true);
 
 				SupplyData sud = (SupplyData)data;
 				string val = "";
@@ -295,13 +292,13 @@ public class ItemDescriptor : MonoBehaviour {
 					case SupplyType.MEDKIT_MEDIUM:
 					case SupplyType.MEDKIT_LARGE:
 					case SupplyType.MEDKIT_ULTRA:
-						val = "+" + sud.value + " HP";
+						val = "Восстанавливает " + sud.value + " HP";
 						break;
-					case SupplyType.GRENADE_SMOKE: val = "Точность -" + sud.value + "%"; break;
-					case SupplyType.GRENADE_PARALIZE: val = "Шанс паралича " + sud.value + "%"; break;
-					case SupplyType.INJECTION_SPEED: val = "Скорость +" + sud.value + "%"; break;
-					case SupplyType.INJECTION_HIT_CHANCE: val = "Точность +" + sud.value + "%"; break;
-					case SupplyType.INJECTION_ARMOR: val = "Защита +" + sud.value + "%"; break;
+					case SupplyType.GRENADE_FLASH: val = "Оглушение на " + sud.duration + " ходов"; break;
+					case SupplyType.GRENADE_PARALIZE: val = "Паралич на " + sud.duration + " ходов"; break;
+					case SupplyType.INJECTION_SPEED: val = "Дополнительно " + sud.value + " действий на " + sud.duration + " ходов"; break;
+					case SupplyType.INJECTION_REGENERATION: val = "Восстановление по " + sud.value + " HP в течении " + sud.duration + " ходов"; break;
+					case SupplyType.INJECTION_ARMOR: val = "Повышение защиты на " + sud.value + " в течении " + sud.duration + " ходов"; break;
 					default: Debug.Log("Unknown supply type: " + sud.type); val = ""; break;
 				}
 				value1.text = "Эффект: <color=orange>" + val + "</color>";
@@ -309,12 +306,7 @@ public class ItemDescriptor : MonoBehaviour {
 				bg1.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value1Render.bounds.size.x);
 
-				value2.text = "Ходы: <color=orange>" + sud.duration + "</color>";
-				scale.x = value2.text.Length - 22;// - (количество спецсимволов)
-				bg2.localScale = scale;
-				maxLenght = Mathf.Max(maxLenght, value2Render.bounds.size.x);
-
-				maxLenght = Mathf.Max(maxLenght, setCost(3, data));
+				maxLenght = Mathf.Max(maxLenght, setCost(2, data));
 				break;
 
 			case ItemType.GOODS:

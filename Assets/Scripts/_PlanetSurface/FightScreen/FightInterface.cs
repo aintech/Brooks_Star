@@ -1,13 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class FightInterface : MonoBehaviour {
 
-	private Transform healthBar;
+	private Transform enemyHealthBar, playerHealthBar;
 
 	private Enemy enemy;
 
-	private Vector3 scale;
+	private Vector3 enemyBarScale, playerBarScale;
 
 	private Vector3 armorScaleOne = new Vector3(.13f, .13f, 1), armorScaleDouble = new Vector3(.1f, .1f, 1);
 
@@ -15,10 +16,27 @@ public class FightInterface : MonoBehaviour {
 
 	private StrokeText enemyArmorValue;
 
+	private List<StatusEffect> playerStatusEffects = new List<StatusEffect>();
+
+	private List<StatusEffect> enemyStatusEffects = new List<StatusEffect>();
+
 	public void init () {
-		healthBar = transform.Find("EnemyHealthBar").Find("Bar");
+		enemyHealthBar = transform.Find("Enemy Health Bar").Find("Bar");
+		playerHealthBar = transform.Find("Player Health Bar").Find("Bar");
 		enemyArmorValue = transform.Find("Enemy Armor Value").GetComponent<StrokeText>().init("default", 5);
-		scale = healthBar.localScale;
+		enemyBarScale = enemyHealthBar.localScale;
+		playerBarScale = playerHealthBar.localScale;
+		Player.fightInterface = this;
+
+		Transform statusEffectHolder = transform.Find("Player Statuses");
+		for (int i = 0; i < statusEffectHolder.childCount; i++) {
+			enemyStatusEffects.Add(statusEffectHolder.GetChild(i).GetComponent<StatusEffect>().init());
+		}
+		statusEffectHolder = transform.Find("Enemy Statuses");
+		for (int i = 0; i < statusEffectHolder.childCount; i++) {
+			enemyStatusEffects.Add(statusEffectHolder.GetChild(i).GetComponent<StatusEffect>().init());
+		}
+
 		gameObject.SetActive(true);
 	}
 
@@ -27,11 +45,17 @@ public class FightInterface : MonoBehaviour {
 		enemyMax = enemy.health;
 		updateEnemyBar();
 		updateEnemyArmor();
+		updatePlayerBar();
 	}
 
 	public void updateEnemyBar () {
-		scale.y = Mathf.Max(1, enemy.health) / enemyMax;
-		healthBar.localScale = scale;
+		enemyBarScale.y = Mathf.Max(1, enemy.health) / enemyMax;
+		enemyHealthBar.localScale = enemyBarScale;
+	}
+
+	public void updatePlayerBar () {
+		playerBarScale.y = (float)Mathf.Max(1, Player.health) / (float)Player.maxHealth;
+		playerHealthBar.localScale = playerBarScale;
 	}
 
 	public void updateEnemyArmor () {

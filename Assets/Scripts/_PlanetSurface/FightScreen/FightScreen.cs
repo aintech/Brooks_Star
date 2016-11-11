@@ -16,7 +16,7 @@ public class FightScreen : MonoBehaviour {
 
 	private Vector3 enemyPos;
 
-	private FightEffectPlayer fightEffectPlayer;
+	public FightEffectPlayer fightEffectPlayer { get; private set; }
 
 	private ElementEffectPlayer elementEffectPlayer;
 
@@ -55,7 +55,7 @@ public class FightScreen : MonoBehaviour {
 		iconsHolderRender = elementsHolder.GetComponent<SpriteRenderer>();
 		fightEffectPlayer = transform.Find("FightEffectPlayer").GetComponent<FightEffectPlayer>().init();
 		elementEffectPlayer = transform.Find("ElementEffectPlayer").GetComponent<ElementEffectPlayer>();
-		fightInterface = transform.Find("FightInterface").GetComponent<FightInterface>();
+		fightInterface = transform.Find("Fight Interface").GetComponent<FightInterface>();
 		enemy = transform.Find("Enemy").GetComponent<Enemy>();
 		resultScreen = transform.Find("FightResultScreen").GetComponent<FightResultScreen>().init(this);
 		enemyDeadAnimator = transform.Find("EnemyDeadAnim").GetComponent<Animator>();
@@ -202,13 +202,18 @@ public class FightScreen : MonoBehaviour {
 		return elementEffectPlayer;
 	}
 
-	public FightEffectPlayer getFightEffectPlayer () {
-		return fightEffectPlayer;
-	}
-
 	public void useSupply (SupplySlot slot) {
-		if (slot.item != null) {
-			fightProcessor.addEffect((SupplyData)DataCopier.copy(slot.item.itemData));
+		if (slot.item != null && fightProcessor.canUseSupply()) {
+			SupplyData data = (SupplyData)slot.item.itemData;
+			switch (data.type) {
+				case SupplyType.MEDKIT_SMALL:
+				case SupplyType.MEDKIT_MEDIUM:
+				case SupplyType.MEDKIT_LARGE:
+				case SupplyType.MEDKIT_ULTRA:
+					fightEffectPlayer.playEffect(FightEffectType.HEAL, Player.healPlayer(data.value));
+					break;
+			}
+			fightProcessor.skipTurn();
 			slot.takeItem().destroy();
 		}
 	}

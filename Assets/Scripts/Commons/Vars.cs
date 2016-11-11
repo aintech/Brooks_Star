@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public static class Vars {
 
-	public static bool EROTIC = false;
+	public static bool EROTIC = true;
 
 	public static StarSystemType starSystemType = StarSystemType.ALURIA;
 

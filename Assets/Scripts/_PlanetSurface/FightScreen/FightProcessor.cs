@@ -151,7 +151,7 @@ public class FightProcessor : MonoBehaviour {
 		//			}
 		//		}
 		FIGHT_ANIM_PLAYER_DONE = false;
-		fightScreen.getFightEffectPlayer().playEffect(FightEffectType.DAMAGE, Player.hitPlayer(enemy.damage));
+		fightScreen.fightEffectPlayer.playEffect(FightEffectType.DAMAGE, Player.hitPlayer(enemy.damage));
 		//		FightMessenger.addDamageMessage(Vars.playerName, ShotElementType.SIMPLE, damage);
 	}
 
@@ -172,7 +172,7 @@ public class FightProcessor : MonoBehaviour {
 		switchMachineState(StateMachine.PLAYER_MOVE_DONE);
 	}
 
-	public bool canDrinkPotion () {
+	public bool canUseSupply () {
 		return machineState == StateMachine.PLAYER_TURN;
 	}
 
@@ -181,11 +181,6 @@ public class FightProcessor : MonoBehaviour {
 		ELEMENTS_ANIM_DONE = true;
 
 		fightScreen.finishFight(playerWin);
-	}
-
-	public void addEffect (SupplyData data) {
-		
-		skipTurn();
 	}
 
 	private enum StateMachine {

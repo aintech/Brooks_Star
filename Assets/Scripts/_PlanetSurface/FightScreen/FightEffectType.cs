@@ -2,5 +2,5 @@
 using System.Collections;
 
 public enum FightEffectType {
-	DAMAGE
+	DAMAGE, HEAL, POISON, BLIND, PARALIZED, ARMORED
 }

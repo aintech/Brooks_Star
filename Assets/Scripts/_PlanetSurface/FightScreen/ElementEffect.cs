@@ -47,7 +47,7 @@ public class ElementEffect : MonoBehaviour {
 		element = elementTrans.GetComponent<SpriteRenderer>();
 		effectHit = trans.Find("HitSprite").GetComponent<SpriteRenderer>();
 		trans.SetParent(fightScreen.transform);
-		fightInterface = fightScreen.transform.Find("FightInterface").GetComponent<FightInterface>();
+		fightInterface = fightScreen.transform.Find("Fight Interface").GetComponent<FightInterface>();
 		hitTextHolder = trans.Find("HitTextHolder");
 		hitText = hitTextHolder.Find("HitText").GetComponent<TextMesh>();
 		hitTextBG = hitTextHolder.Find("HitTextBG").GetComponent<TextMesh>();
