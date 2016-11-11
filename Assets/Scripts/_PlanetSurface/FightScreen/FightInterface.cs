@@ -16,11 +16,10 @@ public class FightInterface : MonoBehaviour {
 
 	private StrokeText enemyArmorValue;
 
-	private List<StatusEffect> playerStatusEffects = new List<StatusEffect>();
+	private FightScreen fightScreen;
 
-	private List<StatusEffect> enemyStatusEffects = new List<StatusEffect>();
-
-	public void init () {
+	public FightInterface init (FightScreen fightScreen) {
+		this.fightScreen = fightScreen;
 		enemyHealthBar = transform.Find("Enemy Health Bar").Find("Bar");
 		playerHealthBar = transform.Find("Player Health Bar").Find("Bar");
 		enemyArmorValue = transform.Find("Enemy Armor Value").GetComponent<StrokeText>().init("default", 5);
@@ -30,14 +29,16 @@ public class FightInterface : MonoBehaviour {
 
 		Transform statusEffectHolder = transform.Find("Player Statuses");
 		for (int i = 0; i < statusEffectHolder.childCount; i++) {
-			enemyStatusEffects.Add(statusEffectHolder.GetChild(i).GetComponent<StatusEffect>().init());
+			fightScreen.playerStatusEffects.Add(statusEffectHolder.GetChild(i).GetComponent<StatusEffect>().init());
 		}
 		statusEffectHolder = transform.Find("Enemy Statuses");
 		for (int i = 0; i < statusEffectHolder.childCount; i++) {
-			enemyStatusEffects.Add(statusEffectHolder.GetChild(i).GetComponent<StatusEffect>().init());
+			fightScreen.enemyStatusEffects.Add(statusEffectHolder.GetChild(i).GetComponent<StatusEffect>().init());
 		}
 
 		gameObject.SetActive(true);
+
+		return this;
 	}
 
 	public void setEnemy (Enemy enemy) {

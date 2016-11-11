@@ -46,6 +46,10 @@ public class FightScreen : MonoBehaviour {
 
 	private ItemDescriptor itemDescriptor;
 
+	public List<StatusEffect> playerStatusEffects = new List<StatusEffect>();
+
+	public List<StatusEffect> enemyStatusEffects = new List<StatusEffect>();
+
 	public FightScreen init (ScanningScreen scanningScreen, PlayerData playerData, ItemDescriptor itemDescriptor) {
 		this.scanningScreen = scanningScreen;
 		this.playerData = playerData;
@@ -53,9 +57,9 @@ public class FightScreen : MonoBehaviour {
 		itemDescriptor.setFightScreen(this);
 		elementsHolder = transform.Find("ElementsHolder").GetComponent<ElementsHolder>();
 		iconsHolderRender = elementsHolder.GetComponent<SpriteRenderer>();
-		fightEffectPlayer = transform.Find("FightEffectPlayer").GetComponent<FightEffectPlayer>().init();
+		fightEffectPlayer = transform.Find("Fight Effect Player").GetComponent<FightEffectPlayer>().init();
 		elementEffectPlayer = transform.Find("ElementEffectPlayer").GetComponent<ElementEffectPlayer>();
-		fightInterface = transform.Find("Fight Interface").GetComponent<FightInterface>();
+		fightInterface = transform.Find("Fight Interface").GetComponent<FightInterface>().init(this);
 		enemy = transform.Find("Enemy").GetComponent<Enemy>();
 		resultScreen = transform.Find("FightResultScreen").GetComponent<FightResultScreen>().init(this);
 		enemyDeadAnimator = transform.Find("EnemyDeadAnim").GetComponent<Animator>();
@@ -64,12 +68,10 @@ public class FightScreen : MonoBehaviour {
 		enemyPos = enemy.transform.localPosition;
 		elementsHolder.init();
 		enemy.init();
-		fightInterface.init();
 		elementEffectPlayer.init(this, enemy);
 		fightProcessor.init(this, elementsHolder, enemy);
 
 		elementsHolder.gameObject.SetActive(true);
-		fightInterface.gameObject.SetActive(true);
 		enemyDeadAnimator.gameObject.SetActive(false);
 		gameObject.SetActive(false);
 
@@ -85,9 +87,12 @@ public class FightScreen : MonoBehaviour {
 	}
 
 	public void startFight (EnemyType type) {
+		SupplySlot supSlot;
 		foreach (SupplySlot slot in playerData.supplySlots) {
 			if (slot.item != null) {
-				getSlot(slot.index).setItem(slot.takeItem());
+				supSlot = getSlot (slot.index);
+				supSlot.setItem(slot.takeItem());
+				supSlot.item.transform.localScale = Vector3.one;
 			}
 		}
 		itemDescriptor.setEnabled(ItemDescriptor.Type.FIGHT, null);
@@ -104,8 +109,12 @@ public class FightScreen : MonoBehaviour {
 
 		deadStone.transform.localPosition = deadStoneInitPos;
 		enemyDeadAnimator.gameObject.SetActive(false);
-		gameObject.SetActive(true);
 		fightStarted = startAnimDone = fightOver = false;
+		foreach (StatusEffect eff in enemyStatusEffects) {
+			eff.initEnemy (enemy);
+		}
+
+		gameObject.SetActive(true);
 	}
 
 	private SupplySlot getSlot (int index) {
@@ -182,9 +191,12 @@ public class FightScreen : MonoBehaviour {
 
 	public void closeFightScreen () {
 		gameObject.SetActive(false);
+		SupplySlot supSlot;
 		foreach (SupplySlot slot in supplySlots) {
 			if (slot.item != null) {
-				playerData.getSupplySlot(slot.index).setItem(slot.takeItem());
+				supSlot = playerData.getSupplySlot (slot.index);
+				supSlot.setItem(slot.takeItem());
+				supSlot.item.transform.localScale = Vector3.one;
 			}
 		}
 		scanningScreen.endFight(playerWin);
@@ -203,19 +215,54 @@ public class FightScreen : MonoBehaviour {
 	}
 
 	public void useSupply (SupplySlot slot) {
-		if (slot.item != null && fightProcessor.canUseSupply()) {
+		if (slot.item != null) {
 			SupplyData data = (SupplyData)slot.item.itemData;
-			switch (data.type) {
-				case SupplyType.MEDKIT_SMALL:
-				case SupplyType.MEDKIT_MEDIUM:
-				case SupplyType.MEDKIT_LARGE:
-				case SupplyType.MEDKIT_ULTRA:
-					fightEffectPlayer.playEffect(FightEffectType.HEAL, Player.healPlayer(data.value));
-					break;
+			if (fightProcessor.canUseSupply (data.type)) {
+				switch (data.type) {
+					case SupplyType.MEDKIT_SMALL:
+					case SupplyType.MEDKIT_MEDIUM:
+					case SupplyType.MEDKIT_LARGE:
+					case SupplyType.MEDKIT_ULTRA:
+						fightEffectPlayer.playEffect (FightEffectType.HEAL, Player.heal (data.value));
+						break;
+					case SupplyType.INJECTION_ARMOR:
+						fightEffectPlayer.playEffect (FightEffectType.ARMORED, data.value);
+						getStatusEffectByType (StatusEffectType.ARMORED, true).addStatus (data.value, data.duration);
+						break;
+					case SupplyType.INJECTION_REGENERATION:
+						fightEffectPlayer.playEffect (FightEffectType.REGENERATION, 0);
+						getStatusEffectByType (StatusEffectType.REGENERATION, true).addStatus (data.value, data.duration);
+						break;
+					case SupplyType.INJECTION_SPEED:
+						fightEffectPlayer.playEffect (FightEffectType.SPEED, 0);
+						getStatusEffectByType (StatusEffectType.SPEED, true).addStatus (data.value, data.duration);
+						break;
+					case SupplyType.GRENADE_FLASH:
+						fightEffectPlayer.playEffectOnEnemy (FightEffectType.BLIND, 0);
+						getStatusEffectByType (StatusEffectType.BLINDED, false).addStatus (data.value, data.duration);
+						break;
+					case SupplyType.GRENADE_PARALIZE:
+						fightEffectPlayer.playEffectOnEnemy (FightEffectType.PARALIZED, 0);
+						getStatusEffectByType (StatusEffectType.PARALIZED, false).addStatus (data.value, data.duration);
+						break;
+
+				}
+				fightProcessor.skipTurn ();
+				FightProcessor.FIGHT_ANIM_PLAYER_DONE = false;
+				slot.takeItem ().destroy ();
 			}
-			fightProcessor.skipTurn();
-			slot.takeItem().destroy();
 		}
+	}
+
+	public StatusEffect getStatusEffectByType (StatusEffectType type, bool asPlayer) {
+		List<StatusEffect> list = asPlayer? playerStatusEffects: enemyStatusEffects;
+		foreach (StatusEffect eff in list) {
+			if (eff.statusType == type) {
+				return eff;
+			}
+		}
+		Debug.Log ("Cant find holder of effect type: " + type);
+		return null;
 	}
 
 //	void Update () {

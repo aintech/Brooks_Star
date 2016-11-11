@@ -164,16 +164,36 @@ public class FightProcessor : MonoBehaviour {
 
 	private void switchMachineState (StateMachine machineState) {
 		this.machineState = machineState;
+		if (machineState == StateMachine.PLAYER_TURN) {
+			foreach (StatusEffect eff in fightScreen.playerStatusEffects) {
+				eff.updateStatus ();
+			}
+		} else if (machineState == StateMachine.ENEMY_TURN) {
+			foreach (StatusEffect eff in fightScreen.enemyStatusEffects) {
+				eff.updateStatus ();
+			}
+		}
 //		if (potionBag.isActive() && !canDrinkPotion()) { potionBag.setBagActive(false); }
 //		else if (!potionBag.isActive() && canDrinkPotion()) { potionBag.setBagActive(true); }
 	}
 
 	public void skipTurn () {
-		switchMachineState(StateMachine.PLAYER_MOVE_DONE);
+		switchMachineState(StateMachine.ICONS_ANIMATION);
 	}
 
-	public bool canUseSupply () {
-		return machineState == StateMachine.PLAYER_TURN;
+	public bool canUseSupply (SupplyType supplyType) {
+		if (machineState != StateMachine.PLAYER_TURN) {
+			return false;
+		}
+		if (supplyType == SupplyType.INJECTION_SPEED || supplyType == SupplyType.INJECTION_ARMOR || supplyType == SupplyType.INJECTION_REGENERATION) {
+			StatusEffectType type = supplyType.toEffectType ();
+			foreach (StatusEffect eff in fightScreen.playerStatusEffects) {
+				if (eff.statusType == type && eff.inProgress) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	private void endFight (bool playerWin) {

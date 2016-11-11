@@ -62,4 +62,18 @@ public static class SupplyDescriotion {
 			default: Debug.Log("Unknown supply type: " + type); return 0;
 		}
 	}
+
+	public static StatusEffectType toEffectType (this SupplyType type) {
+		switch (type) {
+			case SupplyType.INJECTION_SPEED:
+				return StatusEffectType.SPEED;
+			case SupplyType.INJECTION_ARMOR:
+				return StatusEffectType.ARMORED;
+			case SupplyType.INJECTION_REGENERATION:
+				return StatusEffectType.REGENERATION;
+			default:
+				Debug.Log ("Unmapped supply type: " + type);
+				return StatusEffectType.NONE;
+		}
+	}
 }

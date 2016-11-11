@@ -3,7 +3,7 @@ using System.Collections;
 
 public class FightEffectPlayer : MonoBehaviour {
 
-	public Sprite damageSprite, healSprite, poisonSprite, blindSprite, paralizeSprite, armorSprite;
+	public Sprite damageSprite, healSprite, poisonSprite, blindSprite, paralizeSprite, armorSprite, regenerateSprite, speedSprite;
 
 	private Transform bg, effectImage;
 
@@ -123,6 +123,10 @@ public class FightEffectPlayer : MonoBehaviour {
 //		effectSetup();
 //	}
 
+	public void playEffectOnEnemy (FightEffectType type, int value) {
+		playEffect (type, value);
+	}
+
 	public void playEffect (FightEffectType type, int value) {
 		damageEffect = type == FightEffectType.DAMAGE;
 		switch (type) {
@@ -131,10 +135,20 @@ public class FightEffectPlayer : MonoBehaviour {
 				effectTxt.color = green;
 				effectTxt.text = "Здоровье +" + value;
 				break;
+			case FightEffectType.REGENERATION:
+				effectRender.sprite = regenerateSprite;
+				effectTxt.color = green;
+				effectTxt.text = "Регенерация";
+				break;
 			case FightEffectType.ARMORED:
 				effectRender.sprite = armorSprite;
 				effectTxt.color = blue;
 				effectTxt.text = "Защита +" + value;
+				break;
+			case FightEffectType.SPEED:
+				effectRender.sprite = speedSprite;
+				effectTxt.color = blue;
+				effectTxt.text = "Ускорение";
 				break;
 			case FightEffectType.BLIND:
 				effectRender.sprite = blindSprite;
@@ -163,14 +177,14 @@ public class FightEffectPlayer : MonoBehaviour {
 	}
 
 	private void effectSetup () {
-//		if (!damageEffect) {
-//			scaling = true;
-//			
-//			scale.x = .1f;
-//			scale.y = .1f;
-//			
-//			effectImage.localScale = scale;
-//		}
+		if (!damageEffect) {
+			scaling = true;
+			
+			scale.x = .1f;
+			scale.y = .1f;
+			
+			effectImage.localScale = scale;
+		}
 		effectIsPlaying = true;
 		effectTxtBG.text = effectTxt.text;
 

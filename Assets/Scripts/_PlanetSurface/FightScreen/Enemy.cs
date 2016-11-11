@@ -56,6 +56,19 @@ public class Enemy : MonoBehaviour {
 		}
 	}
 
+	public int heal (int amount) {
+		if (amount + health > maxHealth) {
+			int calc = maxHealth - health;
+			health = maxHealth;
+//			if (fightInterface.gameObject.activeInHierarchy) { fightInterface.updatePlayerBar(); }
+			return calc;
+		} else {
+			health += amount;
+//			if (fightInterface.gameObject.activeInHierarchy) { fightInterface.updatePlayerBar(); }
+			return amount;
+		}
+	}
+
 	public void destroyEnemy () {
 		gameObject.SetActive(false);
 	}

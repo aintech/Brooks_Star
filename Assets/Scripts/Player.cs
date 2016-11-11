@@ -61,16 +61,16 @@ public class Player {
 		}
 	}
 
-	public static int healPlayer (int healAmount) {
-		if (healAmount + health > maxHealth) {
+	public static int heal (int amount) {
+		if (amount + health > maxHealth) {
 			int heal = maxHealth - health;
 			setHealthToMax();
 			if (fightInterface.gameObject.activeInHierarchy) { fightInterface.updatePlayerBar(); }
 			return heal;
 		} else {
-			health += healAmount;
+			health += amount;
 			if (fightInterface.gameObject.activeInHierarchy) { fightInterface.updatePlayerBar(); }
-			return healAmount;
+			return amount;
 		}
 	}
 
