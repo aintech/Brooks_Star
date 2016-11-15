@@ -7,7 +7,7 @@ public enum SupplyType {
 	INJECTION_SPEED, INJECTION_ARMOR, INJECTION_REGENERATION
 }
 
-public static class SupplyDescriotion {
+public static class SupplyDescription {
 	public static string name (this SupplyType type) {
 		switch (type) {
 			case SupplyType.MEDKIT_SMALL: return "Маленькая аптечка";
@@ -63,17 +63,39 @@ public static class SupplyDescriotion {
 		}
 	}
 
-	public static StatusEffectType toEffectType (this SupplyType type) {
+	public static StatusEffectType toStatusEffectType (this SupplyType type) {
 		switch (type) {
-			case SupplyType.INJECTION_SPEED:
-				return StatusEffectType.SPEED;
-			case SupplyType.INJECTION_ARMOR:
-				return StatusEffectType.ARMORED;
-			case SupplyType.INJECTION_REGENERATION:
-				return StatusEffectType.REGENERATION;
-			default:
-				Debug.Log ("Unmapped supply type: " + type);
-				return StatusEffectType.NONE;
+			case SupplyType.GRENADE_FLASH: return StatusEffectType.BLINDED;
+			case SupplyType.GRENADE_PARALIZE: return StatusEffectType.PARALIZED;
+			case SupplyType.INJECTION_ARMOR: return StatusEffectType.ARMORED;
+			case SupplyType.INJECTION_REGENERATION: return StatusEffectType.REGENERATION;
+			case SupplyType.INJECTION_SPEED: return StatusEffectType.SPEED;
+			case SupplyType.MEDKIT_SMALL: case SupplyType.MEDKIT_MEDIUM: case SupplyType.MEDKIT_LARGE: case SupplyType.MEDKIT_ULTRA: return StatusEffectType.HEAL;
+			default: Debug.Log ("Unmapped supply type: " + type); return StatusEffectType.NONE;
 		}
+	}
+
+	public static FightEffectType toFightEffectType (this SupplyType type) {
+		switch (type) {
+			case SupplyType.GRENADE_FLASH: return FightEffectType.BLIND;
+			case SupplyType.GRENADE_PARALIZE: return FightEffectType.PARALIZED;
+			case SupplyType.INJECTION_ARMOR: return FightEffectType.ARMORED;
+			case SupplyType.INJECTION_REGENERATION: return FightEffectType.REGENERATION;
+			case SupplyType.INJECTION_SPEED: return FightEffectType.SPEED;
+			case SupplyType.MEDKIT_SMALL: case SupplyType.MEDKIT_MEDIUM: case SupplyType.MEDKIT_LARGE: case SupplyType.MEDKIT_ULTRA: return FightEffectType.HEAL;
+			default: Debug.Log("Unknown supply type: " + type); return FightEffectType.DAMAGE;
+		}
+	}
+
+	public static bool isMedkit (this SupplyType type) {
+		return type == SupplyType.MEDKIT_SMALL || type == SupplyType.MEDKIT_MEDIUM || type == SupplyType.MEDKIT_LARGE || type == SupplyType.MEDKIT_ULTRA;
+	}
+
+	public static bool isGrenade (this SupplyType type) {
+		return type == SupplyType.GRENADE_FLASH || type == SupplyType.GRENADE_PARALIZE;
+	}
+
+	public static bool isInjection (this SupplyType type) {
+		return type == SupplyType.INJECTION_ARMOR || type == SupplyType.INJECTION_REGENERATION || type == SupplyType.INJECTION_SPEED;
 	}
 }

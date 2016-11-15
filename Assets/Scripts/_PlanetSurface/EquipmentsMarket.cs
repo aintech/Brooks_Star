@@ -8,7 +8,9 @@ public class EquipmentsMarket : InventoryContainedScreen {
 
 	private SpriteRenderer bgRender;
 
-	private Inventory playerInventory, buyMarket, sellMarket;
+	private Inventory playerInventory, sellMarket;
+
+	public Inventory buyMarket { get; private set; }
 
 	private Button buyBtn, sellBtn, closeBtn;
 
@@ -184,10 +186,6 @@ public class EquipmentsMarket : InventoryContainedScreen {
 //		}
 //		base.hideItemInfo ();
 //	}
-
-	public Inventory getBuyMarket () {
-		return buyMarket;
-	}
 
 	public void closeScreen () {
 		chosenItem = null;

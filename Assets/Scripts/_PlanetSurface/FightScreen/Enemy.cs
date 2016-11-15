@@ -20,7 +20,10 @@ public class Enemy : MonoBehaviour {
 
 	public EnemyType enemyType { get; private set; }
 
-	public void init () {
+	private FightScreen fightScreen;
+
+	public void init (FightScreen fightScreen) {
+		this.fightScreen = fightScreen;
 		render = GetComponent<SpriteRenderer>();
 	}
 
@@ -46,13 +49,17 @@ public class Enemy : MonoBehaviour {
 	}
 
 	public int hitEnemy (int damageAmount, int iconsCount)  {
-		if (damageAmount < armor) {
+		int armorAmount = armor;
+		if (fightScreen.getStatusEffectByType(StatusEffectType.ARMORED, false).inProgress) {
+			armorAmount += fightScreen.getStatusEffectByType(StatusEffectType.ARMORED, false).value;
+		}
+		if (damageAmount <= armorAmount) {
 			return 0;
 		} else {
-			health -= (damageAmount - armor);
+			health -= (damageAmount - armorAmount);
 			setSprite();
 			Player.updatePerk(PerkType.MARKSMAN, damageAmount * damageToPerkMultiplier);
-			return damageAmount - armor;
+			return damageAmount - armorAmount;
 		}
 	}
 

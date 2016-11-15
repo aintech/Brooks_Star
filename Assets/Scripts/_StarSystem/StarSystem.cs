@@ -61,9 +61,11 @@ public class StarSystem : MonoBehaviour {
 
 		statusScreen = GameObject.Find("Status Screen").GetComponent<StatusScreen>().init(this, descriptor);
 
+		descriptor.playerData = statusScreen.playerData;
+
 		if (Vars.shipCurrentHealth == -1) {
-			statusScreen.getShipData().initializeRandomShip (HullType.ARMAGEDDON);
-			statusScreen.getInventory().setCapacity(statusScreen.getShipData().hullType.getStorageCapacity());
+			statusScreen.shipData.initializeRandomShip (HullType.ARMAGEDDON);
+			statusScreen.inventory.setCapacity(statusScreen.shipData.hullType.getStorageCapacity());
 
 		} else {
 			statusScreen.initFromVars();
@@ -79,7 +81,7 @@ public class StarSystem : MonoBehaviour {
 
 		explosionsManager = GameObject.Find("Explosions Manager").GetComponent<ExplosionsManager>().init();
 
-		lootDropper = GameObject.Find("Loot Dropper").GetComponent<LootDropper>().init(statusScreen.getInventory(), descriptor);
+		lootDropper = GameObject.Find("Loot Dropper").GetComponent<LootDropper>().init(statusScreen.inventory, descriptor);
 
 		spawner = GetComponent<EnemySpawner>().init(Vars.userInterface.minimap, playerShip.transform);
 
@@ -107,7 +109,7 @@ public class StarSystem : MonoBehaviour {
 
 		Vars.userInterface.minimap.loadSystem();
 
-		statusScreen.getShipData().setShieldToMax();
+		statusScreen.shipData.setShieldToMax();
 
 		foreach (EnemyShip enemy in Vars.enemyShipsPool) {
 			if (enemy.alive) {
@@ -125,7 +127,7 @@ public class StarSystem : MonoBehaviour {
 
 	private void initPlayerShip () {
 		playerShip = Instantiate<Transform> (playerShipPrefab).GetComponent<PlayerShip> ();
-		playerShip.initPlayerShip(statusScreen.getShipData(), this);
+		playerShip.initPlayerShip(statusScreen.shipData, this);
 		cameraController = mainCamera.GetComponent<CameraController>();
 		cameraController.init(playerShip.transform, starField);
 	}

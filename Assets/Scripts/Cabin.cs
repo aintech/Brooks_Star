@@ -15,6 +15,6 @@ public class Cabin : MonoBehaviour, ButtonHolder {
 	}
 
 	private void rest () {
-		
+		Player.setHealthToMax();
 	}
 }

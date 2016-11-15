@@ -22,9 +22,7 @@ public class FightProcessor : MonoBehaviour {
 
 	private FightScreen fightScreen;
 
-	private List<ItemData> playerEffects = new List<ItemData>();
-
-	private List<ItemData> enemyEffects = new List<ItemData>();
+	private int playerActions, enemyActions;
 
 	public void init (FightScreen fightScreen, ElementsHolder elementsHolder, Enemy enemy) {
 		this.fightScreen = fightScreen;
@@ -33,35 +31,76 @@ public class FightProcessor : MonoBehaviour {
 	}
 
 	public void startFight () {
+		calcActions();
+		updateStatusEffects();
 		switchMachineState(StateMachine.PLAYER_TURN);
+	}
+
+	private void calcActions () {
+		calcActions(true);
+		calcActions(false);
+
+	}
+
+	private void calcActions (bool asPlayer) {
+		if (fightScreen.getStatusEffectByType(StatusEffectType.PARALIZED, asPlayer).inProgress) {
+			if (asPlayer) { playerActions = 0; }
+			else { enemyActions = 0; }
+			fightScreen.updateActionTexts(playerActions, enemyActions);
+			return;
+		}
+
+		int actions;
+		if (asPlayer) { actions = 3; }
+		else { actions = enemy.enemyType.speed(); }
+
+		if (fightScreen.getStatusEffectByType(StatusEffectType.SPEED, asPlayer).inProgress) {
+			actions += fightScreen.getStatusEffectByType(StatusEffectType.SPEED, asPlayer).value;
+		}
+
+		if (asPlayer) { playerActions = actions; }
+		else { enemyActions = actions; }
+		fightScreen.updateActionTexts(playerActions, enemyActions);
 	}
 
 	void Update () {
 		switch (machineState) {
 			case StateMachine.NOT_IN_FIGHT: break;
 			case StateMachine.PLAYER_TURN:
-				if (!playerChecked) {
-					if (!checkNextTurn(true)) { switchMachineState(StateMachine.PLAYER_MOVE_DONE); }
+//				if (!playerChecked) {
+//					if (!checkNextTurn(true)) { switchMachineState(StateMachine.PLAYER_MOVE_DONE); }
+//				} else {
+				if (playerActions == 0) {
+					PLAYER_MOVE_DONE = false;
+					switchMachineState(StateMachine.ICONS_ANIMATION);
+				} else if (PLAYER_MOVE_DONE) {
+					PLAYER_MOVE_DONE = false;
+					playerActions--;
+					fightScreen.updateActionTexts(playerActions, enemyActions);
+					switchMachineState(StateMachine.ICONS_ANIMATION);
 				} else {
-					if (PLAYER_MOVE_DONE) {
-						switchMachineState(StateMachine.ICONS_ANIMATION);
-						PLAYER_MOVE_DONE = false;
-					} else {
-						elementsHolder.checkPlayerInput();
-					}
+					elementsHolder.checkPlayerInput();
 				}
+//				}
 				break;
 			case StateMachine.ICONS_ANIMATION:
 				if (ELEMENTS_ANIM_DONE && FIGHT_ANIM_PLAYER_DONE && FIGHT_ANIM_ENEMY_DONE) {
+
+					switchMachineState(StateMachine.PLAYER_MOVE_DONE);
+//					if (playerActions == 0) {
+//						switchMachineState(StateMachine.PLAYER_MOVE_DONE);
+//					} else {
+//						switchMachineState(StateMachine.PLAYER_TURN);
+//					}
+
 					//				if (Hero.getHealth() > Vars.player.getMaxHealth()) { Vars.player.setHealthToMax(); }
 					//				if (Vars.enemy.getHealth() > Vars.enemy.getMaxHealth()) { Vars.enemy.setHealthToMax(); }
-					switchMachineState(StateMachine.PLAYER_MOVE_DONE);
 				}
 				break;
 			case StateMachine.PLAYER_MOVE_DONE:
 				afterPlayerMove();
 				//			Vars.player.getStatusEffectHolder().updateEffects();
-				playerChecked = false;
+				//				playerChecked = false;
 				switchMachineState(StateMachine.ICONS_POSITIONING);
 				break;
 			case StateMachine.ICONS_POSITIONING:
@@ -71,12 +110,18 @@ public class FightProcessor : MonoBehaviour {
 					else if (elementsHolder.checkElementsMatch()) {
 						ELEMENTS_ANIM_DONE = false;
 						switchMachineState(StateMachine.ICONS_ANIMATION);
+					} else {
+						if (playerActions == 0) {
+							switchMachineState(StateMachine.ENEMY_TURN);
+						} else {
+							switchMachineState(StateMachine.PLAYER_TURN);
+						}
 					}
-					else { switchMachineState(StateMachine.ENEMY_TURN); }
 				}
 				break;
 			case StateMachine.ENEMY_TURN:
-				if (checkNextTurn(false)) { calculateEnemyTurnResult(); }
+				if (enemyActions > 0) { calculateEnemyTurnResult(); }
+//				if (checkNextTurn(false)) { calculateEnemyTurnResult(); }
 				switchMachineState(StateMachine.ENEMY_MOVE_DONE);
 				break;
 			case StateMachine.ENEMY_MOVE_DONE:
@@ -84,7 +129,12 @@ public class FightProcessor : MonoBehaviour {
 					//				if (Vars.player.getHealth() > Vars.player.getMaxHealth()) { Vars.player.setHealthToMax(); }
 					//				if (Vars.enemy.getHealth() > Vars.enemy.getMaxHealth()) { Vars.enemy.setHealthToMax(); }
 					if (Player.health <= 0) { switchMachineState(StateMachine.ENEMY_WIN); }
-					else { switchMachineState(StateMachine.PLAYER_TURN); }//Vars.enemy.getStatusEffectHolder().updateEffects(); }
+					else if (enemyActions > 0) { switchMachineState(StateMachine.ENEMY_TURN); }
+					else {
+						updateStatusEffects();
+						calcActions();
+						switchMachineState(StateMachine.PLAYER_TURN);
+					}//Vars.enemy.getStatusEffectHolder().updateEffects(); }
 				}
 				break;
 			case StateMachine.PLAYER_WIN:
@@ -96,10 +146,22 @@ public class FightProcessor : MonoBehaviour {
 		}
 	}
 
-	private bool checkNextTurn (bool mustBePlayerTurn) {
-		if (!playerChecked && machineState == StateMachine.PLAYER_TURN) { playerChecked = true; }//???
-		return true;
+	private void updateStatusEffects () {
+			foreach (StatusEffect eff in fightScreen.playerStatusEffects) {
+				eff.updateStatus ();
+			}
+			foreach (StatusEffect eff in fightScreen.enemyStatusEffects) {
+				eff.updateStatus ();
+			}
+//		if (machineState == StateMachine.PLAYER_TURN) {
+//		} else if (machineState == StateMachine.ENEMY_TURN) {
+//		}
 	}
+
+//	private bool checkNextTurn (bool mustBePlayerTurn) {
+//		if (!playerChecked && machineState == StateMachine.PLAYER_TURN) { playerChecked = true; }//???
+//		return true;
+//	}
 
 	private void afterPlayerMove () {
 		elementsHolder.refreshSortingOrder();
@@ -152,6 +214,8 @@ public class FightProcessor : MonoBehaviour {
 		//		}
 		FIGHT_ANIM_PLAYER_DONE = false;
 		fightScreen.fightEffectPlayer.playEffect(FightEffectType.DAMAGE, Player.hitPlayer(enemy.damage));
+		enemyActions--;
+		fightScreen.updateActionTexts(playerActions, enemyActions);
 		//		FightMessenger.addDamageMessage(Vars.playerName, ShotElementType.SIMPLE, damage);
 	}
 
@@ -164,31 +228,34 @@ public class FightProcessor : MonoBehaviour {
 
 	private void switchMachineState (StateMachine machineState) {
 		this.machineState = machineState;
-		if (machineState == StateMachine.PLAYER_TURN) {
-			foreach (StatusEffect eff in fightScreen.playerStatusEffects) {
-				eff.updateStatus ();
-			}
-		} else if (machineState == StateMachine.ENEMY_TURN) {
-			foreach (StatusEffect eff in fightScreen.enemyStatusEffects) {
-				eff.updateStatus ();
-			}
-		}
 //		if (potionBag.isActive() && !canDrinkPotion()) { potionBag.setBagActive(false); }
 //		else if (!potionBag.isActive() && canDrinkPotion()) { potionBag.setBagActive(true); }
 	}
 
-	public void skipTurn () {
-		switchMachineState(StateMachine.ICONS_ANIMATION);
+	public void skipAction () {
+//		playerActions--;
+//		fightScreen.updateActionTexts(playerActions, enemyActions);
+		PLAYER_MOVE_DONE = true;
+//		switchMachineState(StateMachine.ICONS_ANIMATION);
 	}
 
 	public bool canUseSupply (SupplyType supplyType) {
-		if (machineState != StateMachine.PLAYER_TURN) {
+		if (machineState != StateMachine.PLAYER_TURN || playerActions == 0) {
 			return false;
 		}
 		if (supplyType == SupplyType.INJECTION_SPEED || supplyType == SupplyType.INJECTION_ARMOR || supplyType == SupplyType.INJECTION_REGENERATION) {
-			StatusEffectType type = supplyType.toEffectType ();
+			StatusEffectType type = supplyType.toStatusEffectType ();
 			foreach (StatusEffect eff in fightScreen.playerStatusEffects) {
-				if (eff.statusType == type && eff.inProgress) {
+				if (eff.statusType == type && eff.isFired) {
+					Messenger.showMessage("Персонаж уже находится под действием эффекта '" + eff.statusType.name() + "'");
+					return false;
+				}
+			}
+		} else if (supplyType == SupplyType.GRENADE_FLASH || supplyType == SupplyType.GRENADE_PARALIZE) {
+			StatusEffectType type = supplyType.toStatusEffectType ();
+			foreach (StatusEffect eff in fightScreen.enemyStatusEffects) {
+				if (eff.statusType == type && eff.isFired) {
+					Messenger.showMessage("Противник уже находится под действием эффекта '" + eff.statusType.name() + "'");
 					return false;
 				}
 			}

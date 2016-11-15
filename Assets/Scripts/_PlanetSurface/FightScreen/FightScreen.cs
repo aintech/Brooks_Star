@@ -50,11 +50,21 @@ public class FightScreen : MonoBehaviour {
 
 	public List<StatusEffect> enemyStatusEffects = new List<StatusEffect>();
 
+	private List<StatusEffect> effList;
+
+	private Vector3 playerStatusStartPosition = new Vector3(6.8f, 0, 0),
+					enemyStatusStartPosition = new Vector3(6.9f, 7.5f, 0);
+
+	private float playerStatusStep = 1.1f, enemyStatusStep = -.9f;
+
+	private StrokeText playerActionsText, enemyActionsText;
+
 	public FightScreen init (ScanningScreen scanningScreen, PlayerData playerData, ItemDescriptor itemDescriptor) {
 		this.scanningScreen = scanningScreen;
 		this.playerData = playerData;
 		this.itemDescriptor = itemDescriptor;
-		itemDescriptor.setFightScreen(this);
+
+		itemDescriptor.fightScreen = this;
 		elementsHolder = transform.Find("ElementsHolder").GetComponent<ElementsHolder>();
 		iconsHolderRender = elementsHolder.GetComponent<SpriteRenderer>();
 		fightEffectPlayer = transform.Find("Fight Effect Player").GetComponent<FightEffectPlayer>().init();
@@ -67,13 +77,18 @@ public class FightScreen : MonoBehaviour {
 		deadStone = enemyDeadAnimator.transform.Find("DeadStone");
 		enemyPos = enemy.transform.localPosition;
 		elementsHolder.init();
-		enemy.init();
+		enemy.init(this);
 		elementEffectPlayer.init(this, enemy);
 		fightProcessor.init(this, elementsHolder, enemy);
 
 		elementsHolder.gameObject.SetActive(true);
 		enemyDeadAnimator.gameObject.SetActive(false);
 		gameObject.SetActive(false);
+
+		Transform actionsHolder = transform.Find("Actions Holder");
+		actionsHolder.Find("Delimiter").GetComponent<StrokeText>().init("default", 5);
+		playerActionsText = actionsHolder.Find("Player Actions").GetComponent<StrokeText>().init("default", 5);
+		enemyActionsText = actionsHolder.Find("Enemy Actions").GetComponent<StrokeText>().init("default", 5);
 
 		Transform supplyHolder = transform.Find("Supply Holder");
 		SupplySlot slot;
@@ -82,6 +97,8 @@ public class FightScreen : MonoBehaviour {
 			slot.init();
 			supplySlots.Add(slot);
 		}
+
+		Player.fightScreen = this;
 
 		return this;
 	}
@@ -176,6 +193,10 @@ public class FightScreen : MonoBehaviour {
 		} else {
 			showFightResultScreen();
 		}
+
+		foreach (StatusEffect eff in playerStatusEffects) { eff.endEffect(); }
+		foreach (StatusEffect eff in enemyStatusEffects) { eff.endEffect(); }
+
 		elementsHolder.setActive(false);
 		fightOver = true;
 	}
@@ -218,51 +239,59 @@ public class FightScreen : MonoBehaviour {
 		if (slot.item != null) {
 			SupplyData data = (SupplyData)slot.item.itemData;
 			if (fightProcessor.canUseSupply (data.type)) {
-				switch (data.type) {
-					case SupplyType.MEDKIT_SMALL:
-					case SupplyType.MEDKIT_MEDIUM:
-					case SupplyType.MEDKIT_LARGE:
-					case SupplyType.MEDKIT_ULTRA:
-						fightEffectPlayer.playEffect (FightEffectType.HEAL, Player.heal (data.value));
-						break;
-					case SupplyType.INJECTION_ARMOR:
-						fightEffectPlayer.playEffect (FightEffectType.ARMORED, data.value);
-						getStatusEffectByType (StatusEffectType.ARMORED, true).addStatus (data.value, data.duration);
-						break;
-					case SupplyType.INJECTION_REGENERATION:
-						fightEffectPlayer.playEffect (FightEffectType.REGENERATION, 0);
-						getStatusEffectByType (StatusEffectType.REGENERATION, true).addStatus (data.value, data.duration);
-						break;
-					case SupplyType.INJECTION_SPEED:
-						fightEffectPlayer.playEffect (FightEffectType.SPEED, 0);
-						getStatusEffectByType (StatusEffectType.SPEED, true).addStatus (data.value, data.duration);
-						break;
-					case SupplyType.GRENADE_FLASH:
-						fightEffectPlayer.playEffectOnEnemy (FightEffectType.BLIND, 0);
-						getStatusEffectByType (StatusEffectType.BLINDED, false).addStatus (data.value, data.duration);
-						break;
-					case SupplyType.GRENADE_PARALIZE:
-						fightEffectPlayer.playEffectOnEnemy (FightEffectType.PARALIZED, 0);
-						getStatusEffectByType (StatusEffectType.PARALIZED, false).addStatus (data.value, data.duration);
-						break;
+				bool toPlayer = data.type != SupplyType.GRENADE_FLASH && data.type != SupplyType.GRENADE_PARALIZE;
+				StatusEffect statusEffect = getStatusEffectByType(data.type.toStatusEffectType(), toPlayer);
+				FightEffectType fightEffectType = data.type.toFightEffectType();
 
+				if (data.type.isMedkit()) {
+					fightEffectPlayer.playEffect(fightEffectType, Player.heal(data.value));
+				} else if (data.type.isGrenade()) {
+					fightEffectPlayer.playEffectOnEnemy (fightEffectType, 0);
+					statusEffect.addStatus (data.value, data.duration);
+				} else if (data.type.isInjection()) {
+					fightEffectPlayer.playEffect (fightEffectType, data.value);
+					statusEffect.addStatus (data.value, data.duration);
+				} else {
+					Debug.Log("Unknown status effect type");
 				}
-				fightProcessor.skipTurn ();
+
+				Vector3 effectPos = toPlayer? playerStatusStartPosition: enemyStatusStartPosition;
+
+				int activeEffects = -1;//вычитаем добавляемый эффект
+
+				effList = toPlayer? playerStatusEffects: enemyStatusEffects;
+
+				for (int i = 0; i < effList.Count; i++) {
+					if (effList[i].isFired) { activeEffects++; }
+				}
+
+				if (toPlayer) { effectPos.x += activeEffects * playerStatusStep; }
+				else { effectPos.y += activeEffects * enemyStatusStep; }
+
+				statusEffect.transform.localPosition = effectPos;
+
+				fightProcessor.skipAction ();
 				FightProcessor.FIGHT_ANIM_PLAYER_DONE = false;
 				slot.takeItem ().destroy ();
 			}
 		}
 	}
 
-	public StatusEffect getStatusEffectByType (StatusEffectType type, bool asPlayer) {
-		List<StatusEffect> list = asPlayer? playerStatusEffects: enemyStatusEffects;
-		foreach (StatusEffect eff in list) {
+	public StatusEffect getStatusEffectByType (StatusEffectType type, bool toPlayer) {
+		if (type.withoutStatusHolder()) { return null; }
+		effList = toPlayer? playerStatusEffects: enemyStatusEffects;
+		foreach (StatusEffect eff in effList) {
 			if (eff.statusType == type) {
 				return eff;
 			}
 		}
 		Debug.Log ("Cant find holder of effect type: " + type);
 		return null;
+	}
+
+	public void updateActionTexts (int playerActions, int enemyActions) {
+		playerActionsText.setText(playerActions == 0? "-": playerActions.ToString());
+		enemyActionsText.setText(enemyActions == 0? "-": enemyActions.ToString());
 	}
 
 //	void Update () {

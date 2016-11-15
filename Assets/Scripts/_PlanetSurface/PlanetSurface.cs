@@ -23,8 +23,6 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 
 	private IndustrialScreen industrialScreen;
 
-	private Inventory inventory, buyMarket;
-
 	private MessageBox messageBox;
 
 	private Storyline story;
@@ -52,7 +50,8 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 		ItemDescriptor descriptor = GameObject.Find("Item Descriptor").GetComponent<ItemDescriptor>().init();
 
 		statusScreen = GameObject.Find("Status Screen").GetComponent<StatusScreen>().init(null, descriptor);
-		inventory = statusScreen.getInventory();
+
+		descriptor.playerData = statusScreen.playerData;
 
 		Vars.userInterface = GameObject.FindGameObjectWithTag("UserInterface").GetComponent<UserInterface>().init(statusScreen);
 
@@ -60,11 +59,9 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 		story = GameObject.Find("Storyline").GetComponent<Storyline>();
 
 		exploreScreen = GameObject.Find("Explore Screen").GetComponent<ExploreScreen>().init(this, statusScreen.playerData, descriptor);
-		market = GameObject.Find("Equipments Market").GetComponent<EquipmentsMarket> ().init(this, inventory, descriptor);
-		hangarScreen = GameObject.Find("Hangar Screen").GetComponent<HangarScreen>().init(this, inventory, statusScreen.getShipData());
+		market = GameObject.Find("Equipments Market").GetComponent<EquipmentsMarket> ().init(this, statusScreen.inventory, descriptor);
+		hangarScreen = GameObject.Find("Hangar Screen").GetComponent<HangarScreen>().init(this, statusScreen.inventory, statusScreen.shipData);
 		industrialScreen = GameObject.Find("Industrial Screen").GetComponent<IndustrialScreen>().init(this);
-
-		buyMarket = market.getBuyMarket();
 
 		messageBox.init(this);
 		story.init();
@@ -77,10 +74,10 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 	}
 
 	private void startNewGame () {
-		statusScreen.getShipData().initializeRandomShip(HullType.CORVETTE);
+		statusScreen.shipData.initializeRandomShip(HullType.CORVETTE);
 
-		inventory.fillWithRandomItems(50, "Player Item");
-		buyMarket.fillWithRandomItems(50, "Market Item");
+		statusScreen.inventory.fillWithRandomItems(50, "Player Item");
+		market.buyMarket.fillWithRandomItems(50, "Market Item");
 
 		sendToVars();
 //		messageBox.showNewMessage(story.getMessageContainer(Storyline.StoryPart.INTRODUCTION));
@@ -88,9 +85,9 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 
 	public void landPlanet () {
 		initFromVars();
-		if (Vars.planetType.isColonized() && buyMarket.getItems().Count == 0) { buyMarket.fillWithRandomItems(); }
-		statusScreen.getShipData().setShieldToMax();
-		inventory.calculateFreeVolume();
+		if (Vars.planetType.isColonized() && market.buyMarket.getItems().Count == 0) { market.buyMarket.fillWithRandomItems(); }
+		statusScreen.shipData.setShieldToMax();
+		statusScreen.inventory.calculateFreeVolume();
 		UserInterface.showInterface = true;
 		background.setBackground();
 		if (Vars.planetType.isColonized()) {
@@ -101,11 +98,11 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 	}
 
 	public void leavePlanet () {
-		if (statusScreen.getShipData().energyNeeded() < 0) {
+		if (statusScreen.shipData.energyNeeded() < 0) {
 			Messenger.showMessage("Кораблю не хватает энергии!");
-		} else if (statusScreen.getShipData().getSlot(HullSlot.Type.ENGINE, 0).item == null) {
+		} else if (statusScreen.shipData.getSlot(HullSlot.Type.ENGINE, 0).item == null) {
 			Messenger.showMessage("У корабля отсутствует двигатель!");
-		} else if (inventory.getFreeVolume() < .01f) {
+		} else if (statusScreen.inventory.getFreeVolume() < .01f) {
 			Messenger.showMessage("Корабль перегружен!");
 		} else {
 			sendToVars();
@@ -136,12 +133,12 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 
 	private void sendToVars () {
 		statusScreen.sendToVars();
-		if (Vars.planetType.isColonized()) { buyMarket.sendToVars(); }
+		if (Vars.planetType.isColonized()) { market.buyMarket.sendToVars(); }
 	}
 	
 	private void initFromVars () {
 		statusScreen.initFromVars();
-		if (Vars.planetType.isColonized()) { buyMarket.initFromVars(); }
+		if (Vars.planetType.isColonized()) { market.buyMarket.initFromVars(); }
 	}
 
 	public void setVisible (bool visible) {

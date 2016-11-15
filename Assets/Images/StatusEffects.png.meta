@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: c466716c67d607e4abe5dc284be4bf61
-timeCreated: 1478862356
+timeCreated: 1479132747
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -8,6 +8,8 @@ TextureImporter:
     21300002: StatusEffects_Blinded
     21300004: StatusEffects_Poisoned
     21300006: StatusEffects_Regeneration
+    21300008: StatusEffects_Armored
+    21300010: StatusEffects_Speed
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -103,6 +105,32 @@ TextureImporter:
         y: 131
         width: 110
         height: 91
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusEffects_Armored
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 240
+        width: 110
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusEffects_Speed
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 240
+        width: 110
+        height: 90
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

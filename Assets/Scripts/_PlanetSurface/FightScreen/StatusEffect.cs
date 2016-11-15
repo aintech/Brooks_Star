@@ -17,8 +17,18 @@ public class StatusEffect : MonoBehaviour {
 
 	public bool inProgress { get; private set; }
 
+	public bool isFired { get; private set; }
+
+	private SpriteRenderer render;
+
+	private Color32 disabledColor = new Color32(255, 255, 255, 120), enabledColor = new Color32(255, 255, 255, 255);
+
 	public StatusEffect init () {
 		turnsText = transform.Find("Turns").GetComponent<StrokeText>().init("default", 5);
+		inProgress = false;
+
+		render = GetComponent<SpriteRenderer>();
+
 		gameObject.SetActive(false);
 
 		return this;
@@ -31,13 +41,19 @@ public class StatusEffect : MonoBehaviour {
 	public void addStatus (int value, int duration) {
 		this.value = value;
 		this.duration = duration;
+
+		render.color = disabledColor;
 		turnsText.setText (duration.ToString ());
 		turnsText.gameObject.SetActive (true);
 		gameObject.SetActive(true);
-		inProgress = true;
+		isFired = true;
 	}
 
 	public void updateStatus () {
+		if (isFired && !inProgress) {
+			inProgress = true;
+			render.color = enabledColor;
+		}
 		if (!inProgress) {
 			return;
 		}
@@ -45,11 +61,10 @@ public class StatusEffect : MonoBehaviour {
 		if (duration >= 0) {
 			applyEffect ();
 		}
-		if (duration == 1) {
-			turnsText.gameObject.SetActive (false);
-		} else if (duration == 0) {
-			endEffect ();
-		}
+		if (duration == 1) { turnsText.gameObject.SetActive (false); }
+		else if (duration == 0 && !statusType.isStatusActiveOnNextTurn()) { endEffect (); }
+		else if (duration < 0 && statusType.isStatusActiveOnNextTurn()) { endEffect(); }
+
 		turnsText.setText (duration.ToString ());
 	}
 
@@ -65,8 +80,13 @@ public class StatusEffect : MonoBehaviour {
 		}
 	}
 
-	private void endEffect () {
+	private void hideEffect () {
+		gameObject.SetActive (false);
+	}
+
+	public void endEffect () {
 		inProgress = false;
+		isFired = false;
 		gameObject.SetActive (false);
 	}
 }

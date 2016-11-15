@@ -26,6 +26,10 @@ public class Player {
 
 	public static FightInterface fightInterface;
 
+	public static PlayerData playerData;
+
+	public static FightScreen fightScreen;
+
 	public static void init () {
 		if (perks == null || perks.Count == 0) {
 			perks = new Dictionary<PerkType, float>();
@@ -52,12 +56,17 @@ public class Player {
 	}
 
 	public static int hitPlayer (int damageAmount)  {
-		if (armor != null && damageAmount < armor.armorClass) {
+		int armorAmount = armor == null? 0: armor.armorClass;
+		if (fightScreen.getStatusEffectByType(StatusEffectType.ARMORED, true).inProgress) {
+			armorAmount += fightScreen.getStatusEffectByType(StatusEffectType.ARMORED, true).value;
+		}
+
+		if (damageAmount <= armorAmount) {
 			return 0;
 		} else {
-			health -= (damageAmount - (armor == null? 0: armor.armorClass));
+			health -= (damageAmount - armorAmount);
 			if (fightInterface.gameObject.activeInHierarchy) { fightInterface.updatePlayerBar(); }
-			return damageAmount - (armor == null? 0: armor.armorClass);
+			return damageAmount - armorAmount;
 		}
 	}
 
@@ -76,6 +85,7 @@ public class Player {
 
 	public static void setHealthToMax () {
 		health = maxHealth;
+		playerData.updateHealthValue();
 	}
 
 	public static void updatePerk (PerkType type, float value) {

@@ -35,4 +35,8 @@ public static class EnemyDescriptor {
 			default: Debug.Log("Unknown enemy type: " + type); return 0;
 		}
 	}
+
+	public static int speed (this EnemyType type) {
+		return 3;
+	}
 }

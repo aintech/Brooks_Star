@@ -3,6 +3,8 @@ using System.Collections;
 
 public class ItemDescriptor : MonoBehaviour {
 
+	private const float fontLengthMulty = 4.9f;
+
 	private Transform 	trans,
 						namePre, nameBG,
 						qualityPre, qualityBG,
@@ -56,7 +58,9 @@ public class ItemDescriptor : MonoBehaviour {
 
 	private EquipmentsMarket market;
 
-	private FightScreen fightScreen;
+	public FightScreen fightScreen;
+
+	public PlayerData playerData;
 
 	public ItemDescriptor init () {
 		trans = transform.Find ("Descriptor");
@@ -104,10 +108,6 @@ public class ItemDescriptor : MonoBehaviour {
 		hide ();
 
 		return this;
-	}
-
-	public void setFightScreen (FightScreen fightScreen) {
-		this.fightScreen = fightScreen;
 	}
 
 	public void setSpaceOffset (Vector3 spaceOffset) {
@@ -190,15 +190,19 @@ public class ItemDescriptor : MonoBehaviour {
 		}
 	}
 
+	private float calcMeshLength (MeshRenderer mesh) {
+		return mesh.bounds.size.x * fontLengthMulty;
+	}
+
 	private void showDescription (Perk perk) {
 		this.perk = perk;
 
 		nameValue.text = perk.perkType.getName();
-		scale.x = nameValue.text.Length + 1;
+		scale.x = calcMeshLength(nameRender);// nameValue.text.Length + 1;
 		nameBG.localScale = scale;
 
 		value1.text = perk.perkType.getDescription() + " <color=lime>+" + (perk.perkType.getValuePerLevel() * Player.getPerkLevel(perk.perkType)) + "%</color>";
-		scale.x = value1.text.Length - 20.5f;
+		scale.x = calcMeshLength(value1Render);// value1.text.Length - 20.5f;
 		bg1.localScale = scale;
 
 		maxX = screenWidth - value1Render.bounds.size.x - .5f;
@@ -226,6 +230,16 @@ public class ItemDescriptor : MonoBehaviour {
 	private void passRightClick () {
 		if (inventoryType == Type.MARKET_BUY) { market.askToBuy(item); }
 		else if (inventoryType == Type.MARKET_SELL) { market.askToSell(item); }
+		else if (inventoryType == Type.INVENTORY) {
+			if (holder != null && holder is InventoryCell && holder.item != null && holder.item.type == ItemType.SUPPLY) {
+				for (int i = 0; i < playerData.supplySlots.Count; i++) {
+					if (playerData.getSupplySlot(i).item == null) {
+						playerData.getSupplySlot(i).setItem(holder.takeItem());
+						break;
+					}
+				}
+			}
+		}
 		else if (inventoryType == Type.FIGHT) {
 			if (holder != null && holder is SupplySlot) {
 				fightScreen.useSupply((SupplySlot)holder);
@@ -236,14 +250,14 @@ public class ItemDescriptor : MonoBehaviour {
 	private float setCost(int index, ItemData data) {
 		string text = (inventoryType == Type.MARKET_BUY? "Купить за": inventoryType == Type.MARKET_SELL? "Продать за": "Стоимость:")  + " <color=yellow>" + data.cost +
 					  (data.quantity == 1? "$</color>": (" (" + (data.quantity * data.cost) + ")$</color>"));
-		scale.x = text.Length - (data.quantity == 1? 22.5f: 24f);
+//		scale.x = text.Length - (data.quantity == 1? 22.5f: 24f);
 		minY = - 4.7f + (.4f * index);// + transform.localPosition.y;
 		switch (index) {
-			case 1: value1.text = text; bg1.localScale = scale; return value1Render.bounds.size.x;
-			case 2: value2.text = text; bg2.localScale = scale; return value2Render.bounds.size.x;
-			case 3: value3.text = text; bg3.localScale = scale; return value3Render.bounds.size.x;
-			case 4: value4.text = text; bg4.localScale = scale; return value4Render.bounds.size.x;
-			case 5: value5.text = text; bg5.localScale = scale; return value5Render.bounds.size.x;
+			case 1: value1.text = text; scale.x = calcMeshLength(value1Render); bg1.localScale = scale; return value1Render.bounds.size.x;
+			case 2: value2.text = text; scale.x = calcMeshLength(value2Render); bg2.localScale = scale; return value2Render.bounds.size.x;
+			case 3: value3.text = text; scale.x = calcMeshLength(value3Render); bg3.localScale = scale; return value3Render.bounds.size.x;
+			case 4: value4.text = text; scale.x = calcMeshLength(value4Render); bg4.localScale = scale; return value4Render.bounds.size.x;
+			case 5: value5.text = text; scale.x = calcMeshLength(value5Render); bg5.localScale = scale; return value5Render.bounds.size.x;
 			default: Debug.Log("Unknown index: " + index); return 0;
 		}
 	}
@@ -257,7 +271,7 @@ public class ItemDescriptor : MonoBehaviour {
 			qualityValue.gameObject.SetActive (true);
 
 			qualityValue.text = item.quality.getName();
-			scale.x = qualityValue.text.Length + 1;
+			scale.x = calcMeshLength(qualityRender);// qualityValue.text.Length + 1;
 			qualityBG.localScale = scale;
 			qualityValue.color = (data.quality == ItemQuality.ARTEFACT? artefactColor:
 								  data.quality == ItemQuality.UNIQUE? uniqueColor: 
@@ -272,7 +286,7 @@ public class ItemDescriptor : MonoBehaviour {
 		nameValue.gameObject.SetActive (true);
 
 		nameValue.text = data.name;
-		scale.x = nameValue.text.Length + 1;
+		scale.x = calcMeshLength(nameRender);// nameValue.text.Length + 1;
 		nameBG.localScale = scale;
 		maxLenght = Mathf.Max(maxLenght, nameRender.bounds.size.x);
 
@@ -292,17 +306,17 @@ public class ItemDescriptor : MonoBehaviour {
 					case SupplyType.MEDKIT_MEDIUM:
 					case SupplyType.MEDKIT_LARGE:
 					case SupplyType.MEDKIT_ULTRA:
-						val = "Восстанавливает " + sud.value + " HP";
+						val = "Восстанавливает <color=white>" + sud.value + "</color> HP";
 						break;
-					case SupplyType.GRENADE_FLASH: val = "Оглушение на " + sud.duration + " ходов"; break;
-					case SupplyType.GRENADE_PARALIZE: val = "Паралич на " + sud.duration + " ходов"; break;
-					case SupplyType.INJECTION_SPEED: val = "Дополнительно " + sud.value + " действий на " + sud.duration + " ходов"; break;
-					case SupplyType.INJECTION_REGENERATION: val = "Восстановление по " + sud.value + " HP в течении " + sud.duration + " ходов"; break;
-					case SupplyType.INJECTION_ARMOR: val = "Повышение защиты на " + sud.value + " в течении " + sud.duration + " ходов"; break;
+					case SupplyType.GRENADE_FLASH: val = StatusEffectType.BLINDED.name() + " на <color=white>" + sud.duration + "</color> ходов"; break;
+					case SupplyType.GRENADE_PARALIZE: val = StatusEffectType.PARALIZED.name() + " на <color=white>" + sud.duration + "</color> ходов"; break;
+					case SupplyType.INJECTION_SPEED: val = "Дополнительно <color=white>" + sud.value + "</color> действий на <color=white>" + sud.duration + "</color> ходов"; break;
+					case SupplyType.INJECTION_REGENERATION: val = "Восстановление по <color=white>" + sud.value + "</color> HP в течении <color=white>" + sud.duration + "</color> ходов"; break;
+					case SupplyType.INJECTION_ARMOR: val = "Повышение защиты на <color=white>" + sud.value + "</color> в течении <color=white>" + sud.duration + "</color> ходов"; break;
 					default: Debug.Log("Unknown supply type: " + sud.type); val = ""; break;
 				}
 				value1.text = "Эффект: <color=orange>" + val + "</color>";
-				scale.x = value1.text.Length - 23;// - (количество спецсимволов)
+				scale.x = calcMeshLength(value1Render);// value1Render.bounds.size.x * 4.8f;// value1.text.Length - 23;// - (количество спецсимволов)
 				bg1.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value1Render.bounds.size.x);
 
@@ -327,7 +341,7 @@ public class ItemDescriptor : MonoBehaviour {
 
 				HandWeaponData hwd = (HandWeaponData)data;
 				value1.text = "Урон: <color=orange>" + hwd.minDamage + " - " + hwd.maxDamage + "</color>";
-				scale.x = value1.text.Length - 24;// - (количество спецсимволов)
+				scale.x = calcMeshLength(value1Render);//value1.text.Length - 24;// - (количество спецсимволов)
 				bg1.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value1Render.bounds.size.x);
 
@@ -344,7 +358,7 @@ public class ItemDescriptor : MonoBehaviour {
 
 				BodyArmorData bad = (BodyArmorData)data;
 				value1.text = "Защита: <color=orange>" + bad.armorClass + "</color>";
-				scale.x = value1.text.Length - 22;
+				scale.x = calcMeshLength(value1Render);//value1.text.Length - 22;
 				bg1.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value1Render.bounds.size.x);
 
@@ -370,22 +384,22 @@ public class ItemDescriptor : MonoBehaviour {
 
 				WeaponData wd = (WeaponData)data;
 				value1.text = "Урон: <color=orange>" + wd.minDamage + " - " + wd.maxDamage + "</color>";
-				scale.x = value1.text.Length - 24;
+				scale.x = calcMeshLength(value1Render);//value1.text.Length - 24;
 				bg1.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value1Render.bounds.size.x);
 
 				value2.text = "Перезарядка: <color=orange>" + wd.reloadTime.ToString("0.00") + "</color>";
-				scale.x = value2.text.Length - 22.5F;
+				scale.x = calcMeshLength(value2Render);//value2.text.Length - 22.5F;
 				bg2.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value2Render.bounds.size.x);
 
 				value3.text = "Питание: <color=cyan>" + data.energyNeeded + "</color>";
-				scale.x = value3.text.Length - 20.5f;
+				scale.x = calcMeshLength(value3Render);//value3.text.Length - 20.5f;
 				bg3.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value3Render.bounds.size.x);
 
 				value4.text = "Объём: <color=orange>" + data.volume.ToString("0.0") + "</color>";
-				scale.x = value4.text.Length - 22.5F;
+				scale.x = calcMeshLength(value4Render);//value4.text.Length - 22.5F;
 				bg4.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value4Render.bounds.size.x);
 
@@ -408,17 +422,17 @@ public class ItemDescriptor : MonoBehaviour {
 
 				EngineData ed = (EngineData)data;
 				value1.text = "Мощность: <color=orange>" + ((ed.power) * 1000).ToString("0") + "</color>";
-				scale.x = value1.text.Length - 22.5f;
+				scale.x = calcMeshLength(value1Render);//value1.text.Length - 22.5f;
 				bg1.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value1Render.bounds.size.x);
 
 				value2.text = "Питание: <color=cyan>" + data.energyNeeded + "</color>";
-				scale.x = value2.text.Length - 20.5f;
+				scale.x = calcMeshLength(value2Render);//value2.text.Length - 20.5f;
 				bg2.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value2Render.bounds.size.x);
 
 				value3.text = "Объём: <color=orange>" + data.volume.ToString("0.0") + "</color>";
-				scale.x = value3.text.Length - 22.5F;
+				scale.x = calcMeshLength(value3Render);//value3.text.Length - 22.5F;
 				bg3.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value3Render.bounds.size.x);
 
@@ -438,12 +452,12 @@ public class ItemDescriptor : MonoBehaviour {
 
 				ArmorData ad = (ArmorData)data;
 				value1.text = "Броня: <color=orange>" + ad.armorClass + "</color>";
-				scale.x = value1.text.Length - 22.5f;
+				scale.x = calcMeshLength(value1Render);//value1.text.Length - 22.5f;
 				bg1.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value1Render.bounds.size.x);
 
 				value2.text = "Объём: <color=orange>" + data.volume.ToString("0.0") + "</color>";
-				scale.x = value2.text.Length - 22.5F;
+				scale.x = calcMeshLength(value2Render);//value2.text.Length - 22.5F;
 				bg2.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value2Render.bounds.size.x);
 
@@ -463,12 +477,12 @@ public class ItemDescriptor : MonoBehaviour {
 
 				GeneratorData gd = (GeneratorData)data;
 				value1.text = "Мощность: <color=orange>" + gd.maxEnergy + "</color>";
-				scale.x = value1.text.Length - 22.5f;
+				scale.x = calcMeshLength(value1Render);//value1.text.Length - 22.5f;
 				bg1.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value1Render.bounds.size.x);
 
 				value2.text = "Объём: <color=orange>" + data.volume.ToString("0.0") + "</color>";
-				scale.x = value2.text.Length - 22.5F;
+				scale.x = calcMeshLength(value2Render);//value2.text.Length - 22.5F;
 				bg2.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value2Render.bounds.size.x);
 
@@ -491,17 +505,17 @@ public class ItemDescriptor : MonoBehaviour {
 
 				RadarData rd = (RadarData)data;
 				value1.text = "Дальность: <color=orange>" + rd.range + "</color>";
-				scale.x = value1.text.Length - 22.5f;
+				scale.x = calcMeshLength(value1Render);//value1.text.Length - 22.5f;
 				bg1.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value1Render.bounds.size.x);
 
 				value2.text = "Питание: <color=cyan>" + data.energyNeeded + "</color>";
-				scale.x = value2.text.Length - 20.5f;
+				scale.x = calcMeshLength(value2Render);//value2.text.Length - 20.5f;
 				bg2.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value2Render.bounds.size.x);
 
 				value3.text = "Объём: <color=orange>" + data.volume.ToString("0.0") + "</color>";
-				scale.x = value3.text.Length - 22.5F;
+				scale.x = calcMeshLength(value3Render);//value3.text.Length - 22.5F;
 				bg3.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value3Render.bounds.size.x);
 
@@ -527,22 +541,22 @@ public class ItemDescriptor : MonoBehaviour {
 
 				ShieldData sd = (ShieldData)data;
 				value1.text = "Защита: <color=orange>" + sd.shieldLevel + "</color>";
-				scale.x = value1.text.Length - 22.5f;
+				scale.x = calcMeshLength(value1Render);//value1.text.Length - 22.5f;
 				bg1.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value1Render.bounds.size.x);
 
 				value2.text = "Перезарядка: <color=orange>" + sd.rechargeSpeed + "</color>";
-				scale.x = value2.text.Length - 22.5F;
+				scale.x = calcMeshLength(value2Render);//value2.text.Length - 22.5F;
 				bg2.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value2Render.bounds.size.x);
 
 				value3.text = "Питание: <color=cyan>" + data.energyNeeded + "</color>";
-				scale.x = value3.text.Length - 20.5f;
+				scale.x = calcMeshLength(value3Render);//value3.text.Length - 20.5f;
 				bg3.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value3Render.bounds.size.x);
 
 				value4.text = "Объём: <color=orange>" + data.volume.ToString("0.0") + "</color>";
-				scale.x = value4.text.Length - 22.5F;
+				scale.x = calcMeshLength(value4Render);//value4.text.Length - 22.5F;
 				bg4.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value4Render.bounds.size.x);
 
@@ -565,17 +579,17 @@ public class ItemDescriptor : MonoBehaviour {
 
 				RepairDroidData rdd = (RepairDroidData)data;
 				value1.text = "Ремонт: <color=orange>" + rdd.repairSpeed + "</color>";
-				scale.x = value1.text.Length - 22.5f;
+				scale.x = calcMeshLength(value1Render);//value1.text.Length - 22.5f;
 				bg1.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value1Render.bounds.size.x);
 
 				value2.text = "Питание: <color=cyan>" + data.energyNeeded + "</color>";
-				scale.x = value2.text.Length - 20.5f;
+				scale.x = calcMeshLength(value2Render);//value2.text.Length - 20.5f;
 				bg2.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value2Render.bounds.size.x);
 
 				value3.text = "Объём: <color=orange>" + data.volume.ToString("0.0") + "</color>";
-				scale.x = value3.text.Length - 22.5F;
+				scale.x = calcMeshLength(value3Render);//value3.text.Length - 22.5F;
 				bg3.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value3Render.bounds.size.x);
 
@@ -595,12 +609,12 @@ public class ItemDescriptor : MonoBehaviour {
 
 				HarvesterData hd = (HarvesterData)data;
 				value1.text = "Поиск: <color=orange>" + hd.harvestTime + "</color>";
-				scale.x = value1.text.Length - 22.5f;
+				scale.x = calcMeshLength(value1Render);//value1.text.Length - 22.5f;
 				bg1.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value1Render.bounds.size.x);
 
 				value2.text = "Объём: <color=orange>" + data.volume.ToString("0.0") + "</color>";
-				scale.x = value2.text.Length - 22.5F;
+				scale.x = calcMeshLength(value2Render);//value2.text.Length - 22.5F;
 				bg2.localScale = scale;
 				maxLenght = Mathf.Max(maxLenght, value2Render.bounds.size.x);
 

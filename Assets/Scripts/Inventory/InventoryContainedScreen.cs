@@ -3,7 +3,7 @@ using System.Collections;
 
 public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 
-	protected Inventory inventory;
+	public Inventory inventory { get; protected set; }
 	
 	protected Item draggedItem, chosenItem;
 	

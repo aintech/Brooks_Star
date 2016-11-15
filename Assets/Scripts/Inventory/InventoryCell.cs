@@ -24,7 +24,7 @@ public class InventoryCell : ItemHolder {
 		}
 	}
 
-	public Item takeItem () {
+	override public Item takeItem () {
 		if (item == null) { return null; }
 
 		inventory.getItems ().Remove (index + inventory.getOffset ());

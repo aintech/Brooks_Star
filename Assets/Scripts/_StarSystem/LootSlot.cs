@@ -9,7 +9,7 @@ public class LootSlot : ItemHolder {
 		item.transform.localPosition = Vector3.zero;
 	}
 
-	virtual public Item takeItem () {
+	override public Item takeItem () {
 		Item itemRef = item;
 		item = null;
 		return itemRef;

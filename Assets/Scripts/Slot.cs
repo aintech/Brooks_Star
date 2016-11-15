@@ -34,7 +34,7 @@ public abstract class Slot : ItemHolder {
 //		itemChanged = true;
 	}
 
-	virtual public Item takeItem () {
+	override public Item takeItem () {
 		Item itemRef = item;
 		item = null;
 //		bgRender.enabled = true;

@@ -12,7 +12,7 @@ public class StatusScreen : InventoryContainedScreen {
 
 	private Button playerBtn, perksBtn, shipBtn, cabinBtn, repairBtn, closeBtn;
 
-	private ShipData shipData;
+	public ShipData shipData { get; private set; }
 
 	public PlayerData playerData { get; private set; }
 
@@ -58,14 +58,6 @@ public class StatusScreen : InventoryContainedScreen {
 		closeScreen();
 
 		return this;
-	}
-
-	public Inventory getInventory () {
-		return inventory;
-	}
-
-	public ShipData getShipData () {
-		return shipData;
 	}
 
 	public void showScreen () {

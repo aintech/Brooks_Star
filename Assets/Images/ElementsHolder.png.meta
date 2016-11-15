@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: ce8a6fba14f17e84a8bc43d5ab323520
-timeCreated: 1478855674
+timeCreated: 1479199753
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -76,10 +76,10 @@ TextureImporter:
       name: Element_Fire
       rect:
         serializedVersion: 2
-        x: 60
-        y: 56
-        width: 104
-        height: 104
+        x: 64
+        y: 48
+        width: 100
+        height: 99
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -89,10 +89,10 @@ TextureImporter:
       name: Element_Water
       rect:
         serializedVersion: 2
-        x: 208
-        y: 56
-        width: 104
-        height: 104
+        x: 215
+        y: 48
+        width: 95
+        height: 97
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -102,10 +102,10 @@ TextureImporter:
       name: Element_Earth
       rect:
         serializedVersion: 2
-        x: 374
-        y: 56
+        x: 376
+        y: 49
         width: 104
-        height: 104
+        height: 97
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,10 +115,10 @@ TextureImporter:
       name: Element_Air
       rect:
         serializedVersion: 2
-        x: 702
-        y: 55
-        width: 106
-        height: 106
+        x: 709
+        y: 48
+        width: 96
+        height: 100
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,10 +128,10 @@ TextureImporter:
       name: Element_Light
       rect:
         serializedVersion: 2
-        x: 540
-        y: 56
-        width: 104
-        height: 104
+        x: 546
+        y: 50
+        width: 96
+        height: 95
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,10 +141,10 @@ TextureImporter:
       name: Element_Dark
       rect:
         serializedVersion: 2
-        x: 857
-        y: 56
-        width: 104
-        height: 104
+        x: 863
+        y: 48
+        width: 97
+        height: 100
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

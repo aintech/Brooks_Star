@@ -71,6 +71,8 @@ public class PlayerData : MonoBehaviour {
 
 		updatePlayerInfo();
 
+		Player.playerData = this;
+
 		gameObject.SetActive(false);
 
 		return this;
