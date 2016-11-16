@@ -6,7 +6,7 @@ public enum EnemyType {
 }
 
 public static class EnemyDescriptor {
-	public static string getName (this EnemyType type) {
+	public static string name (this EnemyType type) {
 		switch (type) {
 			case EnemyType.DRUID: return "Друид";
 			case EnemyType.BEE: return "Пчела";
@@ -38,5 +38,14 @@ public static class EnemyDescriptor {
 
 	public static int speed (this EnemyType type) {
 		return 3;
+	}
+
+	public static int cost (this EnemyType type) {
+		switch (type) {
+			case EnemyType.DRUID: return 100;
+			case EnemyType.BEE: return 150;
+			case EnemyType.GUNNER: return 200;
+			default: Debug.Log("Unknown enemy type: " + type); return 0;
+		}
 	}
 }

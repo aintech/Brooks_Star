@@ -84,13 +84,13 @@ public class Button : MonoBehaviour {
 	public void setVisible (bool visible) {
 		this.visible = visible;
 		render.enabled = visible;
-		coll.enabled = visible;
+		coll.enabled = visible && active;
 		textRender.enabled = visible;
 	}
 
 	public void setActive (bool active) {
 		this.active = active;
-		coll.enabled = active;
+		coll.enabled = active && visible;
 		if (!active) { changeState(State.NORMAL); }
 		render.color = active? normalColor: notActiveColor;
 		text.color = active? normalColor: notActiveColor;

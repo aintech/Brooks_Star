@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class StatusScreen : InventoryContainedScreen {
+public class StatusScreen : InventoryContainedScreen, Closeable {
 
 	public Sprite equipmentBG, shipBG, perksBG, cabinBG;
 
@@ -18,7 +18,7 @@ public class StatusScreen : InventoryContainedScreen {
 
 	private StarSystem starSystem;
 
-	private Cabin cabin;
+	public Cabin cabin { get; private set; }
 
 	private SpriteRenderer background;
 
@@ -48,14 +48,14 @@ public class StatusScreen : InventoryContainedScreen {
 		closeBtn = transform.Find("Close Button").GetComponent<Button>().init();
 
 		perksView = transform.Find("Perks View").GetComponent<PerksView>().init();
-		cabin = transform.Find("Cabin").GetComponent<Cabin>().init();
+		cabin = transform.Find("Cabin").GetComponent<Cabin>().init(this);
 
 		background = transform.Find("Background").GetComponent<SpriteRenderer>();
 		background.gameObject.SetActive(true);
 
 		inventory.setCapacity(shipData.hullType.getStorageCapacity());
 
-		closeScreen();
+		close(false);
 
 		return this;
 	}
@@ -95,12 +95,14 @@ public class StatusScreen : InventoryContainedScreen {
 
 		updateCashTxt();
 
+		InputProcessor.add(this);
+
 		gameObject.SetActive(true);
 	}
 
-	public void closeScreen () {
+	public void close (bool byInputProcessor) {
 		hideItemInfo();
-//		perksView.hideInfo();
+		//		perksView.hideInfo();
 		perksView.gameObject.SetActive(false);
 		inventory.gameObject.SetActive(false);
 		playerData.gameObject.SetActive(false);
@@ -114,6 +116,8 @@ public class StatusScreen : InventoryContainedScreen {
 
 		UserInterface.showInterface = true;
 		itemDescriptor.setDisabled();
+
+		if (!byInputProcessor) { InputProcessor.removeLast(); }
 	}
 
 	private void show (ScreenType type) {
@@ -153,7 +157,7 @@ public class StatusScreen : InventoryContainedScreen {
 		else if (btn == shipBtn) { show(ScreenType.SHIP); }
 		else if (btn == cabinBtn) { show(ScreenType.CABIN); }
 		else if (btn == repairBtn) { repairShip (); }
-		else if (btn == closeBtn) { closeScreen(); }
+		else if (btn == closeBtn) { close(false); }
 		else { Debug.Log("Unknown button: " + btn.name); }
 	}
 
@@ -386,10 +390,19 @@ public class StatusScreen : InventoryContainedScreen {
 		}
 	}
 
+	public void setButtonsVisible (bool visible) {
+		perksBtn.setVisible(visible);
+		shipBtn.setVisible(visible);
+		cabinBtn.setVisible(visible);
+		playerBtn.setVisible(visible);
+		closeBtn.setVisible(visible);
+	}
+
 	public void sendToVars () {
 		shipData.sendToVars ();
 		playerData.sendToVars();
 		inventory.sendToVars();
+		cabin.sendToVars();
 	}
 
 	public void initFromVars () {
@@ -397,6 +410,7 @@ public class StatusScreen : InventoryContainedScreen {
 		playerData.initFromVars();
 		inventory.initFromVars();
 		inventory.setCapacity(shipData.hullType.getStorageCapacity());
+		cabin.initFromVars();
 	}
 
 	private enum ScreenType {

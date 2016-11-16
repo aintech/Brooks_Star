@@ -6,12 +6,12 @@ public class ImagesProvider : MonoBehaviour {
 	public Sprite[] weaponSprites, engineSprites, armorSprites, generatorSprites, radarSprites, shieldSprites, repairDroidSprites, harvesterSprites,
 					handWeaponSprites, bodyArmorSprites, goodsSprites, supplySprites,
 					hullSprites,
-					enemyMarkerSprites;
+					enemyMarkerSprites, enemyStasisSprites;
 
 	public static Sprite[] weapons, engines, armors, generators, radars, shields, repairDroids, harvesters,
 						   handWeapons, bodyArmors, goods, supplies,
 						   hulls,
-						   enemyMarkers;
+						   enemyMarkers, enemyStasis;
 
 	public void init () {
 		weapons = weaponSprites;
@@ -28,6 +28,16 @@ public class ImagesProvider : MonoBehaviour {
 		supplies = supplySprites;
 		hulls = hullSprites;
 		enemyMarkers = enemyMarkerSprites;
+		enemyStasis = enemyStasisSprites;
+	}
+
+	public static Sprite getEnemyStasisSprite (EnemyType type) {
+		switch (type) {
+			case EnemyType.DRUID: return enemyStasis[0];
+			case EnemyType.BEE: return enemyStasis[1];
+			case EnemyType.GUNNER: return enemyStasis[2];
+			default: Debug.Log("Unknown enemy type: " + type); return null;
+		}
 	}
 
 	public static Sprite getSupplySprite (SupplyType type) {

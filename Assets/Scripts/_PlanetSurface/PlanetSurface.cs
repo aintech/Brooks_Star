@@ -58,7 +58,7 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 		messageBox = GameObject.Find("Message Box").GetComponent<MessageBox>();
 		story = GameObject.Find("Storyline").GetComponent<Storyline>();
 
-		exploreScreen = GameObject.Find("Explore Screen").GetComponent<ExploreScreen>().init(this, statusScreen.playerData, descriptor);
+		exploreScreen = GameObject.Find("Explore Screen").GetComponent<ExploreScreen>().init(this, statusScreen, descriptor);
 		market = GameObject.Find("Equipments Market").GetComponent<EquipmentsMarket> ().init(this, statusScreen.inventory, descriptor);
 		hangarScreen = GameObject.Find("Hangar Screen").GetComponent<HangarScreen>().init(this, statusScreen.inventory, statusScreen.shipData);
 		industrialScreen = GameObject.Find("Industrial Screen").GetComponent<IndustrialScreen>().init(this);

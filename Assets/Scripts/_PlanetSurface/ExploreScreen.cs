@@ -13,14 +13,14 @@ public class ExploreScreen : MonoBehaviour, ButtonHolder, Hideable {
 
 	private ScanningScreen scanningScreen;
 
-	public ExploreScreen init (PlanetSurface planetSurface, PlayerData playerData, ItemDescriptor itemDescriptor) {
+	public ExploreScreen init (PlanetSurface planetSurface, StatusScreen statusScreen, ItemDescriptor itemDescriptor) {
 		this.planetSurface = planetSurface;
 		enemyImage = transform.Find("Enemy Image").GetComponent<SpriteRenderer>();
 
 		exploreBtn = transform.Find("Explore Button").GetComponent<Button>().init();
 		leaveBtn = transform.Find("Leave Button").GetComponent<Button>().init();
 
-		scanningScreen = GameObject.Find("Scanning Screen").GetComponent<ScanningScreen>().init(this, playerData, itemDescriptor);
+		scanningScreen = GameObject.Find("Scanning Screen").GetComponent<ScanningScreen>().init(this, statusScreen, itemDescriptor);
 
 		gameObject.SetActive(false);
 

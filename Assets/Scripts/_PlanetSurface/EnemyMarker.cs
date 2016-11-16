@@ -28,10 +28,8 @@ public class EnemyMarker : MonoBehaviour {
 		trans = transform;
 		visual = trans.Find("Visual");
 		portrait = visual.Find("Portrait").GetComponent<SpriteRenderer>();
-		portrait.sprite = ImagesProvider.getMarkerSprite(enemyType);
 		trans.SetParent(holder);
-		initPos();
-		visual.gameObject.SetActive(false);
+		resetMarker(enemyType);
 
 		return this;
 	}
@@ -69,6 +67,14 @@ public class EnemyMarker : MonoBehaviour {
 	public void revealMarker () {
 		isFound = true;
 		visual.gameObject.SetActive(true);
+	}
+
+	public void resetMarker (EnemyType enemyType) {
+		this.enemyType = enemyType;
+		isFound = false;
+		portrait.sprite = ImagesProvider.getMarkerSprite(enemyType);
+		initPos();
+		visual.gameObject.SetActive(false);
 	}
 
 	public void closeMarker () {

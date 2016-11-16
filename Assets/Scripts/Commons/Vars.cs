@@ -22,6 +22,8 @@ public static class Vars {
 											market_parparis = new Dictionary<int, ItemData> (),
 											market_terana = new Dictionary<int, ItemData>();
 
+	public static Dictionary<int, EnemyType> capturedEnemies = new Dictionary<int, EnemyType>();
+
 	public static Dictionary<Slot.Type, ItemData> equipmentMap = new Dictionary<Slot.Type, ItemData>();
 
 	public static Dictionary<int, ItemData> supplyMap = new Dictionary<int, ItemData>();

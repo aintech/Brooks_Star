@@ -36,8 +36,14 @@ public class EnemyBlock : MonoBehaviour, ButtonHolder {
 	public void setVisible (EnemyMarker marker) {
 		this.marker = marker;
 		portrait.sprite = ImagesProvider.getMarkerSprite(marker.enemyType);
-		enemyName.setText(marker.enemyType.getName());
+		enemyName.setText(marker.enemyType.name());
+		fightResult.gameObject.SetActive(false);
+		attackBtn.setVisible(true);
 		gameObject.SetActive(true);
+	}
+
+	public void hide () {
+		gameObject.SetActive(false);
 	}
 
 	public void fireClickButton (Button btn) {

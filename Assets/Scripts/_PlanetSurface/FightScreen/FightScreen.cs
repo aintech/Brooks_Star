@@ -59,9 +59,9 @@ public class FightScreen : MonoBehaviour {
 
 	private StrokeText playerActionsText, enemyActionsText;
 
-	public FightScreen init (ScanningScreen scanningScreen, PlayerData playerData, ItemDescriptor itemDescriptor) {
+	public FightScreen init (ScanningScreen scanningScreen, StatusScreen statusScreen, ItemDescriptor itemDescriptor) {
 		this.scanningScreen = scanningScreen;
-		this.playerData = playerData;
+		this.playerData = statusScreen.playerData;
 		this.itemDescriptor = itemDescriptor;
 
 		itemDescriptor.fightScreen = this;
@@ -71,7 +71,7 @@ public class FightScreen : MonoBehaviour {
 		elementEffectPlayer = transform.Find("ElementEffectPlayer").GetComponent<ElementEffectPlayer>();
 		fightInterface = transform.Find("Fight Interface").GetComponent<FightInterface>().init(this);
 		enemy = transform.Find("Enemy").GetComponent<Enemy>();
-		resultScreen = transform.Find("FightResultScreen").GetComponent<FightResultScreen>().init(this);
+		resultScreen = transform.Find("FightResultScreen").GetComponent<FightResultScreen>().init(this, statusScreen.cabin.chambersHolder, enemy);
 		enemyDeadAnimator = transform.Find("EnemyDeadAnim").GetComponent<Animator>();
 		fightProcessor = GetComponent<FightProcessor>();
 		deadStone = enemyDeadAnimator.transform.Find("DeadStone");
@@ -89,6 +89,7 @@ public class FightScreen : MonoBehaviour {
 		actionsHolder.Find("Delimiter").GetComponent<StrokeText>().init("default", 5);
 		playerActionsText = actionsHolder.Find("Player Actions").GetComponent<StrokeText>().init("default", 5);
 		enemyActionsText = actionsHolder.Find("Enemy Actions").GetComponent<StrokeText>().init("default", 5);
+		actionsHolder.gameObject.SetActive(true);
 
 		Transform supplyHolder = transform.Find("Supply Holder");
 		SupplySlot slot;
@@ -97,6 +98,7 @@ public class FightScreen : MonoBehaviour {
 			slot.init();
 			supplySlots.Add(slot);
 		}
+		supplyHolder.gameObject.SetActive(true);
 
 		Player.fightScreen = this;
 

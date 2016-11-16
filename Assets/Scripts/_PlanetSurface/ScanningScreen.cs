@@ -38,10 +38,12 @@ public class ScanningScreen : MonoBehaviour, ButtonHolder {
 
 	private FightScreen fightScreen;
 
-	public ScanningScreen init (ExploreScreen exploreScreen, PlayerData playerData, ItemDescriptor itemDescriptor) {
+	public ScanningScreen init (ExploreScreen exploreScreen, StatusScreen statusScreen, ItemDescriptor itemDescriptor) {
 		this.exploreScreen = exploreScreen;
 
-		fightScreen = GameObject.Find("Fight Screen").GetComponent<FightScreen>().init(this, playerData, itemDescriptor);
+		fightScreen = GameObject.Find("Fight Screen").GetComponent<FightScreen>().init(this, statusScreen, itemDescriptor);
+
+		statusScreen.cabin.scanningScreen = this;
 
 		cursor = transform.Find("Cursor").transform;
 		cursor.gameObject.SetActive(true);
@@ -96,6 +98,17 @@ public class ScanningScreen : MonoBehaviour, ButtonHolder {
 
 	private void addMarker (EnemyType enemyType) {
 		markers.Add(Instantiate<Transform>(enemyMarkerPrefab).GetComponent<EnemyMarker>().init(enemyType, markersHolder));
+	}
+
+	public void resetMarkers () {
+		enemyTypes = Vars.planetType.getEnemyTypes();
+		foreach (EnemyMarker marker in markers) {
+			marker.resetMarker(enemyTypes[Random.Range(0, enemyTypes.Length)]);
+		}
+		foreach(EnemyBlock block in enemyBlocks) {
+			block.hide();
+		}
+		revealBlockIndex = 0;
 	}
 
 	private void findNearestTarget () {

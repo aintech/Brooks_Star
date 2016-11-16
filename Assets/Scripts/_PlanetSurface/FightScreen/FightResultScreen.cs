@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class FightResultScreen : MonoBehaviour {
+public class FightResultScreen : MonoBehaviour, ButtonHolder {
 
 //	private Location location;
 
@@ -27,12 +27,28 @@ public class FightResultScreen : MonoBehaviour {
 
 //	private PotionBag potionBag;
 
-	public FightResultScreen init (FightScreen fightScreen) {
+	private StrokeText chambersAvailable, clickText;
+
+	private Button captureBtn, releaseBtn;
+
+	private StasisChambersHolder chambersHolder;
+
+	private Enemy enemy;
+
+	public FightResultScreen init (FightScreen fightScreen, StasisChambersHolder chambersHolder, Enemy enemy) {
 		this.fightScreen = fightScreen;
+		this.chambersHolder = chambersHolder;
+		this.enemy = enemy;
+
+		render = transform.Find("Enemy Image").GetComponent<SpriteRenderer>();
+		bg = transform.Find("BG");
+		chambersAvailable = transform.Find("Chambers Available").GetComponent<StrokeText>().init("FightResultScreen", 2);
+
+		captureBtn = transform.Find("Capture Button").GetComponent<Button>().init();
+		releaseBtn = transform.Find("Release Button").GetComponent<Button>().init();
+
 //		this.potionBag = potionBag;
 //		location = GameObject.FindGameObjectWithTag("LocationScreen").GetComponent<Location>();
-		render = transform.Find("WinImage").GetComponent<SpriteRenderer>();
-		bg = transform.Find("BG");
 //		valuesHolder = transform.Find("ValuesHolder");
 //		rankPointsValue = valuesHolder.Find("RankPointsValue").GetComponent<TextMesh>();
 //		goldValue = valuesHolder.Find("GoldValue").GetComponent<TextMesh>();
@@ -57,10 +73,23 @@ public class FightResultScreen : MonoBehaviour {
 //		newLevelLabel.gameObject.SetActive(false);
 //		valuesHolder.gameObject.SetActive(false);
 
-		transform.Find("Click Text").GetComponent<StrokeText>().init("FightResultScreen", 10);
+		clickText = transform.Find("Click Text").GetComponent<StrokeText>().init("FightResultScreen", 10);
 		gameObject.SetActive(false);
 
 		return this;
+	}
+
+	public void fireClickButton (Button btn) {
+		if (playAnim) { return; }
+		if (btn == captureBtn) { captureEnemy(); }
+		else if (btn == releaseBtn) { closeScreen(); }
+	}
+
+	private void captureEnemy () {
+		foreach (StasisChamber chamber in chambersHolder.chambers) {
+			if (chamber.isEmpty) { chamber.putInChamber(enemy.enemyType); break; }
+		}
+		closeScreen();
 	}
 
 	public void showFightResultScreen (Enemy enemy) {
@@ -73,11 +102,16 @@ public class FightResultScreen : MonoBehaviour {
 //			UserInterface.showQuestInfo(Quest.currentQuest.title + " (done)");
 //		}
 		render.enabled = false;
+
 //		rankPointsCounter = 0;
 //		goldCounter = 0;
 		bgScale = initBgScale;
 		bg.localScale = bgScale;
 		playAnim = true;
+		render.sprite = Imager.getEnemy(enemy.enemyType, 0);
+		captureBtn.setVisible(false);
+		releaseBtn.setVisible(false);
+		chambersAvailable.setText("");
 //		countRankDone = (this.rankPoints > 0);
 		countGoldDone = false;
 //		heroRank = Hero.getRank();
@@ -93,38 +127,48 @@ public class FightResultScreen : MonoBehaviour {
 			if (bgScale.x >= 1) {
 				bgScale.x = bgScale.y = 1;
 				playAnim = false;
+				render.enabled = true;
+				captureBtn.setVisible(true);
+				releaseBtn.setVisible(true);
+				int chamAvail = 0;
+				foreach (StasisChamber cham in chambersHolder.chambers) {
+					if (cham.isEmpty) { chamAvail++; }
+				}
+				captureBtn.setActive(chamAvail > 0);
+				chambersAvailable.setText(chamAvail == 0? "Нет свободных стазис камер": "");
 //				goldValue.text = "0";
 //				rankPointsValue.text = "0";
 //				valuesHolder.gameObject.SetActive(true);
 			}
 			bg.localScale = bgScale;
-		} else {
-//			if (!countRankDone) {
-//				rankPointsCounter++;
-//				if (rankPointsCounter <= rankPoints) {
-//					Hero.addRankPoints(1);
-//					rankPointsValue.text = "+" + rankPointsCounter;
-//					if (Hero.getRank() > heroRank) {
-//						heroRank = Hero.getRank();
-//						newLevelLabel.gameObject.SetActive(true);
-//					}
-//				} else {
-//					countRankDone = true;
-//				}
-//			} else 
-			if (!countGoldDone) {
-//				goldCounter++;
-//				if (goldCounter <= gold) {
-////					Vars.gold++;
-////					UserInterface.updateGold();
-//					goldValue.text = "+" + goldCounter;
-//				} else {
-					countGoldDone = true;
-//				}
-			}
 		}
+//		else {
+////			if (!countRankDone) {
+////				rankPointsCounter++;
+////				if (rankPointsCounter <= rankPoints) {
+////					Hero.addRankPoints(1);
+////					rankPointsValue.text = "+" + rankPointsCounter;
+////					if (Hero.getRank() > heroRank) {
+////						heroRank = Hero.getRank();
+////						newLevelLabel.gameObject.SetActive(true);
+////					}
+////				} else {
+////					countRankDone = true;
+////				}
+////			} else 
+//			if (!countGoldDone) {
+////				goldCounter++;
+////				if (goldCounter <= gold) {
+//////					Vars.gold++;
+//////					UserInterface.updateGold();
+////					goldValue.text = "+" + goldCounter;
+////				} else {
+//					countGoldDone = true;
+////				}
+//			}
+//		}
 
-		if (!playAnim && Input.GetMouseButtonDown(0)) {
+//		if (!playAnim) && Input.GetMouseButtonDown(0)) {
 //			if (!countRankDone) {
 //				Hero.addRankPoints(rankPoints - rankPointsCounter);
 //				rankPointsCounter = rankPoints;
@@ -135,17 +179,17 @@ public class FightResultScreen : MonoBehaviour {
 //				}
 //				countRankDone = true;
 //			} else 
-			if (!countGoldDone) {
+//			if (!countGoldDone) {
 //				Vars.gold += (gold - goldCounter);
 //				goldCounter = gold;
 //				goldValue.text = "+" + gold;
 //				UserInterface.updateGold();
 //			} else if (render.sprite == null && winSprite != null) {
 //				render.sprite = winSprite;
-			} else {
-				closeScreen();
-			}
-		}
+//			} else {
+//				closeScreen();
+//			}
+//		}
 	}
 
 	private void closeScreen () {

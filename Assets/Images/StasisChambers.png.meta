@@ -1,15 +1,19 @@
 fileFormatVersion: 2
-guid: 5c70c673fad13e044901ea64e6ec4eef
-timeCreated: 1479303698
+guid: 7261eba1480319e449a14177160c55b3
+timeCreated: 1479292043
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: FightResultScreen_Shadow
-    21300002: FightResultScreen_BG
-    21300004: FightResultScreen_CaptureBtn
-    21300006: FightResultScreen_CaptureBtn_Hover
-    21300008: FightResultScreen_ReleaseBtn
-    21300010: FightResultScreen_ReleaseBtn_Hover
+    21300000: StasisChambers_Empty
+    21300002: StasisChambers_Gunner
+    21300004: StasisChambers_Bee
+    21300006: StasisChambers_Druid
+    21300008: StasisChambers_ReleaseBtn
+    21300010: StasisChambers_ReleaseBtn_Hover
+    21300012: StasisChambers_SellBtn
+    21300014: StasisChambers_SellBtn_Hover
+    21300016: StasisChambers_BackBtn
+    21300018: StasisChambers_BackBtn_Hover
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -59,63 +63,115 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: FightResultScreen_Shadow
+      name: StasisChambers_Empty
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1600
-        height: 1000
+        x: 1455
+        y: 182
+        width: 332
+        height: 802
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: FightResultScreen_BG
+      name: StasisChambers_Gunner
       rect:
         serializedVersion: 2
-        x: 51
-        y: 1038
-        width: 1498
-        height: 930
+        x: 959
+        y: 182
+        width: 332
+        height: 802
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: FightResultScreen_CaptureBtn
+      name: StasisChambers_Bee
       rect:
         serializedVersion: 2
-        x: 1663
-        y: 1900
-        width: 333
-        height: 64
+        x: 484
+        y: 182
+        width: 332
+        height: 802
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: FightResultScreen_CaptureBtn_Hover
+      name: StasisChambers_Druid
       rect:
         serializedVersion: 2
-        x: 1663
-        y: 1809
-        width: 333
-        height: 64
+        x: 29
+        y: 182
+        width: 332
+        height: 802
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: FightResultScreen_ReleaseBtn
+      name: StasisChambers_ReleaseBtn
       rect:
         serializedVersion: 2
-        x: 1664
-        y: 1714
+        x: 31
+        y: 51
+        width: 296
+        height: 63
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StasisChambers_ReleaseBtn_Hover
+      rect:
+        serializedVersion: 2
+        x: 354
+        y: 51
+        width: 296
+        height: 63
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StasisChambers_SellBtn
+      rect:
+        serializedVersion: 2
+        x: 686
+        y: 26
+        width: 296
+        height: 114
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StasisChambers_SellBtn_Hover
+      rect:
+        serializedVersion: 2
+        x: 1018
+        y: 26
+        width: 296
+        height: 114
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StasisChambers_BackBtn
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 51
         width: 332
         height: 63
       alignment: 0
@@ -124,11 +180,11 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: FightResultScreen_ReleaseBtn_Hover
+      name: StasisChambers_BackBtn_Hover
       rect:
         serializedVersion: 2
-        x: 1664
-        y: 1623
+        x: 1704
+        y: 51
         width: 332
         height: 63
       alignment: 0
