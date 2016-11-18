@@ -7,17 +7,25 @@ public class Cabin : MonoBehaviour, ButtonHolder {
 	[HideInInspector]
 	public ScanningScreen scanningScreen;
 
-	private Button restBtn, stasisBtn;
+	[HideInInspector]
+	public AnnouncementScreen announcementScreen;
+
+	private Button terminalBtn, restBtn, stasisBtn;
 
 	public StatusScreen statusScreen { get; private set; }
 
 	public StasisChambersHolder chambersHolder { get; private set; }
 
+	private PlayerTerminal terminal;
+
 	public Cabin init (StatusScreen statusScreen) {
 		this.statusScreen = statusScreen;
+
+		terminalBtn = transform.Find("Terminal Button").GetComponent<Button>().init();
 		restBtn = transform.Find("Rest Button").GetComponent<Button>().init();
 		stasisBtn = transform.Find("Stasis Button").GetComponent<Button>().init();
 
+		terminal = transform.Find("Player Terminal").GetComponent<PlayerTerminal>().init(this);
 		chambersHolder = transform.Find("Chambers").GetComponent<StasisChambersHolder>().init(this);
 
 		return this;
@@ -26,24 +34,30 @@ public class Cabin : MonoBehaviour, ButtonHolder {
 	public void fireClickButton (Button btn) {
 		if (btn == restBtn) { rest(); }
 		else if (btn == stasisBtn) { showStasisChambers(); }
+		else if (btn == terminalBtn) { showTerminal(); }
 	}
 
 	private void rest () {
 		Player.setHealthToMax();
 		if (Vars.planetType.isPopulated()) { scanningScreen.resetMarkers(); }
+		if (Vars.planetType.isColonized()) { announcementScreen.randomizeAnnouncement(); }
+	}
+
+	public void setButtonVisible (bool visible) {
+		terminalBtn.setVisible(visible);
+		restBtn.setVisible(visible);
+		stasisBtn.setVisible(visible);
+		statusScreen.setButtonsVisible(visible);
+	}
+
+	private void showTerminal () {
+		setButtonVisible(false);
+		terminal.show();
 	}
 
 	private void showStasisChambers () {
-		restBtn.setVisible(false);
-		stasisBtn.setVisible(false);
-		statusScreen.setButtonsVisible(false);
+		setButtonVisible(false);
 		chambersHolder.show();
-	}
-
-	public void closeStasisChambers () {
-		restBtn.setVisible(true);
-		stasisBtn.setVisible(true);
-		statusScreen.setButtonsVisible(true);
 	}
 
 	public void sendToVars () {

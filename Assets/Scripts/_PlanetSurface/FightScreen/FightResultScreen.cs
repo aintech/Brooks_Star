@@ -7,11 +7,15 @@ public class FightResultScreen : MonoBehaviour, ButtonHolder {
 
 	private SpriteRenderer render;
 
-	private Transform bg, valuesHolder;
+	private Transform background, middleground, foreground, valuesHolder;
 
-	private Vector3 bgScale, initBgScale = new Vector3(.2f, .2f, 1);
+	private Vector3 initPos = new Vector3(0, -10, 0), newPos;
 
-	private float bgScaleFactor = .05f;
+	private float appearSpeed = .3f;
+
+//	private Vector3 scale, initScale = new Vector3(.2f, .2f, 1);
+
+//	private float scaleFactor = .05f;
 
 //	private Sprite winSprite;
 
@@ -41,8 +45,10 @@ public class FightResultScreen : MonoBehaviour, ButtonHolder {
 		this.enemy = enemy;
 
 		render = transform.Find("Enemy Image").GetComponent<SpriteRenderer>();
-		bg = transform.Find("BG");
-		chambersAvailable = transform.Find("Chambers Available").GetComponent<StrokeText>().init("FightResultScreen", 2);
+//		background = transform.Find("Background");
+//		middleground = transform.Find("Middleground");
+		foreground = transform.Find("Foreground");
+		chambersAvailable = transform.Find("Chambers Available").GetComponent<StrokeText>().init("FightResultScreen", 5);
 
 		captureBtn = transform.Find("Capture Button").GetComponent<Button>().init();
 		releaseBtn = transform.Find("Release Button").GetComponent<Button>().init();
@@ -73,7 +79,7 @@ public class FightResultScreen : MonoBehaviour, ButtonHolder {
 //		newLevelLabel.gameObject.SetActive(false);
 //		valuesHolder.gameObject.SetActive(false);
 
-		clickText = transform.Find("Click Text").GetComponent<StrokeText>().init("FightResultScreen", 10);
+		clickText = transform.Find("Click Text").GetComponent<StrokeText>().init("FightResultScreen", 6);
 		gameObject.SetActive(false);
 
 		return this;
@@ -101,12 +107,16 @@ public class FightResultScreen : MonoBehaviour, ButtonHolder {
 //			Quest.currentQuest.done = true;
 //			UserInterface.showQuestInfo(Quest.currentQuest.title + " (done)");
 //		}
-		render.enabled = false;
+//		render.enabled = false;
 
 //		rankPointsCounter = 0;
 //		goldCounter = 0;
-		bgScale = initBgScale;
-		bg.localScale = bgScale;
+//		scale = initScale;
+//		middleground.localScale = scale;
+		newPos = initPos;
+		transform.localPosition = newPos;
+//		background.gameObject.SetActive(false);
+//		foreground.gameObject.SetActive(false);
 		playAnim = true;
 		render.sprite = Imager.getEnemy(enemy.enemyType, 0);
 		captureBtn.setVisible(false);
@@ -122,14 +132,19 @@ public class FightResultScreen : MonoBehaviour, ButtonHolder {
 
 	void Update () {
 		if (playAnim) {
-			bgScale.x += bgScaleFactor;
-			bgScale.y += bgScaleFactor;
-			if (bgScale.x >= 1) {
-				bgScale.x = bgScale.y = 1;
+			newPos.y += appearSpeed;
+			if (newPos.y >= 0) {
+//			scale.x += scaleFactor;
+//			scale.y += scaleFactor;
+//			if (scale.x >= 1) {
+//				scale.x = scale.y = 1;
+				newPos.y = 0;
 				playAnim = false;
-				render.enabled = true;
+//				render.enabled = true;
 				captureBtn.setVisible(true);
 				releaseBtn.setVisible(true);
+//				background.gameObject.SetActive(true);
+//				foreground.gameObject.SetActive(true);
 				int chamAvail = 0;
 				foreach (StasisChamber cham in chambersHolder.chambers) {
 					if (cham.isEmpty) { chamAvail++; }
@@ -140,7 +155,8 @@ public class FightResultScreen : MonoBehaviour, ButtonHolder {
 //				rankPointsValue.text = "0";
 //				valuesHolder.gameObject.SetActive(true);
 			}
-			bg.localScale = bgScale;
+			transform.localPosition = newPos;
+//			middleground.localScale = scale;
 		}
 //		else {
 ////			if (!countRankDone) {

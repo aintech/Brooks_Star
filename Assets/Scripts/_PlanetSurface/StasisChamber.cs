@@ -27,6 +27,7 @@ public class StasisChamber : MonoBehaviour, ButtonHolder {
 		releaseBtn = transform.Find("Release Button").GetComponent<Button>().init();
 
 		enemyName = transform.Find("Name").GetComponent<TextMesh>();
+		enemyName.text = "";
 		MeshRenderer mesh = enemyName.GetComponent<MeshRenderer>();
 		mesh.sortingLayerName = "Inventory";
 		mesh.sortingOrder = 2;
@@ -59,7 +60,7 @@ public class StasisChamber : MonoBehaviour, ButtonHolder {
 	}
 
 	private void clearChamber () {
-		enemyName.text = "Пусто";
+		enemyName.text = "";
 		render.sprite = emptyChamber;
 		sellBtn.setVisible(false);
 		releaseBtn.setVisible(false);

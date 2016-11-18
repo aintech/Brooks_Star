@@ -10,6 +10,14 @@ public class InputProcessor : MonoBehaviour {
 	public static void closeLast () { closeables.Pop().close(true); }
 	public static void removeLast () { if (closeables.Count > 0) { closeables.Pop(); }}
 
+	public static void closeToCurrent (Closeable currentToClose) {
+		Closeable closable;
+		do {
+			closable = closeables.Pop();
+			closable.close(true);
+		} while (!currentToClose.Equals(closable));
+	}
+
 	public void Update () {
 		if (Input.GetKeyDown(KeyCode.Escape)) {
 			if (closeables.Count > 0) { closeLast(); }

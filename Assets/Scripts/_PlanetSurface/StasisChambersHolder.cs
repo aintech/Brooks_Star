@@ -23,6 +23,7 @@ public class StasisChambersHolder : MonoBehaviour, Closeable, ButtonHolder {
 
 		closeBtn = transform.Find("Close Button").GetComponent<Button>().init();
 		closeBtn.setVisible(false);
+		gameObject.SetActive(true);
 
 		return this;
 	}
@@ -44,7 +45,7 @@ public class StasisChambersHolder : MonoBehaviour, Closeable, ButtonHolder {
 			chambers[i].gameObject.SetActive(false);
 		}
 		closeBtn.setVisible(false);
-		cabin.closeStasisChambers();
+		cabin.setButtonVisible(true);
 		if (!byInputProcessor) { InputProcessor.removeLast(); }
 	}
 

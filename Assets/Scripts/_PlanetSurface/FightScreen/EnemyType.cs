@@ -48,4 +48,13 @@ public static class EnemyDescriptor {
 			default: Debug.Log("Unknown enemy type: " + type); return 0;
 		}
 	}
+
+	public static PlanetType planet (this EnemyType type) {
+		switch (type) {
+			case EnemyType.BEE: return PlanetType.PALETTE;
+			case EnemyType.DRUID: return PlanetType.PALETTE;
+			case EnemyType.GUNNER: return PlanetType.PALETTE;
+			default: Debug.Log("Unknown planet type: " + type); return PlanetType.PALETTE;
+		}
+	}
 }

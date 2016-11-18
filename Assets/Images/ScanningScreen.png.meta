@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 0c73c6e3888fe69458ec2454eca3357f
-timeCreated: 1478686234
+timeCreated: 1479474938
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -13,6 +13,9 @@ TextureImporter:
     21300012: ScanningScreen_AttackBtn
     21300014: ScanningScreen_AttackBtn_Hover
     21300016: ScanningScreen_EnemyHolderBG
+    21300018: ScanningScreen_DetailsBg
+    21300020: ScanningScreen_LeaveBtn
+    21300022: ScanningScreen_LeaveBtn_Hover
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -65,8 +68,8 @@ TextureImporter:
       name: ScanningScreen_BG
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
+        x: 17
+        y: 11
         width: 1600
         height: 1000
       alignment: 0
@@ -91,10 +94,10 @@ TextureImporter:
       name: ScanningScreen_CloseBtn
       rect:
         serializedVersion: 2
-        x: 1642
-        y: 786
-        width: 332
-        height: 63
+        x: 1658
+        y: 1637
+        width: 334
+        height: 86
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -104,10 +107,10 @@ TextureImporter:
       name: ScanningScreen_CloseBtn_Hover
       rect:
         serializedVersion: 2
-        x: 1644
-        y: 702
-        width: 332
-        height: 63
+        x: 1658
+        y: 1496
+        width: 334
+        height: 87
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -130,10 +133,10 @@ TextureImporter:
       name: ScanningScreen_AttackBtn
       rect:
         serializedVersion: 2
-        x: 1689
-        y: 591
-        width: 214
-        height: 48
+        x: 1658
+        y: 1907
+        width: 334
+        height: 86
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -143,23 +146,49 @@ TextureImporter:
       name: ScanningScreen_AttackBtn_Hover
       rect:
         serializedVersion: 2
-        x: 1689
-        y: 512
-        width: 214
-        height: 48
+        x: 1658
+        y: 1771
+        width: 334
+        height: 86
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: ScanningScreen_EnemyHolderBG
+      name: ScanningScreen_DetailsBg
       rect:
         serializedVersion: 2
-        x: 1630
-        y: 316
-        width: 359
-        height: 154
+        x: 17
+        y: 1031
+        width: 1600
+        height: 1000
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: ScanningScreen_LeaveBtn
+      rect:
+        serializedVersion: 2
+        x: 1658
+        y: 1277
+        width: 334
+        height: 148
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: ScanningScreen_LeaveBtn_Hover
+      rect:
+        serializedVersion: 2
+        x: 1658
+        y: 1064
+        width: 334
+        height: 148
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

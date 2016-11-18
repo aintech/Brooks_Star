@@ -14,7 +14,7 @@ public enum PlanetType {
 
 public static class PlanetDescriptor {
 
-	private static Dictionary<PlanetType, EnemyType[]> enemyTypesOnPlanet = new Dictionary<PlanetType, EnemyType[]>();
+//	private static Dictionary<PlanetType, EnemyType[]> enemyTypesOnPlanet = new Dictionary<PlanetType, EnemyType[]>();
 
 	public static string getName (this PlanetType type) {
 		switch (type) {
@@ -87,14 +87,14 @@ public static class PlanetDescriptor {
 		}
 	}
 
-	public static EnemyType[] getEnemyTypes (this PlanetType type) {
-		if (enemyTypesOnPlanet.Count == 0) { initEnemiesOnPlanets(); }
-		return enemyTypesOnPlanet[type];
-	}
-
-	private static void initEnemiesOnPlanets () {
-		enemyTypesOnPlanet.Add(PlanetType.PALETTE, new EnemyType[]{EnemyType.DRUID, EnemyType.BEE, EnemyType.GUNNER});
-		enemyTypesOnPlanet.Add(PlanetType.VOLARIA, new EnemyType[]{EnemyType.DRUID, EnemyType.BEE, EnemyType.GUNNER});
-		enemyTypesOnPlanet.Add(PlanetType.POSTERA, new EnemyType[]{EnemyType.DRUID, EnemyType.BEE, EnemyType.GUNNER});
-	}
+//	public static EnemyType[] getEnemyTypes (this PlanetType type) {
+//		if (enemyTypesOnPlanet.Count == 0) { initEnemiesOnPlanets(); }
+//		return enemyTypesOnPlanet[type];
+//	}
+//
+//	private static void initEnemiesOnPlanets () {
+//		enemyTypesOnPlanet.Add(PlanetType.PALETTE, new EnemyType[]{EnemyType.DRUID, EnemyType.BEE, EnemyType.GUNNER});
+//		enemyTypesOnPlanet.Add(PlanetType.VOLARIA, new EnemyType[]{EnemyType.DRUID, EnemyType.BEE, EnemyType.GUNNER});
+//		enemyTypesOnPlanet.Add(PlanetType.POSTERA, new EnemyType[]{EnemyType.DRUID, EnemyType.BEE, EnemyType.GUNNER});
+//	}
 }

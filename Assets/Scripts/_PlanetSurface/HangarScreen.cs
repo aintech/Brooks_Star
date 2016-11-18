@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class HangarScreen : MonoBehaviour, ButtonHolder {
+public class HangarScreen : MonoBehaviour, ButtonHolder, Closeable {
 
 	private TextMesh cashValue;
 
@@ -80,16 +80,18 @@ public class HangarScreen : MonoBehaviour, ButtonHolder {
 		UserInterface.showInterface = false;
 		foreach (HullDisplay dsp in displays) { dsp.updateCost(); }
 		gameObject.SetActive (true);
+		InputProcessor.add(this);
 	}
 
-	public void closeScreen () {
+	public void close (bool byInputProcessor) {
 		gameObject.SetActive(false);
 		planetSurface.setVisible(true);
 		UserInterface.showInterface = true;
+		if (!byInputProcessor) { InputProcessor.removeLast(); }
 	}
 
 	public void fireClickButton (Button btn) {
-		if (btn == closeBtn) { closeScreen(); }
+		if (btn == closeBtn) { close(false); }
 		else { Debug.Log("Unknown button: " + btn.name); }
 	}
 

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class EquipmentsMarket : InventoryContainedScreen {
+public class EquipmentsMarket : InventoryContainedScreen, Closeable {
 
 	public Sprite buyBG, sellBG;
 
@@ -50,11 +50,6 @@ public class EquipmentsMarket : InventoryContainedScreen {
 		gameObject.SetActive(false);
 
 		return this;
-	}
-
-	void Update () {
-		if (popup.onScreen) { return; }
-		if (Input.GetKeyDown(KeyCode.Escape)) { closeScreen(); }
 	}
 
 	public void askToBuy (Item item) {
@@ -117,13 +112,15 @@ public class EquipmentsMarket : InventoryContainedScreen {
 
 		updateCashTxt();
 
+		InputProcessor.add(this);
+
 		gameObject.SetActive (true);
 	}
 
 	override protected void checkBtnPress (Button btn) {
 		if (btn == buyBtn) { setBuyActive(); }
 		else if (btn == sellBtn) { setSellActive(); }
-		else if (btn == closeBtn) { closeScreen(); }
+		else if (btn == closeBtn) { close(false); }
 		else { Debug.Log("Unknown btn: " + btn.name); }
 	}
 
@@ -168,46 +165,13 @@ public class EquipmentsMarket : InventoryContainedScreen {
 		sellMarket.gameObject.SetActive(true);
 	}
 
-//	protected void hideItemInfo (Inventory activeInventory) {
-//		if (chosenItem != null && activeInventory != null) {
-//			Inventory chosenItemInvetnory = chosenItem.transform.parent.GetComponent<Inventory> ();
-//			
-//			if ((chosenItemInvetnory == market || chosenItemInvetnory == buyback) && 
-//				(activeInventory == inventory || activeInventory == storage)) 
-//			{
-//				return;
-//			}
-//			
-//			if ((chosenItemInvetnory == inventory || chosenItemInvetnory == storage) &&
-//			    (activeInventory == market || activeInventory == buyback))
-//			{
-//				return;
-//			}
-//		}
-//		base.hideItemInfo ();
-//	}
-
-	public void closeScreen () {
+	public void close (bool byInputProcessor) {
 		chosenItem = null;
 		gameObject.SetActive(false);
 		playerInventory.setItemsFromOtherInventory(sellMarket);
 		UserInterface.showInterface = true;
 		itemDescriptor.setDisabled();
 		planetSurface.setVisible(true);
-//		if (inventory != null) {
-//			if (draggedItem != null) {
-//				draggedItem.returnToParent();
-//				draggedItem = null;
-//			}
-//			hideItemInfo(null);
-//			chosenItem = null;
-//
-//			inventory.gameObject.SetActive (false);
-//			storage.gameObject.SetActive (false);
-//			market.gameObject.SetActive (false);
-//			buyback.gameObject.SetActive (false);
-//
-//			gameObject.SetActive (false);
-//		}
+		if (!byInputProcessor) { InputProcessor.removeLast(); }
 	}
 }

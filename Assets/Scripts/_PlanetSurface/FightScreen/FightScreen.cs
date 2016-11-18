@@ -71,7 +71,7 @@ public class FightScreen : MonoBehaviour {
 		elementEffectPlayer = transform.Find("ElementEffectPlayer").GetComponent<ElementEffectPlayer>();
 		fightInterface = transform.Find("Fight Interface").GetComponent<FightInterface>().init(this);
 		enemy = transform.Find("Enemy").GetComponent<Enemy>();
-		resultScreen = transform.Find("FightResultScreen").GetComponent<FightResultScreen>().init(this, statusScreen.cabin.chambersHolder, enemy);
+		resultScreen = transform.Find("Fight Result Screen").GetComponent<FightResultScreen>().init(this, statusScreen.cabin.chambersHolder, enemy);
 		enemyDeadAnimator = transform.Find("EnemyDeadAnim").GetComponent<Animator>();
 		fightProcessor = GetComponent<FightProcessor>();
 		deadStone = enemyDeadAnimator.transform.Find("DeadStone");
@@ -198,6 +198,8 @@ public class FightScreen : MonoBehaviour {
 
 		foreach (StatusEffect eff in playerStatusEffects) { eff.endEffect(); }
 		foreach (StatusEffect eff in enemyStatusEffects) { eff.endEffect(); }
+
+		itemDescriptor.setDisabled();
 
 		elementsHolder.setActive(false);
 		fightOver = true;

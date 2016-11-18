@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -22,7 +23,7 @@ public class ScanningScreen : MonoBehaviour, ButtonHolder {
 
 	private float ableDistance = 1, distance, tempFloat;
 
-	private EnemyType[] enemyTypes;
+	private List<EnemyType> enemyTypes = new List<EnemyType>();
 
 	private float revealDist = .1f;
 
@@ -30,18 +31,27 @@ public class ScanningScreen : MonoBehaviour, ButtonHolder {
 
 	private Vector3 holderCenter;
 
-	private EnemyBlock[] enemyBlocks;
-
-	private int revealBlockIndex = 0;
-
-	private EnemyBlock enemyFightBlock;
+//	private EnemyBlock[] enemyBlocks;
+//
+//	private int revealBlockIndex = 0;
+//
+//	private EnemyBlock enemyFightBlock;
 
 	private FightScreen fightScreen;
+
+	private int markersOnStage = 5;
+
+	private bool active;
+	public bool isActive { get { return active; } set { closeBtn.setVisible(value); active = value; }}
+
+	private ScanningDetails scanningDetails;
 
 	public ScanningScreen init (ExploreScreen exploreScreen, StatusScreen statusScreen, ItemDescriptor itemDescriptor) {
 		this.exploreScreen = exploreScreen;
 
 		fightScreen = GameObject.Find("Fight Screen").GetComponent<FightScreen>().init(this, statusScreen, itemDescriptor);
+
+		scanningDetails = transform.Find("Scanning Details").GetComponent<ScanningDetails>().init(this);
 
 		statusScreen.cabin.scanningScreen = this;
 
@@ -63,21 +73,30 @@ public class ScanningScreen : MonoBehaviour, ButtonHolder {
 		}
 		barsHolder.gameObject.SetActive(true);
 
-		Transform blockHolder = transform.Find("Enemy Blocks");
-		enemyBlocks = new EnemyBlock[blockHolder.childCount];
-		EnemyBlock block;
-		for (int i = 0; i < blockHolder.childCount; i++) {
-			block = blockHolder.GetChild(i).GetComponent<EnemyBlock>().init(this);
-			enemyBlocks[block.index] = block;
-		}
-		blockHolder.gameObject.SetActive(true);
+//		Transform blockHolder = transform.Find("Enemy Blocks");
+//		enemyBlocks = new EnemyBlock[blockHolder.childCount];
+//		EnemyBlock block;
+//		for (int i = 0; i < blockHolder.childCount; i++) {
+//			block = blockHolder.GetChild(i).GetComponent<EnemyBlock>().init(this);
+//			enemyBlocks[block.index] = block;
+//		}
+//		blockHolder.gameObject.SetActive(true);
 		markersHolder.gameObject.SetActive(true);
+
+		foreach (EnemyType eType in Enum.GetValues(typeof(EnemyType))) {
+			if (eType.planet() == Vars.planetType) {
+				enemyTypes.Add(eType);
+			}
+		}
+
+		isActive = true;
 
 		close();
 		return this;
 	}
 
 	void Update () {
+		if (!isActive) { return; }
 		tempFloat = Vector3.Distance(holderCenter, Utils.mousePos);
 		if (tempFloat < FIELD_RADIUS) {
 			if (!cursor.gameObject.activeInHierarchy) {
@@ -101,14 +120,13 @@ public class ScanningScreen : MonoBehaviour, ButtonHolder {
 	}
 
 	public void resetMarkers () {
-		enemyTypes = Vars.planetType.getEnemyTypes();
 		foreach (EnemyMarker marker in markers) {
-			marker.resetMarker(enemyTypes[Random.Range(0, enemyTypes.Length)]);
+			marker.resetMarker(enemyTypes[UnityEngine.Random.Range(0, enemyTypes.Count)]);
 		}
-		foreach(EnemyBlock block in enemyBlocks) {
-			block.hide();
-		}
-		revealBlockIndex = 0;
+//		foreach(EnemyBlock block in enemyBlocks) {
+//			block.hide();
+//		}
+//		revealBlockIndex = 0;
 	}
 
 	private void findNearestTarget () {
@@ -126,9 +144,12 @@ public class ScanningScreen : MonoBehaviour, ButtonHolder {
 			if (mark.isFound) { continue; }
 			tempFloat = Vector2.Distance(mark.trans.position, Utils.mousePos);
 			if (tempFloat <= revealDist) {
-				mark.revealMarker();
-				enemyBlocks[revealBlockIndex].setVisible(mark);
-				revealBlockIndex++;
+				scanningDetails.showDetails(mark.enemyType);
+				cursor.gameObject.SetActive(false);
+				mark.resetMarker(enemyTypes[UnityEngine.Random.Range(0, enemyTypes.Count)]);
+//				mark.revealMarker();
+//				enemyBlocks[revealBlockIndex].setVisible(mark);
+//				revealBlockIndex++;
 				return;
 			}
 		}
@@ -154,10 +175,9 @@ public class ScanningScreen : MonoBehaviour, ButtonHolder {
 	public void show () {
 		gameObject.SetActive(true);
 		UserInterface.showInterface = false;
-		enemyTypes = Vars.planetType.getEnemyTypes();
 		if (markers.Count == 0) {
-			for (int i = 0; i < enemyBlocks.Length; i++) {
-				addMarker(enemyTypes[Random.Range(0, enemyTypes.Length)]);
+			for (int i = 0; i < markersOnStage; i++) {
+				addMarker(enemyTypes[UnityEngine.Random.Range(0, enemyTypes.Count)]);
 			}
 		}
 	}
@@ -172,14 +192,14 @@ public class ScanningScreen : MonoBehaviour, ButtonHolder {
 		if (btn == closeBtn) { close(); }
 	}
 
-	public void startFight (EnemyBlock enemyBlock) {
+	public void startFight (EnemyType enemyType) {
 		gameObject.SetActive(false);
-		enemyFightBlock = enemyBlock;
-		fightScreen.startFight(enemyBlock.marker.enemyType);
+//		enemyFightBlock = enemyBlock;
+		fightScreen.startFight(enemyType);
 	}
 
 	public void endFight (bool win) {
-		if (win) { enemyFightBlock.setFightingResultWin(); }
+//		if (win) { enemyFightBlock.setFightingResultWin(); }
 		gameObject.SetActive(true);
 	}
 }

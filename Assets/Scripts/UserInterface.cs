@@ -69,19 +69,9 @@ public class UserInterface : MonoBehaviour {
 	void Update () {
 		if (Input.GetKeyDown(KeyCode.I)) {
 			if (statusScreen == null) { return; }
-//			if (statusScreen.gameObject.activeInHierarchy) {
-//				statusScreen.closeScreen();
-//			}
-//			else
-			if (showInterface) {
-				statusScreen.showScreen();
-			}
+			if (showInterface) { statusScreen.showScreen(); }
+			else if (statusScreen.gameObject.activeInHierarchy) { InputProcessor.closeToCurrent(statusScreen); }
 		}
-//		else if (Input.GetKeyDown(KeyCode.Escape)) {
-//			if (statusScreen.gameObject.activeInHierarchy) {
-//				statusScreen.closeScreen();
-//			}
-//		}
 	}
 
 	void OnGUI () {

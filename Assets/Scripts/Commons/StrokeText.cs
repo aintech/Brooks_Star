@@ -5,6 +5,8 @@ public class StrokeText : MonoBehaviour {
 
 	private TextMesh text, top, bottom, left, right;
 
+	public Color32 textColor { get { return text.color; } set {text.color = value; }}
+
 	public StrokeText init (string layerName, int sortingOrder) {
 		text = GetComponent<TextMesh>();
 		MeshRenderer rend = text.GetComponent<MeshRenderer>();

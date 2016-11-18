@@ -51,7 +51,7 @@ public class EnemyBlock : MonoBehaviour, ButtonHolder {
 	}
 
 	private void attackEnemy () {
-		scanningScreen.startFight(this);
+//		scanningScreen.startFight(this);
 	}
 
 	public void setFightingResultWin () {

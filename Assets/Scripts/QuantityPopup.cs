@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class QuantityPopup : MonoBehaviour, ButtonHolder {
+public class QuantityPopup : MonoBehaviour, ButtonHolder, Closeable {
 
 	private Transform bar;
 
@@ -75,7 +75,7 @@ public class QuantityPopup : MonoBehaviour, ButtonHolder {
 		if (btn == applyBtn) { apply(); }
 		else if (btn == decreaseBtn) { decrease(); }
 		else if (btn == increaseBtn) { increase(); }
-		else if (btn == denyBtn || btn == denyArea) { close(); }
+		else if (btn == denyBtn || btn == denyArea) { close(false); }
 	}
 
 	public void show (Item item, bool toBuy) {
@@ -94,6 +94,7 @@ public class QuantityPopup : MonoBehaviour, ButtonHolder {
 			zones[i] = barLeft + (barRatio * i);
 		}
 		updateValues();
+		InputProcessor.add(this);
 		gameObject.SetActive(true);
 		onScreen = true;
 	}
@@ -101,9 +102,10 @@ public class QuantityPopup : MonoBehaviour, ButtonHolder {
 	void Update () {
 		if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)) {
 			apply();
-		} else if (Input.GetKeyDown(KeyCode.Escape)) {
-			close();
 		}
+//		else if (Input.GetKeyDown(KeyCode.Escape)) {
+//			close();
+//		}
 		if (!drag && Input.GetMouseButtonDown(0) && Utils.hit != null && Utils.hit == barCollider) { drag = true; }
 		if (drag) {
 			if (Input.GetMouseButtonUp(0)) {
@@ -162,13 +164,14 @@ public class QuantityPopup : MonoBehaviour, ButtonHolder {
 				market.sellItem(item, count);
 			}
 		}
-		close();
+		close(false);
 	}
 
-	private void close () {
+	public void close (bool byInputProcessor) {
 		item = null;
 		onScreen = false;
 		if (asLoot) { display.applyItemTake(0); }
 		gameObject.SetActive(false);
+		if (!byInputProcessor) { InputProcessor.removeLast(); }
 	}
 }

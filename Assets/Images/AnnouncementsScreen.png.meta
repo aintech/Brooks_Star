@@ -1,16 +1,17 @@
 fileFormatVersion: 2
-guid: 5c70c673fad13e044901ea64e6ec4eef
-timeCreated: 1479481280
+guid: e41e56b28001f1b429a73bd7bdd107c7
+timeCreated: 1479455321
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: FightResultScreen_Foreground
-    21300002: FightResultScreen_BG
-    21300004: FightResultScreen_CaptureBtn
-    21300006: FightResultScreen_CaptureBtn_Hover
-    21300008: FightResultScreen_ReleaseBtn
-    21300010: FightResultScreen_ReleaseBtn_Hover
-    21300012: FightResultScreen_Middleground
+    21300000: AnnouncementsScreen_Foreground
+    21300002: AnnouncementsScreen_Background
+    21300004: AnnouncementsScreen_OrderBtn
+    21300006: AnnouncementsScreen_OrderBtn_Hover
+    21300008: AnnouncementsScreen_ApplyBtn_Hover
+    21300010: AnnouncementsScreen_ApplyBtn
+    21300012: AnnouncementsScreen_CloseBtn
+    21300014: AnnouncementsScreen_CloseBtn_Hover
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -60,78 +61,52 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: FightResultScreen_Foreground
+      name: AnnouncementsScreen_Foreground
       rect:
         serializedVersion: 2
-        x: 1645
-        y: 5
-        width: 1606
-        height: 100
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: FightResultScreen_BG
-      rect:
-        serializedVersion: 2
-        x: 1895
-        y: 243
-        width: 1106
-        height: 936
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: FightResultScreen_CaptureBtn
-      rect:
-        serializedVersion: 2
-        x: 1663
-        y: 1900
-        width: 333
-        height: 64
+        x: 20
+        y: 16
+        width: 1600
+        height: 1000
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: FightResultScreen_CaptureBtn_Hover
+      name: AnnouncementsScreen_Background
       rect:
         serializedVersion: 2
-        x: 1663
-        y: 1809
-        width: 333
-        height: 64
+        x: 20
+        y: 1036
+        width: 1600
+        height: 1000
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: FightResultScreen_ReleaseBtn
+      name: AnnouncementsScreen_ApplyBtn_Hover
       rect:
         serializedVersion: 2
-        x: 1664
-        y: 1714
-        width: 332
-        height: 63
+        x: 1635
+        y: 57
+        width: 400
+        height: 116
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: FightResultScreen_ReleaseBtn_Hover
+      name: AnnouncementsScreen_ApplyBtn
       rect:
         serializedVersion: 2
-        x: 1664
-        y: 1623
-        width: 332
-        height: 63
+        x: 1635
+        y: 215
+        width: 400
+        height: 116
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
