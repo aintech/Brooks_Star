@@ -41,8 +41,8 @@ public class StasisChamber : MonoBehaviour, ButtonHolder {
 	public void putInChamber (EnemyType type) {
 		this.enemyType = type;
 		render.sprite = Vars.EROTIC? ImagesProvider.getEnemyStasisSprite(type): emptyChamber;
-		sellBtn.setVisible(true);
-		releaseBtn.setVisible(true);
+		sellBtn.setVisible(!Vars.inSpace && Vars.planetType.isColonized());
+		releaseBtn.setVisible(!Vars.inSpace);
 		enemyName.text = type.name();
 		sellBtn.setText("Продать\n$" + type.cost());
 		isEmpty = false;

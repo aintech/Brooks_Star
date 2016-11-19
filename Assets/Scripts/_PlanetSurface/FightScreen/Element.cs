@@ -11,9 +11,10 @@ public class Element : MonoBehaviour {
 
 	private Transform trans;
 
-	private ElementType elementType;
+	public ElementType elementType { get; private set; }
 
-	private Vector3 cellCenter, target;
+	[HideInInspector]
+	public Vector3 cellCenter, target;
 
 	private int row, column;
 
@@ -23,9 +24,12 @@ public class Element : MonoBehaviour {
 
 	private float x, y;
 
-	private bool goToTarget;
+	public bool goToTarget { get; private set; }
+	public bool fading { get; private set; }
+	public bool fadeIn { get; private set; }
+	public bool fadeOut { get; private set; }
 
-	private bool fadeOut;
+	private float fadingSpeed = .05f;
 
 	private Color color = new Color(1, 1, 1, 1);
 
@@ -33,14 +37,12 @@ public class Element : MonoBehaviour {
 
 	private Collider2D col;
 
-	void Awake () {
+	public Element init () {
 		render = GetComponent<SpriteRenderer>();
 		col = GetComponent<Collider2D>();
 		trans = transform;
-	}
-
-	public ElementType getElementType () {
-		return elementType;
+		enabled = false;
+		return this;
 	}
 
 	public void initRandomElement () {
@@ -56,6 +58,14 @@ public class Element : MonoBehaviour {
 		}
 	}
 
+	public void prepareFading (bool fadeIn) {
+		color.a = fadeIn ? 0 : 1;
+		scale.x = fadeIn ? 0 : 1;
+		scale.y = fadeIn ? 0 : 1;
+		render.color = color;
+		gameObject.SetActive (true);
+	}
+
 	public void initElement (ElementType elementType) {
 		this.elementType = elementType;
 		setSprite();
@@ -65,23 +75,40 @@ public class Element : MonoBehaviour {
 		return render;
 	}
 
+	public void setGoToTarget () {
+		goToTarget = true;
+		x = trans.localPosition.x;
+		y = trans.localPosition.y;
+		setAsEnabled ();
+	}
+
+	public void initFading (bool fadeIn) {
+		this.fadeIn = fadeIn;
+		this.fadeOut = !fadeIn;
+		fading = true;
+		setAsEnabled ();
+	}
+
 	void Update () {
-		if (goToTarget) {
-			moveToTarget();
-		}
-		if (fadeOut) {
-			if (render.color.a > 0) {
-				color.a -= .05f;
-				render.color = color;
-				scale.x -= .05f;
-				scale.y -= .05f;
-				trans.localScale = scale;
-				trans.Rotate(rotatePoint, -10);
+		if (goToTarget) { moveToTarget(); }
+		if (fading) {
+			if ((fadeOut && render.color.a < .001f) || (fadeIn && render.color.a > .99f)) {
+				fading = false;
+				setAsEnabled ();
+				trans.rotation = new Quaternion ();
 			} else {
-				fadeOut = false;
-				FightProcessor.ELEMENTS_ANIM_DONE = true;
+				color.a += fadeIn? fadingSpeed: -fadingSpeed;
+				render.color = color;
+				scale.x += fadeIn ? fadingSpeed : -fadingSpeed;
+				scale.y += fadeIn ? fadingSpeed : -fadingSpeed;
+				trans.localScale = scale;
+//				trans.Rotate(rotatePoint, fadeIn? 10: -10);
 			}
 		}
+	}
+
+	private void setAsEnabled () {
+		enabled = fading || goToTarget;
 	}
 
 	public void refreshElement () {
@@ -96,6 +123,7 @@ public class Element : MonoBehaviour {
 			trans.localPosition = target;
 			render.sortingOrder = ElementsHolder.START_SORT_ORDER;
 			goToTarget = false;
+			setAsEnabled ();
 		} else {
 			if ((target.x - trans.localPosition.x) < -MOVE_SPEED) {
 				x = trans.localPosition.x - MOVE_SPEED;
@@ -136,34 +164,8 @@ public class Element : MonoBehaviour {
 		return column;
 	}
 
-	public void setCellCenter (Vector3 cellCenter) {
-		this.cellCenter = cellCenter;
-	}
-
-	public Vector3 getCellCenter () {
-		return cellCenter;
-	}
-
-	public void setTarget (Vector3 target) {
-		this.target = target;
-	}
-
-	public Vector3 getTarget () {
-		return target;
-	}
-
-	public void setFadeOut () {
-		fadeOut = true;
-	}
-
 	public bool isGoToTarget () {
 		return goToTarget;
-	}
-
-	public void setGoToTarget () {
-		this.goToTarget = true;
-		x = trans.localPosition.x;
-		y = trans.localPosition.y;
 	}
 
 	public void setActive (bool active) {

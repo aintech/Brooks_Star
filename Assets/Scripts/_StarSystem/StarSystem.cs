@@ -45,6 +45,8 @@ public class StarSystem : MonoBehaviour {
 	}
 
 	private void init () {
+		Vars.inSpace = true;
+
 		ItemFactory.itemPrefab = itemPrefab;
 		mainCamera = Camera.main.transform;
 

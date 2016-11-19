@@ -18,8 +18,6 @@ public class FightProcessor : MonoBehaviour {
 
 	public static bool FIGHT_ANIM_PLAYER_DONE = true, FIGHT_ANIM_ENEMY_DONE = true;
 
-	private bool playerChecked = false;
-
 	private FightScreen fightScreen;
 
 	private int playerActions, enemyActions;
@@ -67,9 +65,6 @@ public class FightProcessor : MonoBehaviour {
 		switch (machineState) {
 			case StateMachine.NOT_IN_FIGHT: break;
 			case StateMachine.PLAYER_TURN:
-//				if (!playerChecked) {
-//					if (!checkNextTurn(true)) { switchMachineState(StateMachine.PLAYER_MOVE_DONE); }
-//				} else {
 				if (playerActions == 0) {
 					PLAYER_MOVE_DONE = false;
 					switchMachineState(StateMachine.ICONS_ANIMATION);
@@ -81,26 +76,14 @@ public class FightProcessor : MonoBehaviour {
 				} else {
 					elementsHolder.checkPlayerInput();
 				}
-//				}
 				break;
 			case StateMachine.ICONS_ANIMATION:
-				if (ELEMENTS_ANIM_DONE && FIGHT_ANIM_PLAYER_DONE && FIGHT_ANIM_ENEMY_DONE) {
-
+				if (FIGHT_ANIM_PLAYER_DONE && FIGHT_ANIM_ENEMY_DONE) {
 					switchMachineState(StateMachine.PLAYER_MOVE_DONE);
-//					if (playerActions == 0) {
-//						switchMachineState(StateMachine.PLAYER_MOVE_DONE);
-//					} else {
-//						switchMachineState(StateMachine.PLAYER_TURN);
-//					}
-
-					//				if (Hero.getHealth() > Vars.player.getMaxHealth()) { Vars.player.setHealthToMax(); }
-					//				if (Vars.enemy.getHealth() > Vars.enemy.getMaxHealth()) { Vars.enemy.setHealthToMax(); }
 				}
 				break;
 			case StateMachine.PLAYER_MOVE_DONE:
 				afterPlayerMove();
-				//			Vars.player.getStatusEffectHolder().updateEffects();
-				//				playerChecked = false;
 				switchMachineState(StateMachine.ICONS_POSITIONING);
 				break;
 			case StateMachine.ICONS_POSITIONING:
@@ -108,7 +91,6 @@ public class FightProcessor : MonoBehaviour {
 					if (enemy.health <= 0) { switchMachineState(StateMachine.PLAYER_WIN); }
 					else if (Player.health <= 0) { switchMachineState(StateMachine.ENEMY_WIN); }
 					else if (elementsHolder.checkElementsMatch()) {
-						ELEMENTS_ANIM_DONE = false;
 						switchMachineState(StateMachine.ICONS_ANIMATION);
 					} else {
 						if (playerActions == 0) {
@@ -121,20 +103,17 @@ public class FightProcessor : MonoBehaviour {
 				break;
 			case StateMachine.ENEMY_TURN:
 				if (enemyActions > 0) { calculateEnemyTurnResult(); }
-//				if (checkNextTurn(false)) { calculateEnemyTurnResult(); }
 				switchMachineState(StateMachine.ENEMY_MOVE_DONE);
 				break;
 			case StateMachine.ENEMY_MOVE_DONE:
 				if (FIGHT_ANIM_PLAYER_DONE && FIGHT_ANIM_ENEMY_DONE) {
-					//				if (Vars.player.getHealth() > Vars.player.getMaxHealth()) { Vars.player.setHealthToMax(); }
-					//				if (Vars.enemy.getHealth() > Vars.enemy.getMaxHealth()) { Vars.enemy.setHealthToMax(); }
 					if (Player.health <= 0) { switchMachineState(StateMachine.ENEMY_WIN); }
 					else if (enemyActions > 0) { switchMachineState(StateMachine.ENEMY_TURN); }
 					else {
 						updateStatusEffects();
 						calcActions();
 						switchMachineState(StateMachine.PLAYER_TURN);
-					}//Vars.enemy.getStatusEffectHolder().updateEffects(); }
+					}
 				}
 				break;
 			case StateMachine.PLAYER_WIN:
@@ -153,20 +132,12 @@ public class FightProcessor : MonoBehaviour {
 			foreach (StatusEffect eff in fightScreen.enemyStatusEffects) {
 				eff.updateStatus ();
 			}
-//		if (machineState == StateMachine.PLAYER_TURN) {
-//		} else if (machineState == StateMachine.ENEMY_TURN) {
-//		}
 	}
-
-//	private bool checkNextTurn (bool mustBePlayerTurn) {
-//		if (!playerChecked && machineState == StateMachine.PLAYER_TURN) { playerChecked = true; }//???
-//		return true;
-//	}
 
 	private void afterPlayerMove () {
 		elementsHolder.refreshSortingOrder();
 		elementsHolder.repositionMatchingElements();
-		elementsHolder.setelEmentsGoToCenter();
+		elementsHolder.setElementsGoToCenter();
 	}
 
 	private void rearrangeIcons () {
@@ -205,18 +176,10 @@ public class FightProcessor : MonoBehaviour {
 	}
 
 	private void calculateEnemyTurnResult () {
-		//		if (Vars.enemy.getStatusEffectHolder().haveActiveEffect(StatusEffectType.BLINDED)) {
-		//			rand = Random.value;
-		//			if (rand > .5f) {
-		//				FightMessenger.addMessage(Vars.enemy.getEnemyType().getName(), "промахивается");
-		//				return;
-		//			}
-		//		}
 		FIGHT_ANIM_PLAYER_DONE = false;
 		fightScreen.fightEffectPlayer.playEffect(FightEffectType.DAMAGE, Player.hitPlayer(enemy.damage));
 		enemyActions--;
 		fightScreen.updateActionTexts(playerActions, enemyActions);
-		//		FightMessenger.addDamageMessage(Vars.playerName, ShotElementType.SIMPLE, damage);
 	}
 
 
@@ -228,15 +191,10 @@ public class FightProcessor : MonoBehaviour {
 
 	private void switchMachineState (StateMachine machineState) {
 		this.machineState = machineState;
-//		if (potionBag.isActive() && !canDrinkPotion()) { potionBag.setBagActive(false); }
-//		else if (!potionBag.isActive() && canDrinkPotion()) { potionBag.setBagActive(true); }
 	}
 
-	public void skipAction () {
-//		playerActions--;
-//		fightScreen.updateActionTexts(playerActions, enemyActions);
+	public void skipMove () {
 		PLAYER_MOVE_DONE = true;
-//		switchMachineState(StateMachine.ICONS_ANIMATION);
 	}
 
 	public bool canUseSupply (SupplyType supplyType) {
@@ -265,8 +223,6 @@ public class FightProcessor : MonoBehaviour {
 
 	private void endFight (bool playerWin) {
 		switchMachineState(StateMachine.NOT_IN_FIGHT);
-		ELEMENTS_ANIM_DONE = true;
-
 		fightScreen.finishFight(playerWin);
 	}
 

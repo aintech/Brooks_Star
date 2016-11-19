@@ -19,7 +19,7 @@ public class FightResultScreen : MonoBehaviour, ButtonHolder {
 
 //	private Sprite winSprite;
 
-	private bool playAnim, countGoldDone;//, countRankDone;
+	private bool playAnim;//, countGoldDone, countRankDone;
 
 	private TextMesh goldValue, newLevelLabel;//rankPointsValue, 
 
@@ -123,7 +123,7 @@ public class FightResultScreen : MonoBehaviour, ButtonHolder {
 		releaseBtn.setVisible(false);
 		chambersAvailable.setText("");
 //		countRankDone = (this.rankPoints > 0);
-		countGoldDone = false;
+//		countGoldDone = false;
 //		heroRank = Hero.getRank();
 //		valuesHolder.gameObject.SetActive(false);
 		gameObject.SetActive(true);

@@ -8,7 +8,7 @@ public class ElementsHolder : MonoBehaviour {
 
 	private FightScreen fightScreen;
 
-	private const int ROWS = 7, COLUMNS = 8;
+	public const int ROWS = 7, COLUMNS = 8;
 	
 	private const float CELL_STEP = 1.05f;//расстояние между центрами ячеек
 	
@@ -41,19 +41,23 @@ public class ElementsHolder : MonoBehaviour {
 
 	private FightProcessor fightProcessor;
 
-	public void init () {
+	public ElementsHolderAnimator holderAnimator { get; private set; }
+
+	public ElementsHolder init (FightScreen fightScreen) {
 		fightScreen = transform.parent.GetComponent<FightScreen>();
 		fightProcessor = fightScreen.getFightProcessor();
 		Element element = null;
 		for (int i = 0; i < ROWS; i++) {
 			for (int j = 0; j < COLUMNS; j++) {
-				element = Instantiate<Transform>(elementPrefab).GetComponent<Element>();
+				element = Instantiate<Transform>(elementPrefab).GetComponent<Element>().init();
 				element.transform.SetParent(transform);
 				elements[i,j] = element;
 				element.setRowAndColumn(i, j);
 				element.getRender().sortingOrder = i + START_SORT_ORDER;
 			}
 		}
+		holderAnimator = GetComponent<ElementsHolderAnimator> ().init (fightScreen, elements);
+		return this;
 	}
 
 	public void initializeElements () {
@@ -67,17 +71,17 @@ public class ElementsHolder : MonoBehaviour {
 				ElementType elementType = getRandomType(null);
 				
 				//горизонтальные совпадения
-				if (j >= 2 && elements[i,j-1].getElementType() == elementType && elements[i,j-2].getElementType() == elementType) {
+				if (j >= 2 && elements[i,j-1].elementType == elementType && elements[i,j-2].elementType == elementType) {
 					nearTypes[0] = elementType;
 					if (i > 0) {
-						nearTypes[1] = elements[i-1,j].getElementType();
+						nearTypes[1] = elements[i-1,j].elementType;
 					}
 					checkTypes = true;
 				}
 				//вертикальные совпадения
-				if (i >= 2 && elements[i-1,j].getElementType() == elementType && elements[i-2,j].getElementType() == elementType) {
+				if (i >= 2 && elements[i-1,j].elementType == elementType && elements[i-2,j].elementType == elementType) {
 					if (j > 0) {
-						nearTypes[0] = elements[i,j-1].getElementType();
+						nearTypes[0] = elements[i,j-1].elementType;
 					}
 					nearTypes[1] = elementType;
 					checkTypes = true;
@@ -90,20 +94,22 @@ public class ElementsHolder : MonoBehaviour {
 				
 				element.initElement(elementType);
 
-				element.transform.localPosition = new Vector2(-MAX_X + j * CELL_STEP, START_Y);
-				element.setCellCenter(getCellPosition(i, j));
-				element.setTarget(element.getCellCenter());
+//				element.transform.localPosition = new Vector2(-MAX_X + j * CELL_STEP, START_Y);
+				element.cellCenter = getCellPosition(i, j);
+				element.target = element.cellCenter;
+				element.transform.localPosition = element.target;
 				element.gameObject.SetActive(false);
 			}
 		}
+//		holderAnimator.playElementsApperance ();
 	}
 
-	public void startElementsDrop () {
-		foreach (Element element in elements) {
-			element.gameObject.SetActive(true);
-			element.setGoToTarget();
-		}
-	}
+//	public void startElementsDrop () {
+//		foreach (Element element in elements) {
+//			element.gameObject.SetActive(true);
+//			element.setGoToTarget();
+//		}
+//	}
 	
 	public void checkPlayerInput () {
 		if (Input.GetMouseButtonDown(0) && draggedElement == null) {
@@ -148,7 +154,7 @@ public class ElementsHolder : MonoBehaviour {
 						element.setRowAndColumn(row, col);
 						elements[row, col] = element;
 						Vector2 cellPos = getCellPosition(row, col);
-						element.setCellCenter(cellPos);
+						element.cellCenter = cellPos;
 						count++;
 						break;
 					}
@@ -159,7 +165,7 @@ public class ElementsHolder : MonoBehaviour {
 							element.setRowAndColumn(row, col);
 							elements[row, col] = element;
 							Vector2 cellPos = getCellPosition(row, col);
-							element.setCellCenter(cellPos);
+							element.cellCenter = cellPos;
 							count++;
 							break;
 						}
@@ -169,7 +175,7 @@ public class ElementsHolder : MonoBehaviour {
 						element.setRowAndColumn(row, col);
 						elements[row, col] = element;
 						Vector2 cellPos = getCellPosition(row, col);
-						element.setCellCenter(cellPos);
+						element.cellCenter = cellPos;
 						break;
 					}
 					step++;
@@ -196,32 +202,32 @@ public class ElementsHolder : MonoBehaviour {
 			}
 		} else {
 			if (moveRestrict == MoveRestrict.HORIZONTAL) {
-				newPos.y = draggedElement.getCellCenter().y;
+				newPos.y = draggedElement.cellCenter.y;
 				if (dir.x > CELL_STEP) {
-					newPos.x = draggedElement.getCellCenter().x + CELL_STEP;
+					newPos.x = draggedElement.cellCenter.x + CELL_STEP;
 				} else if (dir.x < -CELL_STEP) {
-					newPos.x = draggedElement.getCellCenter().x - CELL_STEP;
+					newPos.x = draggedElement.cellCenter.x - CELL_STEP;
 				}
 			} else if (moveRestrict == MoveRestrict.VERTICAL) {
-				newPos.x = draggedElement.getCellCenter().x;
+				newPos.x = draggedElement.cellCenter.x;
 				if (dir.y > CELL_STEP) {
-					newPos.y = draggedElement.getCellCenter().y + CELL_STEP;
+					newPos.y = draggedElement.cellCenter.y + CELL_STEP;
 				} else if (dir.y < -CELL_STEP) {
-					newPos.y = draggedElement.getCellCenter().y - CELL_STEP;
+					newPos.y = draggedElement.cellCenter.y - CELL_STEP;
 				}
 			}
 		}
 		
 		if ((draggedElement.getColumn() == 0 && dir.x < 0) || (draggedElement.getColumn() == (COLUMNS - 1) && dir.x > 0)) {
-			newPos.x = draggedElement.getCellCenter().x;
+			newPos.x = draggedElement.cellCenter.x;
 		}
 		if ((draggedElement.getRow() == 0 && dir.y > 0) || (draggedElement.getRow() == (ROWS - 1) && dir.y < 0)) {
-			newPos.y = draggedElement.getCellCenter().y;
+			newPos.y = draggedElement.cellCenter.y;
 		}
 		
 		draggedElement.transform.localPosition = newPos;
 		
-		Vector3 offset = draggedElement.transform.localPosition - draggedElement.getCellCenter();
+		Vector3 offset = draggedElement.transform.localPosition - draggedElement.cellCenter;
 		
 		if (changeElement == null) {
 			if (offset.x > HALF_CELL_STEP + .1f) {
@@ -234,7 +240,7 @@ public class ElementsHolder : MonoBehaviour {
 				changeElement = elements[draggedElement.getRow() + 1, draggedElement.getColumn()];
 			}
 			if (changeElement != null) {
-				changeElement.setTarget(draggedElement.getCellCenter());
+				changeElement.target = draggedElement.cellCenter;
 				changeElement.setGoToTarget();
 			}
 		} else {
@@ -246,7 +252,7 @@ public class ElementsHolder : MonoBehaviour {
 				moveBack = true;
 			}
 			if (moveBack) {
-				changeElement.setTarget(changeElement.getCellCenter());
+				changeElement.target = changeElement.cellCenter;
 				changeElement.setGoToTarget();
 				changeElement = null;
 			}
@@ -255,9 +261,9 @@ public class ElementsHolder : MonoBehaviour {
 	
 	public void checkElementDrop () {
 		if (changeElement != null) {
-			Vector3 cellCenter = changeElement.getCellCenter();
-			changeElement.setCellCenter(draggedElement.getCellCenter());
-			draggedElement.setCellCenter(cellCenter);
+			Vector3 cellCenter = changeElement.cellCenter;
+			changeElement.cellCenter = draggedElement.cellCenter;
+			draggedElement.cellCenter = cellCenter;
 			
 			int row = changeElement.getRow();
 			int col = changeElement.getColumn();
@@ -270,7 +276,7 @@ public class ElementsHolder : MonoBehaviour {
 			FightProcessor.PLAYER_MOVE_DONE = true;
 		}
 		
-		draggedElement.setTarget(draggedElement.getCellCenter());
+		draggedElement.target = draggedElement.cellCenter;
 		draggedElement.setGoToTarget();
 		draggedElement.getRender().sortingOrder = AFTER_DRAG_ORDER;
 		changeElement = null;
@@ -295,9 +301,9 @@ public class ElementsHolder : MonoBehaviour {
 		allMatch.Clear();
 	}
 
-	public void setelEmentsGoToCenter () {
+	public void setElementsGoToCenter () {
 		foreach (Element element in elements) {
-			element.setTarget(element.getCellCenter());
+			element.target = element.cellCenter;
 			element.setGoToTarget();
 		}
 	}
@@ -321,17 +327,17 @@ public class ElementsHolder : MonoBehaviour {
 						break;
 					}
 					next = elements[row, compareCol];
-					if (next.getElementType() == element.getElementType()) {
+					if (next.elementType == element.elementType) {
 						matchLine.Add(next);
 						if (compareCol == (COLUMNS - 1) && (matchLine.Count >= 2)) {
-							fightProcessor.addToTurnResult(element.getElementType(), matchLine.Count + 1, getMiddlePoint(matchLine));
+							fightProcessor.addToTurnResult(element.elementType, matchLine.Count + 1, getMiddlePoint(matchLine));
 							totalMatchHor.Add(element);
 							totalMatchHor.AddRange(matchLine);
 							matchLine.Clear();
 						}
 					} else {
 						if (matchLine.Count >= 2) {
-							fightProcessor.addToTurnResult(element.getElementType(), matchLine.Count + 1, getMiddlePoint(matchLine));
+							fightProcessor.addToTurnResult(element.elementType, matchLine.Count + 1, getMiddlePoint(matchLine));
 							totalMatchHor.Add(element);
 							totalMatchHor.AddRange(matchLine);
 							matchLine.Clear();
@@ -364,17 +370,17 @@ public class ElementsHolder : MonoBehaviour {
 						break;
 					}
 					next = elements[compareRow, col];
-					if (next.getElementType() == element.getElementType()) {
+					if (next.elementType == element.elementType) {
 						matchLine.Add(next);
 						if (compareRow == (ROWS - 1) && (matchLine.Count >= 2)) {
-							fightProcessor.addToTurnResult(element.getElementType(), matchLine.Count + 1, getMiddlePoint(matchLine));
+							fightProcessor.addToTurnResult(element.elementType, matchLine.Count + 1, getMiddlePoint(matchLine));
 							totalMatchVer.Add(element);
 							totalMatchVer.AddRange(matchLine);
 							matchLine.Clear();
 						}
 					} else {
 						if (matchLine.Count >= 2) {
-							fightProcessor.addToTurnResult(element.getElementType(), matchLine.Count + 1, getMiddlePoint(matchLine));
+							fightProcessor.addToTurnResult(element.elementType, matchLine.Count + 1, getMiddlePoint(matchLine));
 							totalMatchVer.Add(element);
 							totalMatchVer.AddRange(matchLine);
 							matchLine.Clear();
@@ -400,7 +406,7 @@ public class ElementsHolder : MonoBehaviour {
 		}
 		
 		foreach (Element fi in allMatch) {
-			fi.setFadeOut();
+			fi.initFading (false);
 		}
 		
 		matchLine.Clear();
@@ -457,13 +463,13 @@ public class ElementsHolder : MonoBehaviour {
 		return elementType;
 	}
 
-	private enum MoveRestrict {
-		HORIZONTAL, VERTICAL
-	}
-
 	public void setActive (bool active) {
 		foreach (Element element in elements) {
 			element.setActive(active);
 		}
+	}
+
+	private enum MoveRestrict {
+		HORIZONTAL, VERTICAL
 	}
 }

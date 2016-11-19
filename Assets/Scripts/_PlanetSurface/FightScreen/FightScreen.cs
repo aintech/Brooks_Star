@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class FightScreen : MonoBehaviour {
+public class FightScreen : MonoBehaviour, ButtonHolder {
 
 	public static bool ENEMY_DEAD_ANIM_DONE = false;
 
@@ -59,13 +59,19 @@ public class FightScreen : MonoBehaviour {
 
 	private StrokeText playerActionsText, enemyActionsText;
 
+	private Button captureBtn, releaseBtn;
+
+	private StasisChambersHolder chambersHolder;
+
 	public FightScreen init (ScanningScreen scanningScreen, StatusScreen statusScreen, ItemDescriptor itemDescriptor) {
 		this.scanningScreen = scanningScreen;
 		this.playerData = statusScreen.playerData;
 		this.itemDescriptor = itemDescriptor;
+		this.chambersHolder = statusScreen.cabin.chambersHolder;
 
+		fightProcessor = GetComponent<FightProcessor>();
 		itemDescriptor.fightScreen = this;
-		elementsHolder = transform.Find("ElementsHolder").GetComponent<ElementsHolder>();
+		elementsHolder = transform.Find ("Elements Holder").GetComponent<ElementsHolder> ().init (this);;
 		iconsHolderRender = elementsHolder.GetComponent<SpriteRenderer>();
 		fightEffectPlayer = transform.Find("Fight Effect Player").GetComponent<FightEffectPlayer>().init();
 		elementEffectPlayer = transform.Find("ElementEffectPlayer").GetComponent<ElementEffectPlayer>();
@@ -73,10 +79,9 @@ public class FightScreen : MonoBehaviour {
 		enemy = transform.Find("Enemy").GetComponent<Enemy>();
 		resultScreen = transform.Find("Fight Result Screen").GetComponent<FightResultScreen>().init(this, statusScreen.cabin.chambersHolder, enemy);
 		enemyDeadAnimator = transform.Find("EnemyDeadAnim").GetComponent<Animator>();
-		fightProcessor = GetComponent<FightProcessor>();
 		deadStone = enemyDeadAnimator.transform.Find("DeadStone");
 		enemyPos = enemy.transform.localPosition;
-		elementsHolder.init();
+//		elementsHolder.init();
 		enemy.init(this);
 		elementEffectPlayer.init(this, enemy);
 		fightProcessor.init(this, elementsHolder, enemy);
@@ -99,6 +104,9 @@ public class FightScreen : MonoBehaviour {
 			supplySlots.Add(slot);
 		}
 		supplyHolder.gameObject.SetActive(true);
+
+		captureBtn = transform.Find ("Capture Button").GetComponent<Button> ().init ();
+		releaseBtn = transform.Find ("Release Button").GetComponent<Button> ().init ();
 
 		Player.fightScreen = this;
 
@@ -133,6 +141,9 @@ public class FightScreen : MonoBehaviour {
 			eff.initEnemy (enemy);
 		}
 
+		captureBtn.setVisible (false);
+		releaseBtn.setVisible (false);
+
 		gameObject.SetActive(true);
 	}
 
@@ -148,16 +159,17 @@ public class FightScreen : MonoBehaviour {
 		if (!fightStarted) {
 			if (!startAnimDone) {
 				animatingFightStart();
-			} else if (!elementsHolder.isAllElementsOnCells()) {
+			} else if (FightProcessor.ELEMENTS_ANIM_DONE) {
+//			else if (!elementsHolder.isAllElementsOnCells()) {
 				fightStarted = true;
 				fightProcessor.startFight();
 			}
 		}
-		if (enemyDeadPlaying) {
-			if (ENEMY_DEAD_ANIM_DONE) {
-				showFightResultScreen();
-			}
-		}
+//		if (enemyDeadPlaying) {
+//			if (ENEMY_DEAD_ANIM_DONE) {
+//				showFightResultScreen();
+//			}
+//		}
 	}
 
 	private void animatingFightStart () {
@@ -172,43 +184,65 @@ public class FightScreen : MonoBehaviour {
 
 		if (holderColor.a >= 1 && enemy.transform.position.x <= enemyFinalX) {
 			startAnimDone = true;
-			elementsHolder.startElementsDrop();
+			elementsHolder.holderAnimator.playElementsApperance ();
+//			elementsHolder.startElementsDrop();
 		}
-		//		if (enemyScale.x < 1) {
-		//			enemyScale.x += .03f;
-		//			enemyScale.y += .03f;
-		//		} else {
-		//			enemyScale.x = 1;
-		//			enemyScale.y = 1;
-		//		}
 	}
 
 	public void finishFight (bool playerWin) {
 		this.playerWin = playerWin;
-		ENEMY_DEAD_ANIM_DONE = !playerWin;
+//		ENEMY_DEAD_ANIM_DONE = !playerWin;
 
-		if (playerWin) {
-			enemyDeadAnimator.gameObject.SetActive(true);
-			enemyDeadAnimator.Play("EnemyDead");
-			enemy.destroyEnemy();
-			enemyDeadPlaying = true;
-		} else {
-			showFightResultScreen();
-		}
+//		if (playerWin) {
+//			enemyDeadAnimator.gameObject.SetActive(true);
+//			enemyDeadAnimator.Play("EnemyDead");
+//			enemy.destroyEnemy();
+//			enemyDeadPlaying = true;
+//		} else {
+//			showFightResultScreen();
+//		}
 
 		foreach (StatusEffect eff in playerStatusEffects) { eff.endEffect(); }
 		foreach (StatusEffect eff in enemyStatusEffects) { eff.endEffect(); }
 
 		itemDescriptor.setDisabled();
-
+		elementsHolder.holderAnimator.playElementsDisapperance ();
 		elementsHolder.setActive(false);
+
 		fightOver = true;
 	}
 
-	private void showFightResultScreen () {
-		enemyDeadPlaying = false;
-		resultScreen.showFightResultScreen(playerWin? enemy: null);
+	public void showFightEndDisplay () {
+		bool emptyChamber = false;
+		foreach (StasisChamber chamber in chambersHolder.chambers) {
+			if (chamber.isEmpty) { emptyChamber = true; break; }
+		}
+		captureBtn.setText(emptyChamber? "В стазис камеру": "Нет свободных камер");
+		captureBtn.setActive (emptyChamber);
+
+		captureBtn.setVisible (true);
+		releaseBtn.setVisible (true);
 	}
+
+	public void fireClickButton (Button btn) {
+		if (btn == captureBtn) {
+			captureEnemy ();
+		} else if (btn == releaseBtn) {
+			closeFightScreen ();
+		}
+	}
+
+	private void captureEnemy () {
+		foreach (StasisChamber chamber in chambersHolder.chambers) {
+			if (chamber.isEmpty) { chamber.putInChamber(enemy.enemyType); break; }
+		}
+		closeFightScreen ();
+	}
+
+//	private void showFightResultScreen () {
+//		enemyDeadPlaying = false;
+//		resultScreen.showFightResultScreen(playerWin? enemy: null);
+//	}
 
 	public bool isFightOver () {
 		return fightOver;
@@ -274,7 +308,7 @@ public class FightScreen : MonoBehaviour {
 
 				statusEffect.transform.localPosition = effectPos;
 
-				fightProcessor.skipAction ();
+				fightProcessor.skipMove ();
 				FightProcessor.FIGHT_ANIM_PLAYER_DONE = false;
 				slot.takeItem ().destroy ();
 			}

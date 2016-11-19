@@ -32,6 +32,8 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 	private AnnouncementScreen announcementScreen;
 
 	void Awake () {
+		Vars.inSpace = false;
+
 		ItemFactory.itemPrefab = itemPrefab;
 		Imager.initialize();
 		Player.init();
