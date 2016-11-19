@@ -30,8 +30,8 @@ public class Planet : MonoBehaviour {
 //		atmosphere = trans.Find("Atmosphere");
         surfaceRender.sprite = Imager.getPlanet(planetType);
         float angle = Random.Range(0, 359);
-        transform.localPosition = new Vector2(planetType.getDistanceToStar() * Mathf.Sin(angle), planetType.getDistanceToStar() * Mathf.Cos(angle));
-        orbitingSpeed = 2f / planetType.getDistanceToStar();
+		transform.localPosition = new Vector2(planetType.distanceToStar() * Mathf.Sin(angle), planetType.distanceToStar() * Mathf.Cos(angle));
+		orbitingSpeed = 2f / planetType.distanceToStar();
 
 		switch (planetType) {
 			case PlanetType.PALETTE: shadow.localScale = new Vector3(1, 1, 1); break;

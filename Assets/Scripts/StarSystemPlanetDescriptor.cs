@@ -93,7 +93,7 @@ public class StarSystemPlanetDescriptor : MonoBehaviour {
 		this.planetType = planetType;
 		planetDescriptVisible = true;
 		planetSurface = Imager.getPlanetSurface(planetType).texture;
-		planetName = planetType.getName();
+		planetName = planetType.name();
 		explored = true;//Vars.exploredPlanets.Contains(planetType);
 		colonized = planetType.isColonized();
 		populated = planetType.isPopulated();

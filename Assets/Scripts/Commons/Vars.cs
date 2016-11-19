@@ -10,7 +10,7 @@ public static class Vars {
 
 	public static StarSystemType starSystemType = StarSystemType.ALURIA;
 
-	public static PlanetType planetType = PlanetType.PALETTE;
+	public static PlanetType planetType = PlanetType.PARPARIS;
 
 	public static HullType shipHullType = HullType.CORVETTE;
 
@@ -35,6 +35,8 @@ public static class Vars {
 	public static List<EnemyShip> enemyShipsPool = new List<EnemyShip>();
 
 	public static UserInterface userInterface;
+
+	public static List<Bounty> bounties = new List<Bounty> ();
 
 //	public static List<PlanetType> exploredPlanets = new List<PlanetType>();
 //

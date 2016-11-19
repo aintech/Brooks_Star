@@ -16,7 +16,7 @@ public static class PlanetDescriptor {
 
 //	private static Dictionary<PlanetType, EnemyType[]> enemyTypesOnPlanet = new Dictionary<PlanetType, EnemyType[]>();
 
-	public static string getName (this PlanetType type) {
+	public static string name (this PlanetType type) {
 		switch (type) {
 			case PlanetType.CORAS: return "Корас";
 			case PlanetType.PALETTE: return "Палетта";
@@ -48,7 +48,7 @@ public static class PlanetDescriptor {
 		return false;
 	}
 
-	public static string getDescription (this PlanetType type) {
+	public static string description (this PlanetType type) {
 		switch (type) {
 			case PlanetType.CORAS: return "Планета-завод, основанная...";
 			case PlanetType.PALETTE: return "Небольшая планета-поселение...";
@@ -58,7 +58,7 @@ public static class PlanetDescriptor {
 		}
 	}
 
-    public static float getDistanceToStar (this PlanetType type) {
+    public static float distanceToStar (this PlanetType type) {
 		switch (type) {
 			//ALURIA
 			case PlanetType.CORAS: return 45;
@@ -74,7 +74,7 @@ public static class PlanetDescriptor {
         }
     }
 
-	public static StarSystemType getStarSystemType (this PlanetType type) {
+	public static StarSystemType starSystemType (this PlanetType type) {
 		switch (type) {
 			case PlanetType.CORAS:
 			case PlanetType.PARPARIS:

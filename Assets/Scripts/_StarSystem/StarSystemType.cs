@@ -28,7 +28,7 @@ public static class StarSystemDescriptor {
 		foreach (StarSystemType system in Enum.GetValues(typeof(StarSystemType))) {
 			types = new List<PlanetType>();
 			foreach(PlanetType planet in Enum.GetValues(typeof(PlanetType))) {
-				if (planet.getStarSystemType() == system) { types.Add(planet); }
+				if (planet.starSystemType() == system) { types.Add(planet); }
 			}
 			planetToSystemMap.Add(system, types.ToArray());
 		}

@@ -73,11 +73,11 @@ public class Minimap : MonoBehaviour {
 		distances = new float[types.Length];
 
 		foreach (PlanetType type in types) {
-			planetDistanceMax = Mathf.Max(planetDistanceMax, type.getDistanceToStar());
+			planetDistanceMax = Mathf.Max(planetDistanceMax, type.distanceToStar());
 		}
 
 		for (int c = 0; c < types.Length; c++) {
-			distances[c] = (types[c].getDistanceToStar() / planetDistanceMax) * (mapSize / 2);
+			distances[c] = (types[c].distanceToStar() / planetDistanceMax) * (mapSize / 2);
 		}
 
 		toSystemDiff = mapSize / 2 / planetDistanceMax;
@@ -87,7 +87,7 @@ public class Minimap : MonoBehaviour {
 
 		float diff;
 		for (int i = 0; i < orbits.Length; i++) {
-			diff = mapSize * (types[i].getDistanceToStar() / planetDistanceMax);
+			diff = mapSize * (types[i].distanceToStar() / planetDistanceMax);
 			orbits[i] = new Rect(center.x - diff/2, center.y - diff/2, diff, diff);//new Rect(Screen.width - diff + diff/2 - mapSize/2 - 20, (mapSize - diff/2 - mapSize/2) + 20, diff, diff);
 			planetPositions[i] = new Rect(planetRect);
 		}

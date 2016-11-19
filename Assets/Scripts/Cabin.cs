@@ -40,7 +40,7 @@ public class Cabin : MonoBehaviour, ButtonHolder {
 	private void rest () {
 		Player.setHealthToMax();
 		if (Vars.planetType.isPopulated()) { scanningScreen.resetMarkers(); }
-		if (Vars.planetType.isColonized()) { announcementScreen.randomizeAnnouncement(); }
+//		if (Vars.planetType.isColonized()) { announcementScreen.randomizeAnnouncements(); }
 	}
 
 	public void setButtonVisible (bool visible) {
