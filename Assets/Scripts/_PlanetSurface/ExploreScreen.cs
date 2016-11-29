@@ -32,11 +32,6 @@ public class ExploreScreen : MonoBehaviour, ButtonHolder, Hideable {
 		gameObject.SetActive(true);
 	}
 
-	private void leavePlanet () {
-		gameObject.SetActive(false);
-		planetSurface.leavePlanet();
-	}
-
 	private void startExplore () {
 		setVisible(false);
 		scanningScreen.show();
@@ -44,7 +39,7 @@ public class ExploreScreen : MonoBehaviour, ButtonHolder, Hideable {
 
 	public void fireClickButton (Button btn) {
 		if (btn == exploreBtn) { startExplore(); }
-		else if (btn == leaveBtn) { leavePlanet(); }
+		else if (btn == leaveBtn) { planetSurface.leavePlanet(); }
 		else { Debug.Log("Unknown button: " + btn.name); }
 	}
 

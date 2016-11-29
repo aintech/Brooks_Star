@@ -23,15 +23,17 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 
 //	private IndustrialScreen industrialScreen;
 
-	private MessageBox messageBox;
+//	private MessageBox messageBox;
 
-	private Storyline story;
+//	private Storyline story;
+	private Story story;
 
 	private StatusScreen statusScreen;
 
 //	private AnnouncementScreen announcementScreen;
 
 	void Awake () {
+		Vars.initVars();
 		Vars.inSpace = false;
 
 		ItemFactory.itemPrefab = itemPrefab;
@@ -60,8 +62,8 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 
 		Vars.userInterface = GameObject.FindGameObjectWithTag("UserInterface").GetComponent<UserInterface>().init(statusScreen);
 
-		messageBox = GameObject.Find("Message Box").GetComponent<MessageBox>();
-		story = GameObject.Find("Storyline").GetComponent<Storyline>();
+//		messageBox = GameObject.Find("Message Box").GetComponent<MessageBox>();
+		story = GameObject.Find("Story Teller").GetComponent<Story>().init(this);
 
 //		announcementScreen = GameObject.Find("Announcement Screen").GetComponent<AnnouncementScreen>().init(this, statusScreen.cabin);
 		exploreScreen = GameObject.Find("Explore Screen").GetComponent<ExploreScreen>().init(this, statusScreen, descriptor);
@@ -69,8 +71,7 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 		hangarScreen = GameObject.Find("Hangar Screen").GetComponent<HangarScreen>().init(this, statusScreen.inventory, statusScreen.shipData);
 //		industrialScreen = GameObject.Find("Industrial Screen").GetComponent<IndustrialScreen>().init(this);
 
-		messageBox.init(this);
-		story.init();
+//		messageBox.init(this);
 
 		if (Vars.shipCurrentHealth == -1) {
 			startNewGame();
@@ -80,7 +81,7 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 	}
 
 	private void startNewGame () {
-		statusScreen.shipData.initializeRandomShip(HullType.CORVETTE);
+		statusScreen.shipData.initializeRandomShip(HullType.ARMAGEDDON);
 
 		statusScreen.inventory.fillWithRandomItems(50, "Player Item");
 		market.buyMarket.fillWithRandomItems(50, "Market Item");
@@ -96,11 +97,19 @@ public class PlanetSurface : MonoBehaviour, ButtonHolder, Hideable {
 		statusScreen.inventory.calculateFreeVolume();
 		UserInterface.showInterface = true;
 		background.setBackground();
-		if (Vars.planetType.isColonized()) {
+
+		if (checkStoryline()) {
+			story.playNextChapter();
+		} else if (Vars.planetType.isColonized()) {
 			setVisible(true);
 		} else if (Vars.planetType.isPopulated()) {
 			showScreen(ScreenType.EXPLORE);
 		}
+	}
+
+	private bool checkStoryline () {
+		if (Vars.chapter == Story.Chapter.NONE) { return true; }
+		return false;
 	}
 
 	public void leavePlanet () {

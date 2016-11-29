@@ -37,4 +37,8 @@ public class LootDropper : MonoBehaviour {
 			container.hideDrop();
 		}
 	}
+
+	public static void clearContainers () {
+		containers.Clear();
+	}
 }

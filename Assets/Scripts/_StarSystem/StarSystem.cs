@@ -45,6 +45,7 @@ public class StarSystem : MonoBehaviour {
 	}
 
 	private void init () {
+		Vars.initVars();
 		Vars.inSpace = true;
 
 		ItemFactory.itemPrefab = itemPrefab;
@@ -68,7 +69,6 @@ public class StarSystem : MonoBehaviour {
 		if (Vars.shipCurrentHealth == -1) {
 			statusScreen.shipData.initializeRandomShip (HullType.ARMAGEDDON);
 			statusScreen.inventory.setCapacity(statusScreen.shipData.hullType.getStorageCapacity());
-
 		} else {
 			statusScreen.initFromVars();
 		}
@@ -142,6 +142,7 @@ public class StarSystem : MonoBehaviour {
 		statusScreen.sendToVars();
 		Vars.planetType = planetType;
 		ExplosionsManager.clear();
+		LootDropper.clearContainers();
 		SceneManager.LoadScene("PlanetSurface");
 	}
 

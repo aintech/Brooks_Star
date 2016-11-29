@@ -100,6 +100,6 @@ public class LootContainer : MonoBehaviour {
 	public void hideDrop () {
 		onScene = false;
 		loot.Clear();
-		if (gameObject != null) { gameObject.SetActive(false); }
+		gameObject.SetActive(false);
 	}
 }

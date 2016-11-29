@@ -2,15 +2,23 @@
 using System.Collections;
 
 public enum CharacterType {
-	ALIKA, ROKOT
+	ALIKA, GUILD_SECRETARY
 }
 
 public static class CharacterDescriptor {
-	public static string getName (this CharacterType type) {
+	public static string name (this CharacterType type) {
 		switch (type) {
 			case CharacterType.ALIKA: return "Алика";
-			case CharacterType.ROKOT: return "Рокот";
+			case CharacterType.GUILD_SECRETARY: return "Секретарь";
 			default: Debug.Log("Unknown charakter type"); return "";
+		}
+	}
+
+	public static CharacterType nameToType (string name) {
+		switch (name) {
+			case "alika": return CharacterType.ALIKA;
+			case "guild_secretary": return CharacterType.GUILD_SECRETARY;
+			default: Debug.Log("Unknown name: " + name); return CharacterType.ALIKA;
 		}
 	}
 }

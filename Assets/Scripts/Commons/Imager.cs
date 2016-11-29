@@ -22,6 +22,8 @@ public static class Imager {
 
 	private static Dictionary<EnemyType, Sprite[]> enemies = new Dictionary<EnemyType, Sprite[]>();
 
+	private static Dictionary<string, Texture> storyBackgrounds = new Dictionary<string, Texture>();
+
 	private static char delimiter = '=';
 
 	private static string[] typeName = new string[2];
@@ -33,7 +35,9 @@ public static class Imager {
 
 		foreach (Sprite sprite in Resources.LoadAll<Sprite>("Sprites/Enemy")) { addSpriteToList(sprite); }
 
-		foreach (Texture texture in Resources.LoadAll<Texture>("Textures")) { addTextureToList(texture); }
+		foreach (Texture texture in Resources.LoadAll<Texture>("Textures/Portraits")) { addTextureToList(texture); }
+
+		foreach (Texture texture in Resources.LoadAll<Texture>("Textures/Story backgrounds")) { addTextureToList(texture); }
 
 		initialized = true;
 	}
@@ -43,6 +47,7 @@ public static class Imager {
 	public static Sprite getPlanet (PlanetType type) { return planets[type]; }
 	public static Sprite getPlanetSurface (PlanetType type) { return planetSurfaces[type]; }
 	public static Texture getPortrait (CharacterType type) { return portraits[type]; }
+	public static Texture getStoryBackground (string background) { return storyBackgrounds[background.ToUpper()]; }
 
 	public static Sprite getEnemy (EnemyType type, float healthLevel) {
 		return enemies[type][(!Vars.EROTIC)? 0: healthLevel <= .3f? 2: healthLevel <= .7f? 1: 0];
@@ -106,6 +111,9 @@ public static class Imager {
 	private static void addTextureToList (Texture texture) {
 		typeName = texture.name.ToUpper().Split(delimiter);
 		switch (typeName[0]) {
+			case "STORY":
+				storyBackgrounds.Add(typeName[1], texture);
+				break;
 			case "PORTRAIT" :
 				foreach (CharacterType type in characterTypes) {
 					if (type.ToString().Equals(typeName[1])) { 

@@ -485,16 +485,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 	}
 
 	public void sendToVars () {
-		Dictionary<int, ItemData> inventoryToSend = null;
-		switch (inventoryType) {
-			case InventoryType.INVENTORY: inventoryToSend = Vars.inventory; break;
-			case InventoryType.MARKET:
-				switch (Vars.planetType) {
-					case PlanetType.PARPARIS: inventoryToSend = Vars.market_parparis; break;
-					case PlanetType.TERANA: inventoryToSend = Vars.market_terana; break;
-				}
-				break;
-		}
+		Dictionary<int, ItemData> inventoryToSend = inventoryType == InventoryType.INVENTORY? Vars.inventory: Vars.markets[Vars.planetType];
 		if (inventoryToSend == null) {
 			Debug.Log("Unmapped inventory to send: " + inventoryType);
 		} else {
@@ -507,17 +498,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 	}
 
 	public void initFromVars () {
-		switch (inventoryType) {
-			case InventoryType.INVENTORY: loadItems(Vars.inventory); break;
-			case InventoryType.MARKET:
-				switch (Vars.planetType) {
-					case PlanetType.PARPARIS: loadItems(Vars.market_parparis); break;
-					case PlanetType.TERANA: loadItems(Vars.market_terana); break;
-					default: Debug.Log("Unknown planet market: " + Vars.planetType); break;
-				}
-				break;
-			default: Debug.Log("Unknown inventory type: " + inventoryType); break;
-		}
+		loadItems(inventoryType == InventoryType.INVENTORY? Vars.inventory: Vars.markets[Vars.planetType]);
 	}
 
     public enum InventoryType {
